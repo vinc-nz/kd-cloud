@@ -3,6 +3,7 @@ package com.kdcloud.server.entity;
 import java.io.Serializable;
 
 public class DataRow implements Serializable {
+	
 
 	/**
 	 * 

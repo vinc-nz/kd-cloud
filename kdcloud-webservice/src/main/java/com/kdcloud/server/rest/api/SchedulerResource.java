@@ -11,7 +11,6 @@ import org.restlet.resource.Put;
 public interface SchedulerResource {
 	
 	
-	
 	public static final String URI = "/process/ecg/{id}";
 	
 	/**

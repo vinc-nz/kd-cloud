@@ -10,6 +10,7 @@ import javax.persistence.Lob;
 @Entity
 public class Task {
 	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id;

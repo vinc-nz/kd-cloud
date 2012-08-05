@@ -10,7 +10,6 @@ import javax.persistence.Lob;
 
 @Entity
 public class DataTable {
-	
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

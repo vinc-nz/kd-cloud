@@ -38,6 +38,7 @@ import java.util.logging.Logger;
  */
 public final class Devices {
 	
+	
 
   private static final String DEVICE_TYPE = "Device";
   private static final String DEVICE_REG_ID_PROPERTY = "regId";

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 public class Report implements Serializable  {
 	
+	
 
 	/**
 	 * 

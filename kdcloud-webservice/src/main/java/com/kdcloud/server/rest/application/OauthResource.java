@@ -13,6 +13,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 public class OauthResource extends ServerResource {
+	
 
 	@Get
 	public Representation represent() {

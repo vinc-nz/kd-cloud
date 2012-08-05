@@ -11,7 +11,6 @@ import org.restlet.resource.Get;
 public interface DataTableResource {
 	
 	
-	
 	public static final String URI = "/data";
 	
 	

@@ -4,7 +4,6 @@ import org.restlet.resource.Get;
 
 import com.kdcloud.server.entity.Report;
 
-
 /**
  * URI /report/{id}
  * @author spax

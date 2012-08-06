@@ -1,5 +1,5 @@
 eclipse.preferences.version=1
 jarsExcludedFromWebInfLib=
-lastWarOutDir=/home/spax/.git/kd-cloud
+lastWarOutDir=/home/spax/data/dev/kdcloud/kdcloud-webservice/target/kdcloud-webservice-0.0.1-SNAPSHOT
 warSrcDir=src/main/webapp
 warSrcDirIsOutput=true

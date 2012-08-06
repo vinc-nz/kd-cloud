@@ -18,7 +18,6 @@ public class OauthResource extends ServerResource {
 
 	@Get
 	public Representation represent() {
-		getLogger().info("new version");
 		User u = getRequest().getClientInfo().getUser();
 		if (u == null)
 			return new StringRepresentation("not authenticated");

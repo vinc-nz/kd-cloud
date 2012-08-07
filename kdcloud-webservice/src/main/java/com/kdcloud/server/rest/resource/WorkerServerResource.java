@@ -21,6 +21,8 @@ public class WorkerServerResource extends ServerResource {
 
 	@Post
 	public void execute(Form form) {
+		getLogger().info("ready to work on data");
+		
 		EntityManager em = EMService.getEntityManager();
 		String id = (String) getRequestAttributes().get("id");
 		
@@ -29,6 +31,9 @@ public class WorkerServerResource extends ServerResource {
 		DataTable dataTable = em.find(DataTable.class, task.getDatatableId());
 		Report report = engine.execute(dataTable.getDataRows(),
 				Long.valueOf(task.getWorkflowId()));
+		
+		getLogger().info("work done");
+		
 		task.setReport(report);
 		em.merge(task);
 		em.close();

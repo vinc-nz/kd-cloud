@@ -77,6 +77,7 @@ public class KDApplication extends Application {
 	    google.setNext(OauthResource.class);
 	    router.attach("/proxy", google);
 	    router.attach("/validate", OauthResource.class);
+	    
 
 		return router;
 	}

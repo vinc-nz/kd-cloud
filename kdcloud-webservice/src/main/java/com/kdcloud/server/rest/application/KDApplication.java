@@ -6,11 +6,14 @@ import org.restlet.Application;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.ext.oauth.OAuthParameters;
 import org.restlet.ext.oauth.OAuthProxy;
 import org.restlet.ext.oauth.internal.Scopes;
 import org.restlet.routing.Router;
+import org.restlet.security.ChallengeAuthenticator;
 
 import com.kdcloud.server.gcm.Devices;
 import com.kdcloud.server.rest.api.DataRowResource;
@@ -76,7 +79,21 @@ public class KDApplication extends Application {
 		OAuthProxy google = new OAuthProxy(googlep, getContext());
 	    google.setNext(OauthResource.class);
 	    router.attach("/proxy", google);
-	    router.attach("/validate", OauthResource.class);
+		router.attach("/validate", OauthResource.class);
+
+		ChallengeAuthenticator guard = new ChallengeAuthenticator(null,
+				ChallengeScheme.HTTP_BASIC, "testRealm");
+		
+		guard.setVerifier(new OAuthVerifier());
+
+		guard.setNext(new Restlet() {
+			@Override
+			public void handle(Request request, Response response) {
+				response.setEntity("success", MediaType.TEXT_PLAIN);
+			}
+		});
+
+		router.attachDefault(guard);
 
 		return router;
 	}

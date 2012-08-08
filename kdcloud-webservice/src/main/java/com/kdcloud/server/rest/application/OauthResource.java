@@ -1,9 +1,6 @@
 package com.kdcloud.server.rest.application;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.restlet.data.Reference;
-import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.ext.oauth.OAuthServerResource;
 import org.restlet.ext.oauth.OAuthUser;
 import org.restlet.representation.Representation;
@@ -28,17 +25,18 @@ public class OauthResource extends ServerResource {
 	    getLogger().info("validating token: " + ref);
 	    ClientResource client = new ClientResource(ref);
 	    Representation rep = client.get();
-	    if (rep instanceof JsonRepresentation)
-		    try {
-				JSONObject object = ((JsonRepresentation) rep).getJsonObject();
-				String user = (String) object.get("user_id");
-				return new StringRepresentation("your user_id is " + user);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    getLogger().info("not an instance of JsonRepresentation");
-	    return new StringRepresentation("error");
+	    return new StringRepresentation(rep.getMediaType().toString());
+//	    if (rep instanceof JsonRepresentation)
+//		    try {
+//				JSONObject object = ((JsonRepresentation) rep).getJsonObject();
+//				String user = (String) object.get("user_id");
+//				return new StringRepresentation("your user_id is " + user);
+//			} catch (JSONException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//	    getLogger().info("not an instance of JsonRepresentation");
+//	    return new StringRepresentation("error");
 	}
 
 }

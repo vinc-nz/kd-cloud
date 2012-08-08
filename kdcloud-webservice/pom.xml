@@ -23,34 +23,46 @@
 	<dependencies>
 
 	    <!-- Google App Engine meta-package -->
-<!-- 	    <dependency> -->
-<!-- 	      <groupId>net.kindleit</groupId> -->
-<!-- 	      <artifactId>gae-runtime</artifactId> -->
-<!-- 	      <version>${gae.version}</version> -->
-<!-- 	      <type>pom</type> -->
-<!-- 	      <scope>runtime</scope> -->
-<!-- 	    </dependency> -->
+	    <dependency>
+	      <groupId>net.kindleit</groupId>
+	      <artifactId>gae-runtime</artifactId>
+	      <version>${gae.version}</version>
+	      <type>pom</type>
+	      <scope>runtime</scope>
+	      <exclusions>
+	      	<exclusion>
+	      		<artifactId>datanucleus-appengine</artifactId>
+	      		<groupId>com.google.appengine.orm</groupId>
+	      	</exclusion>
+	      </exclusions>
+	    </dependency>
+	    
+	    <dependency>
+	        <artifactId>datanucleus-appengine</artifactId>
+	      	<groupId>com.google.appengine.orm</groupId>
+	      	<version>1.0.10</version>
+	    </dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.datanucleus</groupId> -->
-<!--             <artifactId>datanucleus-core</artifactId> -->
-<!--             <version>${datanucleus.version}</version> -->
-<!--             <scope>runtime</scope> -->
-<!--         </dependency> -->
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+            <version>${datanucleus.version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>javax.transaction</groupId> -->
-<!-- 			<artifactId>jta</artifactId> -->
-<!-- 			<version>1.1</version> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
 
 <!-- 			J2EE Servlet API -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.geronimo.specs</groupId> -->
-<!-- 			<artifactId>geronimo-servlet_2.5_spec</artifactId> -->
-<!-- 			<version>1.2</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-servlet_2.5_spec</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
+		</dependency>
 
 
 <!-- 		restlet dependencies -->
@@ -71,6 +83,14 @@
 	      <artifactId>org.restlet.ext.net</artifactId>
 	      <version>${restlet.version}</version>
 	    </dependency>
+	    
+	    
+<!-- 	    needed, don't know why -->
+	    <dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 	    
 <!-- 	    gmc server by local repo -->
 		<dependency>
@@ -141,49 +161,6 @@
 
 	<build>
 	    
-	     <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>maven-datanucleus-plugin</artifactId>
-                    <versionRange>[1.1.4,)</versionRange>
-                    <goals>
-                      <goal>enhance</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>net.kindleit</groupId>
-                    <artifactId>maven-gae-plugin</artifactId>
-                    <versionRange>[0.7.3,)</versionRange>
-                    <goals>
-                      <goal>unpack</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <execute />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-	    
 		<plugins>
 
 			<plugin>
@@ -212,6 +189,8 @@
 				<artifactId>maven-gae-plugin</artifactId>
 				<version>0.9.4</version>
 			</plugin>
+			
+			
 
 			<!--
 				Upload application to the appspot automatically, during
@@ -269,7 +248,7 @@
 		-->
 		<gae.application.version>test</gae.application.version>
 
-        <datanucleus.version>1.1.4</datanucleus.version>
+        <datanucleus.version>1.1.5</datanucleus.version>
 	</properties>
 
 	<profiles>

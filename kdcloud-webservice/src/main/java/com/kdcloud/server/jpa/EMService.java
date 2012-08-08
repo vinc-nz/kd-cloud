@@ -7,6 +7,7 @@ import javax.persistence.Persistence;
 
 public class EMService {
 	
+	
 	private static final EntityManagerFactory emfInstance = Persistence
 			.createEntityManagerFactory("transactions-optional");
 

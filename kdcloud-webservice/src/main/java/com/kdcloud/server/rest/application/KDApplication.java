@@ -94,6 +94,7 @@ public class KDApplication extends Application {
 		});
 
 		router.attachDefault(guard);
+	    
 
 		return router;
 	}

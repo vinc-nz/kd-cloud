@@ -20,7 +20,7 @@ public abstract class Notification {
 		String id = Long.toString(task.getId());
 		Message message = new Message.Builder().addData("id", id).build();
 		try {
-			sender.send(message, task.getRegId(), 5);
+			sender.sendNoRetry(message, task.getRegId());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

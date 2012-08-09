@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import javax.persistence.EntityManager;
 
+import org.restlet.data.Status;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 
@@ -28,7 +29,7 @@ public class DataRowServerResource extends ServerResource implements DataRowReso
 			getLogger().info("got null data");
 		else
 			getLogger().info("got valid data");
-		if (dataset != null) {
+		if (dataset != null && isCommitter(dataset)) {
 			dataset.getDataRows().addAll(data);
 			em.merge(dataset);
 			getLogger().info("data merged succeffully");
@@ -36,6 +37,15 @@ public class DataRowServerResource extends ServerResource implements DataRowReso
 		else
 			getLogger().info("provided id is invalid");
 		em.close();
+	}
+
+	private boolean isCommitter(DataTable dataset) {
+		String user = getClientInfo().getUser().getIdentifier();
+		getLogger().info("user is "+user);
+		if (dataset.getCommitters().contains(user))
+			return true;
+		getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN);
+		return false;
 	}
 
 }

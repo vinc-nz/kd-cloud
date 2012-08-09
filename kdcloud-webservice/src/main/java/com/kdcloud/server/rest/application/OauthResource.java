@@ -12,10 +12,8 @@ public class OauthResource extends ServerResource {
 	@Get
 	public Representation represent() {
 		User u = getRequest().getClientInfo().getUser();
-		if (u == null)
-			return new StringRepresentation("not authenticated");
 		OAuthUser authenticatedUser = (OAuthUser) u;
-		return new StringRepresentation("your id is "+authenticatedUser.getEmail());
+		return new StringRepresentation("your token is "+authenticatedUser.getAccessToken());
 	}
 
 }

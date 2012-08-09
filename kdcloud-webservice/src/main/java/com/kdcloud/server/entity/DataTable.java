@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 
 @Entity
 public class DataTable {
@@ -23,8 +22,7 @@ public class DataTable {
 	@Lob
 	LinkedList<String> committers = new LinkedList<String>();
 	
-	@OneToMany
-	List<User> owners = new LinkedList<User>();
+	String owner;
 
 	public Long getId() {
 		return id;
@@ -50,12 +48,14 @@ public class DataTable {
 		this.committers = committers;
 	}
 
-	public List<User> getOwners() {
-		return owners;
+	public String getOwner() {
+		return owner;
 	}
 
-	public void setOwners(List<User> owners) {
-		this.owners = owners;
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
+
+	
 	
 }

@@ -18,15 +18,15 @@ public class DataTableServerResource extends ServerResource implements DataTable
 		EntityManager em = EMService.getEntityManager();
 		DataTable dataset = new DataTable();
 		
-		String email = getRequest().getClientInfo().getUser().getIdentifier();
-		if (em.find(User.class, email) == null) {
+		String id = getRequest().getClientInfo().getUser().getIdentifier();
+		if (em.find(User.class, id) == null) {
 			getLogger().info("registering new user");
 			User user = new User();
-			user.setEmail(email);
+			user.setId(id);
 			em.persist(user);
 		}
-		dataset.setOwner(email);
-		dataset.getCommitters().add(email);
+		dataset.setOwner(id);
+		dataset.getCommitters().add(id);
 		em.persist(dataset);
 		
 		em.close();

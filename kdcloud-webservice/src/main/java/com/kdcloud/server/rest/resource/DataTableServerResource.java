@@ -3,14 +3,13 @@ package com.kdcloud.server.rest.resource;
 import javax.persistence.EntityManager;
 
 import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.jpa.EMService;
 import com.kdcloud.server.rest.api.DataTableResource;
 
-public class DataTableServerResource extends ServerResource implements DataTableResource {
+public class DataTableServerResource extends ProtectedServerResource implements DataTableResource {
 
 	@Override
 	@Get
@@ -18,7 +17,7 @@ public class DataTableServerResource extends ServerResource implements DataTable
 		EntityManager em = EMService.getEntityManager();
 		DataTable dataset = new DataTable();
 		
-		String id = getRequest().getClientInfo().getUser().getIdentifier();
+		String id = getUserId();
 		if (em.find(User.class, id) == null) {
 			getLogger().info("registering new user");
 			User user = new User();

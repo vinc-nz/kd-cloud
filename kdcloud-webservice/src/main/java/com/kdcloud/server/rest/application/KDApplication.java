@@ -1,7 +1,5 @@
 package com.kdcloud.server.rest.application;
 
-import java.util.logging.Level;
-
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;

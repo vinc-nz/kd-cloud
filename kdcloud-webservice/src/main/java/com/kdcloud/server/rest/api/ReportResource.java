@@ -14,6 +14,7 @@ public interface ReportResource {
 	
 	
 	public static final String URI = "/report/{id}";
+	public static final String PARAM_ID = "id";
 
 	
 	/**

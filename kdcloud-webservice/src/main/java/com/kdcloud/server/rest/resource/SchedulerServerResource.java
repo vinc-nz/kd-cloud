@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
-import org.restlet.resource.ServerResource;
 
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Task;
@@ -13,7 +12,7 @@ import com.kdcloud.server.rest.api.SchedulerResource;
 import com.kdcloud.server.tasks.GAETaskQueue;
 import com.kdcloud.server.tasks.TaskQueue;
 
-public class SchedulerServerResource extends ServerResource implements SchedulerResource {
+public class SchedulerServerResource extends ProtectedServerResource implements SchedulerResource {
 	
 	private static final long DEFAULT_WORKFLOW = 1;
 	
@@ -22,26 +21,32 @@ public class SchedulerServerResource extends ServerResource implements Scheduler
 	@Override
 	@Put
 	public Long registerProcess(String regId) {
-		String id = (String) getRequestAttributes().get("id");
-		String workflowId = (String) getRequestAttributes().get("workflowId");
-		long workflow =
-				(workflowId != null ? Long.valueOf(workflowId) : DEFAULT_WORKFLOW);
-		EntityManager em = EMService.getEntityManager();
-		Task task = new Task();
-		DataTable dataTable = em.find(DataTable.class, Long.valueOf(id));
-		task.setDatatableId(dataTable.getId());
-		task.setWorkflowId(workflow);
-		task.setRegId(regId);
-		em.persist(task);
-		em.close();
-		taskQueue.push(task);
-		return task.getId();
+		return requestProcess();
 	}
 
 	@Override
 	@Get
 	public Long requestProcess() {
-		return registerProcess(null);
+		String userId = getUserId();
+		String datasetId = getRequestAttribute(PARAM_ID);
+		String workflowId = getRequestAttribute("workflowId");
+		long workflow =
+				(workflowId != null ? Long.valueOf(workflowId) : DEFAULT_WORKFLOW);
+		EntityManager em = EMService.getEntityManager();
+		Task task = new Task();
+		DataTable dataTable = em.find(DataTable.class, Long.valueOf(datasetId));
+		if (dataTable.getOwner().equals(userId)) {
+			task.setDatatableId(dataTable.getId());
+			task.setWorkflowId(workflow);
+			task.setApplicant(userId);
+			em.persist(task);
+		}
+		else {
+			forbid();
+		}
+		em.close();
+		taskQueue.push(task);
+		return task.getId();
 	}
 
 }

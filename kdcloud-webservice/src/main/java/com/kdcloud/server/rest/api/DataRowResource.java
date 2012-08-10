@@ -16,6 +16,7 @@ public interface DataRowResource {
 	
 	
 	public static final String URI = "/data/{id}";
+	public static final String PARAM_ID = "id";
 	
 	/**
 	 * uploads data to the dataset with the given id

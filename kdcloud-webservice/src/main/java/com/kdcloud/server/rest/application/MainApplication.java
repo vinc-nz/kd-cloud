@@ -5,10 +5,6 @@ import java.util.logging.Level;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
-import org.restlet.ext.oauth.OAuthAuthorizer;
-import org.restlet.ext.oauth.OAuthParameters;
-import org.restlet.ext.oauth.OAuthProxy;
-import org.restlet.ext.oauth.internal.Scopes;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.MapVerifier;
@@ -20,7 +16,7 @@ public class MainApplication extends Application {
 
 	@Override
 	public Restlet createInboundRoot() {
-		getLogger().setLevel(Level.FINEST);
+		getLogger().setLevel(Level.INFO);
 
 		Router router = new Router(getContext());
 		
@@ -34,7 +30,7 @@ public class MainApplication extends Application {
 		// Load a single static login/secret pair.
 		mapVerifier.getLocalSecrets().put("login", "secret".toCharArray());
 		guard.setVerifier(mapVerifier);
-		guard.setVerifier(new OAuthVerifier());
+//		guard.setVerifier(new OAuthVerifier());
 
 //		OAuthAuthorizer guard = new OAuthAuthorizer(
 //				"https://www.googleapis.com/oauth2/v1/tokeninfo");

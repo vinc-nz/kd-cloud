@@ -22,7 +22,8 @@ public class Task {
 	@Lob
 	Report report = new Report();
 	
-	String regId;
+	String applicant;
+	
 
 	public Long getId() {
 		return id;
@@ -55,17 +56,13 @@ public class Task {
 	public void setReport(Report report) {
 		this.report = report;
 	}
-
-	public String getRegId() {
-		return regId;
+	
+	public String getApplicant() {
+		return applicant;
 	}
 
-	public void setRegId(String regId) {
-		this.regId = regId;
+	public void setApplicant(String applicant) {
+		this.applicant = applicant;
 	}
-	
-
-	
-	
 
 }

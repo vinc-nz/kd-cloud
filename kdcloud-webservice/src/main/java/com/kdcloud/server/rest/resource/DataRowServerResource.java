@@ -4,9 +4,7 @@ import java.util.LinkedList;
 
 import javax.persistence.EntityManager;
 
-import org.restlet.data.Status;
 import org.restlet.resource.Put;
-import org.restlet.resource.ServerResource;
 
 import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
@@ -15,7 +13,7 @@ import com.kdcloud.server.rest.api.DataRowResource;
 import com.kdcloud.server.tasks.GAETaskQueue;
 import com.kdcloud.server.tasks.TaskQueue;
 
-public class DataRowServerResource extends ServerResource implements DataRowResource {
+public class DataRowServerResource extends ProtectedServerResource implements DataRowResource {
 	
 	TaskQueue taskQueue = new GAETaskQueue();
 
@@ -23,7 +21,7 @@ public class DataRowServerResource extends ServerResource implements DataRowReso
 	@Put
 	public void uploadData(LinkedList<DataRow> data) {
 		EntityManager em = EMService.getEntityManager();
-		String id = (String) getRequestAttributes().get("id");
+		String id = getRequestAttribute(PARAM_ID);
 		DataTable dataset = em.find(DataTable.class, Long.parseLong(id));
 		if (data == null)
 			getLogger().info("got null data");
@@ -40,10 +38,10 @@ public class DataRowServerResource extends ServerResource implements DataRowReso
 	}
 
 	private boolean isCommitter(DataTable dataset) {
-		String user = getClientInfo().getUser().getIdentifier();
+		String user = getUserId();
 		if (dataset.getCommitters().contains(user))
 			return true;
-		getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN);
+		forbid();
 		return false;
 	}
 

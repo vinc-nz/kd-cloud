@@ -12,6 +12,7 @@ public interface SchedulerResource {
 	
 	
 	public static final String URI = "/process/ecg/{id}";
+	public static final String PARAM_ID = "id";
 	
 	/**
 	 * request the processing of the dataset with the given id

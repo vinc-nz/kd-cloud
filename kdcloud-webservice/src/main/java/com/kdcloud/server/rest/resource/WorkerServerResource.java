@@ -11,7 +11,7 @@ import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.gcm.Devices;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.gcm.Notification;
 import com.kdcloud.server.jpa.EMService;
 
@@ -36,12 +36,12 @@ public class WorkerServerResource extends ServerResource {
 		
 		task.setReport(report);
 		em.merge(task);
+		
+		User user = em.find(User.class, task.getApplicant());
+		user.getDevices().size();
 		em.close();
 		
-		String regId = task.getRegId();
-		if (regId != null && Devices.getDevices().contains(regId)) {
-			Notification.notify(task);
-		}
+		Notification.notify(task, user);
 	}
 
 }

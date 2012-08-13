@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.MapVerifier;
@@ -38,6 +39,8 @@ public class MainApplication extends Application {
 		
 		guard.setNext(new KDApplication());
 		router.attachDefault(guard);
+		
+		router.attach("/gwt", new Directory(getContext(), "war:///"));
 
 		return router;
 

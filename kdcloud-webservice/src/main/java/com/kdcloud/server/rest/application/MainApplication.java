@@ -8,7 +8,6 @@ import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
-import org.restlet.security.MapVerifier;
 
 import com.kdcloud.server.rest.resource.WorkerServerResource;
 import com.kdcloud.server.tasks.TaskQueue;
@@ -26,16 +25,9 @@ public class MainApplication extends Application {
 		
 		// Guard the restlet with BASIC authentication.
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null, ChallengeScheme.HTTP_BASIC, "testRealm");
-		// Instantiates a Verifier of identifier/secret couples based on a simple Map.
-		MapVerifier mapVerifier = new MapVerifier();
-		// Load a single static login/secret pair.
-		mapVerifier.getLocalSecrets().put("login", "secret".toCharArray());
-		guard.setVerifier(mapVerifier);
-//		guard.setVerifier(new OAuthVerifier());
 
-//		OAuthAuthorizer guard = new OAuthAuthorizer(
-//				"https://www.googleapis.com/oauth2/v1/tokeninfo");
-//		guard.setAuthorizedRoles(Scopes.toRoles("https://www.googleapis.com/auth/userinfo.email"));
+		
+		guard.setVerifier(new OAuthVerifier());
 		
 		guard.setNext(new KDApplication());
 		router.attachDefault(guard);

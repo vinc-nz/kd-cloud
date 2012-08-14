@@ -5,7 +5,11 @@
 	<source path="client" />
 
 	<!-- Inherit the core Web Toolkit stuff.                        -->
-	<inherits name='com.google.gwt.user.User' />
+<!-- 	<inherits name='com.google.gwt.user.User' /> -->
+
+ 	<!-- For development, a default of `DEBUG` is recommended -->
+  	<inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
+
 	
 	<!-- Inherit the default GWT style sheet.  You can change       -->
 	<!-- the theme of your GWT application by uncommenting          -->

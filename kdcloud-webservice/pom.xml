@@ -96,6 +96,7 @@
 	      <groupId>com.google.gwt</groupId>
 	      <artifactId>gwt-servlet</artifactId>
 	      <version>${gwt.version}</version>
+	      <scope>runtime</scope>
 	    </dependency>
 	
 	    <dependency>
@@ -109,6 +110,18 @@
 	      <groupId>org.restlet.gwt</groupId>
 	      <artifactId>org.restlet</artifactId>
 	      <version>${restlet.version}</version>
+	      <exclusions>
+	          <exclusion>
+	              <groupId>com.google.gwt</groupId>
+	              <artifactId>gwt-dev</artifactId>
+	          </exclusion>
+	      </exclusions>
+	    </dependency>
+	    
+	    <dependency>
+	        <groupId>com.allen-sauer.gwt.log</groupId>
+	        <artifactId>gwt-log</artifactId>
+	        <version>3.1.8</version>
 	    </dependency>
 
 
@@ -131,6 +144,11 @@
 	      <version>${restlet.version}</version>
 	    </dependency>
 	    
+	    <dependency>
+	      <groupId>org.restlet.gae</groupId>
+	      <artifactId>org.restlet.ext.gwt</artifactId>
+	      <version>${restlet.version}</version>
+	    </dependency>
 	    
 <!-- 	    needed, don't know why -->
 	    <dependency>
@@ -200,7 +218,7 @@
 	    
 		<plugins>
 
-	<!--
+			<!--
 				This plug-in "enhances" your domain model objects (i.e. makes them
 				persistent for datanucleus)
 			-->
@@ -313,46 +331,13 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>1.2</version>
-        <configuration>
-          <logLevel>INFO</logLevel>
-
-          <!-- match -Dgae.port -->
-          <port>${gae.port}</port>
-
-          <!-- This must point to your GWT modules! -->
-          <compileTargets>
-            <value>net.kindleit.gae.example.Messages</value>
-          </compileTargets>
-
-          <!-- This is for generating Asynch interfaces -->
-          <!-- <servicePattern>**/client/*Service.java</servicePattern> -->
-
-          <extraJvmArgs>-Xmx512m</extraJvmArgs>
-          <!--<jvm>${JAVA_HOME}/bin/java</jvm> -->
-          <!--<noServer>false</noServer> -->
-
-          <!-- TODO This should help running GAE stuff in hosted mode (when gwt-maven-plugin-1.2
-            is released, see http://jira.codehaus.org/browse/MGWT-112) -->
-          <server>com.google.appengine.tools.development.gwt.AppEngineLauncher
-                    </server>
-
-          <runTarget>/index.html</runTarget>
-          <style>DETAILED</style>
-          <webXml>war/WEB-INF/web.xml</webXml>
-          <!-- this parameter is VERY important with automatic mode - has to match the version
-            in your declared deps -->
-          <!-- if this is set incorrect (not a match), or left out (default is 1.5.2 for 2.0-beta23)
-            you will have mysterious errors -->
-          <gwtVersion>${gwt.version}</gwtVersion>
-        </configuration>
+        <version>${gwt.version}</version>
         <executions>
-          <!-- <execution> <id>generateAsynch</id> <phase>generate-sources</phase> <goals>
-            <goal>generateAsync</goal> </goals> </execution> -->
           <execution>
-            <phase>compile</phase>
             <goals>
               <goal>compile</goal>
+              <goal>generateAsync</goal>
+              <goal>test</goal>
             </goals>
           </execution>
         </executions>
@@ -382,7 +367,7 @@
 			your Eclipse plug-in)
 		-->
 		<gae.version>1.7.0</gae.version>
-		<gwt.version>2.1.0</gwt.version>
+		<gwt.version>2.3.0</gwt.version>
 		<restlet.version>2.2-SNAPSHOT</restlet.version>
 		
 		

@@ -1,7 +1,12 @@
 package com.kdcloud.gwt.client;
 
+import org.restlet.client.data.ChallengeResponse;
+import org.restlet.client.data.ChallengeScheme;
 import org.restlet.client.resource.Result;
 
+import sun.security.action.GetLongAction;
+
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,6 +20,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class GwtClient implements EntryPoint {
 	
 	private final DataTableResourceProxy proxy = GWT.create(DataTableResourceProxy.class);
+	private ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC; 
+	private ChallengeResponse authentication = new ChallengeResponse(scheme, "login", "secret");
 
 	@Override
 	public void onModuleLoad() {
@@ -30,6 +37,7 @@ public class GwtClient implements EntryPoint {
 			
 			@Override
 			public void onClick(ClickEvent evt) {
+				proxy.getClientResource().setChallengeResponse(authentication);
 				proxy.getClientResource().setReference("/data");
 				proxy.create(new Result<Long>() {
 					
@@ -40,7 +48,7 @@ public class GwtClient implements EntryPoint {
 					
 					@Override
 					public void onFailure(Throwable caught) {
-						Window.alert("non funziona un cazzo");
+						Log.fatal("error", caught);
 					}
 				});
 			}

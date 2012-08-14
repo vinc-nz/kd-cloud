@@ -29,6 +29,7 @@ public class DataTableServerResource extends ProtectedServerResource implements 
 		em.persist(dataset);
 		
 		em.close();
+		getLogger().info("table created");
 		return dataset.getId();
 	}
 

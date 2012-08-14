@@ -31,10 +31,10 @@
       <attribute value="jar:file:/home/vincenzo/.m2/repository/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/1.7.1/gwt-servlet-1.7.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-user/1.7.1/gwt-user-1.7.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.3.0/gwt-servlet-2.3.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-servlet/2.3.0/gwt-servlet-2.3.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-user/2.3.0/gwt-user-2.3.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-user/2.3.0/gwt-user-2.3.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gwt/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gwt/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-dev/2.2.0/gwt-dev-2.2.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-dev/2.2.0/gwt-dev-2.2.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/allen-sauer/gwt/log/gwt-log/3.1.8/gwt-log-3.1.8.jar" sourcepath="M2_REPO/com/allen-sauer/gwt/log/gwt-log/3.1.8/gwt-log-3.1.8-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.servlet/2.2-SNAPSHOT/org.restlet.ext.servlet-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.servlet/2.2-SNAPSHOT/org.restlet.ext.servlet-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.oauth/2.2-SNAPSHOT/org.restlet.ext.oauth-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.oauth/2.2-SNAPSHOT/org.restlet.ext.oauth-2.2-SNAPSHOT-sources.jar"/>
@@ -61,6 +61,7 @@
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.wadl/2.2-SNAPSHOT/org.restlet.ext.wadl-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.wadl/2.2-SNAPSHOT/org.restlet.ext.wadl-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.xml/2.2-SNAPSHOT/org.restlet.ext.xml-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.xml/2.2-SNAPSHOT/org.restlet.ext.xml-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.net/2.2-SNAPSHOT/org.restlet.ext.net-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.net/2.2-SNAPSHOT/org.restlet.ext.net-2.2-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.gwt/2.2-SNAPSHOT/org.restlet.ext.gwt-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.gwt/2.2-SNAPSHOT/org.restlet.ext.gwt-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar" sourcepath="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-sources.jar">
     <attributes>
       <attribute value="jar:file:/home/vincenzo/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-javadoc.jar!/" name="javadoc_location"/>

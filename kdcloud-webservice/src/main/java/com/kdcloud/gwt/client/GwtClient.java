@@ -31,6 +31,7 @@ public class GwtClient implements EntryPoint {
 		VerticalPanel panel = new VerticalPanel();
 		panel.add(getButton);
 		panel.add(label);
+		panel.setStyleName("style");
 		RootPanel.get().add(panel);
 		
 		getButton.addClickHandler(new ClickHandler() {

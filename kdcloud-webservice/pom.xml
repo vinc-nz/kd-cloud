@@ -107,6 +107,12 @@
 	    </dependency>
 	    
 	    <dependency>
+	      <groupId>com.google.gwt</groupId>
+	      <artifactId>gwt-oauth2</artifactId>
+	      <version>0.2-alpha</version>
+	    </dependency>
+	    
+	    <dependency>
 	      <groupId>org.restlet.gwt</groupId>
 	      <artifactId>org.restlet</artifactId>
 	      <version>${restlet.version}</version>
@@ -367,7 +373,7 @@
 			your Eclipse plug-in)
 		-->
 		<gae.version>1.7.0</gae.version>
-		<gwt.version>2.3.0</gwt.version>
+		<gwt.version>2.4.0</gwt.version>
 		<restlet.version>2.2-SNAPSHOT</restlet.version>
 		
 		

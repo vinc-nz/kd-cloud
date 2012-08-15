@@ -3,26 +3,30 @@ package com.kdcloud.server.entity;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-@Entity
+@PersistenceCapable
 public class DataTable {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+	private String encodedKey;
+
+	@Persistent
+    @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
 	Long id;
 	
-	@Lob
 	LinkedList<DataRow> dataRows = new LinkedList<DataRow>();
 	
-	@Lob
 	LinkedList<String> committers = new LinkedList<String>();
 	
-	String owner;
+	@Persistent
+	User owner;
 
 	public Long getId() {
 		return id;
@@ -48,14 +52,20 @@ public class DataTable {
 		this.committers = committers;
 	}
 
-	public String getOwner() {
+	public String getEncodedKey() {
+		return encodedKey;
+	}
+
+	public void setEncodedKey(String encodedKey) {
+		this.encodedKey = encodedKey;
+	}
+
+	public User getOwner() {
 		return owner;
 	}
 
-	public void setOwner(String owner) {
+	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 
-	
-	
 }

@@ -26,6 +26,7 @@ public class DataTable {
 	@Persistent(serialized="true")
 	LinkedList<DataRow> dataRows = new LinkedList<DataRow>();
 	
+	@Persistent(serialized="true")
 	LinkedList<String> committers = new LinkedList<String>();
 	
 	@Persistent

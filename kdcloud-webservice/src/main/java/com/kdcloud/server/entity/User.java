@@ -1,13 +1,16 @@
 package com.kdcloud.server.entity;
 
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.datanucleus.annotations.Unowned;
 
 @PersistenceCapable
 public class User {
@@ -22,10 +25,11 @@ public class User {
 	private String id;
 	
 	@Persistent(serialized = "true")
-	private LinkedList<String> devices;
+	private LinkedList<String> devices = new LinkedList<String>();
 	
 	@Persistent(mappedBy="owner")
-	private List<DataTable> tables;
+	@Unowned
+	private Set<DataTable> tables = new HashSet<DataTable>();
 
 	public String getEncodedKey() {
 		return encodedKey;
@@ -51,14 +55,12 @@ public class User {
 		this.devices = devices;
 	}
 
-	public List<DataTable> getTables() {
+	public Set<DataTable> getTables() {
 		return tables;
 	}
 
-	public void setTables(List<DataTable> tables) {
+	public void setTables(Set<DataTable> tables) {
 		this.tables = tables;
 	}
-	
-	
-	
+
 }

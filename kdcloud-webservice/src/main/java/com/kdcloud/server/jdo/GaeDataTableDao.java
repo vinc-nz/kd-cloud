@@ -24,9 +24,9 @@ public class GaeDataTableDao implements DataTableDao {
 
 	@Override
 	public void save(DataTable e) {
-		pm.currentTransaction().begin();
+//		pm.currentTransaction().begin();
 		pm.makePersistent(e);
-		pm.currentTransaction().commit();
+//		pm.currentTransaction().commit();
 		Key k = KeyFactory.stringToKey(e.getEncodedKey());
 		e.setId(k.getId());
 	}

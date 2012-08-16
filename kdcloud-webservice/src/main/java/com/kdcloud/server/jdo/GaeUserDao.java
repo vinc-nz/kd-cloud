@@ -5,6 +5,7 @@ import javax.jdo.PersistenceManager;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.kdcloud.server.dao.UserDao;
+import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.User;
 
 public class GaeUserDao implements UserDao {
@@ -28,10 +29,14 @@ public class GaeUserDao implements UserDao {
 
 	@Override
 	public void save(User user) {
-		pm.currentTransaction().begin();
+//		pm.currentTransaction().begin();
 		pm.makePersistent(user);
-		pm.currentTransaction().commit();
-		pm.detachCopy(user);
+//		pm.currentTransaction().commit();
+//		pm.detachCopy(user);
+		for (DataTable e : user.getTables()) {
+			Key k = KeyFactory.stringToKey(e.getEncodedKey());
+			e.setId(k.getId());
+		}
 	}
 
 }

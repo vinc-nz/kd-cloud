@@ -19,11 +19,10 @@ public class DataTableServerResource extends KDServerResource implements DataTab
 		if (user == null) {
 			user = new User();
 			user.setId(id);
-			userDao.save(user);
 		}
-		dataset.setOwner(user);
 		dataset.getCommitters().add(id);
-		dataTableDao.save(dataset);
+		user.getTables().add(dataset);
+		userDao.save(user);
 		
 		return dataset.getId();
 	}

@@ -41,7 +41,6 @@ public class DataRowServerResource extends ServerResource implements DataRowReso
 
 	private boolean isCommitter(DataTable dataset) {
 		String user = getClientInfo().getUser().getIdentifier();
-		getLogger().info("user is "+user);
 		if (dataset.getCommitters().contains(user))
 			return true;
 		getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN);

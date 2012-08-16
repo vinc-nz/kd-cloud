@@ -15,17 +15,14 @@ public class MainApplication extends Application {
 
 	@Override
 	public Restlet createInboundRoot() {
-		getLogger().setLevel(Level.INFO);
+		getLogger().setLevel(Level.FINEST);
 
 		Router router = new Router(getContext());
 		
-		router.attach(TaskQueue.WORKER_URI, WorkerServerResource.class);
+		router.attach(TaskQueue.WORKER_URI + "{id}", WorkerServerResource.class);
 
-		// Guard the restlet with BASIC authentication.
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null, ChallengeScheme.HTTP_BASIC, "testRealm");
-		
 		guard.setVerifier(new OAuthVerifier());
-
 		guard.setNext(new KDApplication());
 		router.attachDefault(guard);
 

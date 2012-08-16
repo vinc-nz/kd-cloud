@@ -1,20 +1,43 @@
 package com.kdcloud.server.entity;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.datanucleus.annotations.Unowned;
 
-@Entity
-@NamedQuery(name="User.findByEmail", query="SELECT u FROM User u WHERE u.email=:email") 
+@PersistenceCapable
 public class User {
 
-	@Id
+	@PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+    private String encodedKey;
+	
+	@Persistent
+	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String id;
 	
-	private LinkedList<String> devices;
+	@Persistent(serialized = "true")
+	private LinkedList<String> devices = new LinkedList<String>();
+	
+	@Persistent(mappedBy="owner")
+	@Unowned
+	private Set<DataTable> tables = new HashSet<DataTable>();
+
+	public String getEncodedKey() {
+		return encodedKey;
+	}
+
+	public void setEncodedKey(String encodedKey) {
+		this.encodedKey = encodedKey;
+	}
 
 	public String getId() {
 		return id;
@@ -31,5 +54,13 @@ public class User {
 	public void setDevices(LinkedList<String> devices) {
 		this.devices = devices;
 	}
-	
+
+	public Set<DataTable> getTables() {
+		return tables;
+	}
+
+	public void setTables(Set<DataTable> tables) {
+		this.tables = tables;
+	}
+
 }

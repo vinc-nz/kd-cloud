@@ -1,29 +1,45 @@
 package com.kdcloud.server.entity;
 
-import javax.persistence.Entity;
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import com.google.appengine.datanucleus.annotations.Unowned;
 
-@Entity
+@PersistenceCapable
 public class Task {
 	
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+	private String encodedKey;
+
+	@Persistent
+    @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
 	Long id;
 	
-	long datatableId;
+	@Persistent
+	@Unowned
+	DataTable workingTable;
+	
+	@Persistent
+	@Unowned
+	User applicant;
 	
 	long workflowId;
 	
-	@Lob
+	@Persistent(serialized = "true")
 	Report report = new Report();
 	
-	String applicant;
-	
+	public String getEncodedKey() {
+		return encodedKey;
+	}
+
+	public void setEncodedKey(String encodedKey) {
+		this.encodedKey = encodedKey;
+	}
 
 	public Long getId() {
 		return id;
@@ -33,12 +49,12 @@ public class Task {
 		this.id = id;
 	}
 
-	public long getDatatableId() {
-		return datatableId;
+	public DataTable getWorkingTable() {
+		return workingTable;
 	}
 
-	public void setDatatableId(long datatableId) {
-		this.datatableId = datatableId;
+	public void setWorkingTable(DataTable workingTable) {
+		this.workingTable = workingTable;
 	}
 
 	public long getWorkflowId() {
@@ -56,13 +72,13 @@ public class Task {
 	public void setReport(Report report) {
 		this.report = report;
 	}
-	
-	public String getApplicant() {
+
+	public User getApplicant() {
 		return applicant;
 	}
 
-	public void setApplicant(String applicant) {
+	public void setApplicant(User applicant) {
 		this.applicant = applicant;
 	}
-
+	
 }

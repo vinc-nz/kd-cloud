@@ -34,7 +34,10 @@ public class GwtClient implements EntryPoint {
 	private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.email";
 
 	
-	private ChallengeResponse auth;
+	private ChallengeResponse auth = null;
+	
+	Button getButton;;
+	Label label;
 
 	public void requestToken() {
 		final AuthRequest req = new AuthRequest(GOOGLE_AUTH_URL,
@@ -59,7 +62,7 @@ public class GwtClient implements EntryPoint {
 		requestToken();
 
 		Button getButton = new Button("create");
-		final Label label = new Label();
+		Label label = new Label();
 
 		VerticalPanel panel = new VerticalPanel();
 		panel.add(getButton);
@@ -71,23 +74,32 @@ public class GwtClient implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent evt) {
-				proxy.getClientResource().setChallengeResponse(auth);
-				proxy.getClientResource().setReference("/data");
-				proxy.create(new Result<Long>() {
-
-					@Override
-					public void onSuccess(Long result) {
-						label.setText(Long.toString(result));
-					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Log.fatal("error", caught);
-					}
-				});
+				if (auth == null)
+					requestToken();
+				else
+					createDataset();
+				
 			}
+
 		});
 
+	}
+
+	protected void createDataset() {
+		proxy.getClientResource().setChallengeResponse(auth);
+		proxy.getClientResource().setReference("/data");
+		proxy.create(new Result<Long>() {
+
+			@Override
+			public void onSuccess(Long result) {
+				label.setText(Long.toString(result));
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.fatal("error", caught);
+			}
+		});
 	}
 
 }

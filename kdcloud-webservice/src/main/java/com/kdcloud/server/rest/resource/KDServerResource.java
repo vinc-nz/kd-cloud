@@ -3,11 +3,13 @@ package com.kdcloud.server.rest.resource;
 import javax.jdo.PersistenceManager;
 
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
 import org.restlet.resource.ServerResource;
 
 import com.kdcloud.server.dao.DataTableDao;
 import com.kdcloud.server.dao.TaskDao;
 import com.kdcloud.server.dao.UserDao;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.jdo.GaeDataTableDao;
 import com.kdcloud.server.jdo.GaeTaskDao;
 import com.kdcloud.server.jdo.GaeUserDao;
@@ -18,6 +20,8 @@ public abstract class KDServerResource extends ServerResource {
 	UserDao userDao;
 	DataTableDao dataTableDao;
 	TaskDao taskDao;
+	
+	User user;
 	
 	public KDServerResource() {
 		useGAEDatastore();
@@ -40,6 +44,24 @@ public abstract class KDServerResource extends ServerResource {
 	
 	protected void forbid() {
 		getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN);
+	}
+	
+	private User getUser() {
+		String id = getUserId();
+		User user = userDao.findById(id);
+		if (user == null) {
+			getLogger().info("request by unregistered user");
+			user = new User();
+			user.setId(id);
+		}
+		return user;
+	}
+	
+	@Override
+	public Representation handle() {
+		if (getRequest().getClientInfo().getUser() != null)
+			user = getUser();
+		return super.handle();
 	}
 
 }

@@ -1,6 +1,11 @@
 package com.kdcloud.server.rest.api;
 
+import java.util.ArrayList;
+
 import org.restlet.resource.Get;
+import org.restlet.resource.Put;
+
+import com.kdcloud.server.entity.Dataset;
 
 
 /**
@@ -18,7 +23,10 @@ public interface DataTableResource {
 	 * creates a new dataset
 	 * @return the dataset id
 	 */
+	@Put
+	public Long createDataset(String name, String description);
+	
 	@Get
-	public Long createDataset();
+	public ArrayList<Dataset> list();
 
 }

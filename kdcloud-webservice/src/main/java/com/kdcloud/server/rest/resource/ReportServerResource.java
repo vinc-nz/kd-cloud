@@ -4,7 +4,6 @@ import org.restlet.resource.Get;
 
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.ReportResource;
 
 public class ReportServerResource extends KDServerResource implements ReportResource {
@@ -15,7 +14,6 @@ public class ReportServerResource extends KDServerResource implements ReportReso
 	public Report retrive() {
 		String taskId = getRequestAttribute(PARAM_ID);
 		Task task = taskDao.findById(new Long(taskId));
-		User user = userDao.findById(getUserId());
 		if (!task.getApplicant().equals(user))
 			forbid();
 		return task.getReport();

@@ -1,22 +1,26 @@
 package com.kdcloud.server.jdo;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.jdo.PersistenceManager;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.kdcloud.server.dao.UserDao;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.jpa.EMService;
 
 public class GaeUserDao implements UserDao {
 	
-	EntityManager em = EMService.getEntityManager();
+	PersistenceManager pm;
+	
+	public GaeUserDao(PersistenceManager pm) {
+		super();
+		this.pm = pm;
+	}
 
 	@Override
 	public User findById(String id) {
-		Query q = em.createNamedQuery("User.findById");
-		q.setParameter("id", id);
+		Key k = KeyFactory.createKey(User.class.getSimpleName(), id);
 		try {
-			return (User) q.getSingleResult();
+			return pm.getObjectById(User.class, k);
 		} catch (Exception e) {
 			return null;
 		}
@@ -24,18 +28,10 @@ public class GaeUserDao implements UserDao {
 
 	@Override
 	public void save(User user) {
-		if (findById(user.getId()) == null) {
-			em.getTransaction().begin();
-			em.persist(user);
-			em.getTransaction().commit();
-		}
-	}
-
-	@Override
-	public void update(User user) {
-		em.getTransaction().begin();
-		em.merge(user);
-		em.getTransaction().commit();
+		pm.currentTransaction().begin();
+		pm.makePersistent(user);
+		pm.currentTransaction().commit();
+		pm.detachCopy(user);
 	}
 
 }

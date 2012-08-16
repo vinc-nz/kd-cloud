@@ -9,7 +9,7 @@ import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.jpa.EMService;
 import com.kdcloud.server.rest.api.ReportResource;
 
-public class ReportServerResource extends ProtectedServerResource implements ReportResource {
+public class ReportServerResource extends KDServerResource implements ReportResource {
 	
 	
 	@Override

@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.datanucleus.annotations.Unowned;
+
 @PersistenceCapable
 public class DataTable {
 
@@ -21,11 +23,13 @@ public class DataTable {
     @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
 	Long id;
 	
+	@Persistent(serialized="true")
 	LinkedList<DataRow> dataRows = new LinkedList<DataRow>();
 	
 	LinkedList<String> committers = new LinkedList<String>();
 	
 	@Persistent
+	@Unowned
 	User owner;
 
 	public Long getId() {

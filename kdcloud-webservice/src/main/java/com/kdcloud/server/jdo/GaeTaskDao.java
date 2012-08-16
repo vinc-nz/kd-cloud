@@ -4,26 +4,26 @@ import javax.jdo.PersistenceManager;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.kdcloud.server.dao.DataTableDao;
-import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.dao.TaskDao;
+import com.kdcloud.server.entity.Task;
 
-public class GaeDataTableDao implements DataTableDao {
+public class GaeTaskDao implements TaskDao {
 	
 	PersistenceManager pm;
 	
-	public GaeDataTableDao(PersistenceManager pm) {
+	public GaeTaskDao(PersistenceManager pm) {
 		super();
 		this.pm = pm;
 	}
 
 	@Override
-	public DataTable findById(Long id) {
-		Key k = KeyFactory.createKey(DataTable.class.getSimpleName(), id);
-		return pm.getObjectById(DataTable.class, k);
+	public Task findById(Long id) {
+		Key k = KeyFactory.createKey(Task.class.getSimpleName(), id);
+		return pm.getObjectById(Task.class, k);
 	}
 
 	@Override
-	public void save(DataTable e) {
+	public void save(Task e) {
 		pm.currentTransaction().begin();
 		pm.makePersistent(e);
 		pm.currentTransaction().commit();

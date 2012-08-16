@@ -21,6 +21,7 @@ public class User {
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String id;
 	
+	@Persistent(serialized = "true")
 	private LinkedList<String> devices;
 	
 	@Persistent(mappedBy="owner")

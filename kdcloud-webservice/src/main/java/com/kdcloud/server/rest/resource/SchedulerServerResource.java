@@ -1,18 +1,16 @@
 package com.kdcloud.server.rest.resource;
 
-import javax.persistence.EntityManager;
-
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.jpa.EMService;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.SchedulerResource;
 import com.kdcloud.server.tasks.GAETaskQueue;
 import com.kdcloud.server.tasks.TaskQueue;
 
-public class SchedulerServerResource extends ProtectedServerResource implements SchedulerResource {
+public class SchedulerServerResource extends KDServerResource implements SchedulerResource {
 	
 	private static final long DEFAULT_WORKFLOW = 1;
 	
@@ -27,24 +25,22 @@ public class SchedulerServerResource extends ProtectedServerResource implements 
 	@Override
 	@Get
 	public Long requestProcess() {
-		String userId = getUserId();
+		User user = userDao.findById(getUserId());
 		String datasetId = getRequestAttribute(PARAM_ID);
 		String workflowId = getRequestAttribute("workflowId");
 		long workflow =
 				(workflowId != null ? Long.valueOf(workflowId) : DEFAULT_WORKFLOW);
-		EntityManager em = EMService.getEntityManager();
 		Task task = new Task();
-		DataTable dataTable = em.find(DataTable.class, Long.valueOf(datasetId));
-		if (dataTable.getOwner().equals(userId)) {
-			task.setDatatableId(dataTable.getId());
+		DataTable dataTable = dataTableDao.findById(Long.valueOf(datasetId));
+		if (dataTable.getOwner().equals(user)) {
+			task.setWorkingTable(dataTable);
 			task.setWorkflowId(workflow);
-			task.setApplicant(userId);
-			em.persist(task);
+			task.setApplicant(user);
+			taskDao.save(task);
 		}
 		else {
 			forbid();
 		}
-		em.close();
 		taskQueue.push(task);
 		return task.getId();
 	}

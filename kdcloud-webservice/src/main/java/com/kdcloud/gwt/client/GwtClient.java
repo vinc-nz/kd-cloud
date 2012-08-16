@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.kdcloud.server.entity.DataTable;
 
 public class GwtClient implements EntryPoint {
 
@@ -38,6 +39,8 @@ public class GwtClient implements EntryPoint {
 	
 	Button getButton;;
 	Label label;
+	
+	DataTable table;
 
 	public void requestToken() {
 		final AuthRequest req = new AuthRequest(GOOGLE_AUTH_URL,

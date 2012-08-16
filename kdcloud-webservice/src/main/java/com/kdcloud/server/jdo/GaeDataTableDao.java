@@ -31,4 +31,9 @@ public class GaeDataTableDao implements DataTableDao {
 		e.setId(k.getId());
 	}
 
+	@Override
+	public void delete(DataTable dataset) {
+		pm.deletePersistent(dataset);
+	}
+
 }

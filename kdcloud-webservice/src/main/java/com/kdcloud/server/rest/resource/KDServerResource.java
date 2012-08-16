@@ -14,12 +14,16 @@ import com.kdcloud.server.jdo.GaeDataTableDao;
 import com.kdcloud.server.jdo.GaeTaskDao;
 import com.kdcloud.server.jdo.GaeUserDao;
 import com.kdcloud.server.jdo.PMF;
+import com.kdcloud.server.tasks.GAETaskQueue;
+import com.kdcloud.server.tasks.TaskQueue;
 
 public abstract class KDServerResource extends ServerResource {
 	
 	UserDao userDao;
 	DataTableDao dataTableDao;
 	TaskDao taskDao;
+	
+	TaskQueue taskQueue;
 	
 	User user;
 	
@@ -32,6 +36,7 @@ public abstract class KDServerResource extends ServerResource {
 		userDao = new GaeUserDao(pm);
 		dataTableDao = new GaeDataTableDao(pm);
 		taskDao = new GaeTaskDao(pm);
+		taskQueue = new GAETaskQueue();
 	}
 	
 	protected String getRequestAttribute(String key) {

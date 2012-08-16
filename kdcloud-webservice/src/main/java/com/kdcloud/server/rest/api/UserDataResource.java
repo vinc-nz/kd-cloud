@@ -2,6 +2,7 @@ package com.kdcloud.server.rest.api;
 
 import java.util.ArrayList;
 
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
@@ -13,7 +14,7 @@ import com.kdcloud.server.entity.Dataset;
  * @author vincenzo
  *
  */
-public interface DataTableResource {
+public interface UserDataResource {
 	
 	
 	public static final String URI = "/data";
@@ -27,6 +28,9 @@ public interface DataTableResource {
 	public Long createDataset(String name, String description);
 	
 	@Get
-	public ArrayList<Dataset> list();
+	public ArrayList<Dataset> listDataset();
+	
+	@Delete
+	public void deleteAllData();
 
 }

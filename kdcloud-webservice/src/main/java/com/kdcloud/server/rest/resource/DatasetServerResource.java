@@ -51,23 +51,31 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	@Override
 	@Post
 	public void addCommitter(String email) {
-		dataset.getCommitters().add(email);
-		dataTableDao.save(dataset);
-		//TODO notify user
+		if (dataset.getOwner().equals(user)) {
+			dataset.getCommitters().add(email);
+			dataTableDao.save(dataset);
+			//TODO notify user
+		}
+		else
+			forbid();
 	}
 
 	@Override
 	@Get
 	public ArrayList<DataRow> getData() {
-		//TODO test
-		return new ArrayList<DataRow>(dataset.getDataRows());
+		if (dataset.getOwner().equals(user))
+			return new ArrayList<DataRow>(dataset.getDataRows());
+		forbid();
+		return null;
 	}
 
 	@Override
 	@Delete
 	public void deleteDataset() {
-		//TODO test
-		dataTableDao.delete(dataset);
+		if (dataset.getOwner().equals(user))
+			dataTableDao.delete(dataset);
+		else
+			forbid();
 	}
 
 }

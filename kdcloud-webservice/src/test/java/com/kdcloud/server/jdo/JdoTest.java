@@ -6,19 +6,12 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.restlet.Component;
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.ChallengeScheme;
-import org.restlet.data.Protocol;
-import org.restlet.resource.ClientResource;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.rest.api.UserDataResource;
-import com.kdcloud.server.rest.application.KDApplication;
-import com.kdcloud.server.rest.application.MainApplication;
 public class JdoTest {
 	
     private final LocalServiceTestHelper helper =
@@ -45,6 +38,11 @@ public class JdoTest {
     	user.getTables().add(dataTable);
     	pm.makePersistent(user);
     	Assert.assertEquals(dataTable.getOwner().getId(), name);
+    	
+    	Task t = new Task();
+    	t.setWorkingTable(dataTable);
+    	t.setApplicant(user);
+    	pm.makePersistent(t);
     	
     	pm.deletePersistent(dataTable);
     	pm.refresh(user);

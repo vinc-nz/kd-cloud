@@ -62,5 +62,12 @@ public class User {
 	public void setTables(Set<DataTable> tables) {
 		this.tables = tables;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof User)
+			return ((User) obj).id.equals(this.id);
+		return false;
+	}
 
 }

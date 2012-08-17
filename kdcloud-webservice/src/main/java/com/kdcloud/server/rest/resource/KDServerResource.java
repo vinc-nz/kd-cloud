@@ -43,16 +43,12 @@ public abstract class KDServerResource extends ServerResource {
 		return (String) getRequestAttributes().get(key);
 	}
 	
-	protected String getUserId() {
-		return getRequest().getClientInfo().getUser().getIdentifier();
-	}
-	
 	protected void forbid() {
 		getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN);
 	}
 	
 	private User getUser() {
-		String id = getUserId();
+		String id = getRequest().getClientInfo().getUser().getIdentifier();
 		User user = userDao.findById(id);
 		if (user == null) {
 			getLogger().info("request by unregistered user");

@@ -42,8 +42,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	}
 
 	private boolean isCommitter(DataTable dataset) {
-		String user = getUserId();
-		if (dataset.getCommitters().contains(user))
+		if (dataset.getCommitters().contains(user.getId()))
 			return true;
 		forbid();
 		return false;

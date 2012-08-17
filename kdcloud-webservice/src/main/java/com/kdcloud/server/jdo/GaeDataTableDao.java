@@ -19,7 +19,11 @@ public class GaeDataTableDao implements DataTableDao {
 	@Override
 	public DataTable findById(Long id) {
 		Key k = KeyFactory.createKey(DataTable.class.getSimpleName(), id);
-		return pm.getObjectById(DataTable.class, k);
+		try {
+			return pm.getObjectById(DataTable.class, k);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override

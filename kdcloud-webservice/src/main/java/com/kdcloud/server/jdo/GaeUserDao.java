@@ -39,4 +39,12 @@ public class GaeUserDao implements UserDao {
 		}
 	}
 
+	@Override
+	public void delete(User user) {
+		for (DataTable e : user.getTables()) {
+			pm.deletePersistent(e);
+		}
+		pm.deletePersistent(user);
+	}
+
 }

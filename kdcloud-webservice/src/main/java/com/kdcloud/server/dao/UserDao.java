@@ -6,5 +6,6 @@ public interface UserDao {
 	
 	public User findById(String id);
 	public void save(User user);
+	public void delete(User user);
 
 }

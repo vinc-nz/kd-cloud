@@ -11,6 +11,11 @@ public class DataRow implements Serializable {
 	
 	
 	String[] dataCells;
+	
+	public DataRow(String[] dataCells) {
+		super();
+		this.dataCells = dataCells;
+	}
 
 	public String[] getDataCells() {
 		return dataCells;

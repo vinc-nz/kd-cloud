@@ -83,6 +83,15 @@
       <attribute value="jar:file:/home/spax/.m2/repository/ch/qos/logback/logback-core/0.9.24/logback-core-0.9.24-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/jse/org.restlet.ext.simple/2.2-SNAPSHOT/org.restlet.ext.simple-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/jse/org.restlet.ext.simple/2.2-SNAPSHOT/org.restlet.ext.simple-2.2-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/simpleframework/simple/4.1.21/simple-4.1.21.jar" sourcepath="M2_REPO/org/simpleframework/simple/4.1.21/simple-4.1.21-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/jse/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/jse/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/jse/org.restlet.ext.ssl/2.2-SNAPSHOT/org.restlet.ext.ssl-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/jse/org.restlet.ext.ssl/2.2-SNAPSHOT/org.restlet.ext.ssl-2.2-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/jsslutils/jsslutils/1.0.5/jsslutils-1.0.5.jar" sourcepath="M2_REPO/org/jsslutils/jsslutils/1.0.5/jsslutils-1.0.5-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/spax/.m2/repository/org/jsslutils/jsslutils/1.0.5/jsslutils-1.0.5-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-api-labs/1.7.0/appengine-api-labs-1.7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-api-stubs/1.7.0/appengine-api-stubs-1.7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-testing/1.7.0/appengine-testing-1.7.0.jar"/>

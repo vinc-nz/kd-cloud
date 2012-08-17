@@ -5,7 +5,6 @@ import org.restlet.resource.Put;
 
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.SchedulerResource;
 import com.kdcloud.server.tasks.GAETaskQueue;
 import com.kdcloud.server.tasks.TaskQueue;
@@ -25,16 +24,12 @@ public class SchedulerServerResource extends KDServerResource implements Schedul
 	@Override
 	@Get
 	public Long requestProcess() {
-		User user = userDao.findById(getUserId());
 		String datasetId = getRequestAttribute(PARAM_ID);
-		String workflowId = getRequestAttribute("workflowId");
-		long workflow =
-				(workflowId != null ? Long.valueOf(workflowId) : DEFAULT_WORKFLOW);
 		Task task = new Task();
 		DataTable dataTable = dataTableDao.findById(Long.valueOf(datasetId));
 		if (dataTable.getOwner().equals(user)) {
 			task.setWorkingTable(dataTable);
-			task.setWorkflowId(workflow);
+			task.setWorkflowId(DEFAULT_WORKFLOW);
 			task.setApplicant(user);
 			taskDao.save(task);
 		}

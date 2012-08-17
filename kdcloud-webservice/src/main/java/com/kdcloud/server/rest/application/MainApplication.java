@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
-import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 
@@ -22,17 +21,10 @@ public class MainApplication extends Application {
 		
 		router.attach(TaskQueue.WORKER_URI + "{id}", WorkerServerResource.class);
 
-		
-		// Guard the restlet with BASIC authentication.
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null, ChallengeScheme.HTTP_BASIC, "testRealm");
-
-		
 		guard.setVerifier(new OAuthVerifier());
-		
 		guard.setNext(new KDApplication());
 		router.attachDefault(guard);
-		
-		router.attach("/gwt", new Directory(getContext(), "war:///"));
 
 		return router;
 

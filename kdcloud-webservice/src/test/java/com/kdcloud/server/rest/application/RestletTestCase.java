@@ -80,7 +80,7 @@ public class RestletTestCase {
 		}
 	}
 
-	@Test
+//	@Test
 	public void test() {
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
 		ChallengeResponse authentication = new ChallengeResponse(scheme,

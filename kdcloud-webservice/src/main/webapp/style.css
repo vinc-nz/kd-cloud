@@ -1,4 +1,25 @@
-.style {
+.center {
     margin-left: auto;
     margin-right: auto;
+}
+
+.paddedHorizontalPanel {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.paddedHorizontalPanel table {
+	padding-right: 50px
+}
+
+
+.table td {
+	font-family: verdana,arial,sans-serif;
+	font-size:18px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+	padding: 8px;
+	border-style: solid;
 }

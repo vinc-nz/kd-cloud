@@ -44,7 +44,7 @@ public class GwtClient implements EntryPoint {
 
 	public void onModuleLoad() {
 
-		SummaryTable table = new SummaryTable(scheduler);
+		SummaryTable table = new SummaryTable(new Controller());
 		AppList list = new AppList(scheduler);
 		
 		HorizontalPanel tablesPannel = new HorizontalPanel();

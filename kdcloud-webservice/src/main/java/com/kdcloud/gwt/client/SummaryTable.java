@@ -15,14 +15,13 @@ public class SummaryTable extends CellTable<Dataset> {
 
 	// The list of data to display.
 	static final Long id = new Long(1);
-	static final List<Dataset> SAMPLE_DATA = Arrays
-			.asList(new Dataset(id, "ECG Test Data 1", "no description", 184461),
-					new Dataset(id, "ECG Test Data 2", "no description", 162574),
-					new Dataset(id, "ECG Test Data 3", "no description", 193670),
-					new Dataset(id, "ECG Test Data 4", "no description", 2067)
-			);
+	static final List<Dataset> SAMPLE_DATA = Arrays.asList(new Dataset(id,
+			"ECG Test Data 1", "no description", 184461), new Dataset(id,
+			"ECG Test Data 2", "no description", 162574), new Dataset(id,
+			"ECG Test Data 3", "no description", 193670), new Dataset(id,
+			"ECG Test Data 4", "no description", 2067));
 
-	public SummaryTable(final Scheduler scheduler) {
+	public SummaryTable(final Controller controller) {
 		super();
 
 		// Create name column.
@@ -56,11 +55,8 @@ public class SummaryTable extends CellTable<Dataset> {
 
 			@Override
 			public void onCellPreview(CellPreviewEvent<Dataset> event) {
-				if (event.getNativeEvent().getType().equals("click") && scheduler.getApplication() != null) {
-					Dataset input = event.getValue();
-					String app = scheduler.getApplication();
-					Window.confirm(app + " will be executed on " + input.getName());
-					scheduler.setDataset(input);
+				if (event.getNativeEvent().getType().equals("click")) {
+					controller.onDatasetSelected(event.getValue());
 				}
 			}
 		});

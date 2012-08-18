@@ -24,6 +24,7 @@ public class GwtClient implements EntryPoint {
 	
 	private Scheduler scheduler = new Scheduler();
 
+
 	public void requestToken() {
 		final AuthRequest req = new AuthRequest(GOOGLE_AUTH_URL,
 				GOOGLE_CLIENT_ID).withScopes(SCOPE);

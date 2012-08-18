@@ -21,8 +21,6 @@ public class GwtClient implements EntryPoint {
 	private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.email";
 	
 	private String accessToken;
-	
-	private Scheduler scheduler = new Scheduler();
 
 
 	public void requestToken() {
@@ -45,12 +43,16 @@ public class GwtClient implements EntryPoint {
 
 	public void onModuleLoad() {
 
-		SummaryTable table = new SummaryTable(new Controller());
-		AppList list = new AppList(scheduler);
+		Scheduler scheduler = new Scheduler();
+		DetailsPanel details = new DetailsPanel();
+		Controller controller = new Controller(details, scheduler);
+		SummaryTable table = new SummaryTable(controller);
+		AppList list = new AppList(controller);
 		
 		HorizontalPanel tablesPannel = new HorizontalPanel();
 		tablesPannel.add(list);
 		tablesPannel.add(table);
+		tablesPannel.add(details);
 		tablesPannel.setStyleName("paddedHorizontalPanel");
 		
 		HorizontalPanel buttonPanel = new HorizontalPanel();

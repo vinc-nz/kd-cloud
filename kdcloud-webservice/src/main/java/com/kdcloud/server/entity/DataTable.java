@@ -93,6 +93,11 @@ public class DataTable {
 		this.description = description;
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DataTable)
+			return ((DataTable) obj).id.equals(this.id);
+		return false;
+	}
 
 }

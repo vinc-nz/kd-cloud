@@ -17,6 +17,7 @@ public class UserDataServerResource extends KDServerResource implements UserData
 	@Put
 	public Long createDataset(String name, String description) {
 		DataTable dataset = new DataTable();
+		dataset.setName(name);
 		dataset.getCommitters().add(user.getId());
 		user.getTables().add(dataset);
 		userDao.save(user);

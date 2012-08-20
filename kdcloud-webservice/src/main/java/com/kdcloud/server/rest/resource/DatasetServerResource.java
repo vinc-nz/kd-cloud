@@ -72,8 +72,8 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	@Override
 	@Delete
 	public void deleteDataset() {
-		if (dataset.getOwner().equals(user))
-			dataTableDao.delete(dataset);
+		if (user.getTables().remove(dataset))
+			userDao.save(user);
 		else
 			forbid();
 	}

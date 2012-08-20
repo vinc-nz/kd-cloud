@@ -55,13 +55,8 @@ public class GwtClient implements EntryPoint {
 		tablesPannel.add(details);
 		tablesPannel.setStyleName("paddedHorizontalPanel");
 		
-		HorizontalPanel buttonPanel = new HorizontalPanel();
-		buttonPanel.add(new Button("New Application"));
-		buttonPanel.setStyleName("paddedHorizontalPanel");
-		
 		VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.add(tablesPannel);
-		mainPanel.add(buttonPanel);
 		mainPanel.setStyleName("center");
 
 		// Add it to the root panel.

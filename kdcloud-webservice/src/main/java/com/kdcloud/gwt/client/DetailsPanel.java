@@ -1,8 +1,5 @@
 package com.kdcloud.gwt.client;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
@@ -12,35 +9,46 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.kdcloud.server.entity.Dataset;
 
-public class DetailsPanel extends VerticalPanel {
+public class DetailsPanel extends VerticalPanel implements ViewComponent {
 	
-	private static final List<String> COMMITTERS = Arrays.asList("g.fortino@gmail.com",
-			"g.difatta@gmail.com", "v.pirrone@gmail.com", "d.parisi@gmail.com");
-
+	Model model;
 	
-	public DetailsPanel() {
+	public DetailsPanel(Model model) {
+		super();
+		this.model = model;
+		
 		Label label = new Label("click on a dataset to see the infos");
 		label.setStyleName("topPadding");
 		this.add(label);
 		this.setSpacing(10);
 	}
 	
-	public void setDataset(Dataset dataset) {
-		this.clear();
-		this.add(new HTML("<h3>"+dataset.getName()+"</h3>"));
+	public void refresh() {
 		
-		this.add(new Label("the following user can send data to this table:"));
+		Dataset dataset = model.selectedDataset;
+		if (dataset != null) {
+			this.clear();
+			this.add(new HTML("<h3>"+dataset.getName()+"</h3>"));
+			
+			this.add(new Label("the following user can send data to this table:"));
+			
+		    TextCell textCell = new TextCell();
+		    CellList<String> cellList = new CellList<String>(textCell);
+		    cellList.setRowCount(Model.COMMITTERS.size(), true);
+		    cellList.setRowData(0, Model.COMMITTERS);
+		    cellList.setStyleName("leftPadding");
+		    this.add(cellList);
+		    
+		    this.add(new Hyperlink("Share with others..", null));
+		    
+		    this.add(new Button("Delete Dataset"));
+		}
 		
-	    TextCell textCell = new TextCell();
-	    CellList<String> cellList = new CellList<String>(textCell);
-	    cellList.setRowCount(COMMITTERS.size(), true);
-	    cellList.setRowData(0, COMMITTERS);
-	    cellList.setStyleName("leftPadding");
-	    this.add(cellList);
-	    
-	    this.add(new Hyperlink("Share with others..", null));
-	    
-	    this.add(new Button("Delete Dataset"));
+	}
+
+	@Override
+	public void setupHandlers(Controller controller) {
+		// TODO Auto-generated method stub
 		
 	}
 

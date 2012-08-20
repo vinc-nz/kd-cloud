@@ -16,7 +16,10 @@ public class UserDataServerResource extends KDServerResource implements UserData
 	@Override
 	@Put
 	public Long createDataset(String name, String description) {
+		getLogger().info("creating dataset with desc " + description);
 		DataTable dataset = new DataTable();
+		dataset.setName(name);
+		dataset.setDescription(description);
 		dataset.getCommitters().add(user.getId());
 		user.getTables().add(dataset);
 		userDao.save(user);

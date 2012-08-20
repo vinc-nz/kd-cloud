@@ -5,7 +5,6 @@ import com.google.api.gwt.oauth2.client.AuthRequest;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -20,8 +19,7 @@ public class GwtClient implements EntryPoint {
 
 	private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.email";
 	
-	private String accessToken;
-
+	Controller controller;
 
 	public void requestToken() {
 		final AuthRequest req = new AuthRequest(GOOGLE_AUTH_URL,
@@ -30,7 +28,7 @@ public class GwtClient implements EntryPoint {
 		AUTH.login(req, new Callback<String, Throwable>() {
 			@Override
 			public void onSuccess(String token) {
-				GwtClient.this.accessToken = token;
+				controller.onLogin(token);
 			}
 
 			@Override
@@ -42,16 +40,22 @@ public class GwtClient implements EntryPoint {
 	}
 
 	public void onModuleLoad() {
+		Model model = new Model();
 
-		Scheduler scheduler = new Scheduler();
-		DetailsPanel details = new DetailsPanel();
-		Controller controller = new Controller(details, scheduler);
-		SummaryTable table = new SummaryTable(controller);
-		AppList list = new AppList(controller);
+		AppList appList = new AppList(model);
+		SummaryTable summaryTable = new SummaryTable(model);
+		DetailsPanel details = new DetailsPanel(model);
+		
+		View view = new View();
+		view.add(details);
+		view.add(appList);
+		view.add(summaryTable);
+		
+		controller = new Controller(model, view);
 		
 		HorizontalPanel tablesPannel = new HorizontalPanel();
-		tablesPannel.add(list);
-		tablesPannel.add(table);
+		tablesPannel.add(appList);
+		tablesPannel.add(summaryTable);
 		tablesPannel.add(details);
 		tablesPannel.setStyleName("paddedHorizontalPanel");
 		
@@ -61,6 +65,8 @@ public class GwtClient implements EntryPoint {
 
 		// Add it to the root panel.
 		RootPanel.get().add(mainPanel);
+		
+		requestToken();
 	}
 
 }

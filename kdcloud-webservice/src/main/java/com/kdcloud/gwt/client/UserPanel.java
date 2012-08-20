@@ -17,12 +17,6 @@ public class UserPanel extends VerticalPanel implements ViewComponent {
 	}
 
 	@Override
-	public void setupHandlers(Controller controller) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void refresh() {
 		label.setText("you are logged with token " + model.user);
 	}

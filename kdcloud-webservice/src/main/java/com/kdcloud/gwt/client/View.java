@@ -14,13 +14,6 @@ public class View implements ViewComponent {
 		}
 	}
 
-	@Override
-	public void setupHandlers(Controller controller) {
-		for (ViewComponent c : components) {
-			c.setupHandlers(controller);
-		}
-	}
-	
 	public void add(ViewComponent c) {
 		components.add(c);
 	}

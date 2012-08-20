@@ -46,9 +46,10 @@ public class SummaryTable extends VerticalPanel implements ViewComponent {
 	Model model;
 	Controller controller;
 
-	public SummaryTable(Model model) {
+	public SummaryTable(Model model, Controller controller) {
 		super();
 		this.model = model;
+		this.controller = controller;
 		this.dataProvider = new ListDataProvider<Dataset>();
 
 		this.setupTable();
@@ -110,12 +111,6 @@ public class SummaryTable extends VerticalPanel implements ViewComponent {
 		table.addColumn(nameColumn, "Dataset");
 		table.addColumn(descriptionColumn, "Description");
 		table.addColumn(sizeColumn, "Size");
-		dataProvider.addDataDisplay(table);
-	}
-
-	@Override
-	public void setupHandlers(final Controller controller) {
-		this.controller = controller;
 		table.addCellPreviewHandler(new Handler<Dataset>() {
 
 			@Override
@@ -125,6 +120,7 @@ public class SummaryTable extends VerticalPanel implements ViewComponent {
 				}
 			}
 		});
+		dataProvider.addDataDisplay(table);
 	}
 
 }

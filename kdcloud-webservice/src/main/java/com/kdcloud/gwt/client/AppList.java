@@ -24,22 +24,17 @@ public class AppList extends VerticalPanel implements ViewComponent {
 	
 	Model model;
 
-	public AppList(Model model) {
+	Controller controller;
+
+	public AppList(Model model, final Controller controller) {
 		super();
 		this.model = model;
+		this.controller = controller;
 
 		appTable.addColumn(textColumn, "Applications");
 		ListDataProvider<String> provider = new ListDataProvider<String>();
 		provider.addDataDisplay(appTable);
 		provider.getList().addAll(model.apps);
-		this.add(appTable);
-
-		Widget newApp = new Hyperlink("New Application..", null);
-		newApp.setStyleName("leftPadding");
-		this.add(newApp);
-	}
-	
-	public void setupHandlers(final Controller controller) {
 		appTable.addCellPreviewHandler(new Handler<String>() {
 
 			@Override
@@ -50,6 +45,15 @@ public class AppList extends VerticalPanel implements ViewComponent {
 
 			}
 		});
+		this.add(appTable);
+
+		Widget newApp = new Hyperlink("New Application..", null);
+		newApp.setStyleName("leftPadding");
+		this.add(newApp);
+	}
+	
+	public void setupHandlers(final Controller controller) {
+		
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package com.kdcloud.gwt.client;
 
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
@@ -12,10 +14,12 @@ import com.kdcloud.server.entity.Dataset;
 public class DetailsPanel extends VerticalPanel implements ViewComponent {
 	
 	Model model;
+	Controller controller;
 	
-	public DetailsPanel(Model model) {
+	public DetailsPanel(Model model, Controller controller) {
 		super();
 		this.model = model;
+		this.controller = controller;
 		
 		Label label = new Label("click on a dataset to see the infos");
 		label.setStyleName("topPadding");
@@ -25,7 +29,7 @@ public class DetailsPanel extends VerticalPanel implements ViewComponent {
 	
 	public void refresh() {
 		
-		Dataset dataset = model.selectedDataset;
+		final Dataset dataset = model.selectedDataset;
 		if (dataset != null) {
 			this.clear();
 			this.add(new HTML("<h3>"+dataset.getName()+"</h3>"));
@@ -41,14 +45,16 @@ public class DetailsPanel extends VerticalPanel implements ViewComponent {
 		    
 		    this.add(new Hyperlink("Share with others..", null));
 		    
-		    this.add(new Button("Delete Dataset"));
+		    Button deleteButton = new Button("Delete Dataset");
+		    deleteButton.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					controller.onDatasetDeletion(dataset);
+				}
+			});
+		    this.add(deleteButton);
 		}
-		
-	}
-
-	@Override
-	public void setupHandlers(Controller controller) {
-		// TODO Auto-generated method stub
 		
 	}
 

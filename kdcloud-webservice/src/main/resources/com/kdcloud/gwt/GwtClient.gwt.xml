@@ -5,6 +5,8 @@
 	<source path="client" />
 	
 	<inherits name='com.kdcloud.Common'/>
+	<!-- Inherits the Restlet core module                           -->
+	<inherits name='org.restlet.Restlet' />
 	
 	<inherits name='com.google.gwt.user.UserAgent'/>
 	<set-property name="user.agent" value="gecko1_8"/>
@@ -21,10 +23,7 @@
 <!-- 	<inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 	
 	<inherits name="com.google.api.gwt.oauth2.OAuth2" />
-
-	<!-- Inherits the Restlet core module                           -->
-	<inherits name='org.restlet.Restlet' />
-
+	
 	<!-- Specify the app entry point class.                         -->
   <entry-point class='com.kdcloud.gwt.client.GwtClient'/>
 </module>

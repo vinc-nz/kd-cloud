@@ -1,4 +1,4 @@
-package com.kdcloud.gwt.client;
+package com.kdcloud.gwt.client.rest;
 
 import java.util.ArrayList;
 

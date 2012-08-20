@@ -41,17 +41,17 @@ public class GwtClient implements EntryPoint {
 
 	public void onModuleLoad() {
 		Model model = new Model();
-
-		AppList appList = new AppList(model);
-		SummaryTable summaryTable = new SummaryTable(model);
-		DetailsPanel details = new DetailsPanel(model);
-		
 		View view = new View();
+		controller = new Controller(model, view);
+
+		AppList appList = new AppList(model, controller);
+		SummaryTable summaryTable = new SummaryTable(model, controller);
+		DetailsPanel details = new DetailsPanel(model, controller);
+		
 		view.add(details);
 		view.add(appList);
 		view.add(summaryTable);
 		
-		controller = new Controller(model, view);
 		
 		HorizontalPanel tablesPannel = new HorizontalPanel();
 		tablesPannel.add(appList);

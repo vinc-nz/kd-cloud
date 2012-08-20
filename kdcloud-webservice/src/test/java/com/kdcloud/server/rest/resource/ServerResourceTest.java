@@ -14,6 +14,7 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.Dataset;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.tasks.TaskQueue;
@@ -55,7 +56,7 @@ public class ServerResourceTest {
 	
 	@Test
 	public void testUserData() {
-		Long id = userDataResource.createDataset("test", "test");
+		Long id = userDataResource.createDataset(new Dataset("test", "test"));
 		assertNotNull(id);
 		
 		User u = userDataResource.userDao.findById(USER_ID);
@@ -72,7 +73,7 @@ public class ServerResourceTest {
 
 	@Test
 	public void testDataset() {
-		Long id = userDataResource.createDataset("test", "test");
+		Long id = userDataResource.createDataset(new Dataset("test", "test"));
 		
 		datasetResource.dataset = datasetResource.dataTableDao.findById(id);
 		String[] cells = {"1", "2"};

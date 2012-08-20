@@ -20,6 +20,7 @@ import org.restlet.security.MapVerifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.kdcloud.server.entity.Dataset;
 import com.kdcloud.server.rest.api.UserDataResource;
 
 public class RestletTestCase {
@@ -89,7 +90,7 @@ public class RestletTestCase {
 		ClientResource data = new ClientResource(BASE_URI + "data");
 		data.setChallengeResponse(authentication);
 		UserDataResource userDataResource = data.wrap(UserDataResource.class);
-		long id = userDataResource.createDataset("test", "test");
+		long id = userDataResource.createDataset(new Dataset("test", "test"));
 		Assert.assertNotNull(id);
 	}
 

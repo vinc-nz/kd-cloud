@@ -15,9 +15,11 @@ public class UserDataServerResource extends KDServerResource implements UserData
 	
 	@Override
 	@Put
-	public Long createDataset(String name, String description) {
+	public Long createDataset(Dataset dto) {
 		DataTable dataset = new DataTable();
-		dataset.setName(name);
+		dataset.setName(dto.getName());
+		dataset.setDescription(dto.getDescription());
+		dataset.setCommitters(dto.getCommitters());
 		dataset.getCommitters().add(user.getId());
 		user.getTables().add(dataset);
 		userDao.save(user);
@@ -29,8 +31,7 @@ public class UserDataServerResource extends KDServerResource implements UserData
 	public ArrayList<Dataset> listDataset() {
 		ArrayList<Dataset> list = new ArrayList<Dataset>(user.getTables().size());
 		for (DataTable table : user.getTables()) {
-			Dataset dto = new Dataset();
-			dto.setName(table.getName());
+			Dataset dto = new Dataset(table.getName(), table.getDescription());
 			dto.setDescription(table.getDescription());
 			dto.setSize(table.getDataRows().size());
 			dto.setId(table.getId());

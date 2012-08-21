@@ -37,8 +37,8 @@ public class DetailsPanel extends VerticalPanel implements ViewComponent {
 		
 	    TextCell textCell = new TextCell();
 	    CellList<String> cellList = new CellList<String>(textCell);
-	    cellList.setRowCount(Model.COMMITTERS.size(), true);
-	    cellList.setRowData(0, Model.COMMITTERS);
+	    cellList.setRowCount(dataset.getCommitters().size(), true);
+	    cellList.setRowData(0, dataset.getCommitters());
 	    cellList.setStyleName("leftPadding");
 	    this.add(cellList);
 	    

@@ -1,4 +1,4 @@
-package com.kdcloud.gwt.client;
+package com.kdcloud.client.gwt;
 
 import com.google.api.gwt.oauth2.client.Auth;
 import com.google.api.gwt.oauth2.client.AuthRequest;
@@ -8,6 +8,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.kdcloud.client.gwt.mvc.AppList;
+import com.kdcloud.client.gwt.mvc.Controller;
+import com.kdcloud.client.gwt.mvc.DetailsPanel;
+import com.kdcloud.client.gwt.mvc.Model;
+import com.kdcloud.client.gwt.mvc.SummaryTable;
+import com.kdcloud.client.gwt.mvc.View;
 
 public class GwtClient implements EntryPoint {
 

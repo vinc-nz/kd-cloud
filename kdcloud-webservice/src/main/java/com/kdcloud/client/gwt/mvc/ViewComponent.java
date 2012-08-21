@@ -1,4 +1,4 @@
-package com.kdcloud.gwt.client;
+package com.kdcloud.client.gwt.mvc;
 
 public interface ViewComponent {
 	

@@ -1,9 +1,11 @@
-package com.kdcloud.gwt.client.rest;
+package com.kdcloud.client.gwt.rest;
 
 import org.restlet.client.data.ChallengeResponse;
 import org.restlet.client.data.ChallengeScheme;
 
 import com.google.gwt.core.client.GWT;
+import com.kdcloud.server.rest.api.DatasetResource;
+import com.kdcloud.server.rest.api.UserDataResource;
 
 public class KDClient {
 	
@@ -15,7 +17,7 @@ public class KDClient {
 	private ChallengeResponse auth;
 	
 	public KDClient() {
-		userDataResourceProxy.getClientResource().setReference("/data");
+		userDataResourceProxy.getClientResource().setReference(UserDataResource.URI);
 	}
 	
 	public void setToken(String token) {
@@ -29,10 +31,9 @@ public class KDClient {
 	}
 
 	public DatasetResourceProxy getDatasetResource(Long id) {
-		datasetResourceProxy.getClientResource().setReference("/data/" + Long.toString(id));
+		String uri = DatasetResource.URI.replaceAll("\\{\\w+\\}", Long.toString(id));
+		datasetResourceProxy.getClientResource().setReference(uri);
 		return datasetResourceProxy;
 	}
-	
-	
 	
 }

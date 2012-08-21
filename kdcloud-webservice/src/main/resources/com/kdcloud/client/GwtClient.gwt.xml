@@ -2,9 +2,10 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
 <module rename-to='com_kdcloud_gwt'>
 	<!-- Add necessary source paths.                               -->
-	<source path="client" />
+	<source path="gwt" />
 	
-	<inherits name='com.kdcloud.Common'/>
+	<inherits name='com.kdcloud.Entities'/>
+	<inherits name='com.kdcloud.Api' />
 	<!-- Inherits the Restlet core module                           -->
 	<inherits name='org.restlet.Restlet' />
 	
@@ -25,5 +26,5 @@
 	<inherits name="com.google.api.gwt.oauth2.OAuth2" />
 	
 	<!-- Specify the app entry point class.                         -->
-  <entry-point class='com.kdcloud.gwt.client.GwtClient'/>
+  <entry-point class='com.kdcloud.client.gwt.GwtClient'/>
 </module>

@@ -1,4 +1,4 @@
-package com.kdcloud.gwt.client;
+package com.kdcloud.client.gwt.mvc;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ import org.restlet.client.resource.Result;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Window;
-import com.kdcloud.gwt.client.rest.KDClient;
+import com.kdcloud.client.gwt.rest.KDClient;
 import com.kdcloud.server.entity.Dataset;
 
 public class Controller {
@@ -80,6 +80,7 @@ public class Controller {
 				@Override
 				public void onSuccess(Void result) {
 					model.data.remove(dataset);
+					model.selectedDataset = null;
 					view.refresh();
 				}
 			});

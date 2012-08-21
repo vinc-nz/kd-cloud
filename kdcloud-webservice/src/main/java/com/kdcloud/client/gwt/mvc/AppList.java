@@ -1,4 +1,4 @@
-package com.kdcloud.gwt.client;
+package com.kdcloud.client.gwt.mvc;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;

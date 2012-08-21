@@ -1,4 +1,4 @@
-package com.kdcloud.gwt.client.rest;
+package com.kdcloud.client.gwt.rest;
 
 import org.restlet.client.resource.ClientProxy;
 import org.restlet.client.resource.Delete;

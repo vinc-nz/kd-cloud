@@ -1,4 +1,4 @@
-package com.kdcloud.gwt.client;
+package com.kdcloud.client.gwt.mvc;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;

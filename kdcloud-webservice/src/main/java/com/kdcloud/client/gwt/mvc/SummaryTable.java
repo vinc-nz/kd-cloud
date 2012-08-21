@@ -1,4 +1,4 @@
-package com.kdcloud.gwt.client;
+package com.kdcloud.client.gwt.mvc;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -41,7 +41,8 @@ public class SummaryTable extends VerticalPanel implements ViewComponent {
 	CellTable<Dataset> table;
 	ListDataProvider<Dataset> dataProvider;
 	Button newDatasetButton;
-	Widget loading; 
+	Widget loading;
+	Widget noDataBanner;
 
 	Model model;
 	Controller controller;
@@ -59,6 +60,10 @@ public class SummaryTable extends VerticalPanel implements ViewComponent {
 		this.loading.addStyleName("bottomPadding");
 		this.loading.addStyleName("leftPadding");
 		this.add(loading);
+		
+		this.noDataBanner = new Label("you do not have any dataset");
+		this.noDataBanner.addStyleName("bottomPadding");
+		this.noDataBanner.addStyleName("leftPadding");
 
 		this.newDatasetButton = new Button("Create New");
 		this.newDatasetButton.addClickHandler(new ClickHandler() {
@@ -101,9 +106,15 @@ public class SummaryTable extends VerticalPanel implements ViewComponent {
 	@Override
 	public void refresh() {
 		this.remove(loading);
+		this.remove(noDataBanner);
 		dataProvider.getList().clear();
 		dataProvider.getList().addAll(model.data);
 		dataProvider.refresh();
+		if (model.data.isEmpty()) {
+			this.remove(newDatasetButton);
+			this.add(noDataBanner);
+			this.add(newDatasetButton);
+		}
 	}
 
 	private void setupTable() {

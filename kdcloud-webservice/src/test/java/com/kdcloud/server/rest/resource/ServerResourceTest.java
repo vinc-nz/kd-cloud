@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 
 import java.util.LinkedList;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,6 +78,7 @@ public class ServerResourceTest {
 		Long id = userDataResource.createDataset(new Dataset("test", "test"));
 		
 		datasetResource.dataset = datasetResource.dataTableDao.findById(id);
+		assertNotNull(datasetResource.dataset.getId());
 		String[] cells = {"1", "2"};
 		DataRow dataRow = new DataRow(cells);
 		LinkedList<DataRow> data = new LinkedList<DataRow>();
@@ -87,8 +90,8 @@ public class ServerResourceTest {
 		datasetResource.user.setId("committer");
 		datasetResource.uploadData(data);
 		
-		datasetResource.user = new User();
-		datasetResource.user.setId(USER_ID);
+		datasetResource.user = datasetResource.userDao.findById(USER_ID);
+		assertNotNull(userDataResource.user.getTables().iterator().next().getId());
 		assertEquals(2, datasetResource.getData().size());
 		
 		datasetResource.deleteDataset();

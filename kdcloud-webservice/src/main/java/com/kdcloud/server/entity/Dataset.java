@@ -21,6 +21,10 @@ public class Dataset implements Serializable {
 	
 	int size;
 	
+	public Dataset() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public Dataset(String name, String description) {
 		super();
 		this.name = name;

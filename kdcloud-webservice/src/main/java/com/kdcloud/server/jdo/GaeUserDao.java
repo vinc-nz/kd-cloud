@@ -29,10 +29,12 @@ public class GaeUserDao implements UserDao {
 
 	@Override
 	public void save(User user) {
-//		pm.currentTransaction().begin();
 		pm.makePersistent(user);
-//		pm.currentTransaction().commit();
-//		pm.detachCopy(user);
+		setTablesKey(user);
+	}
+	
+	//jdo should perform this automatically
+	private void setTablesKey(User user) {
 		for (DataTable e : user.getTables()) {
 			Key k = KeyFactory.stringToKey(e.getEncodedKey());
 			e.setId(k.getId());

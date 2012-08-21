@@ -20,7 +20,9 @@ public class GaeDataTableDao implements DataTableDao {
 	public DataTable findById(Long id) {
 		Key k = KeyFactory.createKey(DataTable.class.getSimpleName(), id);
 		try {
-			return pm.getObjectById(DataTable.class, k);
+			DataTable e = pm.getObjectById(DataTable.class, k);
+			e.setId(id);
+			return e;
 		} catch (Exception e) {
 			return null;
 		}
@@ -28,9 +30,7 @@ public class GaeDataTableDao implements DataTableDao {
 
 	@Override
 	public void save(DataTable e) {
-//		pm.currentTransaction().begin();
 		pm.makePersistent(e);
-//		pm.currentTransaction().commit();
 		Key k = KeyFactory.stringToKey(e.getEncodedKey());
 		e.setId(k.getId());
 	}

@@ -12,7 +12,10 @@ import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
+import org.restlet.representation.ObjectRepresentation;
+import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
@@ -21,7 +24,6 @@ import org.restlet.security.MapVerifier;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.entity.Dataset;
-import com.kdcloud.server.rest.api.UserDataResource;
 
 public class RestletTestCase {
 
@@ -81,7 +83,7 @@ public class RestletTestCase {
 		}
 	}
 
-//	@Test
+	@Test
 	public void test() {
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
 		ChallengeResponse authentication = new ChallengeResponse(scheme,
@@ -89,9 +91,15 @@ public class RestletTestCase {
 
 		ClientResource data = new ClientResource(BASE_URI + "data");
 		data.setChallengeResponse(authentication);
-		UserDataResource userDataResource = data.wrap(UserDataResource.class);
-		long id = userDataResource.createDataset(new Dataset("test", "test"));
-		Assert.assertNotNull(id);
+		ObjectRepresentation<Dataset> dataset = 
+				new ObjectRepresentation<Dataset>(new Dataset("test", "test"));
+		try {
+			Representation response = data.put(dataset, MediaType.APPLICATION_JAVA_OBJECT);
+			ObjectRepresentation<Long> id = new ObjectRepresentation<Long>(response);
+			Assert.assertNotNull(id.getObject());
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
 
 }

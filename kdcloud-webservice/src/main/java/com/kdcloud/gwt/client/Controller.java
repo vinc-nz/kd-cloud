@@ -65,7 +65,7 @@ public class Controller {
 				view.refresh();
 			}
 		};
-		client.getUserDataResource().createDataset(d.getName(), d.getDescription(), callback);
+		client.getUserDataResource().createDataset(d, callback);
 	}
 
 	public void onDatasetDeletion(final Dataset dataset) {

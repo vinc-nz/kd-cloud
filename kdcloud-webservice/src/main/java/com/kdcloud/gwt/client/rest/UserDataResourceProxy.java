@@ -15,6 +15,6 @@ public interface UserDataResourceProxy extends ClientProxy {
 	public void list(Result<ArrayList<Dataset>> callback);
 	
 	@Put
-	public void createDataset(String name, String description, Result<Long> callback);
+	public void createDataset(Dataset dto, Result<Long> callback);
 
 }

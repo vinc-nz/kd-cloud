@@ -1,0 +1,26 @@
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.paddedHorizontalPanel {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.paddedHorizontalPanel table {
+	padding-right: 50px;
+	padding-bottom: 20px;
+}
+
+.leftPadding {
+	padding-left: 20px;
+}
+
+.topPadding {
+	padding-top: 50px;
+}
+
+.bottomPadding {
+	padding-bottom: 20px;
+}

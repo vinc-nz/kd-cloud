@@ -7,6 +7,8 @@
   <classpathentry kind="var" path="M2_REPO/javax/jdo/jdo-api/3.0/jdo-api-3.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/transaction/transaction-api/1.1/transaction-api-1.1.jar" sourcepath="M2_REPO/javax/transaction/transaction-api/1.1/transaction-api-1.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/transaction/jta/1.1/jta-1.1.jar" sourcepath="M2_REPO/javax/transaction/jta/1.1/jta-1.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar" sourcepath="M2_REPO/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-api-1.0-sdk/1.7.0/appengine-api-1.0-sdk-1.7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1.jar" sourcepath="M2_REPO/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1-sources.jar">
@@ -27,6 +29,11 @@
       <attribute value="jar:file:/home/spax/.m2/repository/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.4.0/gwt-servlet-2.4.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-servlet/2.4.0/gwt-servlet-2.4.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-user/2.4.0/gwt-user-2.4.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-user/2.4.0/gwt-user-2.4.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-oauth2/0.2-alpha/gwt-oauth2-0.2-alpha.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/gwt/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gwt/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/allen-sauer/gwt/log/gwt-log/3.1.8/gwt-log-3.1.8.jar" sourcepath="M2_REPO/com/allen-sauer/gwt/log/gwt-log/3.1.8/gwt-log-3.1.8-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.servlet/2.2-SNAPSHOT/org.restlet.ext.servlet-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.servlet/2.2-SNAPSHOT/org.restlet.ext.servlet-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet/2.2-SNAPSHOT/org.restlet-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.oauth/2.2-SNAPSHOT/org.restlet.ext.oauth-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.oauth/2.2-SNAPSHOT/org.restlet.ext.oauth-2.2-SNAPSHOT-sources.jar"/>
@@ -53,6 +60,7 @@
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.wadl/2.2-SNAPSHOT/org.restlet.ext.wadl-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.wadl/2.2-SNAPSHOT/org.restlet.ext.wadl-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.xml/2.2-SNAPSHOT/org.restlet.ext.xml-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.xml/2.2-SNAPSHOT/org.restlet.ext.xml-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.net/2.2-SNAPSHOT/org.restlet.ext.net-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.net/2.2-SNAPSHOT/org.restlet.ext.net-2.2-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.gwt/2.2-SNAPSHOT/org.restlet.ext.gwt-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.gwt/2.2-SNAPSHOT/org.restlet.ext.gwt-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar" sourcepath="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-sources.jar">
     <attributes>
       <attribute value="jar:file:/home/spax/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-javadoc.jar!/" name="javadoc_location"/>

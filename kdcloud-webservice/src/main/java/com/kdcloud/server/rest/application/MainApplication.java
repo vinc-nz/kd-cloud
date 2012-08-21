@@ -25,7 +25,7 @@ public class MainApplication extends Application {
 		guard.setVerifier(new OAuthVerifier());
 		guard.setNext(new KDApplication());
 		router.attachDefault(guard);
-		
+
 		return router;
 
 	}

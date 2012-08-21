@@ -5,21 +5,56 @@ import java.util.ArrayList;
 import org.restlet.client.resource.Result;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.History;
 import com.kdcloud.client.gwt.rest.KDClient;
 import com.kdcloud.server.entity.Dataset;
 
 public class Controller {
 	
+	public static final String NEW_COMMITTER_HYSTORY_TOKEN = "share";
+	
 	Model model;
 	View view;
 	
 	KDClient client = new KDClient();
+	
+	ValueChangeHandler<String> historyListener = new ValueChangeHandler<String>() {
+
+		@Override
+		public void onValueChange(ValueChangeEvent<String> event) {
+			if (event.getValue().equals(NEW_COMMITTER_HYSTORY_TOKEN))
+				newCommitter();
+			History.newItem("home");
+			History.fireCurrentHistoryState();
+		}
+	};
 
 	public Controller(Model model, View view) {
 		super();
 		this.model = model;
 		this.view = view;
+		
+		History.addValueChangeHandler(historyListener);
+	}
+
+	protected void newCommitter() {
+		Long id = model.selectedDataset.getId();
+		final String email = view.askCommitterEmail();
+		client.getDatasetResource(id).addCommitter(email, new Result<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.fatal("error adding committer", caught);
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				model.selectedDataset.getCommitters().add(email);
+				view.refresh();
+			}
+		});
 	}
 
 	public void onDatasetSelected(Dataset dataset) {
@@ -69,7 +104,7 @@ public class Controller {
 	}
 
 	public void onDatasetDeletion(final Dataset dataset) {
-		if (Window.confirm("Are you sure you want to delete " + dataset.getName() + "?"))
+		if (view.askDatasetRemovalConfirm(dataset));
 			client.getDatasetResource(dataset.getId()).deleteDataset(new Result<Void>() {
 
 				@Override
@@ -85,5 +120,5 @@ public class Controller {
 				}
 			});
 	}
-	
+
 }

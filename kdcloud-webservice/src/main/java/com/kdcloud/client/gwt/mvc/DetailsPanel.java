@@ -42,7 +42,8 @@ public class DetailsPanel extends VerticalPanel implements ViewComponent {
 	    cellList.setStyleName("leftPadding");
 	    this.add(cellList);
 	    
-	    this.add(new Hyperlink("Share with others..", null));
+	    this.add(new Hyperlink("Share with others..", Controller.NEW_COMMITTER_HYSTORY_TOKEN));
+	    
 	    
 	    Button deleteButton = new Button("Delete Dataset");
 	    deleteButton.addClickHandler(new ClickHandler() {

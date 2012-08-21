@@ -25,7 +25,7 @@ public interface UserDataResource {
 	 * @return the dataset id
 	 */
 	@Put
-	public Long createDataset(String name, String description);
+	public Long createDataset(Dataset dto);
 	
 	@Get
 	public ArrayList<Dataset> listDataset();

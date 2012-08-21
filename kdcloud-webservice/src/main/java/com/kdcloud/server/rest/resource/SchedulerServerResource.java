@@ -1,7 +1,6 @@
 package com.kdcloud.server.rest.resource;
 
 import org.restlet.resource.Get;
-import org.restlet.resource.Put;
 
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Task;
@@ -14,12 +13,6 @@ public class SchedulerServerResource extends KDServerResource implements Schedul
 	private static final long DEFAULT_WORKFLOW = 1;
 	
 	TaskQueue taskQueue = new GAETaskQueue();
-
-	@Override
-	@Put
-	public Long registerProcess(String regId) {
-		return requestProcess();
-	}
 
 	@Override
 	@Get

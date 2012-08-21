@@ -1,5 +1,7 @@
 package com.kdcloud.server.rest.resource;
 
+import java.io.IOException;
+
 import org.restlet.data.Form;
 import org.restlet.resource.Post;
 
@@ -35,7 +37,12 @@ public class WorkerServerResource extends KDServerResource {
 		User user = task.getApplicant();
 		user.getDevices().size();
 		
-		Notification.notify(task, user);
+		try {
+			Notification.notify(task, user);
+			getLogger().info("user has been notified");
+		} catch (IOException e) {
+			getLogger().info("unable to notify user");
+		}
 	}
 
 }

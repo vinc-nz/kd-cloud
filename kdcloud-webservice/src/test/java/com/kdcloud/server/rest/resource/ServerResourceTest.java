@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 
 import java.util.LinkedList;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.Dataset;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.tasks.TaskQueue;
@@ -55,7 +58,7 @@ public class ServerResourceTest {
 	
 	@Test
 	public void testUserData() {
-		Long id = userDataResource.createDataset("test", "test");
+		Long id = userDataResource.createDataset(new Dataset("test", "test"));
 		assertNotNull(id);
 		
 		User u = userDataResource.userDao.findById(USER_ID);
@@ -72,9 +75,10 @@ public class ServerResourceTest {
 
 	@Test
 	public void testDataset() {
-		Long id = userDataResource.createDataset("test", "test");
+		Long id = userDataResource.createDataset(new Dataset("test", "test"));
 		
 		datasetResource.dataset = datasetResource.dataTableDao.findById(id);
+		assertNotNull(datasetResource.dataset.getId());
 		String[] cells = {"1", "2"};
 		DataRow dataRow = new DataRow(cells);
 		LinkedList<DataRow> data = new LinkedList<DataRow>();
@@ -86,8 +90,8 @@ public class ServerResourceTest {
 		datasetResource.user.setId("committer");
 		datasetResource.uploadData(data);
 		
-		datasetResource.user = new User();
-		datasetResource.user.setId(USER_ID);
+		datasetResource.user = datasetResource.userDao.findById(USER_ID);
+		assertNotNull(userDataResource.user.getTables().iterator().next().getId());
 		assertEquals(2, datasetResource.getData().size());
 		
 		datasetResource.deleteDataset();

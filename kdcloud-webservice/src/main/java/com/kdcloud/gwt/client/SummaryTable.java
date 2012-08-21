@@ -88,7 +88,7 @@ public class SummaryTable extends VerticalPanel implements ViewComponent {
 			@Override
 			public void onClick(ClickEvent event) {
 				add(loading);
-				Dataset d = new Dataset(null, name.getText(), desc.getText(), 0);
+				Dataset d = new Dataset(name.getText(), desc.getText());
 				controller.onNewDataset(d);
 				remove(panel);
 				add(newDatasetButton);

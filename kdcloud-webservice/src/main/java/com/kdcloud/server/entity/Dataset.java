@@ -1,6 +1,7 @@
 package com.kdcloud.server.entity;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 
 public class Dataset implements Serializable {
 	
@@ -16,21 +17,19 @@ public class Dataset implements Serializable {
 	
 	String description;
 	
+	LinkedList<String> committers = new LinkedList<String>();
+	
 	int size;
 	
 	public Dataset() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Dataset(Long id, String name, String description, int size) {
+	public Dataset(String name, String description) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.size = size;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -62,6 +61,10 @@ public class Dataset implements Serializable {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	public LinkedList<String> getCommitters() {
+		return committers;
 	}
 	
 }

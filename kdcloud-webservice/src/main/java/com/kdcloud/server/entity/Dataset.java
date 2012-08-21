@@ -66,5 +66,9 @@ public class Dataset implements Serializable {
 	public LinkedList<String> getCommitters() {
 		return committers;
 	}
+
+	public void setCommitters(LinkedList<String> committers) {
+		this.committers = committers;
+	}
 	
 }

@@ -35,6 +35,7 @@ public class UserDataServerResource extends KDServerResource implements UserData
 			dto.setDescription(table.getDescription());
 			dto.setSize(table.getDataRows().size());
 			dto.setId(table.getId());
+			dto.getCommitters().addAll(table.getCommitters());
 			list.add(dto);
 		}
 		return list;

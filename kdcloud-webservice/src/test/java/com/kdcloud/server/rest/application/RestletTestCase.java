@@ -27,7 +27,7 @@ public class RestletTestCase {
 
 	static final String HOST = "http://localhost";
 	static final int PORT = 8888;
-	static final String BASE_URI = HOST + ":" + PORT + "/";
+	static final String BASE_URI = HOST + ":" + PORT;
 
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
 			new LocalDatastoreServiceTestConfig());
@@ -87,7 +87,7 @@ public class RestletTestCase {
 		ChallengeResponse authentication = new ChallengeResponse(scheme,
 				"login", "secret");
 
-		ClientResource data = new ClientResource(BASE_URI + "data");
+		ClientResource data = new ClientResource(BASE_URI + UserDataResource.URI);
 		data.setChallengeResponse(authentication);
 		UserDataResource userDataResource = data.wrap(UserDataResource.class);
 		long id = userDataResource.createDataset(new Dataset("test", "test"));

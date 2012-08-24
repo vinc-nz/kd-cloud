@@ -1,18 +1,22 @@
 package com.kdcloud.client.gwt;
 
+
 import com.google.api.gwt.oauth2.client.Auth;
 import com.google.api.gwt.oauth2.client.AuthRequest;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.kdcloud.client.gwt.mvc.AppList;
 import com.kdcloud.client.gwt.mvc.Controller;
 import com.kdcloud.client.gwt.mvc.DetailsPanel;
 import com.kdcloud.client.gwt.mvc.Model;
 import com.kdcloud.client.gwt.mvc.SummaryTable;
+import com.kdcloud.client.gwt.mvc.UserPanel;
 import com.kdcloud.client.gwt.mvc.View;
 
 public class GwtClient implements EntryPoint {
@@ -25,7 +29,16 @@ public class GwtClient implements EntryPoint {
 
 	private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.email";
 	
-	Controller controller;
+	private static final String LOGIN_MESSAGE = "You are not authenticated. " +
+			"Please disable pop-ups for this site then reload the page to sign in with your Google Account";
+	
+	
+	Widget notLoggedBanner = new Label(LOGIN_MESSAGE);
+	
+	Model model = new Model();
+	View view = new View();
+	Controller controller = new Controller(model, view);
+	
 
 	public void requestToken() {
 		final AuthRequest req = new AuthRequest(GOOGLE_AUTH_URL,
@@ -34,6 +47,7 @@ public class GwtClient implements EntryPoint {
 		AUTH.login(req, new Callback<String, Throwable>() {
 			@Override
 			public void onSuccess(String token) {
+				init();
 				controller.onLogin(token);
 			}
 
@@ -45,18 +59,18 @@ public class GwtClient implements EntryPoint {
 
 	}
 
-	public void onModuleLoad() {
-		Model model = new Model();
-		View view = new View();
-		controller = new Controller(model, view);
-
+	public void init() {
+		RootPanel.get().remove(notLoggedBanner);
+		
 		AppList appList = new AppList(model, controller);
 		SummaryTable summaryTable = new SummaryTable(model, controller);
 		DetailsPanel details = new DetailsPanel(model, controller);
+		UserPanel userPanel = new UserPanel(model);
 		
 		view.add(details);
 		view.add(appList);
 		view.add(summaryTable);
+		view.add(userPanel);
 		
 		
 		HorizontalPanel tablesPannel = new HorizontalPanel();
@@ -66,12 +80,17 @@ public class GwtClient implements EntryPoint {
 		tablesPannel.setStyleName("paddedHorizontalPanel");
 		
 		VerticalPanel mainPanel = new VerticalPanel();
+		mainPanel.add(userPanel);
 		mainPanel.add(tablesPannel);
 		mainPanel.setStyleName("center");
 
-		// Add it to the root panel.
 		RootPanel.get().add(mainPanel);
-		
+	}
+
+	@Override
+	public void onModuleLoad() {
+		notLoggedBanner.setStyleName("center");
+		RootPanel.get().add(notLoggedBanner);
 		requestToken();
 	}
 

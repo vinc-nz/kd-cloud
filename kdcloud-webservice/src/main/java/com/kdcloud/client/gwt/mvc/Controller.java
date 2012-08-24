@@ -26,8 +26,6 @@ public class Controller {
 		public void onValueChange(ValueChangeEvent<String> event) {
 			if (event.getValue().equals(NEW_COMMITTER_HYSTORY_TOKEN))
 				newCommitter();
-			History.newItem("home");
-			History.fireCurrentHistoryState();
 		}
 	};
 
@@ -68,8 +66,19 @@ public class Controller {
 	}
 
 	public void onLogin(String token) {
-		model.user = token;
 		client.setToken(token);
+		client.getUserDetailsResource().getUserId(new Result<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.fatal("error", caught);
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				model.user = result;
+			}
+		});
 		client.getUserDataResource().list(new Result<ArrayList<Dataset>>() {
 			
 			@Override
@@ -96,6 +105,7 @@ public class Controller {
 			@Override
 			public void onSuccess(Long result) {
 				d.setId(result);
+				d.getCommitters().add(model.user);
 				model.data.add(d);
 				view.refresh();
 			}

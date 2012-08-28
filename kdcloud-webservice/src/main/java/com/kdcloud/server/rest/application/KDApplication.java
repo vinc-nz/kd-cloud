@@ -12,13 +12,9 @@ import com.kdcloud.server.rest.api.GlobalDataResource;
 import com.kdcloud.server.rest.api.ModalitiesResource;
 import com.kdcloud.server.rest.api.ReportResource;
 import com.kdcloud.server.rest.api.SchedulerResource;
-<<<<<<< HEAD
 import com.kdcloud.server.rest.api.UserDataResource;
 import com.kdcloud.server.rest.api.UserDetailsResource;
 import com.kdcloud.server.rest.resource.AnalysisServerResource;
-=======
-import com.kdcloud.server.rest.api.UserDetailsResource;
->>>>>>> 9ce796218abe195517128ff80a215af55b79d39a
 import com.kdcloud.server.rest.resource.DatasetServerResource;
 import com.kdcloud.server.rest.resource.DeviceServerResource;
 import com.kdcloud.server.rest.resource.GlobalAnalysisServerResource;
@@ -26,10 +22,7 @@ import com.kdcloud.server.rest.resource.GlobalDataServerResource;
 import com.kdcloud.server.rest.resource.ModalitiesServerResource;
 import com.kdcloud.server.rest.resource.ReportServerResource;
 import com.kdcloud.server.rest.resource.SchedulerServerResource;
-<<<<<<< HEAD
 import com.kdcloud.server.rest.resource.UserDataServerResource;
-=======
->>>>>>> 9ce796218abe195517128ff80a215af55b79d39a
 import com.kdcloud.server.rest.resource.UserDetailsServerResource;
 
 public class KDApplication extends Application {

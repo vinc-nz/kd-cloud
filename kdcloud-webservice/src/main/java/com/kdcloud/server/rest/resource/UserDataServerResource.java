@@ -19,8 +19,7 @@ public class UserDataServerResource extends KDServerResource implements UserData
 		DataTable dataset = new DataTable();
 		dataset.setName(dto.getName());
 		dataset.setDescription(dto.getDescription());
-		dataset.setCommitters(dto.getCommitters());
-		dataset.getCommitters().add(user.getId());
+		user.getTables().clear();
 		user.getTables().add(dataset);
 		userDao.save(user);
 		return dataset.getId();
@@ -35,7 +34,6 @@ public class UserDataServerResource extends KDServerResource implements UserData
 			dto.setDescription(table.getDescription());
 			dto.setSize(table.getDataRows().size());
 			dto.setId(table.getId());
-			dto.getCommitters().addAll(table.getCommitters());
 			list.add(dto);
 		}
 		return list;

@@ -32,32 +32,13 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 			getLogger().info("got null data");
 		else
 			getLogger().info("got valid data");
-		if (dataset != null && isCommitter(dataset)) {
+		if (dataset != null && dataset.getOwner().equals(user)) {
 			dataset.getDataRows().addAll(data);
-			dataTableDao.save(dataset);
+			dataTableDao.update(dataset);
 			getLogger().info("data merged succeffully");
 		}
 		else
 			getLogger().info("provided id is invalid");
-	}
-
-	private boolean isCommitter(DataTable dataset) {
-		if (dataset.getCommitters().contains(user.getId()))
-			return true;
-		forbid();
-		return false;
-	}
-
-	@Override
-	@Post
-	public void addCommitter(String email) {
-		if (dataset.getOwner().equals(user)) {
-			dataset.getCommitters().add(email);
-			dataTableDao.save(dataset);
-			//TODO notify user
-		}
-		else
-			forbid();
 	}
 
 	@Override
@@ -76,6 +57,14 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 			userDao.save(user);
 		else
 			forbid();
+	}
+
+
+	@Override
+	@Post
+	public void addCommitter(String email) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

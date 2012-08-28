@@ -1,6 +1,9 @@
 package com.kdcloud.server.jdo;
 
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -47,6 +50,13 @@ public class GaeUserDao implements UserDao {
 			pm.deletePersistent(e);
 		}
 		pm.deletePersistent(user);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> list() {
+		Query q = pm.newQuery(User.class);
+		return (List<User>) q.execute();
 	}
 
 }

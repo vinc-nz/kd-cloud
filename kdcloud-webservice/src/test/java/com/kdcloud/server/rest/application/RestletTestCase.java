@@ -24,6 +24,7 @@ import org.restlet.security.MapVerifier;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.entity.Dataset;
+import com.kdcloud.server.rest.api.AnalysisResource;
 import com.kdcloud.server.rest.api.UserDataResource;
 
 public class RestletTestCase {
@@ -101,6 +102,11 @@ public class RestletTestCase {
 		} catch (Exception e) {
 			Assert.fail();
 		}
+		
+		String uri = AnalysisResource.URI.replaceAll("\\{\\w+\\}", "pirrone.v@gmail.com");
+		ClientResource cr = new ClientResource(BASE_URI + uri);
+		cr.setChallengeResponse(authentication);
+		cr.get();
 	}
 
 }

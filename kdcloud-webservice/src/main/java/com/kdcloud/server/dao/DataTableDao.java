@@ -5,6 +5,6 @@ import com.kdcloud.server.entity.DataTable;
 public interface DataTableDao {
 	
 	public DataTable findById(Long id);
-	public void save(DataTable dataTable);
+	public void update(DataTable dataTable);
 
 }

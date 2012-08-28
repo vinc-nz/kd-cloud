@@ -1,7 +1,6 @@
 package com.kdcloud.server.entity;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -26,9 +25,6 @@ public class DataTable {
 	@Persistent(serialized="true")
 	LinkedList<DataRow> dataRows = new LinkedList<DataRow>();
 	
-	@Persistent(serialized="true")
-	LinkedList<String> committers = new LinkedList<String>();
-	
 	@Persistent
 	@Unowned
 	User owner;
@@ -51,14 +47,6 @@ public class DataTable {
 
 	public void setDataRows(LinkedList<DataRow> dataRows) {
 		this.dataRows = dataRows;
-	}
-
-	public List<String> getCommitters() {
-		return committers;
-	}
-
-	public void setCommitters(LinkedList<String> committers) {
-		this.committers = committers;
 	}
 
 	public String getEncodedKey() {

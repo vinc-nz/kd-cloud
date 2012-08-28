@@ -29,7 +29,7 @@ public class GaeDataTableDao implements DataTableDao {
 	}
 
 	@Override
-	public void save(DataTable e) {
+	public void update(DataTable e) {
 		pm.makePersistent(e);
 		Key k = KeyFactory.stringToKey(e.getEncodedKey());
 		e.setId(k.getId());

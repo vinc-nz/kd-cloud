@@ -20,15 +20,12 @@ public class SchedulerServerResource extends KDServerResource implements Schedul
 		String datasetId = getRequestAttribute(PARAM_ID);
 		Task task = new Task();
 		DataTable dataTable = dataTableDao.findById(Long.valueOf(datasetId));
-		if (dataTable.getOwner().equals(user)) {
-			task.setWorkingTable(dataTable);
-			task.setWorkflowId(DEFAULT_WORKFLOW);
-			task.setApplicant(user);
-			taskDao.save(task);
-		}
-		else {
-			forbid();
-		}
+
+		task.setWorkingTable(dataTable);
+		task.setWorkflowId(DEFAULT_WORKFLOW);
+		task.setApplicant(user);
+		taskDao.save(task);
+
 		taskQueue.push(task);
 		return task.getId();
 	}

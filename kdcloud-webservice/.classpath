@@ -95,4 +95,7 @@
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-api-labs/1.7.0/appengine-api-labs-1.7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-api-stubs/1.7.0/appengine-api-stubs-1.7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-testing/1.7.0/appengine-testing-1.7.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/jse/org.restlet.ext.jackson/2.1-RC6/org.restlet.ext.jackson-2.1-RC6.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.9.8/jackson-core-asl-1.9.8.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-mapper-asl/1.9.8/jackson-mapper-asl-1.9.8.jar"/>
 </classpath>

@@ -2,6 +2,8 @@ package com.kdcloud.server.rest.api;
 
 import org.restlet.resource.Get;
 
+import com.kdcloud.server.entity.ServerParameter;
+
 /**
  * URI /process/ecg/{id}
  * @author spax
@@ -10,8 +12,7 @@ import org.restlet.resource.Get;
 public interface SchedulerResource {
 	
 	
-	public static final String URI = "/process/ecg/{id}";
-	public static final String PARAM_ID = "id";
+	public static final String URI = "/process/ecg/" + ServerParameter.DATASET_ID;
 	
 	
 	/**

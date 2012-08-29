@@ -3,6 +3,7 @@ package com.kdcloud.server.rest.resource;
 import org.restlet.resource.Get;
 
 import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.rest.api.SchedulerResource;
 import com.kdcloud.server.tasks.GAETaskQueue;
@@ -17,7 +18,7 @@ public class SchedulerServerResource extends KDServerResource implements Schedul
 	@Override
 	@Get
 	public Long requestProcess() {
-		String datasetId = getRequestAttribute(PARAM_ID);
+		String datasetId = getParameter(ServerParameter.DATASET_ID);
 		Task task = new Task();
 		DataTable dataTable = dataTableDao.findById(Long.valueOf(datasetId));
 

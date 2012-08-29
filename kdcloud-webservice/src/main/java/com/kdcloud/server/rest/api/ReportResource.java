@@ -3,6 +3,7 @@ package com.kdcloud.server.rest.api;
 import org.restlet.resource.Get;
 
 import com.kdcloud.server.entity.Report;
+import com.kdcloud.server.entity.ServerParameter;
 
 /**
  * URI /report/{id}
@@ -13,8 +14,7 @@ public interface ReportResource {
 	
 	
 	
-	public static final String URI = "/report/{id}";
-	public static final String PARAM_ID = "id";
+	public static final String URI = "/report/" + ServerParameter.TASK_ID;
 
 	
 	/**

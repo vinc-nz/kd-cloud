@@ -1,7 +1,5 @@
 package com.kdcloud.server.rest.api;
 
-import java.util.ArrayList;
-
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
@@ -27,8 +25,10 @@ public interface UserDataResource {
 	@Put
 	public Long createDataset(Dataset dto);
 	
+//	@Get
+//	public ArrayList<Dataset> listDataset();
 	@Get
-	public ArrayList<Dataset> listDataset();
+	public Long createDataset();
 	
 	@Delete
 	public void deleteAllData();

@@ -25,8 +25,8 @@ public class UserDataServerResource extends KDServerResource implements UserData
 		return dataset.getId();
 	}
 
-	@Override
-	@Get
+//	@Override
+//	@Get
 	public ArrayList<Dataset> listDataset() {
 		ArrayList<Dataset> list = new ArrayList<Dataset>(user.getTables().size());
 		for (DataTable table : user.getTables()) {
@@ -43,6 +43,13 @@ public class UserDataServerResource extends KDServerResource implements UserData
 	@Delete
 	public void deleteAllData() {
 		userDao.delete(user);
+	}
+
+	@Override
+	@Get
+	public Long createDataset() {
+		String name = "Dataset of user " + user.getId();
+		return createDataset(new Dataset(name, null));
 	}
 
 }

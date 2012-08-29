@@ -25,7 +25,7 @@ public class GlobalAnalysisServerResource extends KDServerResource implements
 		List<User> users = userDao.list();
 		ArrayList<Report> globalReport = new ArrayList<Report>(users.size());
 		for (User subject : users) {
-			if (!user.getTables().isEmpty()) {
+			if (!subject.getTables().isEmpty()) {
 				DataTable table = subject.getTables().iterator().next();
 				globalReport.add(engine.execute(table.getDataRows(), DEFAULT_WORKFLOW));
 			}

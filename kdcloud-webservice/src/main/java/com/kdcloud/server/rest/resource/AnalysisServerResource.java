@@ -6,6 +6,7 @@ import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
+import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.AnalysisResource;
 
@@ -19,7 +20,7 @@ public class AnalysisServerResource extends KDServerResource implements
 	@Override
 	@Get
 	public Report requestAnalysis() {
-		String userId = getRequestAttribute(PARAM_USERID);
+		String userId = getParameter(ServerParameter.USER_ID);
 		User subject = userDao.findById(userId);
 		if (subject == null || subject.getTables().isEmpty())
 			return null;

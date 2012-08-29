@@ -11,6 +11,7 @@ import org.restlet.resource.Put;
 
 import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.rest.api.DatasetResource;
 
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
@@ -19,7 +20,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 
 	@Override
 	public Representation handle() {
-		String id = getRequestAttribute(PARAM_ID);
+		String id = getParameter(ServerParameter.DATASET_ID);
 		dataset = dataTableDao.findById(Long.parseLong(id));
 		return super.handle();
 	}

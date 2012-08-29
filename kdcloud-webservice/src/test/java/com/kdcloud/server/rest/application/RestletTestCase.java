@@ -1,5 +1,8 @@
 package com.kdcloud.server.rest.application;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import junit.framework.Assert;
 
 import org.junit.After;
@@ -23,14 +26,12 @@ import org.restlet.security.MapVerifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.entity.Dataset;
-import com.kdcloud.server.rest.api.AnalysisResource;
-import com.kdcloud.server.rest.api.UserDataResource;
+import com.kdcloud.server.rest.api.ModalitiesResource;
 
 public class RestletTestCase {
 
 	static final String HOST = "http://localhost";
-	static final int PORT = 8888;
+	static final int PORT = 8887;
 	static final String BASE_URI = HOST + ":" + PORT;
 
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
@@ -41,7 +42,9 @@ public class RestletTestCase {
 		@Override
 		public Restlet createInboundRoot() {
 			Router router = new Router(getContext());
+			helper.setUp();
 			router.attachDefault(new KDApplication());
+			helper.tearDown();
 			return router;
 		}
 
@@ -60,7 +63,7 @@ public class RestletTestCase {
 	public void setUp() {
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, PORT);
-		
+
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null,
 				ChallengeScheme.HTTP_BASIC, "testRealm");
 		MapVerifier mapVerifier = new MapVerifier();
@@ -72,6 +75,7 @@ public class RestletTestCase {
 		try {
 			component.start();
 		} catch (Exception e) {
+			e.printStackTrace();
 			Assert.fail();
 		}
 	}
@@ -81,6 +85,7 @@ public class RestletTestCase {
 		try {
 			component.stop();
 		} catch (Exception e) {
+			e.printStackTrace();
 			Assert.fail();
 		}
 	}
@@ -91,22 +96,19 @@ public class RestletTestCase {
 		ChallengeResponse authentication = new ChallengeResponse(scheme,
 				"login", "secret");
 
-		ClientResource data = new ClientResource(BASE_URI + UserDataResource.URI);
+		ClientResource data = new ClientResource(BASE_URI
+				+ ModalitiesResource.URI);
 		data.setChallengeResponse(authentication);
-		ObjectRepresentation<Dataset> dataset = 
-				new ObjectRepresentation<Dataset>(new Dataset("test", "test"));
 		try {
-			Representation response = data.put(dataset, MediaType.APPLICATION_JAVA_OBJECT);
-			ObjectRepresentation<Long> id = new ObjectRepresentation<Long>(response);
-			Assert.assertNotNull(id.getObject());
+			Representation response = data
+					.get(MediaType.APPLICATION_JAVA_OBJECT);
+			ObjectRepresentation<Serializable> id = new ObjectRepresentation<Serializable>(
+					response);
+			Assert.assertTrue(id.getObject() instanceof ArrayList<?>);
 		} catch (Exception e) {
 			Assert.fail();
 		}
-		
-		String uri = AnalysisResource.URI.replaceAll("\\{\\w+\\}", "pirrone.v@gmail.com");
-		ClientResource cr = new ClientResource(BASE_URI + uri);
-		cr.setChallengeResponse(authentication);
-		cr.get();
+
 	}
 
 }

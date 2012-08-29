@@ -1,10 +1,10 @@
 package com.kdcloud.server.rest.resource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.util.LinkedList;
+
+import javax.validation.constraints.AssertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,12 +12,20 @@ import org.junit.Test;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Dataset;
-import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.entity.Modality;
+import com.kdcloud.server.entity.Report;
+import com.kdcloud.server.entity.ServerAction;
+import com.kdcloud.server.entity.ServerMethod;
+import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.tasks.TaskQueue;
+import com.kdcloud.server.rest.api.AnalysisResource;
+import com.kdcloud.server.rest.api.DatasetResource;
+import com.kdcloud.server.rest.api.GlobalAnalysisResource;
+import com.kdcloud.server.rest.api.UserDataResource;
 
 public class ServerResourceTest {
 	
@@ -26,9 +34,27 @@ public class ServerResourceTest {
 	
 	private static final String USER_ID = "tester";
 	
-	UserDataServerResource userDataResource = new UserDataServerResource();
-	DatasetServerResource datasetResource = new DatasetServerResource();
-	SchedulerServerResource schedulerResource = new SchedulerServerResource();
+	private UserDataServerResource userDataResource = new UserDataServerResource();
+	
+	private DatasetServerResource datasetResource = new DatasetServerResource();
+	
+	private ModalitiesServerResource modalitiesResource = new ModalitiesServerResource();
+	
+	private AnalysisServerResource analysisResource = new AnalysisServerResource() {
+		protected String getParameter(ServerParameter serverParameter) {return USER_ID;};
+	};
+	
+	private GlobalDataServerResource globalDataResource = new GlobalDataServerResource();
+	
+	private GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource();
+	
+	private KDEngine stubEngine = new KDEngine() {
+		
+		@Override
+		public Report execute(LinkedList<DataRow> dataset, long workflowId) {
+			return new Report();
+		}
+	};
 	
 	
 	@Before
@@ -38,15 +64,12 @@ public class ServerResourceTest {
 		u.setId(USER_ID);
 		userDataResource.user = u;
 		datasetResource.user = u;
-		schedulerResource.user = u;
-		schedulerResource.taskQueue = new TaskQueue() {
-			
-			@Override
-			public void push(Task task) {
-				// TODO Auto-generated method stub
-				
-			}
-		};
+		modalitiesResource.user = u;
+		analysisResource.user = u;
+		analysisResource.engine = stubEngine;
+		globalDataResource.user = u;
+		globalAnalysisResource.user = u;
+		globalAnalysisResource.engine = stubEngine;
 	}
 
 	@After
@@ -56,7 +79,7 @@ public class ServerResourceTest {
 	
 	@Test
 	public void testUserData() {
-		Long id = userDataResource.createDataset(new Dataset("test", "test"));
+		Long id = userDataResource.createDataset();
 		assertNotNull(id);
 		
 		User u = userDataResource.userDao.findById(USER_ID);
@@ -73,7 +96,7 @@ public class ServerResourceTest {
 
 	@Test
 	public void testDataset() {
-		Long id = userDataResource.createDataset(new Dataset("test", "test"));
+		Long id = userDataResource.createDataset();
 		
 		datasetResource.dataset = datasetResource.dataTableDao.findById(id);
 		assertNotNull(datasetResource.dataset.getId());
@@ -94,6 +117,63 @@ public class ServerResourceTest {
 		
 		datasetResource.deleteDataset();
 		assertNull(datasetResource.dataTableDao.findById(id));
+	}
+	
+	@Test
+	public void testModalities() {
+		addStandardModalities();
+		assertEquals(3, modalitiesResource.listModalities().size());
+	}
+	
+	@Test
+	public void testAnalysis() {
+		userDataResource.createDataset();
+		Report r = analysisResource.requestAnalysis();
+		assertNotNull(r);
+	}
+	
+	@Test
+	public void testGlobalData() {
+		String[] ids = {"a", "b", "c"};
+		for (String s : ids) {
+			User user = new User();
+			user.setId(s);
+			userDataResource.user = user;
+			userDataResource.createDataset();
+			assertEquals(1, userDataResource.listDataset().size());
+		}
+		assertTrue(globalDataResource.getAllUsersWithData().contains(ids[0]));
+		assertEquals(ids.length, globalDataResource.getAllUsersWithData().size());
+		
+		assertEquals(ids.length, globalAnalysisResource.requestAnalysis().size());
+	}
+	
+	private void addStandardModalities() {
+		Modality dataFeed = new Modality();
+		dataFeed.setName("Data Feed");
+		dataFeed.getSensors().add("ecg");
+		ServerAction createDataset = new ServerAction(UserDataResource.URI,
+				ServerParameter.DATASET_ID.getName(), ServerMethod.PUT, false,
+				10 * 60 * 1000);
+		dataFeed.getServerCommands().add(createDataset);
+		ServerAction uploadData = new ServerAction(DatasetResource.URI, null,
+				ServerMethod.PUT, true, 10 * 60 * 1000);
+		dataFeed.getServerCommands().add(uploadData);
+		modalitiesResource.createModality(dataFeed);
+
+		Modality singleAnalysis = new Modality();
+		singleAnalysis.setName("Single Analysis");
+		ServerAction analyze = new ServerAction(AnalysisResource.URI, null,
+				ServerMethod.GET, false, 0);
+		singleAnalysis.getServerCommands().add(analyze);
+		modalitiesResource.createModality(singleAnalysis);
+
+		Modality globalAnalysis = new Modality();
+		globalAnalysis.setName("Global Analysis");
+		ServerAction globalAnalyze = new ServerAction(
+				GlobalAnalysisResource.URI, null, ServerMethod.GET, false, 0);
+		globalAnalysis.getServerCommands().add(globalAnalyze);
+		modalitiesResource.createModality(globalAnalysis);
 	}
 	
 }

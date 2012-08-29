@@ -9,6 +9,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 
 import com.kdcloud.server.entity.DataRow;
+import com.kdcloud.server.entity.ServerParameter;
 
 /**
  * URI /data/{id}
@@ -18,8 +19,7 @@ import com.kdcloud.server.entity.DataRow;
 public interface DatasetResource {
 	
 	
-	public static final String URI = "/data/{id}";
-	public static final String PARAM_ID = "id";
+	public static final String URI = "/data/" + ServerParameter.DATASET_ID;
 	
 	/**
 	 * uploads data to the dataset with the given id

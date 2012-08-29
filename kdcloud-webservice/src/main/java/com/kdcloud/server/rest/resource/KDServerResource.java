@@ -75,11 +75,9 @@ public abstract class KDServerResource extends ServerResource {
 
 	@Override
 	public Representation handle() {
-		pm.currentTransaction().begin();
 		if (getRequest().getClientInfo().getUser() != null)
 			user = getUser();
 		Representation representation = super.handle();
-		pm.currentTransaction().commit();
 		return representation;
 	}
 

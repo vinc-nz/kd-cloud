@@ -41,4 +41,16 @@ public class GaeModalityDao implements ModalityDao {
 		return list;
 	}
 
+	@Override
+	public Modality findById(Long id) {
+		Key k = KeyFactory.createKey(Modality.class.getSimpleName(), id);
+		try {
+			Modality e = pm.getObjectById(Modality.class, k);
+			e.setId(id);
+			return e;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

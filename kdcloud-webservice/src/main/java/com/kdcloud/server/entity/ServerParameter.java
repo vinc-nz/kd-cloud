@@ -17,6 +17,9 @@ public class ServerParameter implements Serializable {
 	public static final ServerParameter DATASET_ID = new ServerParameter("datasetId");
 	public static final ServerParameter USER_ID = new ServerParameter("userId");
 	public static final ServerParameter TASK_ID = new ServerParameter("taskId");
+	public static final ServerParameter MODALITY_ID = new ServerParameter("modalityId");
+
+
 	
 	public static List<ServerParameter> getParamsFromUri(String uri) {
 		List<ServerParameter> params = new LinkedList<ServerParameter>();

@@ -9,19 +9,20 @@ import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
+import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.gcm.Notification;
 
 public class WorkerServerResource extends KDServerResource {
-
+	
 	KDEngine engine = new QRS();
 
 	@Post
 	public void execute(Form form) {
 		getLogger().info("ready to work on data");
 		
-		String id = (String) getRequestAttributes().get("id");
+		String id = getParameter(ServerParameter.TASK_ID);
 		
 		Task task = taskDao.findById(new Long(id));
 
@@ -35,14 +36,14 @@ public class WorkerServerResource extends KDServerResource {
 		taskDao.save(task);
 		
 		User user = task.getApplicant();
-		user.getDevices().size();
 		
-		try {
-			Notification.notify(task, user);
-			getLogger().info("user has been notified");
-		} catch (IOException e) {
-			getLogger().info("unable to notify user");
-		}
+		if (user.getDevices().size() > 0);
+			try {
+				Notification.notify(task, user);
+				getLogger().info("user has been notified");
+			} catch (IOException e) {
+				getLogger().info("unable to notify user");
+			}
 	}
 
 }

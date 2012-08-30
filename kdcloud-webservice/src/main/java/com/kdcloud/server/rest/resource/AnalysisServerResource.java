@@ -25,7 +25,9 @@ public class AnalysisServerResource extends KDServerResource implements
 		if (subject == null || subject.getTables().isEmpty())
 			return null;
 		DataTable table = subject.getTables().iterator().next();
-		return engine.execute(table.getDataRows(), DEFAULT_WORKFLOW);
+		Report report = engine.execute(table.getDataRows(), DEFAULT_WORKFLOW);
+		report.setName("analysis requested by " + user.getId() + " on " + subject.getId() + " data");
+		return report;
 	}
 
 }

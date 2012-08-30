@@ -23,7 +23,7 @@ import com.kdcloud.server.tasks.TaskQueue;
 
 public abstract class KDServerResource extends ServerResource {
 	
-	private PersistenceManager pm;
+	PersistenceManager pm;
 
 	UserDao userDao;
 	DataTableDao dataTableDao;
@@ -62,6 +62,7 @@ public abstract class KDServerResource extends ServerResource {
 			getLogger().info("request by unregistered user");
 			user = new User();
 			user.setId(id);
+			userDao.save(user);
 		}
 		return user;
 	}

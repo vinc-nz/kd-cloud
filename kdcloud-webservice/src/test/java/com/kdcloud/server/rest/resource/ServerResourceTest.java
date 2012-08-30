@@ -3,29 +3,30 @@ package com.kdcloud.server.rest.resource;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
-
-import javax.validation.constraints.AssertTrue;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.restlet.representation.Representation;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
-import com.kdcloud.server.entity.Dataset;
 import com.kdcloud.server.entity.Modality;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerAction;
 import com.kdcloud.server.entity.ServerMethod;
 import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.AnalysisResource;
 import com.kdcloud.server.rest.api.DatasetResource;
 import com.kdcloud.server.rest.api.GlobalAnalysisResource;
 import com.kdcloud.server.rest.api.UserDataResource;
+import com.kdcloud.server.tasks.TaskQueue;
 
 public class ServerResourceTest {
 	
@@ -47,6 +48,23 @@ public class ServerResourceTest {
 	private GlobalDataServerResource globalDataResource = new GlobalDataServerResource();
 	
 	private GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource();
+	
+	private ChoosenModalityServerResource choosenModalityResource = new ChoosenModalityServerResource() {
+		public Representation handle() {
+			this.modality = modalityDao.findById(new Long(1));
+			return null;
+		};
+	};
+	
+	private DeviceServerResource deviceResource = new DeviceServerResource();
+	
+	private SchedulerServerResource scheduler = new SchedulerServerResource() {
+		 protected String getParameter(ServerParameter serverParameter) {return "1";}
+	 };
+	 
+	 private WorkerServerResource worker = new WorkerServerResource() {
+		 protected String getParameter(ServerParameter serverParameter) {return "2";}
+	 };
 	
 	private KDEngine stubEngine = new KDEngine() {
 		
@@ -70,6 +88,18 @@ public class ServerResourceTest {
 		globalDataResource.user = u;
 		globalAnalysisResource.user = u;
 		globalAnalysisResource.engine = stubEngine;
+		choosenModalityResource.user = u;
+		deviceResource.user = u;
+		scheduler.user = u;
+		worker.engine = stubEngine;
+		scheduler.taskQueue = new TaskQueue() {
+			
+			@Override
+			public void push(Task task) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
 	}
 
 	@After
@@ -122,7 +152,17 @@ public class ServerResourceTest {
 	@Test
 	public void testModalities() {
 		addStandardModalities();
-		assertEquals(3, modalitiesResource.listModalities().size());
+		List<Modality> list = modalitiesResource.listModalities();
+		assertEquals(3, list.size());
+		
+		Modality modality = list.get(0);
+		modality.setName("test");
+		choosenModalityResource.handle();
+		choosenModalityResource.editModality(modality);
+		choosenModalityResource.handle();
+		modality = choosenModalityResource.getModality();
+		assertEquals("test", modality.getName());
+		choosenModalityResource.deleteModality();
 	}
 	
 	@Test
@@ -146,6 +186,21 @@ public class ServerResourceTest {
 		assertEquals(ids.length, globalDataResource.getAllUsersWithData().size());
 		
 		assertEquals(ids.length, globalAnalysisResource.requestAnalysis().size());
+	}
+	
+	@Test
+	public void testDevices() {
+		deviceResource.register("test");
+		deviceResource.unregister("test");
+	}
+	
+	@Test
+	public void testScheduling() {
+		userDataResource.createDataset();
+		userDataResource.pm.close();
+		scheduler.requestProcess();
+		scheduler.pm.close();
+		worker.execute(null);
 	}
 	
 	private void addStandardModalities() {

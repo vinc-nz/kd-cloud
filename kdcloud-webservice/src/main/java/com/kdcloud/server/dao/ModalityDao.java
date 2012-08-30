@@ -6,6 +6,7 @@ import com.kdcloud.server.entity.Modality;
 
 public interface ModalityDao {
 	
+	public Modality findById(Long id);
 	public void save(Modality modality);
 	public void delete(Modality modality);
 	public List<Modality> getAll();

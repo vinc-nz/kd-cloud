@@ -1,4 +1,4 @@
-package com.kdcloud.server.jdo;
+package com.kdcloud.server.persistence.jdo;
 
 import javax.jdo.PersistenceManager;
 
@@ -7,11 +7,11 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.kdcloud.server.dao.TaskDao;
 import com.kdcloud.server.entity.Task;
 
-public class GaeTaskDao implements TaskDao {
+public class TaskDaoImpl implements TaskDao {
 	
 	PersistenceManager pm;
 	
-	public GaeTaskDao(PersistenceManager pm) {
+	public TaskDaoImpl(PersistenceManager pm) {
 		super();
 		this.pm = pm;
 	}

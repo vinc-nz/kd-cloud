@@ -1,9 +1,10 @@
 package com.kdcloud.server.rest.resource;
 
+import org.restlet.Application;
 import org.restlet.resource.Get;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.engine.KDEngine;
-import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerParameter;
@@ -12,10 +13,25 @@ import com.kdcloud.server.rest.api.AnalysisResource;
 
 public class AnalysisServerResource extends KDServerResource implements
 		AnalysisResource {
-	
+
 	private static final long DEFAULT_WORKFLOW = 1;
-	
-	KDEngine engine = new QRS();
+
+	KDEngine engine;
+
+	public AnalysisServerResource() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public AnalysisServerResource(Application application) {
+		super(application);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		engine = (KDEngine) inject(KDEngine.class);
+	}
 
 	@Override
 	@Get
@@ -26,7 +42,8 @@ public class AnalysisServerResource extends KDServerResource implements
 			return null;
 		DataTable table = subject.getTables().iterator().next();
 		Report report = engine.execute(table.getDataRows(), DEFAULT_WORKFLOW);
-		report.setName("analysis requested by " + user.getId() + " on " + subject.getId() + " data");
+		report.setName("analysis requested by " + user.getId() + " on "
+				+ subject.getId() + " data");
 		return report;
 	}
 

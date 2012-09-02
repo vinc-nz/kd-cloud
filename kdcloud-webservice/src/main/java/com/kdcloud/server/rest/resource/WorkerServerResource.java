@@ -2,11 +2,12 @@ package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
 
+import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.resource.Post;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.engine.KDEngine;
-import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerParameter;
@@ -16,7 +17,23 @@ import com.kdcloud.server.gcm.Notification;
 
 public class WorkerServerResource extends KDServerResource {
 	
-	KDEngine engine = new QRS();
+	KDEngine engine;
+	
+	public WorkerServerResource() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public WorkerServerResource(Application application) {
+		super(application);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		engine = (KDEngine) inject(KDEngine.class);
+	}
 
 	@Post
 	public void execute(Form form) {

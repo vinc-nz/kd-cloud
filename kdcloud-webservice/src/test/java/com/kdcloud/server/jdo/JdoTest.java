@@ -1,5 +1,7 @@
 package com.kdcloud.server.jdo;
+import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
 
 import junit.framework.Assert;
 
@@ -19,10 +21,14 @@ public class JdoTest {
 	
     private final LocalServiceTestHelper helper =
         new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+    
+    private static PersistenceManagerFactory pmfInstance;
+	        
 
     @Before
     public void setUp() {
-        helper.setUp();        
+        helper.setUp();
+        pmfInstance = JDOHelper.getPersistenceManagerFactory("transactions-optional");
     }
 
     @After
@@ -32,7 +38,7 @@ public class JdoTest {
     
     @Test
     public void test() {
-    	PersistenceManager pm = PMF.get().getPersistenceManager();
+    	PersistenceManager pm = pmfInstance.getPersistenceManager();
     	User user = new User();
     	String name = "name";
     	user.setId(name);

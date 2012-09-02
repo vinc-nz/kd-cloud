@@ -1,6 +1,9 @@
 package com.kdcloud.server.rest.resource;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,11 +11,11 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.restlet.Application;
 import org.restlet.representation.Representation;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Modality;
@@ -20,86 +23,55 @@ import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerAction;
 import com.kdcloud.server.entity.ServerMethod;
 import com.kdcloud.server.entity.ServerParameter;
-import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.AnalysisResource;
 import com.kdcloud.server.rest.api.DatasetResource;
 import com.kdcloud.server.rest.api.GlobalAnalysisResource;
 import com.kdcloud.server.rest.api.UserDataResource;
-import com.kdcloud.server.tasks.TaskQueue;
 
 public class ServerResourceTest {
 	
 	private final LocalServiceTestHelper helper =
 	        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 	
-	private static final String USER_ID = "tester";
+	public static final String USER_ID = TestContext.USER_ID;
 	
-	private UserDataServerResource userDataResource = new UserDataServerResource();
+	private Application application = new Application(new TestContext());
 	
-	private DatasetServerResource datasetResource = new DatasetServerResource();
+	private UserDataServerResource userDataResource = new UserDataServerResource(application);
 	
-	private ModalitiesServerResource modalitiesResource = new ModalitiesServerResource();
+	private DatasetServerResource datasetResource = new DatasetServerResource(application);
 	
-	private AnalysisServerResource analysisResource = new AnalysisServerResource() {
+	private ModalitiesServerResource modalitiesResource = new ModalitiesServerResource(application);
+	
+	private AnalysisServerResource analysisResource = new AnalysisServerResource(application) {
 		protected String getParameter(ServerParameter serverParameter) {return USER_ID;};
 	};
 	
-	private GlobalDataServerResource globalDataResource = new GlobalDataServerResource();
+	private GlobalDataServerResource globalDataResource = new GlobalDataServerResource(application);
 	
-	private GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource();
+	private GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource(application);
 	
-	private ChoosenModalityServerResource choosenModalityResource = new ChoosenModalityServerResource() {
+	private ChoosenModalityServerResource choosenModalityResource = new ChoosenModalityServerResource(application) {
 		public Representation handle() {
 			this.modality = modalityDao.findById(new Long(1));
 			return null;
 		};
 	};
 	
-	private DeviceServerResource deviceResource = new DeviceServerResource();
+	private DeviceServerResource deviceResource = new DeviceServerResource(application);
 	
-	private SchedulerServerResource scheduler = new SchedulerServerResource() {
+	private SchedulerServerResource scheduler = new SchedulerServerResource(application) {
 		 protected String getParameter(ServerParameter serverParameter) {return "1";}
 	 };
 	 
-	 private WorkerServerResource worker = new WorkerServerResource() {
+	 private WorkerServerResource worker = new WorkerServerResource(application) {
 		 protected String getParameter(ServerParameter serverParameter) {return "2";}
 	 };
-	
-	private KDEngine stubEngine = new KDEngine() {
-		
-		@Override
-		public Report execute(LinkedList<DataRow> dataset, long workflowId) {
-			return new Report();
-		}
-	};
-	
 	
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
-		User u = new User();
-		u.setId(USER_ID);
-		userDataResource.user = u;
-		datasetResource.user = u;
-		modalitiesResource.user = u;
-		analysisResource.user = u;
-		analysisResource.engine = stubEngine;
-		globalDataResource.user = u;
-		globalAnalysisResource.user = u;
-		globalAnalysisResource.engine = stubEngine;
-		choosenModalityResource.user = u;
-		deviceResource.user = u;
-		scheduler.user = u;
-		worker.engine = stubEngine;
-		scheduler.taskQueue = new TaskQueue() {
-			
-			@Override
-			public void push(Task task) {
-				// TODO Auto-generated method stub
-				
-			}
-		};
 	}
 
 	@After
@@ -197,9 +169,9 @@ public class ServerResourceTest {
 	@Test
 	public void testScheduling() {
 		userDataResource.createDataset();
-		userDataResource.pm.close();
+		userDataResource.getPersistenceContext().close();
 		scheduler.requestProcess();
-		scheduler.pm.close();
+		scheduler.getPersistenceContext().close();
 		worker.execute(null);
 	}
 	

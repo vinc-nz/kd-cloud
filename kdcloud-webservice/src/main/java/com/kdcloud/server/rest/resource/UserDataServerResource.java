@@ -2,6 +2,7 @@ package com.kdcloud.server.rest.resource;
 
 import java.util.ArrayList;
 
+import org.restlet.Application;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
@@ -11,8 +12,18 @@ import com.kdcloud.server.entity.Dataset;
 import com.kdcloud.server.rest.api.UserDataResource;
 
 public class UserDataServerResource extends KDServerResource implements UserDataResource {
- 
 	
+ 
+	public UserDataServerResource() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public UserDataServerResource(Application application) {
+		super(application);
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	@Put
 	public Long createDataset(Dataset dto) {

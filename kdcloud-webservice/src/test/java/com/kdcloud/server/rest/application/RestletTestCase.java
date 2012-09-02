@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.restlet.Application;
 import org.restlet.Component;
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
@@ -36,6 +37,8 @@ public class RestletTestCase {
 
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
 			new LocalDatastoreServiceTestConfig());
+	
+	Context context = new GAEContext();
 
 	Application testApp = new Application() {
 
@@ -43,7 +46,7 @@ public class RestletTestCase {
 		public Restlet createInboundRoot() {
 			Router router = new Router(getContext());
 			helper.setUp();
-			router.attachDefault(new KDApplication());
+			router.attachDefault(new KDApplication(context));
 			helper.tearDown();
 			return router;
 		}

@@ -1,4 +1,4 @@
-package com.kdcloud.server.jdo;
+package com.kdcloud.server.persistence.jdo;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.kdcloud.server.dao.ModalityDao;
 import com.kdcloud.server.entity.Modality;
 
-public class GaeModalityDao implements ModalityDao {
+public class ModalityDaoImpl implements ModalityDao {
 	
 	PersistenceManager pm;
 	
-	public GaeModalityDao(PersistenceManager pm) {
+	public ModalityDaoImpl(PersistenceManager pm) {
 		super();
 		this.pm = pm;
 	}

@@ -1,4 +1,4 @@
-package com.kdcloud.server.jdo;
+package com.kdcloud.server.persistence.jdo;
 
 import java.util.List;
 
@@ -11,11 +11,11 @@ import com.kdcloud.server.dao.UserDao;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.User;
 
-public class GaeUserDao implements UserDao {
+public class UserDaoImpl implements UserDao {
 	
 	PersistenceManager pm;
 	
-	public GaeUserDao(PersistenceManager pm) {
+	public UserDaoImpl(PersistenceManager pm) {
 		super();
 		this.pm = pm;
 	}

@@ -3,12 +3,25 @@ package com.kdcloud.server.rest.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.restlet.Application;
 import org.restlet.resource.Get;
 
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.GlobalDataResource;
 
 public class GlobalDataServerResource extends KDServerResource implements GlobalDataResource {
+	
+	
+
+	public GlobalDataServerResource() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public GlobalDataServerResource(Application application) {
+		super(application);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	@Get

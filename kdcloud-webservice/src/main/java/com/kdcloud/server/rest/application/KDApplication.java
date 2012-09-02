@@ -2,27 +2,19 @@ package com.kdcloud.server.rest.application;
 
 import java.util.Set;
 
-import javax.jdo.PersistenceManager;
-
 import org.reflections.Reflections;
 import org.restlet.Application;
+import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
-import com.kdcloud.server.dao.ModalityDao;
-import com.kdcloud.server.jdo.GaeModalityDao;
-import com.kdcloud.server.jdo.PMF;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
 public class KDApplication extends Application {
-
-	public KDApplication() {
-		super();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		ModalityDao modalityDao = new GaeModalityDao(pm);
-		if (modalityDao.getAll().isEmpty()) {
-			Utils.addStandardModalities(modalityDao);
-		}
+	
+	public KDApplication(Context context) {
+		super(context);
+		Utils.initDatabase(context);
 	}
 
 	/**

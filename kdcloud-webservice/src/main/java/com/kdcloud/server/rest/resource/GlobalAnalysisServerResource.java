@@ -3,10 +3,11 @@ package com.kdcloud.server.rest.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.restlet.Application;
 import org.restlet.resource.Get;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.engine.KDEngine;
-import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.User;
@@ -17,7 +18,25 @@ public class GlobalAnalysisServerResource extends KDServerResource implements
 	
 	private static final long DEFAULT_WORKFLOW = 1;
 	
-	KDEngine engine = new QRS();
+	KDEngine engine;
+	
+	
+	
+	public GlobalAnalysisServerResource() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public GlobalAnalysisServerResource(Application application) {
+		super(application);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		engine = (KDEngine) inject(KDEngine.class);
+	}
 
 	@Override
 	@Get

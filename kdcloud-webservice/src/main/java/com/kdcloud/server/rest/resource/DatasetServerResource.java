@@ -3,6 +3,7 @@ package com.kdcloud.server.rest.resource;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.restlet.Application;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
@@ -17,6 +18,20 @@ import com.kdcloud.server.rest.api.DatasetResource;
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
 	
 	DataTable dataset;
+	
+	
+
+	public DatasetServerResource() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public DatasetServerResource(Application application) {
+		super(application);
+		// TODO Auto-generated constructor stub
+	}
+
 
 	@Override
 	public Representation handle() {

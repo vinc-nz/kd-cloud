@@ -1,5 +1,6 @@
 package com.kdcloud.server.rest.resource;
 
+import org.restlet.Application;
 import org.restlet.client.resource.Delete;
 import org.restlet.client.resource.Post;
 import org.restlet.representation.Representation;
@@ -13,6 +14,18 @@ public class ChoosenModalityServerResource extends KDServerResource implements C
 	
 	Modality modality;
 	
+	
+	
+	public ChoosenModalityServerResource() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public ChoosenModalityServerResource(Application application) {
+		super(application);
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public Representation handle() {
 		String id = getParameter(ServerParameter.MODALITY_ID);

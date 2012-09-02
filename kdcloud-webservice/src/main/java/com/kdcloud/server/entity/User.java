@@ -30,6 +30,14 @@ public class User {
 	@Persistent(mappedBy="owner")
 	@Unowned
 	private Set<DataTable> tables = new HashSet<DataTable>();
+	
+	public User() {
+	}
+	
+	public User(String id) {
+		super();
+		this.id = id;
+	}
 
 	public String getEncodedKey() {
 		return encodedKey;

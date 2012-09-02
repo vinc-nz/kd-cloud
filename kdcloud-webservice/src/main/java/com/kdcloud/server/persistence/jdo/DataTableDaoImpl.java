@@ -1,4 +1,4 @@
-package com.kdcloud.server.jdo;
+package com.kdcloud.server.persistence.jdo;
 
 import javax.jdo.PersistenceManager;
 
@@ -7,11 +7,11 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.kdcloud.server.dao.DataTableDao;
 import com.kdcloud.server.entity.DataTable;
 
-public class GaeDataTableDao implements DataTableDao {
+public class DataTableDaoImpl implements DataTableDao {
 	
 	PersistenceManager pm;
 	
-	public GaeDataTableDao(PersistenceManager pm) {
+	public DataTableDaoImpl(PersistenceManager pm) {
 		super();
 		this.pm = pm;
 	}

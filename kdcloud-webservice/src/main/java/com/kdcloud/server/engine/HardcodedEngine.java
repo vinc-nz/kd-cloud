@@ -12,7 +12,7 @@ public class HardcodedEngine implements KDEngine {
 			throw new UnsupportedAttributeTypeException();
 		String className = (String) workflow.getExecutionData();
 		Class<?> clazz = Class.forName(className);
-		KDCommand command = clazz.asSubclass(KDCommand.class).getConstructor().newInstance();
+		HardcodedAlgorithm command = clazz.asSubclass(HardcodedAlgorithm.class).getConstructor().newInstance();
 		return command.execute(dataset);
 	}
 

@@ -12,7 +12,7 @@ import com.kdcloud.weka.core.Instances;
 
 
 
-public class QRS implements KDCommand {
+public class QRS implements HardcodedAlgorithm {
 
 	public static final int M = 5;
 	public static final int windowsSize = 15;
@@ -194,10 +194,6 @@ public class QRS implements KDCommand {
 		return result;
 	}
 
-	@Override
-	public Instances execute(Instances dataset) {
-		return ecg(dataset);
-	}
 	
 	public static Workflow getWorkflow() {
 		Workflow workflow = new Workflow();
@@ -205,6 +201,25 @@ public class QRS implements KDCommand {
 		workflow.getInputSpec().add(INPUT_ATTRIBUTE);
 		workflow.getOutputSpec().add(OUTPUT_ATTRIBUTE);
 		return workflow;
+	}
+
+	@Override
+	public Instances execute(Instances dataset) {
+		return ecg(dataset);
+	}
+	
+	@Override
+	public ArrayList<Attribute> inputSpec() {
+		ArrayList<Attribute> attrs = new ArrayList<Attribute>(1);
+		attrs.add(INPUT_ATTRIBUTE);
+		return attrs;
+	}
+
+	@Override
+	public ArrayList<Attribute> outputSpec() {
+		ArrayList<Attribute> attrs = new ArrayList<Attribute>(1);
+		attrs.add(OUTPUT_ATTRIBUTE);
+		return attrs;
 	}
 	
 	

@@ -32,8 +32,6 @@ public class Modality implements Serializable {
 	@Persistent(serialized="true")
 	List<ServerAction> serverCommands = new LinkedList<ServerAction>();
 	
-	List<String> sensors = new LinkedList<String>();
-
 	public String getEncodedKey() {
 		return encodedKey;
 	}
@@ -65,15 +63,5 @@ public class Modality implements Serializable {
 	public void setServerCommands(List<ServerAction> serverCommands) {
 		this.serverCommands = serverCommands;
 	}
-
-	public List<String> getSensors() {
-		return sensors;
-	}
-
-	public void setSensors(List<String> sensors) {
-		this.sensors = sensors;
-	}
-	
-	
 
 }

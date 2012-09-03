@@ -3,10 +3,12 @@ package com.kdcloud.server.rest.application;
 import org.restlet.Context;
 
 import com.kdcloud.server.dao.ModalityDao;
+import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.Modality;
 import com.kdcloud.server.entity.ServerAction;
 import com.kdcloud.server.entity.ServerMethod;
 import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.rest.api.AnalysisResource;
@@ -17,15 +19,18 @@ import com.kdcloud.server.rest.api.UserDataResource;
 public class Utils {
 
 	public static void addStandardModalities(ModalityDao modalityDao) {
+		Workflow workflow = QRS.getWorkflow();
+		
 		Modality dataFeed = new Modality();
 		dataFeed.setName("Data Feed");
-		dataFeed.getSensors().add("ecg");
 		ServerAction createDataset = new ServerAction(UserDataResource.URI,
-				ServerParameter.DATASET_ID.getName(), ServerMethod.GET, false,
+				ServerParameter.DATASET_ID.getName(), ServerMethod.PUT, false,
 				10 * 60 * 1000);
+		createDataset.setDataSpec(workflow.getInputSpec());
 		dataFeed.getServerCommands().add(createDataset);
 		ServerAction uploadData = new ServerAction(DatasetResource.URI, null,
 				ServerMethod.PUT, true, 10 * 60 * 1000);
+		uploadData.setDataSpec(workflow.getInputSpec());
 		dataFeed.getServerCommands().add(uploadData);
 		modalityDao.save(dataFeed);
 

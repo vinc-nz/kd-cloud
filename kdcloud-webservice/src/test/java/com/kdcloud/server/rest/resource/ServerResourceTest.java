@@ -179,7 +179,6 @@ public class ServerResourceTest {
 	private void addStandardModalities() {
 		Modality dataFeed = new Modality();
 		dataFeed.setName("Data Feed");
-		dataFeed.getSensors().add("ecg");
 		ServerAction createDataset = new ServerAction(UserDataResource.URI,
 				ServerParameter.DATASET_ID.getName(), ServerMethod.PUT, false,
 				10 * 60 * 1000);

@@ -1,7 +1,10 @@
 package com.kdcloud.server.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.kdcloud.weka.core.Attribute;
 
 public class ServerAction implements Serializable {
 
@@ -15,6 +18,8 @@ public class ServerAction implements Serializable {
 	String outputLabel;
 	
 	ServerMethod method;
+	
+	ArrayList<Attribute> dataSpec;
 	
 	boolean repeat;
 	
@@ -77,6 +82,15 @@ public class ServerAction implements Serializable {
 	public void setSleepTime(long sleepTime) {
 		this.sleepTime = sleepTime;
 	}
+	
+	public ArrayList<Attribute> getDataSpec() {
+		return dataSpec;
+	}
+
+	public void setDataSpec(ArrayList<Attribute> dataSpec) {
+		this.dataSpec = dataSpec;
+	}
+
 
 	public List<ServerParameter> getParams() {
 		return ServerParameter.getParamsFromUri(uri);

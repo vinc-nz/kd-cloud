@@ -39,9 +39,6 @@ public class ChoosenModalityServerResource extends KDServerResource implements C
 		modality.setName(dto.getName());
 		modality.getServerCommands().clear();
 		modality.getServerCommands().addAll(dto.getServerCommands());
-		modality.getSensors().clear();
-		modality.getSensors().addAll(dto.getSensors());
-		modality.setSensors(dto.getSensors());
 		modalityDao.save(modality);
 	}
 

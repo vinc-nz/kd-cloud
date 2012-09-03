@@ -28,11 +28,23 @@ public class Task {
 	@Unowned
 	User applicant;
 	
-	Long workflowId;
+	
+	@Persistent
+	@Unowned
+	Workflow workflow;
 	
 	@Persistent(serialized = "true")
 	Report report = new Report();
 	
+	public Task(DataTable table, Workflow workflow) {
+		this.workingTable = table;
+		this.workflow = workflow;
+	}
+	
+	public Task() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getEncodedKey() {
 		return encodedKey;
 	}
@@ -57,12 +69,12 @@ public class Task {
 		this.workingTable = workingTable;
 	}
 
-	public Long getWorkflowId() {
-		return workflowId;
+	public Workflow getWorkflow() {
+		return workflow;
 	}
 
-	public void setWorkflowId(long workflowId) {
-		this.workflowId = workflowId;
+	public void setWorkflow(Workflow workflow) {
+		this.workflow = workflow;
 	}
 
 	public Report getReport() {

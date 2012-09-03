@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.After;
@@ -17,7 +16,6 @@ import org.restlet.representation.Representation;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Modality;
 import com.kdcloud.server.entity.Report;
@@ -175,7 +173,7 @@ public class ServerResourceTest {
 		userDataResource.getPersistenceContext().close();
 		scheduler.requestProcess();
 		scheduler.getPersistenceContext().close();
-		worker.execute(null);
+		worker.pullTask(null);
 	}
 	
 	private void addStandardModalities() {

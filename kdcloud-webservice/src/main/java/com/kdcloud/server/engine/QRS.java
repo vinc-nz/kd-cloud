@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
+import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.DenseInstance;
 import com.kdcloud.weka.core.Instance;
@@ -16,6 +17,9 @@ public class QRS implements KDCommand {
 	public static final int M = 5;
 	public static final int windowsSize = 15;
 	public static final int sampling_rate_ms = 10;
+	
+	public static final Attribute INPUT_ATTRIBUTE = new Attribute("sign");
+	public static final Attribute OUTPUT_ATTRIBUTE = new Attribute("rr");
 
 
 	public static double[] highPass(double[] sig0, int nsamp) {
@@ -151,7 +155,7 @@ public class QRS implements KDCommand {
 	public static double[] readData(Instances data) {
 		Vector<Double> sign = new Vector<Double>();
 		for (Instance i : data) {
-			sign.add(i.value(0));
+			sign.add(i.value(INPUT_ATTRIBUTE));
 		}
 		double[] res = new double[sign.size()];
 		for (int i = 0; i < sign.size(); i++) {
@@ -163,7 +167,7 @@ public class QRS implements KDCommand {
 	
 	public static Instances ecg(Instances data) {
 		ArrayList<Attribute> attrs = new ArrayList<Attribute>(1);
-		attrs.add(new Attribute("rr"));
+		attrs.add(OUTPUT_ATTRIBUTE);
 		Instances result = new Instances("rr", attrs, data.numInstances()/100);
 		double[] sign = readData(data);
 		int nsamp = sign.length;
@@ -193,6 +197,14 @@ public class QRS implements KDCommand {
 	@Override
 	public Instances execute(Instances dataset) {
 		return ecg(dataset);
+	}
+	
+	public static Workflow getWorkflow() {
+		Workflow workflow = new Workflow();
+		workflow.setExecutionData(QRS.class.getName());
+		workflow.getInputSpec().add(INPUT_ATTRIBUTE);
+		workflow.getOutputSpec().add(OUTPUT_ATTRIBUTE);
+		return workflow;
 	}
 	
 	

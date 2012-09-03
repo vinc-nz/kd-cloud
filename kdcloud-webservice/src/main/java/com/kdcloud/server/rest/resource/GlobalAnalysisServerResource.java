@@ -5,24 +5,21 @@ import java.util.List;
 
 import org.restlet.Application;
 import org.restlet.resource.Get;
-import org.restlet.resource.ResourceException;
 
-import com.kdcloud.server.engine.KDEngine;
+import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
+import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
+import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.server.rest.api.GlobalAnalysisResource;
 import com.kdcloud.weka.core.Instances;
 
-public class GlobalAnalysisServerResource extends KDServerResource implements
-		GlobalAnalysisResource {
-	
-	private static final long DEFAULT_WORKFLOW = 1;
-	
-	KDEngine engine;
-	
-	
-	
+public class GlobalAnalysisServerResource extends WorkerServerResource
+		implements GlobalAnalysisResource {
+
+	private static final Workflow WORKFLOW = QRS.getWorkflow();
+
 	public GlobalAnalysisServerResource() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -33,10 +30,17 @@ public class GlobalAnalysisServerResource extends KDServerResource implements
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	protected void doInit() throws ResourceException {
-		super.doInit();
-		engine = (KDEngine) inject(KDEngine.class);
+	public Report requestAnalysisOn(User subject) {
+		if (!subject.getTables().isEmpty()) {
+			DataTable table = subject.getTables().iterator().next();
+			if (engine.validInput(table.getInstances(), WORKFLOW)) {
+				Instances result = execute(new Task(table, WORKFLOW));
+				String label = "analysis requested by " + user.getId() + " on "
+						+ subject.getId() + " data";
+				return new Report(label, result);
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -46,10 +50,8 @@ public class GlobalAnalysisServerResource extends KDServerResource implements
 		ArrayList<Report> globalReport = new ArrayList<Report>(users.size());
 		for (User subject : users) {
 			if (!subject.getTables().isEmpty()) {
-				DataTable table = subject.getTables().iterator().next();
-				Instances result = engine.execute(table.getInstances(), DEFAULT_WORKFLOW);
-				String label = "analysis requested by " + user.getId() + " on " + subject.getId() + " data";
-				globalReport.add(new Report(label, result));
+				Report report = requestAnalysisOn(subject);
+				globalReport.add(report);
 			}
 		}
 		return globalReport;

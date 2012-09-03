@@ -6,6 +6,8 @@ import com.kdcloud.weka.core.Instances;
 
 public interface KDEngine {
 	
-	public Instances execute(Instances dataset, Workflow workflow) throws Exception;
+	public boolean validInput(Instances input, Workflow workflow);
+	
+	public Instances execute(Instances input, Workflow workflow) throws Exception;
 
 }

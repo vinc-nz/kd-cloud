@@ -12,6 +12,7 @@ import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.GlobalAnalysisResource;
+import com.kdcloud.weka.core.Instances;
 
 public class GlobalAnalysisServerResource extends KDServerResource implements
 		GlobalAnalysisResource {
@@ -46,7 +47,9 @@ public class GlobalAnalysisServerResource extends KDServerResource implements
 		for (User subject : users) {
 			if (!subject.getTables().isEmpty()) {
 				DataTable table = subject.getTables().iterator().next();
-				globalReport.add(engine.execute(table.getDataRows(), DEFAULT_WORKFLOW));
+				Instances result = engine.execute(table.getInstances(), DEFAULT_WORKFLOW);
+				String label = "analysis requested by " + user.getId() + " on " + subject.getId() + " data";
+				globalReport.add(new Report(label, result));
 			}
 		}
 		return globalReport;

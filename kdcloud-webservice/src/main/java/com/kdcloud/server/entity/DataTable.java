@@ -1,14 +1,14 @@
 package com.kdcloud.server.entity;
 
-import java.util.LinkedList;
-
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.FieldResult;
 
 import com.google.appengine.datanucleus.annotations.Unowned;
+import com.kdcloud.weka.core.Instances;
 
 @PersistenceCapable
 public class DataTable {
@@ -23,7 +23,7 @@ public class DataTable {
 	Long id;
 	
 	@Persistent(serialized="true")
-	LinkedList<DataRow> dataRows = new LinkedList<DataRow>();
+	Instances instances;
 	
 	@Persistent
 	@Unowned
@@ -41,12 +41,12 @@ public class DataTable {
 		this.id = id;
 	}
 
-	public LinkedList<DataRow> getDataRows() {
-		return dataRows;
+	public Instances getInstances() {
+		return instances;
 	}
 
-	public void setDataRows(LinkedList<DataRow> dataRows) {
-		this.dataRows = dataRows;
+	public void setInstances(Instances instances) {
+		this.instances = instances;
 	}
 
 	public String getEncodedKey() {

@@ -27,7 +27,9 @@ import org.restlet.security.MapVerifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.rest.api.ModalitiesResource;
+import com.kdcloud.server.rest.resource.UserDataServerResource;
+import com.kdcloud.weka.core.Attribute;
+import com.kdcloud.weka.core.Instances;
 
 public class RestletTestCase {
 
@@ -100,15 +102,18 @@ public class RestletTestCase {
 				"login", "secret");
 
 		ClientResource data = new ClientResource(BASE_URI
-				+ ModalitiesResource.URI);
+				+ UserDataServerResource.URI);
 		data.setChallengeResponse(authentication);
+		Instances instances = new Instances("test", new ArrayList<Attribute>(), 0);
+		ObjectRepresentation<Serializable> instancesRep = new ObjectRepresentation<Serializable>(instances);
 		try {
 			Representation response = data
-					.get(MediaType.APPLICATION_JAVA_OBJECT);
+					.put(instancesRep, MediaType.APPLICATION_JAVA_OBJECT);
 			ObjectRepresentation<Serializable> id = new ObjectRepresentation<Serializable>(
 					response);
-			Assert.assertTrue(id.getObject() instanceof ArrayList<?>);
+			Assert.assertTrue(id.getObject() instanceof Long);
 		} catch (Exception e) {
+			e.printStackTrace();
 			Assert.fail();
 		}
 

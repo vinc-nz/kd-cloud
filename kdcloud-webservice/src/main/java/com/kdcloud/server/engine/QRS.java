@@ -1,12 +1,13 @@
 package com.kdcloud.server.engine;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Vector;
 
-import com.kdcloud.server.entity.DataRow;
-import com.kdcloud.server.entity.Report;
+import com.kdcloud.weka.core.Attribute;
+import com.kdcloud.weka.core.DenseInstance;
+import com.kdcloud.weka.core.Instance;
+import com.kdcloud.weka.core.Instances;
 
 
 
@@ -17,13 +18,13 @@ public class QRS implements KDEngine {
 	public static final int sampling_rate_ms = 10;
 
 
-	private static float[] highPass(float[] sig0, int nsamp) {
-		float[] highPass = new float[nsamp];
-		float constant = (float) 1 / M;
+	public static double[] highPass(double[] sig0, int nsamp) {
+		double[] highPass = new double[nsamp];
+		double constant = (double) 1 / M;
 
 		for (int i = 0; i < sig0.length; i++) {
-			float y1 = 0;
-			float y2 = 0;
+			double y1 = 0;
+			double y2 = 0;
 
 			int y2_index = i - ((M + 1) / 2);
 			if (y2_index < 0) {
@@ -31,7 +32,7 @@ public class QRS implements KDEngine {
 			}
 			y2 = sig0[y2_index];
 
-			float y1_sum = 0;
+			double y1_sum = 0;
 			for (int j = i; j > i - M; j--) {
 				int x_index = i - (i - j);
 				if (x_index < 0) {
@@ -45,23 +46,23 @@ public class QRS implements KDEngine {
 		return highPass;
 	}
 
-	private static float[] lowPass(float[] sig0, int nsamp) {
-		float[] lowPass = new float[nsamp];
+	public static double[] lowPass(double[] sig0, int nsamp) {
+		double[] lowPass = new double[nsamp];
 		for (int i = 0; i < sig0.length; i++) {
-			float sum = 0;
+			double sum = 0;
 			if (i + windowsSize < sig0.length) {
 				for (int j = i; j < i + windowsSize; j++) {
-					float current = sig0[j] * sig0[j];
+					double current = sig0[j] * sig0[j];
 					sum += current;
 				}
 			} else if (i + windowsSize >= sig0.length) {
 				int over = i + windowsSize - sig0.length;
 				for (int j = i; j < sig0.length; j++) {
-					float current = sig0[j] * sig0[j];
+					double current = sig0[j] * sig0[j];
 					sum += current;
 				}
 				for (int j = 0; j < over; j++) {
-					float current = sig0[j] * sig0[j];
+					double current = sig0[j] * sig0[j];
 					sum += current;
 				}
 			}
@@ -70,7 +71,7 @@ public class QRS implements KDEngine {
 		return lowPass;
 	}
 
-	private static double average(float[] array) {
+	public static double average(double[] array) {
 		double sum = 0;
 		for (int i = 0; i < array.length; i++) {
 			sum += array[i];
@@ -78,19 +79,19 @@ public class QRS implements KDEngine {
 		return sum / array.length;
 	}
 
-	private static int[] QRS_RC(float[] lowPass, int nsamp) {
+	public static int[] QRS_RC(double[] lowPass, int nsamp) {
 		int[] QRS = new int[nsamp];
 
 		int cut_length = 200;
-		float[] sort_array = Arrays.copyOf(lowPass, cut_length);
+		double[] sort_array = Arrays.copyOf(lowPass, cut_length);
 		Arrays.sort(sort_array);
 		int percent = 50 * cut_length / 100;
-		float[] mean_array = Arrays.copyOfRange(sort_array,
+		double[] mean_array = Arrays.copyOfRange(sort_array,
 				(sort_array.length - percent), sort_array.length);
 		double treshold = average(mean_array);
 
 		/*
-		 * int cut_length=100; float max_value=getMax(lowPass,0,cut_length);
+		 * int cut_length=100; double max_value=getMax(lowPass,0,cut_length);
 		 * double treshold =max_value - (max_value*80/100);
 		 */
 
@@ -98,7 +99,7 @@ public class QRS implements KDEngine {
 		int i = 0;
 
 		while (i < lowPass.length) {
-			float max = 0;
+			double max = 0;
 			int index = 0;
 
 			if (i + frame > lowPass.length) {
@@ -122,7 +123,7 @@ public class QRS implements KDEngine {
 				if (lowPass[j] > max)
 					max = lowPass[j];
 			}
-			float last_max = 0;
+			double last_max = 0;
 			int index_last_max = -1;
 			for (int j = i; j < index; j++) {
 				if (lowPass[j] >= treshold && lowPass[j] > last_max) {
@@ -147,13 +148,12 @@ public class QRS implements KDEngine {
 	}
 
 	
-	private static float[] readData(List<DataRow> data) {
-		Vector<Float> sign = new Vector<Float>();
-		for (DataRow dataRow : data) {
-			String line = dataRow.getDataCells()[0];
-			sign.add(Float.parseFloat(line));
+	public static double[] readData(Instances data) {
+		Vector<Double> sign = new Vector<Double>();
+		for (Instance i : data) {
+			sign.add(i.value(0));
 		}
-		float[] res = new float[sign.size()];
+		double[] res = new double[sign.size()];
 		for (int i = 0; i < sign.size(); i++) {
 			res[i] = sign.get(i);
 		}
@@ -161,12 +161,14 @@ public class QRS implements KDEngine {
 	}
 
 	
-	private static Report ecg(List<DataRow> data) {
-		Report report = new Report();
-		float[] sign = readData(data);
+	public static Instances ecg(Instances data) {
+		ArrayList<Attribute> attrs = new ArrayList<Attribute>(1);
+		attrs.add(new Attribute("rr"));
+		Instances result = new Instances("rr", attrs, data.numInstances()/100);
+		double[] sign = readData(data);
 		int nsamp = sign.length;
-		float[] highPass = highPass(sign, nsamp);
-		float[] lowPass = lowPass(highPass, nsamp);
+		double[] highPass = highPass(sign, nsamp);
+		double[] lowPass = lowPass(highPass, nsamp);
 		int[] QRS = QRS_RC(lowPass, nsamp);
 		int time = 0;
 		boolean first_peak = true;
@@ -177,19 +179,22 @@ public class QRS implements KDEngine {
 					first_peak = false;
 				} else {
 					time += sampling_rate_ms;
-					report.getStats().add(time);
+					double[] row = {time};
+					result.add(new DenseInstance(0, row));
 				}
 				time = 0;
 			} else {
 				time += sampling_rate_ms;
 			}
 		}
-		return report;
+		return result;
 	}
 
 	@Override
-	public Report execute(LinkedList<DataRow> dataset, long workflowId) {
+	public Instances execute(Instances dataset, long workflowId) {
 		return ecg(dataset);
 	}
+	
+	
 
 }

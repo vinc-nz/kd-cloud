@@ -15,6 +15,7 @@ import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
 import com.kdcloud.server.tasks.TaskQueue;
+import com.kdcloud.weka.core.Instances;
 
 public class TestContext extends Context {
 	
@@ -36,11 +37,13 @@ public class TestContext extends Context {
 		
 		
 		attrs.put(KDEngine.class.getName(), new KDEngine() {
-			
+
 			@Override
-			public Report execute(LinkedList<DataRow> dataset, long workflowId) {
-				return new Report();
+			public Instances execute(Instances dataset, long workflowId) {
+				return null;
 			}
+			
+			
 		});
 		
 		attrs.put(UserProvider.class.getName(), new UserProvider() {

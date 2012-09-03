@@ -10,6 +10,7 @@ import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.api.AnalysisResource;
+import com.kdcloud.weka.core.Instances;
 
 public class AnalysisServerResource extends KDServerResource implements
 		AnalysisResource {
@@ -41,10 +42,9 @@ public class AnalysisServerResource extends KDServerResource implements
 		if (subject == null || subject.getTables().isEmpty())
 			return null;
 		DataTable table = subject.getTables().iterator().next();
-		Report report = engine.execute(table.getDataRows(), DEFAULT_WORKFLOW);
-		report.setName("analysis requested by " + user.getId() + " on "
-				+ subject.getId() + " data");
-		return report;
+		Instances result = engine.execute(table.getInstances(), DEFAULT_WORKFLOW);
+		String label = "analysis requested by " + user.getId() + " on " + subject.getId() + " data";
+		return new Report(label, result);
 	}
 
 }

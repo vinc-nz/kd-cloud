@@ -2,25 +2,31 @@ package com.kdcloud.server.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
 
+import com.kdcloud.weka.core.Instances;
 
-public class Report implements Serializable  {
-	
+public class Report implements Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	String name;
-	
+
 	Date date = new Date();
-	
-	HashMap<String, String> map = new HashMap<String, String>();
-	
-	LinkedList<Integer> stats = new LinkedList<Integer>();
-	
+
+	Instances data;
+
+	public Report() {
+	}
+
+	public Report(String name, Instances data) {
+		super();
+		this.name = name;
+		this.data = data;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -37,20 +43,12 @@ public class Report implements Serializable  {
 		this.date = date;
 	}
 
-	public HashMap<String, String> getMap() {
-		return map;
+	public Instances getData() {
+		return data;
 	}
 
-	public void setMap(HashMap<String, String> map) {
-		this.map = map;
-	}
-
-	public LinkedList<Integer> getStats() {
-		return stats;
-	}
-
-	public void setStats(LinkedList<Integer> stats) {
-		this.stats = stats;
+	public void setData(Instances data) {
+		this.data = data;
 	}
 
 }

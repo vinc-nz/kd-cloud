@@ -28,7 +28,7 @@ public class Task {
 	@Unowned
 	User applicant;
 	
-	long workflowId;
+	Long workflowId;
 	
 	@Persistent(serialized = "true")
 	Report report = new Report();
@@ -57,7 +57,7 @@ public class Task {
 		this.workingTable = workingTable;
 	}
 
-	public long getWorkflowId() {
+	public Long getWorkflowId() {
 		return workflowId;
 	}
 

@@ -1,10 +1,9 @@
 package com.kdcloud.server.rest.api;
 
 import org.restlet.resource.Delete;
-import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
-import com.kdcloud.server.entity.Dataset;
+import com.kdcloud.weka.core.Instances;
 
 
 /**
@@ -23,12 +22,12 @@ public interface UserDataResource {
 	 * @return the dataset id
 	 */
 	@Put
-	public Long createDataset(Dataset dto);
+	public Long createDataset(Instances instances);
 	
 //	@Get
 //	public ArrayList<Dataset> listDataset();
-	@Get
-	public Long createDataset();
+//	@Get
+//	public Long createDataset();
 	
 	@Delete
 	public void deleteAllData();

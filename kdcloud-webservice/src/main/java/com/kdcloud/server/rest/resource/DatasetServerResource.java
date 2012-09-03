@@ -1,19 +1,17 @@
 package com.kdcloud.server.rest.resource;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import org.restlet.Application;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 
-import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.rest.api.DatasetResource;
+import com.kdcloud.weka.core.Instances;
 
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
 	
@@ -37,31 +35,35 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	public Representation handle() {
 		String id = getParameter(ServerParameter.DATASET_ID);
 		dataset = dataTableDao.findById(Long.parseLong(id));
+		if (dataset == null) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "provided id is invalid");
+			return null;
+		}
 		return super.handle();
 	}
 	
 	
 	@Override
 	@Put
-	public void uploadData(LinkedList<DataRow> data) {
-		if (data == null)
-			getLogger().info("got null data");
-		else
-			getLogger().info("got valid data");
-		if (dataset != null && dataset.getOwner().equals(user)) {
-			dataset.getDataRows().addAll(data);
+	public void uploadData(Instances data) {
+		if (!dataset.getOwner().equals(user))
+			forbid();
+		if (data != null && dataset.getInstances().equalHeaders(data)) {
+			dataset.getInstances().addAll(data);
 			dataTableDao.update(dataset);
 			getLogger().info("data merged succeffully");
 		}
-		else
-			getLogger().info("provided id is invalid");
+		else {
+			String error = "provided data is either null or it does not match the dataset specification";
+			setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE,  error);
+		}
 	}
 
 	@Override
 	@Get
-	public ArrayList<DataRow> getData() {
+	public Instances getData() {
 		if (dataset.getOwner().equals(user))
-			return new ArrayList<DataRow>(dataset.getDataRows());
+			return dataset.getInstances();
 		forbid();
 		return null;
 	}

@@ -10,6 +10,7 @@ import org.restlet.resource.Put;
 
 import com.kdcloud.server.entity.DataRow;
 import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.weka.core.Instances;
 
 /**
  * URI /data/{id}
@@ -26,7 +27,7 @@ public interface DatasetResource {
 	 * @param values the data
 	 */
 	@Put
-	public void uploadData(LinkedList<DataRow> data);
+	public void uploadData(Instances data);
 	
 	@Post
 	public void addCommitter(String email);
@@ -35,6 +36,6 @@ public interface DatasetResource {
 	public void deleteDataset();
 	
 	@Get
-	public ArrayList<DataRow> getData();
+	public Instances getData();
 
 }

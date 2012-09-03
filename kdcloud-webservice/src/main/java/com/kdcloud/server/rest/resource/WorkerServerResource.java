@@ -14,6 +14,7 @@ import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.gcm.Notification;
+import com.kdcloud.weka.core.Instances;
 
 public class WorkerServerResource extends KDServerResource {
 	
@@ -43,13 +44,13 @@ public class WorkerServerResource extends KDServerResource {
 		
 		Task task = taskDao.findById(new Long(id));
 
-		DataTable dataTable = task.getWorkingTable();
-		Report report = engine.execute(dataTable.getDataRows(),
-				Long.valueOf(task.getWorkflowId()));
+		DataTable table = task.getWorkingTable();
+		Instances result = engine.execute(table.getInstances(), task.getWorkflowId());
+		String label = "analysis requested by " + task.getApplicant().getId();
 		
 		getLogger().info("work done");
 		
-		task.setReport(report);
+		task.setReport(new Report(label, result));
 		taskDao.save(task);
 		
 		User user = task.getApplicant();

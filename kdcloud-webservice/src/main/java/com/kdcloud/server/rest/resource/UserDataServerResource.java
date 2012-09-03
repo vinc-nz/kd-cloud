@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import org.restlet.Application;
 import org.restlet.resource.Delete;
-import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
 import com.kdcloud.server.entity.DataTable;
-import com.kdcloud.server.entity.Dataset;
 import com.kdcloud.server.rest.api.UserDataResource;
+import com.kdcloud.weka.core.Attribute;
+import com.kdcloud.weka.core.Instances;
 
 public class UserDataServerResource extends KDServerResource implements UserDataResource {
 	
@@ -26,10 +26,10 @@ public class UserDataServerResource extends KDServerResource implements UserData
 
 	@Override
 	@Put
-	public Long createDataset(Dataset dto) {
+	public Long createDataset(Instances instances) {
 		DataTable dataset = new DataTable();
-		dataset.setName(dto.getName());
-		dataset.setDescription(dto.getDescription());
+		dataset.setName(instances.relationName());
+		dataset.setInstances(instances);
 		user.getTables().clear();
 		user.getTables().add(dataset);
 		userDao.save(user);
@@ -38,17 +38,17 @@ public class UserDataServerResource extends KDServerResource implements UserData
 
 //	@Override
 //	@Get
-	public ArrayList<Dataset> listDataset() {
-		ArrayList<Dataset> list = new ArrayList<Dataset>(user.getTables().size());
-		for (DataTable table : user.getTables()) {
-			Dataset dto = new Dataset(table.getName(), table.getDescription());
-			dto.setDescription(table.getDescription());
-			dto.setSize(table.getDataRows().size());
-			dto.setId(table.getId());
-			list.add(dto);
-		}
-		return list;
-	}
+//	public ArrayList<Dataset> listDataset() {
+//		ArrayList<Dataset> list = new ArrayList<Dataset>(user.getTables().size());
+//		for (DataTable table : user.getTables()) {
+//			Dataset dto = new Dataset(table.getName(), table.getDescription());
+//			dto.setDescription(table.getDescription());
+//			dto.setSize(table.getDataRows().size());
+//			dto.setId(table.getId());
+//			list.add(dto);
+//		}
+//		return list;
+//	}
 
 	@Override
 	@Delete
@@ -56,11 +56,12 @@ public class UserDataServerResource extends KDServerResource implements UserData
 		userDao.delete(user);
 	}
 
-	@Override
-	@Get
+//	@Override
+//	@Get
 	public Long createDataset() {
 		String name = "Dataset of user " + user.getId();
-		return createDataset(new Dataset(name, null));
+		Instances data = new Instances(name, new ArrayList<Attribute>(), 0);
+		return createDataset(data);
 	}
 
 }

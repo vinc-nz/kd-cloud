@@ -11,7 +11,7 @@ import com.kdcloud.weka.core.Instances;
 
 
 
-public class QRS implements KDEngine {
+public class QRS implements KDCommand {
 
 	public static final int M = 5;
 	public static final int windowsSize = 15;
@@ -191,7 +191,7 @@ public class QRS implements KDEngine {
 	}
 
 	@Override
-	public Instances execute(Instances dataset, long workflowId) {
+	public Instances execute(Instances dataset) {
 		return ecg(dataset);
 	}
 	

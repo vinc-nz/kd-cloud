@@ -1,8 +1,18 @@
 package com.kdcloud.server.rest.resource;
 
+import java.io.File;
+import java.net.URI;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
+import org.w3c.dom.Document;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
+import org.xml.sax.InputSource;
 
 import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.entity.DataTable;
@@ -49,7 +59,34 @@ public class AnalysisServerResource extends WorkerServerResource implements
 		Instances result = execute(task);
 		
 		String label = "analysis requested by " + user.getId() + " on " + subject.getId() + " data";
-		return new Report(label, result);
+		Report report = new Report(label, result);
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder builder = dbf.newDocumentBuilder();
+			URI uri = getClass().getClassLoader().getResource("view.xml").toURI();
+			Document dom = builder.parse(new File(uri));
+			report.setViewSpec(dom.getTextContent());
+			return report;
+		} catch (Exception e) {
+			e.printStackTrace();
+			setStatus(Status.SERVER_ERROR_INTERNAL, e);
+			return null;
+		}
+	}
+	
+	public static void main(String[] args) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder builder = dbf.newDocumentBuilder();
+			URI uri = AnalysisServerResource.class.getClassLoader().getResource("view.xml").toURI();
+			Document dom = builder.parse(new File(uri));
+			DOMImplementationLS ls = (DOMImplementationLS) dom.getImplementation();
+			LSSerializer serializer = ls.createLSSerializer();
+			System.out.println(serializer.writeToString(dom));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

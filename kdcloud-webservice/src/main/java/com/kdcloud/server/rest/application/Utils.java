@@ -53,9 +53,14 @@ public class Utils {
 		PersistenceContextFactory pcf = (PersistenceContextFactory) context
 				.getAttributes().get(PersistenceContextFactory.class.getName());
 		PersistenceContext pc = pcf.get();
-		ModalityDao modalityDao = pc.getModalityDao();
-		if (modalityDao.getAll().isEmpty())
-			addStandardModalities(modalityDao);
+		cleanDatabase(pc);
+		addStandardModalities(pc.getModalityDao());
+	}
+	
+	public static void cleanDatabase(PersistenceContext pc) {
+		pc.getModalityDao().deleteAll();
+//		pc.getTaskDao().deleteAll();
+//		pc.getDataTableDao().deleteAll();
 	}
 
 }

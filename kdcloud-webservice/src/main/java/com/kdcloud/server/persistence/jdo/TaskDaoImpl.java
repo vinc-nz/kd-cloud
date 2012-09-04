@@ -1,6 +1,9 @@
 package com.kdcloud.server.persistence.jdo;
 
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -29,6 +32,22 @@ public class TaskDaoImpl implements TaskDao {
 //		pm.currentTransaction().commit();
 		Key k = KeyFactory.stringToKey(e.getEncodedKey());
 		e.setId(k.getId());
+	}
+	
+	@Override
+	public void deleteAll() {
+		pm.deletePersistentAll(getAll());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Task> getAll() {
+		Query q = pm.newQuery(Task.class);
+		List<Task> list = (List<Task>) q.execute();
+		for (Task e : list) {
+			Key k = KeyFactory.stringToKey(e.getEncodedKey());
+			e.setId(k.getId());
+		}
+		return list;
 	}
 
 }

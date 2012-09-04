@@ -6,5 +6,6 @@ public interface TaskDao {
 	
 	public Task findById(Long id);
 	public void save(Task e);
+	public void deleteAll();
 
 }

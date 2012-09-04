@@ -9,6 +9,7 @@ public interface ModalityDao {
 	public Modality findById(Long id);
 	public void save(Modality modality);
 	public void delete(Modality modality);
+	public void deleteAll();
 	public List<Modality> getAll();
 
 }

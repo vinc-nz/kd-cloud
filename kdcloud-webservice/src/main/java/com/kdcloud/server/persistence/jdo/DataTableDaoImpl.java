@@ -1,6 +1,9 @@
 package com.kdcloud.server.persistence.jdo;
 
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -33,6 +36,22 @@ public class DataTableDaoImpl implements DataTableDao {
 		pm.makePersistent(e);
 		Key k = KeyFactory.stringToKey(e.getEncodedKey());
 		e.setId(k.getId());
+	}
+
+	@Override
+	public void deleteAll() {
+		pm.deletePersistentAll(getAll());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DataTable> getAll() {
+		Query q = pm.newQuery(DataTable.class);
+		List<DataTable> list = (List<DataTable>) q.execute();
+		for (DataTable e : list) {
+			Key k = KeyFactory.stringToKey(e.getEncodedKey());
+			e.setId(k.getId());
+		}
+		return list;
 	}
 
 }

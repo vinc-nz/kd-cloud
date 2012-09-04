@@ -6,5 +6,6 @@ public interface DataTableDao {
 	
 	public DataTable findById(Long id);
 	public void update(DataTable dataTable);
+	public void deleteAll();
 
 }

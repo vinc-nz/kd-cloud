@@ -24,7 +24,7 @@ public class KDApplication extends Application {
 	public Restlet createInboundRoot() {
 
 		Router router = new Router(getContext());
-
+		
 		Reflections reflections = new Reflections(
 				"com.kdcloud.server.rest.resource");
 

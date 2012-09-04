@@ -53,4 +53,9 @@ public class ModalityDaoImpl implements ModalityDao {
 		}
 	}
 
+	@Override
+	public void deleteAll() {
+		pm.deletePersistentAll(getAll());
+	}
+
 }

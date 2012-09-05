@@ -1,6 +1,6 @@
 package com.kdcloud.server.entity;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -12,9 +12,12 @@ public class ServerActionTest {
 	public void test() {
 		ServerAction action = 
 				new ServerAction(DatasetResource.URI, null, ServerMethod.PUT, false, 0);
-		ServerParameter param = action.getParams().iterator().next();
+		action.addParameter(ServerParameter.USER_ID);
+		ServerParameter param = action.uriParams.iterator().next();
 		assertEquals(ServerParameter.DATASET_ID.getName(), param.getName());
 		ServerAction newAction = action.setParameter(param, "1");
 		assertEquals("/data/1", newAction.uri);
+		newAction = action.setParameter(ServerParameter.USER_ID, "1");
+		assertTrue(action.postForm != newAction.postForm);
 	}
 }

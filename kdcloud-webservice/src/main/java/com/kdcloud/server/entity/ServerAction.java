@@ -2,9 +2,17 @@ package com.kdcloud.server.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.restlet.data.Form;
+import org.restlet.data.Parameter;
+import org.restlet.representation.ObjectRepresentation;
+import org.restlet.representation.Representation;
 
 import com.kdcloud.weka.core.Attribute;
+import com.kdcloud.weka.core.Instances;
 
 public class ServerAction implements Serializable {
 
@@ -20,6 +28,10 @@ public class ServerAction implements Serializable {
 	ServerMethod method;
 	
 	ArrayList<Attribute> dataSpec;
+	
+	Set<ServerParameter> uriParams;
+	Set<ServerParameter> postParams;
+	ArrayList<Parameter> postForm;
 	
 	boolean repeat;
 	
@@ -38,6 +50,22 @@ public class ServerAction implements Serializable {
 		this.method = method;
 		this.repeat = repeat;
 		this.sleepTime = sleepTime;
+		this.uriParams = ServerParameter.getParamsFromUri(uri);
+		this.postParams = new HashSet<ServerParameter>();
+		this.postForm = new ArrayList<Parameter>();
+	}
+
+
+	ServerAction(ServerAction serverAction, String newUri, ArrayList<Parameter> newPostForm) {
+		this.outputLabel = serverAction.outputLabel;
+		this.method = serverAction.method;
+		this.repeat = serverAction.repeat;
+		this.sleepTime = serverAction.sleepTime;
+		this.dataSpec = serverAction.dataSpec;
+		this.uri = newUri;
+		this.uriParams = ServerParameter.getParamsFromUri(uri);
+		this.postParams = serverAction.postParams;
+		this.postForm = newPostForm;
 	}
 
 
@@ -54,10 +82,6 @@ public class ServerAction implements Serializable {
 		return uri;
 	}
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
-	
 	public String getOutputLabel() {
 		return outputLabel;
 	}
@@ -93,16 +117,40 @@ public class ServerAction implements Serializable {
 
 
 	public List<ServerParameter> getParams() {
-		return ServerParameter.getParamsFromUri(uri);
+		ArrayList<ServerParameter> params = 
+				new ArrayList<ServerParameter>(uriParams.size() + postParams.size());
+		params.addAll(postParams);
+		params.addAll(postParams);
+		return params;
 	}
 	
 	public boolean hasParameters() {
-		return getParams().isEmpty();
+		return uriParams.isEmpty() && postParams.isEmpty();
+	}
+	
+	public boolean addParameter(ServerParameter param) {
+		return postParams.add(param);
 	}
 
 	public ServerAction setParameter(ServerParameter param, String value) {
-		String newUri = uri.replaceAll(param.getPattern(), value);
-		return new ServerAction(newUri, outputLabel, method, repeat, sleepTime);
+		String newUri = uri;
+		ArrayList<Parameter> newPostForm = postForm;
+		if (uriParams.contains(param)) {
+			newUri = uri.replaceAll(param.getPattern(), value);
+		} else if (postParams.contains(param)) {
+			newPostForm = new ArrayList<Parameter>(postForm);
+			Parameter postParam = new Parameter(param.getName(), value);
+			newPostForm.add(postParam);
+		}
+		return new ServerAction(this, newUri, newPostForm);
+	}
+	
+	public Representation getPostRepresentation() {
+		return new Form(postForm).getWebRepresentation();
+	}
+	
+	public Representation getPutRepresentation(Instances instances) {
+		return new ObjectRepresentation<Serializable>(instances);
 	}
 	
 }

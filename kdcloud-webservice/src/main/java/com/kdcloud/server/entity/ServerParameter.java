@@ -1,8 +1,8 @@
 package com.kdcloud.server.entity;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,8 +21,8 @@ public class ServerParameter implements Serializable {
 
 
 	
-	public static List<ServerParameter> getParamsFromUri(String uri) {
-		List<ServerParameter> params = new LinkedList<ServerParameter>();
+	public static Set<ServerParameter> getParamsFromUri(String uri) {
+		Set<ServerParameter> params = new HashSet<ServerParameter>();
 		Matcher m = Pattern.compile("\\{\\w+\\}").matcher(uri);
 		while (m.find()) {
 			String param = m.group().replaceAll("[\\{\\}]", "");

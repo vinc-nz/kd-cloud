@@ -2,6 +2,7 @@ package com.kdcloud.server.rest.resource;
 
 import java.io.File;
 import java.net.URI;
+import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,12 +44,12 @@ public class AnalysisServerResource extends WorkerServerResource implements
 	public Report requestAnalysis() {
 		String userId = getParameter(ServerParameter.USER_ID);
 		User subject = userDao.findById(userId);
-		if (subject == null || subject.getTables().isEmpty()) {
+		if (subject == null || subject.getTable() == null) {
 			getLogger().info("no data to work on");
 			return null;
 		}
 		
-		DataTable table = subject.getTables().iterator().next();
+		DataTable table = subject.getTable();
 		if (!engine.validInput(table.getInstances(), WORKFLOW)) {
 			String msg = "the job requested is not applicable for the given data";
 			getLogger().info(msg);
@@ -66,10 +67,13 @@ public class AnalysisServerResource extends WorkerServerResource implements
 			DocumentBuilder builder = dbf.newDocumentBuilder();
 			URI uri = getClass().getClassLoader().getResource("view.xml").toURI();
 			Document dom = builder.parse(new File(uri));
-			report.setViewSpec(dom.getTextContent());
+			DOMImplementationLS ls = (DOMImplementationLS) dom.getImplementation();
+			LSSerializer serializer = ls.createLSSerializer();
+			report.setViewSpec(serializer.writeToString(dom));
 			return report;
 		} catch (Exception e) {
 			e.printStackTrace();
+			getLogger().log(Level.SEVERE, "error", e);
 			setStatus(Status.SERVER_ERROR_INTERNAL, e);
 			return null;
 		}

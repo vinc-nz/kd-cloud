@@ -38,7 +38,9 @@ public class UserDaoImpl implements UserDao {
 	
 	//jdo should perform this automatically
 	private void setTablesKey(User user) {
-		for (DataTable e : user.getTables()) {
+		DataTable e = user.getTable();
+		if (e != null) {
+//		for (DataTable e : user.getTables()) {
 			Key k = KeyFactory.stringToKey(e.getEncodedKey());
 			e.setId(k.getId());
 		}
@@ -46,9 +48,10 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public void delete(User user) {
-		for (DataTable e : user.getTables()) {
-			pm.deletePersistent(e);
-		}
+//		for (DataTable e : user.getTables()) {
+//			pm.deletePersistent(e);
+//		}
+		pm.deletePersistent(user.getTable());
 		pm.deletePersistent(user);
 	}
 

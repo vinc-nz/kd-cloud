@@ -1,6 +1,7 @@
 package com.kdcloud.server.rest.resource;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.restlet.Application;
 import org.restlet.resource.Delete;
@@ -30,23 +31,17 @@ public class UserDataServerResource extends KDServerResource implements UserData
 		DataTable dataset = new DataTable();
 		dataset.setName(instances.relationName());
 		dataset.setInstances(instances);
-		user.getTables().clear();
-		user.getTables().add(dataset);
+//		user.getTables().clear();
+//		user.getTables().add(dataset);
+		user.setTable(dataset);
 		userDao.save(user);
 		return dataset.getId();
 	}
 
 //	@Override
 //	@Get
-//	public ArrayList<Dataset> listDataset() {
-//		ArrayList<Dataset> list = new ArrayList<Dataset>(user.getTables().size());
-//		for (DataTable table : user.getTables()) {
-//			Dataset dto = new Dataset(table.getName(), table.getDescription());
-//			dto.setDescription(table.getDescription());
-//			dto.setSize(table.getDataRows().size());
-//			dto.setId(table.getId());
-//			list.add(dto);
-//		}
+//	public Collection<DataTable> listDataset() {
+//		ArrayList<DataTable> list = new ArrayList<DataTable>(user.getTables());
 //		return list;
 //	}
 

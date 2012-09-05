@@ -31,8 +31,8 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 	}
 
 	public Report requestAnalysisOn(User subject) {
-		if (!subject.getTables().isEmpty()) {
-			DataTable table = subject.getTables().iterator().next();
+		if (subject.getTable() != null) {
+			DataTable table = subject.getTable();
 			if (engine.validInput(table.getInstances(), WORKFLOW)) {
 				Instances result = execute(new Task(table, WORKFLOW));
 				String label = "analysis requested by " + user.getId() + " on "
@@ -49,10 +49,8 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 		List<User> users = userDao.list();
 		ArrayList<Report> globalReport = new ArrayList<Report>(users.size());
 		for (User subject : users) {
-			if (!subject.getTables().isEmpty()) {
-				Report report = requestAnalysisOn(subject);
-				globalReport.add(report);
-			}
+			Report report = requestAnalysisOn(subject);
+			globalReport.add(report);
 		}
 		return globalReport;
 	}

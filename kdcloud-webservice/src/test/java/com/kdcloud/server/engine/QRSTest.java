@@ -8,8 +8,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.DenseInstance;
+import com.kdcloud.weka.core.Instance;
 import com.kdcloud.weka.core.Instances;
 
 public class QRSTest {
@@ -44,7 +46,7 @@ public class QRSTest {
 	 * @param args
 	 * @throws URISyntaxException
 	 */
-	public static void main(String[] args) throws URISyntaxException {
+	public static void main(String[] args) throws Exception {
 		URI uri = QRSTest.class.getClassLoader().getResource("ecg_test.txt")
 				.toURI();
 		double[] sign = readData(new File(uri));
@@ -55,9 +57,10 @@ public class QRSTest {
 			double[] row = { sign[i] };
 			data.add(new DenseInstance(0, row));
 		}
-		Instances res = QRS.ecg(data);
-		System.out.println(data.numInstances());
-		System.out.println(res.numInstances());
+		HardcodedEngine e = new HardcodedEngine();
+		Instances result = e.execute(data, QRS.getWorkflow());
+		for (Instance i : result)
+			System.out.println(i.value(0));
 	}
 
 }

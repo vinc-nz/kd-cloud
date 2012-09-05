@@ -29,7 +29,7 @@ public class GlobalDataServerResource extends KDServerResource implements Global
 		List<User> users = userDao.list();
 		ArrayList<String> userIds = new ArrayList<String>(users.size());
 		for (User user : userDao.list()) {
-			if (!user.getTables().isEmpty())
+			if (user.getTable() != null)
 				userIds.add(user.getId());
 		}
 		return userIds;

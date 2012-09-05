@@ -32,45 +32,61 @@ import com.kdcloud.weka.core.DenseInstance;
 import com.kdcloud.weka.core.Instances;
 
 public class ServerResourceTest {
-	
-	private final LocalServiceTestHelper helper =
-	        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
-	
+
+	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
+			new LocalDatastoreServiceTestConfig()
+	/* .setDefaultHighRepJobPolicyUnappliedJobPercentage(100) */);
+
 	public static final String USER_ID = TestContext.USER_ID;
-	
+
 	private Application application = new Application(new TestContext());
-	
-	private UserDataServerResource userDataResource = new UserDataServerResource(application);
-	
-	private DatasetServerResource datasetResource = new DatasetServerResource(application);
-	
-	private ModalitiesServerResource modalitiesResource = new ModalitiesServerResource(application);
-	
-	private AnalysisServerResource analysisResource = new AnalysisServerResource(application) {
-		protected String getParameter(ServerParameter serverParameter) {return USER_ID;};
+
+	private UserDataServerResource userDataResource = new UserDataServerResource(
+			application);
+
+	private DatasetServerResource datasetResource = new DatasetServerResource(
+			application);
+
+	private ModalitiesServerResource modalitiesResource = new ModalitiesServerResource(
+			application);
+
+	private AnalysisServerResource analysisResource = new AnalysisServerResource(
+			application) {
+		protected String getParameter(ServerParameter serverParameter) {
+			return USER_ID;
+		};
 	};
-	
-	private GlobalDataServerResource globalDataResource = new GlobalDataServerResource(application);
-	
-	private GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource(application);
-	
-	private ChoosenModalityServerResource choosenModalityResource = new ChoosenModalityServerResource(application) {
+
+	private GlobalDataServerResource globalDataResource = new GlobalDataServerResource(
+			application);
+
+	private GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource(
+			application);
+
+	private ChoosenModalityServerResource choosenModalityResource = new ChoosenModalityServerResource(
+			application) {
 		public Representation handle() {
 			this.modality = modalityDao.findById(new Long(1));
 			return null;
 		};
 	};
-	
-	private DeviceServerResource deviceResource = new DeviceServerResource(application);
-	
-	private SchedulerServerResource scheduler = new SchedulerServerResource(application) {
-		 protected String getParameter(ServerParameter serverParameter) {return "1";}
-	 };
-	 
-	 private WorkerServerResource worker = new WorkerServerResource(application) {
-		 protected String getParameter(ServerParameter serverParameter) {return "2";}
-	 };
-	
+
+	private DeviceServerResource deviceResource = new DeviceServerResource(
+			application);
+
+	private SchedulerServerResource scheduler = new SchedulerServerResource(
+			application) {
+		protected String getParameter(ServerParameter serverParameter) {
+			return "1";
+		}
+	};
+
+	private WorkerServerResource worker = new WorkerServerResource(application) {
+		protected String getParameter(ServerParameter serverParameter) {
+			return "2";
+		}
+	};
+
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
@@ -80,54 +96,60 @@ public class ServerResourceTest {
 	public void tearDown() throws Exception {
 		helper.tearDown();
 	}
-	
+
 	@Test
 	public void testUserData() {
 		Long id = userDataResource.createDataset();
 		assertNotNull(id);
-		
+
 		User u = userDataResource.userDao.findById(USER_ID);
 		assertNotNull(u);
-		
+
+//		ArrayList<Attribute> attInfo = new ArrayList<Attribute>();
+//		attInfo.add(new Attribute("bar"));
+//		Instances i = new Instances("foo", attInfo, 0);
+//		userDataResource.createDataset(i);
 //		assertEquals(1, userDataResource.listDataset().size());
-		
-		userDataResource.deleteAllData();
-		u = userDataResource.userDao.findById(USER_ID);
-		assertNull(u);
-		DataTable dataTable = userDataResource.dataTableDao.findById(id);
-		assertNull(dataTable);
+
+		// assertEquals(1, userDataResource.listDataset().size());
+
+		// userDataResource.deleteAllData();
+		// u = userDataResource.userDao.findById(USER_ID);
+		// assertNull(u);
+		// DataTable dataTable = userDataResource.dataTableDao.findById(id);
+		// assertNull(dataTable);
 	}
 
 	@Test
 	public void testDataset() {
 		Long id = userDataResource.createDataset();
-		
+
 		datasetResource.dataset = datasetResource.dataTableDao.findById(id);
 		assertNotNull(datasetResource.dataset.getId());
-		double[] cells = {1, 2};
+		double[] cells = { 1, 2 };
 		Instances data = new Instances("test", new ArrayList<Attribute>(), 1);
 		data.add(new DenseInstance(0, cells));
 		datasetResource.uploadData(data);
-		
-//		datasetResource.addCommitter("committer");
-//		datasetResource.user = new User();
-//		datasetResource.user.setId("committer");
-//		datasetResource.uploadData(data);
-//		
+
+		// datasetResource.addCommitter("committer");
+		// datasetResource.user = new User();
+		// datasetResource.user.setId("committer");
+		// datasetResource.uploadData(data);
+		//
 		datasetResource.user = datasetResource.userDao.findById(USER_ID);
-		assertNotNull(userDataResource.user.getTables().iterator().next().getId());
-//		assertEquals(2, datasetResource.getData().size());
-		
-		datasetResource.deleteDataset();
-		assertNull(datasetResource.dataTableDao.findById(id));
+		assertNotNull(userDataResource.user.getTable().getId());
+		assertEquals(1, datasetResource.getData().size());
+
+//		datasetResource.deleteDataset();
+//		assertNull(datasetResource.dataTableDao.findById(id));
 	}
-	
+
 	@Test
 	public void testModalities() {
 		addStandardModalities();
 		List<Modality> list = modalitiesResource.listModalities();
 		assertEquals(3, list.size());
-		
+
 		Modality modality = list.get(0);
 		modality.setName("test");
 		choosenModalityResource.handle();
@@ -137,36 +159,38 @@ public class ServerResourceTest {
 		assertEquals("test", modality.getName());
 		choosenModalityResource.deleteModality();
 	}
-	
+
 	@Test
 	public void testAnalysis() {
 		userDataResource.createDataset();
 		Report r = analysisResource.requestAnalysis();
 		assertNotNull(r);
 	}
-	
+
 	@Test
 	public void testGlobalData() {
-		String[] ids = {"a", "b", "c"};
+		String[] ids = { "a", "b", "c" };
 		for (String s : ids) {
 			User user = new User();
 			user.setId(s);
 			userDataResource.user = user;
 			userDataResource.createDataset();
-//			assertEquals(1, userDataResource.listDataset().size());
+			// assertEquals(1, userDataResource.listDataset().size());
 		}
 		assertTrue(globalDataResource.getAllUsersWithData().contains(ids[0]));
-		assertEquals(ids.length, globalDataResource.getAllUsersWithData().size());
-		
-		assertEquals(ids.length, globalAnalysisResource.requestAnalysis().size());
+		assertEquals(ids.length, globalDataResource.getAllUsersWithData()
+				.size());
+
+		assertEquals(ids.length, globalAnalysisResource.requestAnalysis()
+				.size());
 	}
-	
+
 	@Test
 	public void testDevices() {
 		deviceResource.register("test");
 		deviceResource.unregister("test");
 	}
-	
+
 	@Test
 	public void testScheduling() {
 		userDataResource.createDataset();
@@ -175,7 +199,7 @@ public class ServerResourceTest {
 		scheduler.getPersistenceContext().close();
 		worker.pullTask(null);
 	}
-	
+
 	private void addStandardModalities() {
 		Modality dataFeed = new Modality();
 		dataFeed.setName("Data Feed");
@@ -202,5 +226,5 @@ public class ServerResourceTest {
 		globalAnalysis.getServerCommands().add(globalAnalyze);
 		modalitiesResource.createModality(globalAnalysis);
 	}
-	
+
 }

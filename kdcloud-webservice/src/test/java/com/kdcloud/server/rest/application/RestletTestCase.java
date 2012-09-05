@@ -27,8 +27,10 @@ import org.restlet.security.MapVerifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.kdcloud.server.engine.QRS;
 import com.kdcloud.server.rest.resource.UserDataServerResource;
 import com.kdcloud.weka.core.Attribute;
+import com.kdcloud.weka.core.DenseInstance;
 import com.kdcloud.weka.core.Instances;
 
 public class RestletTestCase {
@@ -104,7 +106,8 @@ public class RestletTestCase {
 		ClientResource data = new ClientResource(BASE_URI
 				+ UserDataServerResource.URI);
 		data.setChallengeResponse(authentication);
-		Instances instances = new Instances("test", new ArrayList<Attribute>(), 0);
+		Instances instances = new Instances("test", QRS.getWorkflow().getInputSpec(), 0);
+		instances.add(new DenseInstance(0, new double[]{1, 2}));
 		ObjectRepresentation<Serializable> instancesRep = new ObjectRepresentation<Serializable>(instances);
 		try {
 			Representation response = data

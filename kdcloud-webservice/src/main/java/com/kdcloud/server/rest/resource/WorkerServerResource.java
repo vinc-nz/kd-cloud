@@ -1,6 +1,7 @@
 package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
@@ -68,15 +69,22 @@ public class WorkerServerResource extends KDServerResource {
 	}
 
 	public Instances execute(Task task) {
-		DataTable table = task.getWorkingTable();
+		Instances input = task.getWorkingTable().getInstances();
+		getLogger().info("input size: " + input.size());
+		if (input.size() > 0)
+			getLogger().info("mean: " + input.meanOrMode(0));
 		try {
-			return engine.execute(table.getInstances(), task.getWorkflow());
+			return engine.execute(input, task.getWorkflow());
 		} catch (Exception e) {
-			getLogger().info("there was an error on computation");
-			e.printStackTrace();
+			String msg = "there was an error on computation";
+			getLogger().log(Level.SEVERE, msg, e);
 			setStatus(Status.SERVER_ERROR_INTERNAL, e);
 			return null;
 		}
+	}
+
+	public static void main(String[] args) {
+
 	}
 
 }

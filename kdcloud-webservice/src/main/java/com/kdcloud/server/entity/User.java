@@ -27,9 +27,11 @@ public class User {
 	@Persistent(serialized = "true")
 	private LinkedList<String> devices = new LinkedList<String>();
 	
-	@Persistent(mappedBy="owner")
+//	@Persistent(mappedBy="owner")
 	@Unowned
-	private Set<DataTable> tables = new HashSet<DataTable>();
+//	private Set<DataTable> tables = new HashSet<DataTable>();
+	@Persistent
+	private DataTable table;
 	
 	public User() {
 	}
@@ -63,19 +65,30 @@ public class User {
 		this.devices = devices;
 	}
 
-	public Set<DataTable> getTables() {
-		return tables;
-	}
-
-	public void setTables(Set<DataTable> tables) {
-		this.tables = tables;
-	}
+//	public Set<DataTable> getTables() {
+//		return tables;
+//	}
+//
+//	public void setTables(Set<DataTable> tables) {
+//		this.tables = tables;
+//	}
+	
+	
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof User)
 			return ((User) obj).id.equals(this.id);
 		return false;
+	}
+
+	public DataTable getTable() {
+		return table;
+	}
+
+	public void setTable(DataTable table) {
+		table.setOwner(this);
+		this.table = table;
 	}
 
 }

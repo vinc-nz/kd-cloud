@@ -46,12 +46,14 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	@Override
 	@Put
 	public void uploadData(Instances data) {
-		if (!dataset.getOwner().equals(user))
-			forbid();
+//		if (!dataset.getOwner().equals(user))
+//			forbid();
 		if (data != null && dataset.getInstances().equalHeaders(data)) {
-			dataset.getInstances().addAll(data);
+			Instances newInstances = new Instances(dataset.getInstances());
+			newInstances.addAll(data);
+			dataset.setInstances(newInstances);
 			dataTableDao.update(dataset);
-			getLogger().info("data merged succeffully");
+			getLogger().info(newInstances.size() + " instances merged succeffully");
 		}
 		else {
 			String error = "provided data is either null or it does not match the dataset specification";
@@ -71,10 +73,10 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	@Override
 	@Delete
 	public void deleteDataset() {
-		if (user.getTables().remove(dataset))
-			userDao.save(user);
-		else
-			forbid();
+//		if (user.getTables().remove(dataset))
+//			userDao.save(user);
+//		else
+//			forbid();
 	}
 
 

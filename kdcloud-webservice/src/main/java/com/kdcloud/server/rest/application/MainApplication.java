@@ -7,6 +7,7 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Router;
+import org.restlet.routing.Template;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.Verifier;
 
@@ -23,6 +24,7 @@ public class MainApplication extends Application {
 	@Override
 	public Restlet createInboundRoot() {
 		getLogger().setLevel(Level.INFO);
+		applicationContext.setLogger(getLogger());
 
 		Router router = new Router(getContext());
 		

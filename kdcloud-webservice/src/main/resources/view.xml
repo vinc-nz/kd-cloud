@@ -1,72 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Report>
-    <Chart type="line">
-        <Title>MY Graph</Title>
-        
-        <Line>
-            <LineWidth>2</LineWidth>
-            
-            <Marker>
+<report>
+    
+   
+    <textContent>
+        <title>Titolo 1</title>
+        <content>
+            <title>Titolo 2</title>
+            <p>lala alal lalala</p>
+        </content>
+        <content>
+            <title>Titolo 2.1</title>
+            <Content>lolo lololo lo lolo lololo lolo lo</Content>
+        </content>
+    </textContent>
+    
+    <chart type="line">
+        <title>MY Graph</title>
+       
+        <line>
+            <lineWidth>2</lineWidth>
+           
+            <markers>
                 <Style>diamond</Style>
-            </Marker>
-            
-            <Points>
+            </markers>
+           
+            <points>
                 <instancesIndex>0</instancesIndex>
                 <xIndex>0</xIndex>
                 <yIndex>0</yIndex>
-            </Points>
-            
-            <!-- 
-			<Point>
-				<X>10</X>
-				<Y>10</Y>                    
-			</Point>
-			<Point>
-				<X>1</X>
-				<Y>1</Y>                    
-			</Point>
-			<Point>
-				<X>2</X>
-				<Y>2</Y>                    
-			</Point>
-			<Point>
-				<X>5</X>
-				<Y>5</Y>                    
-			</Point>
-			-->
-			 
-        </Line>
-    </Chart>
+            </points>
+           
+            <!--
+            <point>
+                <X>10</X>
+                <Y>10</Y>                   
+            </point>
+            <point>
+                <X>1</X>
+                <Y>1</Y>                   
+            </point>
+            <point>
+                <X>2</X>
+                <Y>2</Y>                   
+            </point>
+            <point>
+                <X>5</X>
+                <Y>5</Y>                   
+            </point>
+            -->
+             
+        </line>
+    </chart>
 
-    <Chart type="line">
-        <Title>MY Graph</Title>
-        
-		<Lines>
-	        <Line>
-	            <LineWidth>2</LineWidth>
-	            
-	            <Marker>
-	                <Style>diamond</Style>
-	            </Marker>
-	            
-                <Point>
-					<X>10</X>
-					<Y>10</Y>                    
-                </Point>
-				<Point>
-					<X>1</X>
-					<Y>1</Y>                    
-                </Point>
-                <Point>
-					<X>2</X>
-					<Y>2</Y>                    
-                </Point>
-                <Point>
-					<X>5</X>
-					<Y>5</Y>                    
-                </Point>
-                
-	        </Line>
-		</Lines>
-    </Chart>
-</Report>
+    <chart type="line">
+        <title>MY Graph</title>
+       
+        <lines>
+            <line>
+                <lineWidth>2</lineWidth>
+               
+                <markers>
+                    <Style>diamond</Style>
+                </markers>
+               
+                <point>
+                    <X>10</X>
+                    <Y>10</Y>                   
+                </point>
+                <point>
+                    <X>1</X>
+                    <Y>1</Y>                   
+                </point>
+                <point>
+                    <X>2</X>
+                    <Y>2</Y>                   
+                </point>
+                <point>
+                    <X>5</X>
+                    <Y>5</Y>                   
+                </point>
+               
+            </line>
+        </lines>
+    </chart>
+
+   
+</report>

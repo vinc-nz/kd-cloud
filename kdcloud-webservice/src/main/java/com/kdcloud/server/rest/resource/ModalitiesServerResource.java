@@ -28,6 +28,7 @@ public class ModalitiesServerResource extends KDServerResource implements Modali
 	public ArrayList<Modality> listModalities() {
 		ArrayList<Modality> list = new ArrayList<Modality>();
 		list.addAll(modalityDao.getAll());
+		getLogger().info("fetched " + list.size() + " modalities");
 		return list;
 	}
 

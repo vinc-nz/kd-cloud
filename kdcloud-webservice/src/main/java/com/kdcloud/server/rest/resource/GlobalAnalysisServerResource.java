@@ -4,21 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.restlet.Application;
-import org.restlet.resource.Get;
+import org.restlet.data.Form;
+import org.restlet.resource.Post;
 
-import com.kdcloud.server.engine.QRS;
-import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Report;
+import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.server.rest.api.GlobalAnalysisResource;
-import com.kdcloud.weka.core.Instances;
 
 public class GlobalAnalysisServerResource extends WorkerServerResource
 		implements GlobalAnalysisResource {
-
-	private static final Workflow WORKFLOW = QRS.getWorkflow();
 
 	public GlobalAnalysisServerResource() {
 		super();
@@ -30,27 +27,20 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 		// TODO Auto-generated constructor stub
 	}
 
-	public Report requestAnalysisOn(User subject) {
-		if (subject.getTable() != null) {
-			DataTable table = subject.getTable();
-			if (engine.validInput(table.getInstances(), WORKFLOW)) {
-				Instances result = execute(new Task(table, WORKFLOW));
-				String label = "analysis requested by " + user.getId() + " on "
-						+ subject.getId() + " data";
-				return new Report(label, result);
-			}
-		}
-		return null;
-	}
-
 	@Override
-	@Get
-	public ArrayList<Report> requestAnalysis() {
+	@Post
+	public ArrayList<Report> execute(Form form) {
+		String workflowId = getParameter(ServerParameter.WORKFLOW_ID);
+		Workflow workflow = getPersistenceContext().getWorkflowDao().findById(new Long(workflowId));
 		List<User> users = userDao.list();
 		ArrayList<Report> globalReport = new ArrayList<Report>(users.size());
 		for (User subject : users) {
-			Report report = requestAnalysisOn(subject);
-			globalReport.add(report);
+			form.add(ServerParameter.USER_ID.getName(), subject.getId());
+			Task task = new Task();
+			task.setApplicant(user);
+			task.setWorkflow(workflow);
+			globalReport.add(execute(task, form));
+			form.removeFirst(ServerParameter.USER_ID.getName());
 		}
 		return globalReport;
 	}

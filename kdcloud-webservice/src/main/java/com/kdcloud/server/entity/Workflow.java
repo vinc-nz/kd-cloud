@@ -35,9 +35,6 @@ public class Workflow implements Serializable {
 	@Persistent(serialized="true")
 	ArrayList<Attribute> inputSpec = new ArrayList<Attribute>();
 	
-	@Persistent(serialized="true")
-	ArrayList<Attribute> outputSpec = new ArrayList<Attribute>();
-	
 	Serializable executionData;
 
 	public String getEncodedKey() {
@@ -78,14 +75,6 @@ public class Workflow implements Serializable {
 
 	public void setInputSpec(ArrayList<Attribute> inputSpec) {
 		this.inputSpec = inputSpec;
-	}
-
-	public ArrayList<Attribute> getOutputSpec() {
-		return outputSpec;
-	}
-
-	public void setOutputSpec(ArrayList<Attribute> outputSpec) {
-		this.outputSpec = outputSpec;
 	}
 
 	public Serializable getExecutionData() {

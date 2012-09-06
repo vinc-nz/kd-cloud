@@ -2,26 +2,32 @@ package com.kdcloud.server.engine.embedded;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
+import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.DenseInstance;
 import com.kdcloud.weka.core.Instance;
 import com.kdcloud.weka.core.Instances;
 
-
-
-public class QRS implements Node {
+public class QRS extends NodeAdapter {
 
 	public static final int M = 5;
 	public static final int windowsSize = 15;
 	public static final int sampling_rate_ms = 10;
-	
+
 	public static final Attribute INPUT_ATTRIBUTE = new Attribute("sign");
 	public static final Attribute OUTPUT_ATTRIBUTE = new Attribute("rr");
-	
-	private Instances mInput;
 
+	private Instances mInput;
+	
+	public static ArrayList<Attribute> getInputSpec() {
+		ArrayList<Attribute> attinfo = new ArrayList<Attribute>(1);
+		attinfo.add(INPUT_ATTRIBUTE);
+		return attinfo;
+	}
 
 	public static double[] highPass(double[] sig0, int nsamp) {
 		double[] highPass = new double[nsamp];
@@ -152,7 +158,6 @@ public class QRS implements Node {
 		return QRS;
 	}
 
-	
 	public static double[] readData(Instances data) {
 		Vector<Double> sign = new Vector<Double>();
 		for (Instance i : data) {
@@ -165,11 +170,10 @@ public class QRS implements Node {
 		return res;
 	}
 
-	
 	public static Instances ecg(Instances data) {
 		ArrayList<Attribute> attrs = new ArrayList<Attribute>(1);
 		attrs.add(OUTPUT_ATTRIBUTE);
-		Instances result = new Instances("rr", attrs, data.numInstances()/100);
+		Instances result = new Instances("rr", attrs, data.numInstances() / 100);
 		double[] sign = readData(data);
 		int nsamp = sign.length;
 		double[] highPass = highPass(sign, nsamp);
@@ -184,7 +188,7 @@ public class QRS implements Node {
 					first_peak = false;
 				} else {
 					time += sampling_rate_ms;
-					double[] row = {time};
+					double[] row = { time };
 					result.add(new DenseInstance(0, row));
 				}
 				time = 0;
@@ -212,17 +216,15 @@ public class QRS implements Node {
 		return mInput != null;
 	}
 
-	@Override
-	public boolean configure(WorkerConfiguration config) {
-		return true;
-	}
 
 	@Override
 	public PortObject getOutput() {
-		return ecg(mInput);
+		return new BufferedInstances(ecg(mInput));
 	}
 
-	
-	
+	@Override
+	public Set<ServerParameter> getParameters() {
+		return new HashSet<ServerParameter>();
+	}
 
 }

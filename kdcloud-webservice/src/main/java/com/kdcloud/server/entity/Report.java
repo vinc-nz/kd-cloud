@@ -20,7 +20,7 @@ public class Report implements Serializable {
 
 	Date date = new Date();
 
-	List<Instances> data = new LinkedList<Instances>();
+	Instances data;
 	
 	String viewSpec;
 
@@ -30,7 +30,7 @@ public class Report implements Serializable {
 	public Report(String name, Instances data) {
 		super();
 		this.name = name;
-		this.data.add(data);
+		this.data = data;
 	}
 
 	public String getName() {
@@ -49,11 +49,11 @@ public class Report implements Serializable {
 		this.date = date;
 	}
 
-	public List<Instances> getData() {
+	public Instances getData() {
 		return data;
 	}
 
-	public void setData(List<Instances> data) {
+	public void setData(Instances data) {
 		this.data = data;
 	}
 

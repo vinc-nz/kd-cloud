@@ -4,6 +4,7 @@ import com.kdcloud.server.dao.DataTableDao;
 import com.kdcloud.server.dao.ModalityDao;
 import com.kdcloud.server.dao.TaskDao;
 import com.kdcloud.server.dao.UserDao;
+import com.kdcloud.server.dao.WorkflowDao;
 
 public interface PersistenceContext {
 	
@@ -16,10 +17,13 @@ public interface PersistenceContext {
 
 	public ModalityDao getModalityDao();
 	
+	public WorkflowDao getWorkflowDao();
+	
 	public void beginTransaction();
 	
 	public void commitTransaction();
 	
 	public void close();
+
 
 }

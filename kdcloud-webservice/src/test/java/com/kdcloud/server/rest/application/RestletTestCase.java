@@ -1,7 +1,6 @@
 package com.kdcloud.server.rest.application;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import junit.framework.Assert;
 
@@ -27,9 +26,8 @@ import org.restlet.security.MapVerifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.engine.QRS;
+import com.kdcloud.server.engine.embedded.EmbeddedEngine;
 import com.kdcloud.server.rest.resource.UserDataServerResource;
-import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.DenseInstance;
 import com.kdcloud.weka.core.Instances;
 
@@ -42,14 +40,13 @@ public class RestletTestCase {
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
 			new LocalDatastoreServiceTestConfig());
 	
-	Context context = new GAEContext();
-
 	Application testApp = new Application() {
 
 		@Override
 		public Restlet createInboundRoot() {
 			Router router = new Router(getContext());
 			helper.setUp();
+			Context context = new GAEContext(getLogger());
 			router.attachDefault(new KDApplication(context));
 			helper.tearDown();
 			return router;
@@ -106,7 +103,7 @@ public class RestletTestCase {
 		ClientResource data = new ClientResource(BASE_URI
 				+ UserDataServerResource.URI);
 		data.setChallengeResponse(authentication);
-		Instances instances = new Instances("test", QRS.getWorkflow().getInputSpec(), 0);
+		Instances instances = new Instances("test", EmbeddedEngine.getQRSWorkflow().getInputSpec(), 0);
 		instances.add(new DenseInstance(0, new double[]{1, 2}));
 		ObjectRepresentation<Serializable> instancesRep = new ObjectRepresentation<Serializable>(instances);
 		try {

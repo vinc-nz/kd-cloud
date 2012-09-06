@@ -5,6 +5,7 @@ import com.kdcloud.server.dao.DataTableDao;
 import com.kdcloud.server.dao.ModalityDao;
 import com.kdcloud.server.dao.TaskDao;
 import com.kdcloud.server.dao.UserDao;
+import com.kdcloud.server.dao.WorkflowDao;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class PersistenceContextImpl implements PersistenceContext {
@@ -50,6 +51,11 @@ public class PersistenceContextImpl implements PersistenceContext {
 	@Override
 	public void close() {
 		pm.close();
+	}
+
+	@Override
+	public WorkflowDao getWorkflowDao() {
+		return new WorkflowDaoImpl(pm);
 	}
 	
 }

@@ -1,18 +1,16 @@
 package com.kdcloud.server.rest.api;
 
-import java.util.ArrayList;
-
 import org.restlet.data.Form;
 import org.restlet.resource.Post;
 
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerParameter;
 
-public interface GlobalAnalysisResource {
+public interface WorkflowResource {
 	
-	public static final String URI = "/global/workflow" + ServerParameter.WORKFLOW_ID;
+	public static final String URI = "/workflow/" + ServerParameter.WORKFLOW_ID;
 	
 	@Post
-	public ArrayList<Report> execute(Form form);
+	public Report execute(Form form);
 
 }

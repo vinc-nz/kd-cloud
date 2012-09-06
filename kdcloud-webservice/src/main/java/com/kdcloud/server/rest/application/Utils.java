@@ -3,7 +3,7 @@ package com.kdcloud.server.rest.application;
 import org.restlet.Context;
 
 import com.kdcloud.server.dao.ModalityDao;
-import com.kdcloud.server.engine.QRS;
+import com.kdcloud.server.engine.embedded.EmbeddedEngine;
 import com.kdcloud.server.entity.Modality;
 import com.kdcloud.server.entity.ServerAction;
 import com.kdcloud.server.entity.ServerMethod;
@@ -11,7 +11,7 @@ import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.rest.api.AnalysisResource;
+import com.kdcloud.server.rest.api.WorkflowResource;
 import com.kdcloud.server.rest.api.DatasetResource;
 import com.kdcloud.server.rest.api.GlobalAnalysisResource;
 import com.kdcloud.server.rest.api.UserDataResource;
@@ -19,7 +19,7 @@ import com.kdcloud.server.rest.api.UserDataResource;
 public class Utils {
 
 	public static void addStandardModalities(ModalityDao modalityDao) {
-		Workflow workflow = QRS.getWorkflow();
+		Workflow workflow = EmbeddedEngine.getQRSWorkflow();
 		
 		Modality dataFeed = new Modality();
 		dataFeed.setName("Data Feed");
@@ -36,7 +36,7 @@ public class Utils {
 
 		Modality singleAnalysis = new Modality();
 		singleAnalysis.setName("Single Analysis");
-		ServerAction analyze = new ServerAction(AnalysisResource.URI, null,
+		ServerAction analyze = new ServerAction(WorkflowResource.URI, null,
 				ServerMethod.GET, false, 0);
 		singleAnalysis.getServerCommands().add(analyze);
 		modalityDao.save(singleAnalysis);

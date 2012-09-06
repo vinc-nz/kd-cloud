@@ -1,22 +1,19 @@
 package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
-import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
-import org.restlet.data.Status;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.engine.KDEngine;
-import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.engine.Worker;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.gcm.Notification;
-import com.kdcloud.weka.core.Instances;
 
 public class WorkerServerResource extends KDServerResource {
 
@@ -45,16 +42,15 @@ public class WorkerServerResource extends KDServerResource {
 		String id = getParameter(ServerParameter.TASK_ID);
 		Task task = taskDao.findById(new Long(id));
 
-		Instances result = execute(task);
-		if (result != null) {
+		Report report = execute(task, form);
 
-			getLogger().info("work done");
-			String label = "analysis requested by "
-					+ task.getApplicant().getId();
-			task.setReport(new Report(label, result));
-			taskDao.save(task);
-			notifyApplicant(task);
-		}
+		getLogger().info("work done");
+		String label = "analysis requested by %s".replace("%s", task
+				.getApplicant().getId());
+		report.setName(label);
+		task.setReport(report);
+		taskDao.save(task);
+		notifyApplicant(task);
 	}
 
 	public void notifyApplicant(Task task) {
@@ -68,23 +64,14 @@ public class WorkerServerResource extends KDServerResource {
 			}
 	}
 
-	public Instances execute(Task task) {
-		Instances input = task.getWorkingTable().getInstances();
-		getLogger().info("input size: " + input.size());
-		if (input.size() > 0)
-			getLogger().info("mean: " + input.meanOrMode(0));
-		try {
-			return engine.execute(input, task.getWorkflow());
-		} catch (Exception e) {
-			String msg = "there was an error on computation";
-			getLogger().log(Level.SEVERE, msg, e);
-			setStatus(Status.SERVER_ERROR_INTERNAL, e);
-			return null;
+	public Report execute(Task task, Form form) {
+		Worker worker = engine.getWorker(task.getWorkflow());
+		worker.setPersistenceContext(getPersistenceContext());
+		for (ServerParameter param : worker.getParameters()) {
+			worker.setParameter(param, form.getFirstValue(param.getName()));
 		}
-	}
-
-	public static void main(String[] args) {
-
+		worker.run();
+		return worker.getReport();
 	}
 
 }

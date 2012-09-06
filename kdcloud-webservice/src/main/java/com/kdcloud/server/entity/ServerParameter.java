@@ -18,6 +18,7 @@ public class ServerParameter implements Serializable {
 	public static final ServerParameter USER_ID = new ServerParameter("userId");
 	public static final ServerParameter TASK_ID = new ServerParameter("taskId");
 	public static final ServerParameter MODALITY_ID = new ServerParameter("modalityId");
+	public static final ServerParameter WORKFLOW_ID = new ServerParameter("workflowId");
 
 
 	

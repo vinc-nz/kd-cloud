@@ -11,9 +11,13 @@ import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.DenseInstance;
 import com.kdcloud.weka.core.Instances;
 
-public class FileDataReader implements Node {
+public class FileDataReader extends NodeAdapter {
 	
 	File mFile;
+	
+	public FileDataReader(String filename) {
+		loadFile(filename);
+	}
 	
 	public static double[] readData(File file) {
 		BufferedReader in = null;
@@ -41,10 +45,6 @@ public class FileDataReader implements Node {
 		return res;
 	}
 
-	@Override
-	public boolean setInput(PortObject input) {
-		return true;
-	}
 
 	@Override
 	public boolean ready() {
@@ -54,15 +54,17 @@ public class FileDataReader implements Node {
 	@Override
 	public boolean configure(WorkerConfiguration config) {
 		String filename = (String) config.get("filename");
-		if (filename == null)
-			return false;
+		if (filename != null)
+			loadFile(filename);
+		return mFile != null;
+	}
+	
+	private void loadFile(String filename) {
 		try {
 			URI uri = getClass().getClassLoader().getResource(filename).toURI();
 			mFile = new File(uri);
-			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
 		}
 	}
 
@@ -76,7 +78,7 @@ public class FileDataReader implements Node {
 			double[] row = { sign[i] };
 			data.add(new DenseInstance(0, row));
 		}
-		return data;
+		return new BufferedInstances(data);
 	}
 
 }

@@ -2,6 +2,8 @@ package com.kdcloud.server.engine.embedded;
 
 import java.io.File;
 import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,12 +12,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 
+import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.weka.core.Instances;
 
 public class ReportGenerator implements Node {
 	
 	String mXml;
 	Instances mData;
+	
+	public ReportGenerator(String xmlFilename) {
+		loadXmlFromFile(xmlFilename);
+	}
 
 	@Override
 	public boolean setInput(PortObject input) {
@@ -34,6 +41,14 @@ public class ReportGenerator implements Node {
 	@Override
 	public boolean configure(WorkerConfiguration config) {
 		String filename = (String) config.get("view");
+		if (filename == null && mXml != null)
+			return true;
+		else if (filename != null)
+			return loadXmlFromFile(filename);
+		return mXml != null;
+	}
+
+	private boolean loadXmlFromFile(String filename) {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = dbf.newDocumentBuilder();
@@ -51,7 +66,12 @@ public class ReportGenerator implements Node {
 
 	@Override
 	public PortObject getOutput() {
-		return new Report(mData, mXml);
+		return new View(mXml, mData);
+	}
+
+	@Override
+	public Set<ServerParameter> getParameters() {
+		return new HashSet<ServerParameter>();
 	}
 
 }

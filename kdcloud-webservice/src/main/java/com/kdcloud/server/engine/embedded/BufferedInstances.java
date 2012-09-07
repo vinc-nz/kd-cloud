@@ -2,18 +2,21 @@ package com.kdcloud.server.engine.embedded;
 
 import com.kdcloud.weka.core.Instances;
 
-public class BufferedInstances extends Instances implements PortObject {
+public class BufferedInstances implements PortObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	Instances instances;
 
-	public BufferedInstances(Instances dataset) {
-		super(dataset);
-		// TODO Auto-generated constructor stub
+	public BufferedInstances(Instances instances) {
+		super();
+		this.instances = instances;
+	}
+
+	public Instances getInstances() {
+		return instances;
+	}
+
+	public void setInstances(Instances instances) {
+		this.instances = instances;
 	}
 	
-	
-
 }

@@ -73,7 +73,7 @@ public class FileDataReader extends NodeAdapter {
 		double[] sign = readData(mFile);
 		ArrayList<Attribute> attrs = new ArrayList<Attribute>();
 		attrs.add(QRS.INPUT_ATTRIBUTE);
-		Instances data = new Instances("test", attrs, 20000);
+		Instances data = new Instances("file", attrs, 20000);
 		for (int i = 0; i < sign.length; i++) {
 			double[] row = { sign[i] };
 			data.add(new DenseInstance(0, row));

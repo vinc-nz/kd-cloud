@@ -15,10 +15,10 @@ import org.w3c.dom.ls.LSSerializer;
 import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.weka.core.Instances;
 
-public class ReportGenerator implements Node {
+public class ReportGenerator extends NodeAdapter {
 	
 	String mXml;
-	Instances mData;
+	BufferedInstances mState;
 	
 	public ReportGenerator(String xmlFilename) {
 		loadXmlFromFile(xmlFilename);
@@ -26,8 +26,8 @@ public class ReportGenerator implements Node {
 
 	@Override
 	public boolean setInput(PortObject input) {
-		if (input instanceof Instances) {
-			mData = (Instances) input;
+		if (input instanceof BufferedInstances) {
+			mState = (BufferedInstances) input;
 			return true;
 		}
 		return false;
@@ -35,7 +35,7 @@ public class ReportGenerator implements Node {
 
 	@Override
 	public boolean ready() {
-		return mXml != null && mData != null;
+		return mXml != null && mState != null;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class ReportGenerator implements Node {
 
 	@Override
 	public PortObject getOutput() {
-		return new View(mXml, mData);
+		return new View(mXml, mState);
 	}
 
 	@Override

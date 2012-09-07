@@ -15,5 +15,7 @@ public interface Node {
 	public Set<ServerParameter> getParameters();
 	
 	public PortObject getOutput();
+	
+	public void run();
 
 }

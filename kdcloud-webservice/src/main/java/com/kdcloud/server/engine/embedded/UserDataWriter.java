@@ -14,11 +14,9 @@ import com.kdcloud.weka.core.Instances;
 
 public class UserDataWriter extends NodeAdapter {
 
-	BufferedInstances instances;
+	BufferedInstances mState;
 	UserDao userDao;
 	User user;
-
-	List<ServerParameter> params = Arrays.asList(ServerParameter.USER_ID);
 	
 	public UserDataWriter() {
 		// TODO Auto-generated constructor stub
@@ -40,35 +38,37 @@ public class UserDataWriter extends NodeAdapter {
 	public boolean configure(WorkerConfiguration config) {
 		String userId = config.getServerParameter(ServerParameter.USER_ID);
 		PersistenceContext pc = config.getPersistenceContext();
-		if (userId == null || pc == null)
+		if (pc == null)
 			return false;
 		userDao = pc.getUserDao();
-		if (user == null)
-			user = userDao.findById(userId);
+		if (userId != null)
+			user = pc.getUserDao().findById(userId);
 		return ready();
 	}
 
 	@Override
 	public Set<ServerParameter> getParameters() {
-		return new HashSet<ServerParameter>(params);
+		Set<ServerParameter> params = new HashSet<ServerParameter>();
+		if (user == null)
+			params.add(ServerParameter.USER_ID);
+		return params;
 	}
 
 	@Override
 	public boolean setInput(PortObject input) {
 		if (input instanceof BufferedInstances) {
-			instances = (BufferedInstances) input;
+			mState = (BufferedInstances) input;
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public PortObject getOutput() {
+	public void run() {
 		DataTable table = new DataTable();
-		table.setInstances(new Instances(instances));
+		table.setInstances(new Instances(mState.getInstances()));
 		user.setTable(table);
 		userDao.save(user);
-		return null;
 	}
 
 }

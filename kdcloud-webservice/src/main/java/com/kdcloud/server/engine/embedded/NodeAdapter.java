@@ -22,5 +22,13 @@ public abstract class NodeAdapter implements Node {
 		return new HashSet<ServerParameter>();
 	}
 	
+	@Override
+	public PortObject getOutput() {
+		return null;
+	}
+	
+	@Override
+	public void run() {
+	}
 
 }

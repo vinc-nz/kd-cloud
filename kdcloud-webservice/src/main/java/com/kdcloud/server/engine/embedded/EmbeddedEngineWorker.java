@@ -14,12 +14,12 @@ import com.kdcloud.server.persistence.PersistenceContext;
 
 public class EmbeddedEngineWorker implements Worker {
 
-	private int status = STATUS_WAITING_PARAMETERS;
+	private int status = STATUS_WAITING_CONFIGURATION;
 	private Logger logger;
 	private WorkerConfiguration mConfig;
 	private ArrayList<Node> mFlow;
 	private Set<ServerParameter> params;
-	private Report mReport;
+	private PortObject lastOutput;
 
 	public EmbeddedEngineWorker(Logger logger, SequenceFlow flow) {
 		super();
@@ -34,18 +34,14 @@ public class EmbeddedEngineWorker implements Worker {
 		}
 	}
 
-	public PortObject execute(Node node, PortObject input)
+	public PortObject prepare(Node node, PortObject input)
 			throws WrongConnectionException, WrongConfigurationException,
 			RuntimeException {
 		if (!node.setInput(input))
 			throw new WrongConnectionException();
 		if (!node.configure(mConfig))
 			throw new WrongConfigurationException();
-		try {
-			return node.getOutput();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return node.getOutput();
 	}
 
 	private void onException(Node node, String msg, Throwable thrown) {
@@ -53,16 +49,17 @@ public class EmbeddedEngineWorker implements Worker {
 		logger.log(Level.SEVERE, msg.replace("%s", nodeName));
 	}
 
-	public PortObject execute(ArrayList<Node> flow) {
+	public PortObject prepare() {
 		PortObject previousOutput = null;
 		Node node = null;
 		try {
-			for (Iterator<Node> iterator = flow.iterator(); iterator.hasNext();) {
+			for (Iterator<Node> iterator = mFlow.iterator(); iterator.hasNext();) {
 				node = iterator.next();
-				logger.info("executing %s node".replace("%s", node.getClass().getSimpleName()));
-				PortObject currentOutput = execute(node, previousOutput);
+				logger.info("configuring %s node".replace("%s", node.getClass().getSimpleName()));
+				PortObject currentOutput = prepare(node, previousOutput);
 				previousOutput = currentOutput;
 			}
+			status = STATUS_READY;
 			return previousOutput;
 		} catch (WrongConnectionException e) {
 			onException(node, "error on %s input", e);
@@ -70,9 +67,6 @@ public class EmbeddedEngineWorker implements Worker {
 		} catch (WrongConfigurationException e) {
 			onException(node, "error on %s configuration", e);
 			status = STATUS_ERROR_WRONG_CONFIG;
-		} catch (RuntimeException e) {
-			onException(node, "error executing %s", e.getCause());
-			status = STATUS_ERROR_RUNTIME;
 		}
 		return null;
 	}
@@ -92,29 +86,43 @@ public class EmbeddedEngineWorker implements Worker {
 	public void setPersistenceContext(PersistenceContext pc) {
 		mConfig.setPersistenceContext(pc);
 	}
+	
+	@Override
+	public boolean configure() {
+		if (!params.isEmpty())
+			return false;
+		lastOutput = prepare();
+		return status == STATUS_READY;
+	}
+	
 
 	@Override
 	public void run() {
-		if (mFlow != null) {
-			PortObject output = execute(mFlow);
-			if (output instanceof View) {
-				View v = (View) output;
-				mReport = new Report();
-				mReport.setData(v.mData);
-				mReport.setViewSpec(v.mXml);
+		Node node = null;
+		try {
+			for (Iterator<Node> iterator = mFlow.iterator(); iterator.hasNext();) {
+				node = iterator.next();
+				logger.info("executing %s node".replace("%s", node.getClass().getSimpleName()));
+				node.run();
 			}
+		} catch (Exception e) {
+			onException(node, "error executing %s", e);
+			status = STATUS_ERROR_RUNTIME;
 		}
+		
 	}
 
 	@Override
 	public Report getReport() {
-		return mReport;
+		if (lastOutput instanceof View) {
+			View v = (View) lastOutput;
+			return new Report(v.getData(), v.getViewSpec());
+		}
+		return null;
 	}
 
 	@Override
 	public int getStatus() {
-		if (status == STATUS_WAITING_PARAMETERS && params.isEmpty())
-			status = STATUS_READY;
 		return status;
 	}
 

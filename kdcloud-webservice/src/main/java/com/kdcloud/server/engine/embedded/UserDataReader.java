@@ -3,6 +3,7 @@ package com.kdcloud.server.engine.embedded;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.kdcloud.server.entity.ServerParameter;
@@ -14,7 +15,14 @@ public class UserDataReader extends NodeAdapter {
 	
 	User user;
 	
-	List<ServerParameter> params = Arrays.asList(ServerParameter.USER_ID);
+	public UserDataReader() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public UserDataReader(User user) {
+		super();
+		this.user = user;
+	}
 
 
 	@Override
@@ -24,19 +32,21 @@ public class UserDataReader extends NodeAdapter {
 
 	@Override
 	public boolean configure(WorkerConfiguration config) {
+		String userId = config.getServerParameter(ServerParameter.USER_ID);
 		PersistenceContext pc = config.getPersistenceContext();
 		if (pc == null)
 			return false;
-		String userId = (String) config.get(ServerParameter.USER_ID.getName());
-		if (userId == null)
-			return false;
-		user = pc.getUserDao().findById(userId);
-		return user != null;
+		if (userId != null)
+			user = pc.getUserDao().findById(userId);
+		return ready();
 	}
 
 	@Override
 	public Set<ServerParameter> getParameters() {
-		return new HashSet<ServerParameter>(params);
+		Set<ServerParameter> params = new HashSet<ServerParameter>();
+		if (user == null)
+			params.add(ServerParameter.USER_ID);
+		return params;
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public class QRS extends NodeAdapter {
 	public static final Attribute INPUT_ATTRIBUTE = new Attribute("sign");
 	public static final Attribute OUTPUT_ATTRIBUTE = new Attribute("rr");
 
-	private Instances mInput;
+	private BufferedInstances mStatus;
 	
 	public static ArrayList<Attribute> getInputSpec() {
 		ArrayList<Attribute> attinfo = new ArrayList<Attribute>(1);
@@ -201,11 +201,11 @@ public class QRS extends NodeAdapter {
 
 	@Override
 	public boolean setInput(PortObject input) {
-		if (input instanceof Instances) {
-			Instances candidate = (Instances) input;
-			if (candidate.attribute(INPUT_ATTRIBUTE.name()) == null)
+		if (input instanceof BufferedInstances) {
+			BufferedInstances candidate = (BufferedInstances) input;
+			if (candidate.getInstances().attribute(INPUT_ATTRIBUTE.name()) == null)
 				return false;
-			mInput = candidate;
+			mStatus = candidate;
 			return true;
 		}
 		return false;
@@ -213,18 +213,23 @@ public class QRS extends NodeAdapter {
 
 	@Override
 	public boolean ready() {
-		return mInput != null;
+		return mStatus != null;
 	}
 
 
 	@Override
 	public PortObject getOutput() {
-		return new BufferedInstances(ecg(mInput));
+		return mStatus;
 	}
 
 	@Override
 	public Set<ServerParameter> getParameters() {
 		return new HashSet<ServerParameter>();
+	}
+	
+	@Override
+	public void run() {
+		mStatus = new BufferedInstances(ecg(mStatus.getInstances()));
 	}
 
 }

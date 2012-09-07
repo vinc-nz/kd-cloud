@@ -23,14 +23,13 @@ public class Report implements Serializable {
 	Instances data;
 	
 	String viewSpec;
-
+	
 	public Report() {
 	}
 
-	public Report(String name, Instances data) {
-		super();
-		this.name = name;
+	public Report(Instances data, String viewSpec) {
 		this.data = data;
+		this.viewSpec = viewSpec;
 	}
 
 	public String getName() {

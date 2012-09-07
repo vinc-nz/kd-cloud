@@ -40,7 +40,7 @@ public class EmbeddedEngineTest {
 		SequenceFlow flow = new SequenceFlow();
 		flow.add(new FileDataReader("ecg_small.txt"));
 		flow.add(new UserDataWriter(new User("test")));
-		flow.add(new UserDataReader());
+		flow.add(new UserDataReader(new User("test")));
 		flow.add(new QRS());
 		flow.add(new ReportGenerator("view.xml"));
 		workflow.setExecutionData(flow);
@@ -55,8 +55,8 @@ public class EmbeddedEngineTest {
 	@Test
 	public void test() {
 		Worker worker = engine.getWorker(workflow);
-		worker.setParameter(ServerParameter.USER_ID, "test");
 		worker.setPersistenceContext(pc);
+		assertTrue(worker.configure());
 		worker.run();
 	}
 

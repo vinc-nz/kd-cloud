@@ -4,13 +4,21 @@ import com.kdcloud.weka.core.Instances;
 
 public class View implements PortObject {
 	
-	String mXml;
-	Instances mData;
+	private String mXml;
+	private BufferedInstances reference;
 	
-	public View(String xml, Instances data) {
+	public View(String xml, BufferedInstances reference) {
 		super();
 		this.mXml = xml;
-		this.mData = data;
+		this.reference = reference;
+	}
+	
+	public String getViewSpec() {
+		return mXml;
+	}
+	
+	public Instances getData() {
+		return reference.getInstances();
 	}
 	
 }

@@ -1,7 +1,6 @@
 package com.kdcloud.server.rest.resource;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.restlet.Application;
 import org.restlet.resource.Delete;
@@ -17,12 +16,10 @@ public class UserDataServerResource extends KDServerResource implements UserData
  
 	public UserDataServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public UserDataServerResource(Application application) {
+	UserDataServerResource(Application application) {
 		super(application);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

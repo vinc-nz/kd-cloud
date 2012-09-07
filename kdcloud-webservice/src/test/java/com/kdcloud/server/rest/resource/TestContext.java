@@ -22,7 +22,7 @@ public class TestContext extends Context {
 		HashMap<String, Object> attrs = new HashMap<String, Object>();
 
 		attrs.put(PersistenceContextFactory.class.getName(),
-				new PersistenceContextFactoryImpl());
+				new PCFTest());
 
 		attrs.put(TaskQueue.class.getName(), new TaskQueue() {
 

@@ -3,21 +3,23 @@ package com.kdcloud.server.entity;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.restlet.data.Form;
 
 import com.kdcloud.server.rest.api.DatasetResource;
+import com.kdcloud.server.rest.api.WorkflowResource;
 
 public class ServerActionTest {
 
 	@Test
 	public void test() {
-		ServerAction action = 
-				new ServerAction(DatasetResource.URI, null, ServerMethod.PUT, false, 0);
+		ServerAction action = new ServerAction(WorkflowResource.URI, null,
+				ServerMethod.GET, false, 0);
+		assertEquals(1, action.uriParams.size());
+		assertTrue(action.uriParams.contains(ServerParameter.WORKFLOW_ID));
+		action = action.setParameter(ServerParameter.WORKFLOW_ID, "1");
+		assertEquals("/workflow/1", action.uri);
 		action.addParameter(ServerParameter.USER_ID);
-		ServerParameter param = action.uriParams.iterator().next();
-		assertEquals(ServerParameter.DATASET_ID.getName(), param.getName());
-		ServerAction newAction = action.setParameter(param, "1");
-		assertEquals("/data/1", newAction.uri);
-		newAction = action.setParameter(ServerParameter.USER_ID, "1");
-		assertTrue(action.postForm != newAction.postForm);
+		action = action.setParameter(ServerParameter.USER_ID, "test");
+		assertEquals("test", new Form(action.postForm).getFirstValue("userId"));
 	}
 }

@@ -10,7 +10,7 @@ import com.kdcloud.server.entity.ServerParameter;
 
 public interface GlobalAnalysisResource {
 	
-	public static final String URI = "/global/workflow" + ServerParameter.WORKFLOW_ID;
+	public static final String URI = "/global/workflow/" + ServerParameter.WORKFLOW_ID;
 	
 	@Post
 	public ArrayList<Report> execute(Form form);

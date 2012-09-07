@@ -153,4 +153,15 @@ public class ServerAction implements Serializable {
 		return new ObjectRepresentation<Serializable>(instances);
 	}
 	
+	@Override
+	public String toString() {
+		String postString = " ( ";
+		for (ServerParameter p : postParams) {
+			postString = postString + p.getName() + " ";
+		}
+		postString = postString + ")";
+		return method.toString() + ": " + uri + postString;
+	}
+	
 }
+

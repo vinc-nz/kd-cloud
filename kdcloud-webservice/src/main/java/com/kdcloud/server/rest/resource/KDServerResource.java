@@ -15,7 +15,7 @@ import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 
-public class KDServerResource extends ServerResource {
+public abstract class KDServerResource extends ServerResource {
 
 	private PersistenceContext persistenceContext;
 	private UserProvider userProvider;
@@ -54,8 +54,14 @@ public class KDServerResource extends ServerResource {
 		return (String) getRequestAttributes().get(serverParameter.getName());
 	}
 
-	protected void forbid() {
+	protected Representation forbidden() {
 		getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN);
+		return null;
+	}
+	
+	protected Representation notFound() {
+		getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+		return null;
 	}
 
 

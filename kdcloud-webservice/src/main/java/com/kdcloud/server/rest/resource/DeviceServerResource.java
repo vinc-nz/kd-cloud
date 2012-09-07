@@ -8,16 +8,12 @@ import com.kdcloud.server.rest.api.DeviceResource;
 
 public class DeviceServerResource extends KDServerResource implements DeviceResource {
 	
-	
-
 	public DeviceServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public DeviceServerResource(Application application) {
+	DeviceServerResource(Application application) {
 		super(application);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

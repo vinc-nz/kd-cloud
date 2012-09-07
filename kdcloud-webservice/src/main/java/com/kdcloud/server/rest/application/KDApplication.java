@@ -14,6 +14,7 @@ public class KDApplication extends Application {
 	
 	public KDApplication(Context context) {
 		super(context);
+		getLogger().info("init database");
 		Utils.initDatabase(context);
 	}
 

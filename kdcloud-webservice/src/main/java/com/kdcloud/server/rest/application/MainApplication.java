@@ -10,7 +10,7 @@ import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 
 import com.kdcloud.server.entity.ServerParameter;
-import com.kdcloud.server.rest.resource.WorkerServerResource;
+import com.kdcloud.server.rest.resource.QueueWorkerServerResource;
 import com.kdcloud.server.tasks.TaskQueue;
 
 public class MainApplication extends Application {
@@ -23,7 +23,7 @@ public class MainApplication extends Application {
 
 		Router router = new Router(getContext());
 		
-		router.attach(TaskQueue.WORKER_URI + ServerParameter.TASK_ID, WorkerServerResource.class);
+		router.attach(TaskQueue.WORKER_URI + ServerParameter.TASK_ID, QueueWorkerServerResource.class);
 
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null, ChallengeScheme.HTTP_BASIC, "testRealm");
 		guard.setVerifier(new OAuthVerifier());

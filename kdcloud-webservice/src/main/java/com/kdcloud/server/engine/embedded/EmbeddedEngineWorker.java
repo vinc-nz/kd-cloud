@@ -50,7 +50,7 @@ public class EmbeddedEngineWorker implements Worker {
 
 	private void onException(Node node, String msg, Throwable thrown) {
 		String nodeName = node.getClass().getName();
-		logger.log(Level.SEVERE, msg.replace("%s", nodeName), thrown);
+		logger.log(Level.SEVERE, msg.replace("%s", nodeName));
 	}
 
 	public PortObject execute(ArrayList<Node> flow) {

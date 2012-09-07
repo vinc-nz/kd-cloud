@@ -1,6 +1,7 @@
 package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
 import com.kdcloud.server.entity.Report;
@@ -10,26 +11,34 @@ import com.kdcloud.server.rest.api.ReportResource;
 
 public class ReportServerResource extends KDServerResource implements ReportResource {
 	
-	
+	private Report report;
 	
 	public ReportServerResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ReportServerResource(Application application) {
+	ReportServerResource(Application application, Report report) {
 		super(application);
-		// TODO Auto-generated constructor stub
+		this.report = report;
+	}
+	
+	@Override
+	public Representation handle() {
+		String taskId = getParameter(ServerParameter.TASK_ID);
+		Task task = taskDao.findById(new Long(taskId));
+		if (task == null)
+			return notFound();
+		if (!task.getApplicant().equals(user))
+			return forbidden();
+		report = task.getReport();
+		return super.handle();
 	}
 
 	@Override
 	@Get
 	public Report retrive() {
-		String taskId = getParameter(ServerParameter.TASK_ID);
-		Task task = taskDao.findById(new Long(taskId));
-		if (!task.getApplicant().equals(user))
-			forbid();
-		return task.getReport();
+		return report;
 	}
 
 }

@@ -11,16 +11,12 @@ import com.kdcloud.server.rest.api.ModalitiesResource;
 
 public class ModalitiesServerResource extends KDServerResource implements ModalitiesResource {
 	
-	
-
 	public ModalitiesServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public ModalitiesServerResource(Application application) {
 		super(application);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

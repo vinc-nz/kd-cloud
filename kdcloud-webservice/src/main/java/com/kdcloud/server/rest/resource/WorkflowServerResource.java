@@ -2,6 +2,7 @@ package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
 import com.kdcloud.server.entity.Report;
@@ -13,21 +14,28 @@ import com.kdcloud.server.rest.api.WorkflowResource;
 public class WorkflowServerResource extends WorkerServerResource implements
 		WorkflowResource {
 
+	private Workflow workflow;
 
 	public WorkflowServerResource() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public WorkflowServerResource(Application application) {
+	public WorkflowServerResource(Application application, Workflow workflow) {
 		super(application);
-		// TODO Auto-generated constructor stub
+		this.workflow = workflow;
+	}
+	
+	@Override
+	public Representation handle() {
+		String workflowId = getParameter(ServerParameter.WORKFLOW_ID);
+		workflow = getPersistenceContext().getWorkflowDao().findById(new Long(workflowId));
+		if (workflow == null)
+			return notFound();
+		return super.handle();
 	}
 
 	@Override
 	@Post
 	public Report execute(Form form) {
-		String workflowId = getParameter(ServerParameter.WORKFLOW_ID);
-		Workflow workflow = getPersistenceContext().getWorkflowDao().findById(new Long(workflowId));
 		Task task = new Task();
 		task.setApplicant(user);
 		task.setWorkflow(workflow);

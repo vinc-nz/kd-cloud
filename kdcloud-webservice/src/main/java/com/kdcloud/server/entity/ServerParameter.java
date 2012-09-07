@@ -12,16 +12,16 @@ public class ServerParameter implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
-	public static final ServerParameter DATASET_ID = new ServerParameter("datasetId");
+
+	public static final ServerParameter DATASET_ID = new ServerParameter(
+			"datasetId");
 	public static final ServerParameter USER_ID = new ServerParameter("userId");
 	public static final ServerParameter TASK_ID = new ServerParameter("taskId");
-	public static final ServerParameter MODALITY_ID = new ServerParameter("modalityId");
-	public static final ServerParameter WORKFLOW_ID = new ServerParameter("workflowId");
+	public static final ServerParameter MODALITY_ID = new ServerParameter(
+			"modalityId");
+	public static final ServerParameter WORKFLOW_ID = new ServerParameter(
+			"workflowId");
 
-
-	
 	public static Set<ServerParameter> getParamsFromUri(String uri) {
 		Set<ServerParameter> params = new HashSet<ServerParameter>();
 		Matcher m = Pattern.compile("\\{\\w+\\}").matcher(uri);
@@ -31,9 +31,9 @@ public class ServerParameter implements Serializable {
 		}
 		return params;
 	}
-	
+
 	private String name;
-	
+
 	public ServerParameter() {
 		// TODO Auto-generated constructor stub
 	}
@@ -50,19 +50,23 @@ public class ServerParameter implements Serializable {
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "{" + name + "}";
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ServerParameter)
 			return ((ServerParameter) obj).name.equals(name);
 		return false;
 	}
-	
+
+	public int hashCode() {
+		return name.hashCode();
+	};
+
 	String getPattern() {
 		return "\\{" + name + "\\}";
 	}

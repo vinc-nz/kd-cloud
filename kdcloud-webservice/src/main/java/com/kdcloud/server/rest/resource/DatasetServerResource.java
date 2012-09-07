@@ -15,29 +15,26 @@ import com.kdcloud.weka.core.Instances;
 
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
 	
-	DataTable dataset;
-	
-	
+	private DataTable dataset;
 
 	public DatasetServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 
-	public DatasetServerResource(Application application) {
+	DatasetServerResource(Application application, DataTable dataset) {
 		super(application);
-		// TODO Auto-generated constructor stub
+		this.dataset = dataset;
 	}
 
 
 	@Override
 	public Representation handle() {
+		//TODO possibly add user restrictions here
 		String id = getParameter(ServerParameter.DATASET_ID);
 		dataset = dataTableDao.findById(Long.parseLong(id));
 		if (dataset == null) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "provided id is invalid");
-			return null;
+			return notFound();
 		}
 		return super.handle();
 	}
@@ -66,7 +63,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	public Instances getData() {
 		if (dataset.getOwner().equals(user))
 			return dataset.getInstances();
-		forbid();
+		forbidden();
 		return null;
 	}
 

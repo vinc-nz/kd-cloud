@@ -11,12 +11,10 @@ public class UserDetailsServerResource extends KDServerResource implements
 
 	public UserDetailsServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public UserDetailsServerResource(Application application) {
 		super(application);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

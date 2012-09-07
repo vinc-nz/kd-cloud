@@ -10,26 +10,27 @@ import com.kdcloud.server.entity.Modality;
 import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.rest.api.ChoosenModalityResource;
 
+
+//TODO insert user restrictions
 public class ChoosenModalityServerResource extends KDServerResource implements ChoosenModalityResource {
 	
-	Modality modality;
-	
-	
+	private Modality modality;
 	
 	public ChoosenModalityServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public ChoosenModalityServerResource(Application application) {
+	ChoosenModalityServerResource(Application application, Modality modality) {
 		super(application);
-		// TODO Auto-generated constructor stub
+		this.modality = modality;
 	}
 
 	@Override
 	public Representation handle() {
 		String id = getParameter(ServerParameter.MODALITY_ID);
 		modality = modalityDao.findById(new Long(id));
+		if (modality == null)
+			return notFound();
 		return super.handle();
 	}
 
@@ -37,8 +38,7 @@ public class ChoosenModalityServerResource extends KDServerResource implements C
 	@Post
 	public void editModality(Modality dto) {
 		modality.setName(dto.getName());
-		modality.getServerCommands().clear();
-		modality.getServerCommands().addAll(dto.getServerCommands());
+		modality.setServerCommands(dto.getServerCommands());
 		modalityDao.save(modality);
 	}
 

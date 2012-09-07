@@ -11,16 +11,12 @@ import com.kdcloud.server.rest.api.GlobalDataResource;
 
 public class GlobalDataServerResource extends KDServerResource implements GlobalDataResource {
 	
-	
-
 	public GlobalDataServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public GlobalDataServerResource(Application application) {
+	GlobalDataServerResource(Application application) {
 		super(application);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

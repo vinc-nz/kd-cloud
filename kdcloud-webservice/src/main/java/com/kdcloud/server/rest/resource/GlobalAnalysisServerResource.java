@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
 import com.kdcloud.server.entity.Report;
@@ -16,22 +17,30 @@ import com.kdcloud.server.rest.api.GlobalAnalysisResource;
 
 public class GlobalAnalysisServerResource extends WorkerServerResource
 		implements GlobalAnalysisResource {
+	
+	private Workflow workflow;
 
 	public GlobalAnalysisServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public GlobalAnalysisServerResource(Application application) {
+	GlobalAnalysisServerResource(Application application, Workflow workflow) {
 		super(application);
-		// TODO Auto-generated constructor stub
+		this.workflow = workflow;
+	}
+	
+	@Override
+	public Representation handle() {
+		String workflowId = getParameter(ServerParameter.WORKFLOW_ID);
+		workflow = getPersistenceContext().getWorkflowDao().findById(new Long(workflowId));
+		if (workflow == null)
+			return notFound();
+		return super.handle();
 	}
 
 	@Override
 	@Post
 	public ArrayList<Report> execute(Form form) {
-		String workflowId = getParameter(ServerParameter.WORKFLOW_ID);
-		Workflow workflow = getPersistenceContext().getWorkflowDao().findById(new Long(workflowId));
 		List<User> users = userDao.list();
 		ArrayList<Report> globalReport = new ArrayList<Report>(users.size());
 		for (User subject : users) {

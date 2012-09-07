@@ -1,10 +1,7 @@
 package com.kdcloud.server.rest.resource;
 
-import java.io.IOException;
-
 import org.restlet.Application;
 import org.restlet.data.Form;
-import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.engine.KDEngine;
@@ -12,21 +9,17 @@ import com.kdcloud.server.engine.Worker;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.entity.User;
-import com.kdcloud.server.gcm.Notification;
 
-public class WorkerServerResource extends KDServerResource {
+public abstract class WorkerServerResource extends KDServerResource {
 
 	KDEngine engine;
 
 	public WorkerServerResource() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public WorkerServerResource(Application application) {
+	WorkerServerResource(Application application) {
 		super(application);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -34,41 +27,15 @@ public class WorkerServerResource extends KDServerResource {
 		super.doInit();
 		engine = (KDEngine) inject(KDEngine.class);
 	}
-
-	@Post
-	public void pullTask(Form form) {
-		getLogger().info("ready to work on data");
-
-		String id = getParameter(ServerParameter.TASK_ID);
-		Task task = taskDao.findById(new Long(id));
-
-		Report report = execute(task, form);
-
-		getLogger().info("work done");
-		String label = "analysis requested by %s".replace("%s", task
-				.getApplicant().getId());
-		report.setName(label);
-		task.setReport(report);
-		taskDao.save(task);
-		notifyApplicant(task);
-	}
-
-	public void notifyApplicant(Task task) {
-		User user = task.getApplicant();
-		if (user.getDevices().size() > 0)
-			try {
-				Notification.notify(task, user);
-				getLogger().info("user has been notified");
-			} catch (IOException e) {
-				getLogger().info("unable to notify user");
-			}
-	}
+	
 
 	public Report execute(Task task, Form form) {
 		Worker worker = engine.getWorker(task.getWorkflow());
 		worker.setPersistenceContext(getPersistenceContext());
 		for (ServerParameter param : worker.getParameters()) {
-			worker.setParameter(param, form.getFirstValue(param.getName()));
+			String value = form.getFirstValue(param.getName());
+			getLogger().info("setting parameter: " + param.getName() + "=" + value);
+			worker.setParameter(param, value);
 		}
 		worker.run();
 		return worker.getReport();

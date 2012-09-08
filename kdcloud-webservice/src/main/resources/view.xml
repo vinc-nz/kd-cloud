@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report>
-    
    
-    <textContent>
+    <textContent id="text1">
         <title>Titolo 1</title>
         <content>
             <title>Titolo 2</title>
@@ -13,76 +12,80 @@
             <p>lolo lololo lo lolo lololo lolo lo</p>
         </content>
     </textContent>
-    
-    <chart type="line">
+   
+    <chart id="chart1" type="line">
         <title>MY Graph</title>
        
         <line>
             <lineWidth>2</lineWidth>
            
             <markers>
-                <Style>diamond</Style>
+                <style>diamond</style>
             </markers>
            
             <points>
-                <instancesIndex>0</instancesIndex>
                 <xIndex>0</xIndex>
                 <yIndex>0</yIndex>
             </points>
-           
-            <!--
-            <point>
-                <X>10</X>
-                <Y>10</Y>                   
-            </point>
-            <point>
-                <X>1</X>
-                <Y>1</Y>                   
-            </point>
-            <point>
-                <X>2</X>
-                <Y>2</Y>                   
-            </point>
-            <point>
-                <X>5</X>
-                <Y>5</Y>                   
-            </point>
-            -->
              
         </line>
     </chart>
 
-    <chart type="line">
+    <table id="table1">
+        <title>My Table</title>
+        <col>
+            <header>Header 1</header>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+        </col>
+       
+        <col>
+            <header>Header 2</header>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+        </col>
+       
+        <dataCol>
+            <header>Header3</header>
+            <valueIndex>0</valueIndex>
+        </dataCol>
+       
+    </table>
+   
+    <chart id="chart2" type="line">
         <title>MY Graph</title>
        
-        <lines>
-            <line>
-                <lineWidth>2</lineWidth>
-               
-                <markers>
-                    <Style>diamond</Style>
-                </markers>
-               
-                <point>
-                    <X>10</X>
-                    <Y>10</Y>                   
-                </point>
-                <point>
-                    <X>1</X>
-                    <Y>1</Y>                   
-                </point>
-                <point>
-                    <X>2</X>
-                    <Y>2</Y>                   
-                </point>
-                <point>
-                    <X>5</X>
-                    <Y>5</Y>                   
-                </point>
-               
-            </line>
-        </lines>
+        <line>
+            <lineWidth>2</lineWidth>
+           
+            <markers>
+                <style>diamond</style>
+            </markers>
+           
+               <point>
+                <X>10</X>
+                <Y>10</Y>
+               </point>
+            <point>
+                <X>1</X>
+                <Y>1</Y>                   
+               </point>
+               <point>
+                <X>2</X>
+                <Y>2</Y>                   
+               </point>
+               <point>
+                <X>5</X>
+                <Y>5</Y>                   
+               </point>
+              
+        </line>
     </chart>
-
    
 </report>

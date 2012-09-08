@@ -119,7 +119,7 @@ public class ServerAction implements Serializable {
 	public List<ServerParameter> getParams() {
 		ArrayList<ServerParameter> params = 
 				new ArrayList<ServerParameter>(uriParams.size() + postParams.size());
-		params.addAll(postParams);
+		params.addAll(uriParams);
 		params.addAll(postParams);
 		return params;
 	}

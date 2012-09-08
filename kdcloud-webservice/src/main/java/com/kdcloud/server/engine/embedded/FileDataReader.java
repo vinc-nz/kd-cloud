@@ -47,16 +47,12 @@ public class FileDataReader extends NodeAdapter {
 
 
 	@Override
-	public boolean ready() {
-		return mFile != null;
-	}
-
-	@Override
-	public boolean configure(WorkerConfiguration config) {
+	public void configure(WorkerConfiguration config) throws WrongConfigurationException {
 		String filename = (String) config.get("filename");
 		if (filename != null)
 			loadFile(filename);
-		return mFile != null;
+		if (mFile == null)
+			throw new WrongConfigurationException("input file not valid");
 	}
 	
 	private void loadFile(String filename) {
@@ -64,7 +60,6 @@ public class FileDataReader extends NodeAdapter {
 			URI uri = getClass().getClassLoader().getResource(filename).toURI();
 			mFile = new File(uri);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

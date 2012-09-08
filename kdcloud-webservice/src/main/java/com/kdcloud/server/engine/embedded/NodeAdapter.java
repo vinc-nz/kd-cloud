@@ -6,29 +6,33 @@ import java.util.Set;
 import com.kdcloud.server.entity.ServerParameter;
 
 public abstract class NodeAdapter implements Node {
-	
+
 	@Override
-	public boolean setInput(PortObject input) {
-		return true;
+	public void setInput(PortObject input) throws WrongConnectionException {
+		
 	}
-	
-	@Override
-	public boolean configure(WorkerConfiguration config) {
-		return true;
-	}
-	
-	@Override
-	public Set<ServerParameter> getParameters() {
-		return new HashSet<ServerParameter>();
-	}
-	
+
 	@Override
 	public PortObject getOutput() {
 		return null;
 	}
-	
+
 	@Override
-	public void run() {
+	public Set<ServerParameter> getParameters() {
+		return new HashSet<ServerParameter>();
 	}
+
+	@Override
+	public void configure(WorkerConfiguration config)
+			throws WrongConfigurationException {
+		
+	}
+
+	@Override
+	public void run() throws Exception {
+		
+	}
+	
+	
 
 }

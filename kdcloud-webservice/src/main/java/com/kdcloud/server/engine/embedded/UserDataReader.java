@@ -1,9 +1,6 @@
 package com.kdcloud.server.engine.embedded;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.kdcloud.server.entity.ServerParameter;
@@ -24,21 +21,21 @@ public class UserDataReader extends NodeAdapter {
 		this.user = user;
 	}
 
-
 	@Override
-	public boolean ready() {
-		return user != null;
-	}
-
-	@Override
-	public boolean configure(WorkerConfiguration config) {
+	public void configure(WorkerConfiguration config) throws WrongConfigurationException {
+		String msg = null;
 		String userId = config.getServerParameter(ServerParameter.USER_ID);
 		PersistenceContext pc = config.getPersistenceContext();
 		if (pc == null)
-			return false;
+			msg = "no persistence context in configuration";
 		if (userId != null)
 			user = pc.getUserDao().findById(userId);
-		return ready();
+		if (user == null)
+			msg = "not a valid user in configuration";
+		else if (user.getTable() == null)
+			msg = "user has no data";
+		if (msg != null)
+			throw new WrongConfigurationException(msg);
 	}
 
 	@Override
@@ -51,8 +48,6 @@ public class UserDataReader extends NodeAdapter {
 
 	@Override
 	public PortObject getOutput() {
-		if (user.getTable() == null)
-			return null;
 		Instances instances = user.getTable().getInstances();
 		return new BufferedInstances(instances);
 	}

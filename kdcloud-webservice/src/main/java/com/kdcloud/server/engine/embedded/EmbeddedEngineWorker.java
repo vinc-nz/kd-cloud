@@ -19,7 +19,8 @@ public class EmbeddedEngineWorker implements Worker {
 	private WorkerConfiguration mConfig;
 	private ArrayList<Node> mFlow;
 	private Set<ServerParameter> params;
-	private PortObject lastOutput;
+	private Node mNode;
+	private PortObject mState;
 
 	public EmbeddedEngineWorker(Logger logger, SequenceFlow flow) {
 		super();
@@ -34,41 +35,34 @@ public class EmbeddedEngineWorker implements Worker {
 		}
 	}
 
-	public PortObject prepare(Node node, PortObject input)
+	public void prepareNodes()
 			throws WrongConnectionException, WrongConfigurationException,
 			RuntimeException {
-		if (!node.setInput(input))
-			throw new WrongConnectionException();
-		if (!node.configure(mConfig))
-			throw new WrongConfigurationException();
-		return node.getOutput();
+		for (Iterator<Node> iterator = mFlow.iterator(); iterator.hasNext();) {
+			mNode = iterator.next();
+			logger.info("configuring %s node".replace("%s", mNode.getClass().getSimpleName()));
+			mNode.setInput(mState);
+			mNode.configure(mConfig);
+			mState = mNode.getOutput();
+		}
+		status = STATUS_READY;
 	}
 
 	private void onException(Node node, String msg, Throwable thrown) {
 		String nodeName = node.getClass().getName();
-		logger.log(Level.SEVERE, msg.replace("%s", nodeName));
+		logger.log(Level.SEVERE, msg.replace("%s", nodeName), thrown);
 	}
 
-	public PortObject prepare() {
-		PortObject previousOutput = null;
-		Node node = null;
+	public void prepare() {
 		try {
-			for (Iterator<Node> iterator = mFlow.iterator(); iterator.hasNext();) {
-				node = iterator.next();
-				logger.info("configuring %s node".replace("%s", node.getClass().getSimpleName()));
-				PortObject currentOutput = prepare(node, previousOutput);
-				previousOutput = currentOutput;
-			}
-			status = STATUS_READY;
-			return previousOutput;
+			prepareNodes();
 		} catch (WrongConnectionException e) {
-			onException(node, "error on %s input", e);
+			onException(mNode, "error on %s input", e);
 			status = STATUS_ERROR_WRONG_INPUT;
 		} catch (WrongConfigurationException e) {
-			onException(node, "error on %s configuration", e);
+			onException(mNode, "error on %s configuration", e);
 			status = STATUS_ERROR_WRONG_CONFIG;
 		}
-		return null;
 	}
 
 	@Override
@@ -91,31 +85,35 @@ public class EmbeddedEngineWorker implements Worker {
 	public boolean configure() {
 		if (!params.isEmpty())
 			return false;
-		lastOutput = prepare();
+		prepare();
 		return status == STATUS_READY;
 	}
 	
 
+	public void runNodes() throws Exception {
+		for (Iterator<Node> iterator = mFlow.iterator(); iterator.hasNext();) {
+			mNode = iterator.next();
+			logger.info("executing %s node".replace("%s", mNode.getClass()
+					.getSimpleName()));
+			mNode.run();
+		}
+	}
+	
 	@Override
 	public void run() {
-		Node node = null;
 		try {
-			for (Iterator<Node> iterator = mFlow.iterator(); iterator.hasNext();) {
-				node = iterator.next();
-				logger.info("executing %s node".replace("%s", node.getClass().getSimpleName()));
-				node.run();
-			}
+			runNodes();
+			status = STATUS_JOB_COMPLETED;
 		} catch (Exception e) {
-			onException(node, "error executing %s", e);
+			onException(mNode, "error executing %s", e);
 			status = STATUS_ERROR_RUNTIME;
 		}
-		
 	}
 
 	@Override
 	public Report getReport() {
-		if (lastOutput instanceof View) {
-			View v = (View) lastOutput;
+		if (mState instanceof View) {
+			View v = (View) mState;
 			return new Report(v.getData(), v.getViewSpec());
 		}
 		return null;

@@ -23,12 +23,13 @@ import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
 
 public class EmbeddedEngineTest {
-	
+
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
 			new LocalDatastoreServiceTestConfig());
-	
+
 	PersistenceContext pc;
-	Workflow workflow;
+	Workflow w1;
+	Workflow w2;
 	KDEngine engine;
 
 	@Before
@@ -36,17 +37,16 @@ public class EmbeddedEngineTest {
 		helper.setUp();
 		PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
 		pc = pcf.get();
-		workflow = new Workflow();
-		SequenceFlow flow = new SequenceFlow();
-		flow.add(new FileDataReader("ecg_small.txt"));
-		flow.add(new UserDataWriter(new User("test")));
-		flow.add(new UserDataReader(new User("test")));
-		flow.add(new QRS());
-		flow.add(new ReportGenerator("view.xml"));
-		workflow.setExecutionData(flow);
+		pc.getUserDao().save(new User("test"));
+		w1 = new Workflow();
+		SequenceFlow flow1 = new SequenceFlow();
+		flow1.add(new FileDataReader("ecg_small.txt"));
+		flow1.add(new UserDataWriter());
+		w1.setExecutionData(flow1);
+		w2 = EmbeddedEngine.getQRSWorkflow();
 		engine = new EmbeddedEngine();
 	}
-	
+
 	@After
 	public void tearDown() {
 		helper.tearDown();
@@ -54,10 +54,16 @@ public class EmbeddedEngineTest {
 
 	@Test
 	public void test() {
-		Worker worker = engine.getWorker(workflow);
-		worker.setPersistenceContext(pc);
-		assertTrue(worker.configure());
-		worker.run();
+		Workflow[] workflows = { w1, w2 };
+		for (Workflow workflow : workflows) {
+			Worker worker = engine.getWorker(workflow);
+			assertEquals(1, worker.getParameters().size());
+			worker.setPersistenceContext(pc);
+			worker.setParameter(ServerParameter.USER_ID, "test");
+			assertTrue(worker.configure());
+			worker.run();
+			assertEquals(Worker.STATUS_JOB_COMPLETED, worker.getStatus());
+		}
 	}
 
 }

@@ -6,16 +6,14 @@ import com.kdcloud.server.entity.ServerParameter;
 
 public interface Node {
 	
-	public boolean setInput(PortObject input);
-	
-	public boolean ready();
-	
-	public boolean configure(WorkerConfiguration config);
-	
-	public Set<ServerParameter> getParameters();
+	public void setInput(PortObject input) throws WrongConnectionException;
 	
 	public PortObject getOutput();
 	
-	public void run();
+	public Set<ServerParameter> getParameters();
+	
+	public void configure(WorkerConfiguration config) throws WrongConfigurationException;
+	
+	public void run() throws Exception;
 
 }

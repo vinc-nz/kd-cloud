@@ -2,8 +2,6 @@ package com.kdcloud.server.engine.embedded;
 
 import java.io.File;
 import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,9 +9,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
-
-import com.kdcloud.server.entity.ServerParameter;
-import com.kdcloud.weka.core.Instances;
 
 public class ReportGenerator extends NodeAdapter {
 	
@@ -25,27 +20,22 @@ public class ReportGenerator extends NodeAdapter {
 	}
 
 	@Override
-	public boolean setInput(PortObject input) {
+	public void setInput(PortObject input) throws WrongConnectionException {
 		if (input instanceof BufferedInstances) {
 			mState = (BufferedInstances) input;
-			return true;
+		} else {
+			throw new WrongConnectionException();
 		}
-		return false;
 	}
 
-	@Override
-	public boolean ready() {
-		return mXml != null && mState != null;
-	}
 
 	@Override
-	public boolean configure(WorkerConfiguration config) {
+	public void configure(WorkerConfiguration config) throws WrongConfigurationException {
 		String filename = (String) config.get("view");
-		if (filename == null && mXml != null)
-			return true;
-		else if (filename != null)
-			return loadXmlFromFile(filename);
-		return mXml != null;
+		if (filename != null)
+			loadXmlFromFile(filename);
+		if (mXml == null)
+			throw new WrongConfigurationException();
 	}
 
 	private boolean loadXmlFromFile(String filename) {
@@ -67,11 +57,6 @@ public class ReportGenerator extends NodeAdapter {
 	@Override
 	public PortObject getOutput() {
 		return new View(mXml, mState);
-	}
-
-	@Override
-	public Set<ServerParameter> getParameters() {
-		return new HashSet<ServerParameter>();
 	}
 
 }

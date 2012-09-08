@@ -2,6 +2,7 @@ package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
+import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.engine.KDEngine;
@@ -37,8 +38,13 @@ public abstract class WorkerServerResource extends KDServerResource {
 			getLogger().info("setting parameter: " + param.getName() + "=" + value);
 			worker.setParameter(param, value);
 		}
-		worker.run();
-		return worker.getReport();
+		if (worker.configure())
+			worker.run();
+		if (worker.getStatus() == Worker.STATUS_JOB_COMPLETED)
+			return worker.getReport();
+		else
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		return null;
 	}
 
 }

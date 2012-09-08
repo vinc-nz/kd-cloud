@@ -1,8 +1,6 @@
 package com.kdcloud.server.engine.embedded;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.kdcloud.server.dao.UserDao;
@@ -28,22 +26,20 @@ public class UserDataWriter extends NodeAdapter {
 		this.user = user;
 	}
 
-
 	@Override
-	public boolean ready() {
-		return userDao != null && user != null;
-	}
-
-	@Override
-	public boolean configure(WorkerConfiguration config) {
+	public void configure(WorkerConfiguration config) throws WrongConfigurationException  {
+		String msg = null;
 		String userId = config.getServerParameter(ServerParameter.USER_ID);
 		PersistenceContext pc = config.getPersistenceContext();
 		if (pc == null)
-			return false;
+			msg = "no persistence context in configuration";
 		userDao = pc.getUserDao();
 		if (userId != null)
-			user = pc.getUserDao().findById(userId);
-		return ready();
+			user = userDao.findById(userId);
+		if (user == null)
+			msg = "not a valid user in configuration";
+		if (msg != null)
+			throw new WrongConfigurationException(msg);
 	}
 
 	@Override
@@ -55,12 +51,12 @@ public class UserDataWriter extends NodeAdapter {
 	}
 
 	@Override
-	public boolean setInput(PortObject input) {
+	public void setInput(PortObject input) throws WrongConnectionException {
 		if (input instanceof BufferedInstances) {
 			mState = (BufferedInstances) input;
-			return true;
+		} else {
+			throw new WrongConnectionException();
 		}
-		return false;
 	}
 
 	@Override

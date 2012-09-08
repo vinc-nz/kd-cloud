@@ -2,11 +2,8 @@ package com.kdcloud.server.engine.embedded;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Vector;
 
-import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.DenseInstance;
 import com.kdcloud.weka.core.Instance;
@@ -200,33 +197,25 @@ public class QRS extends NodeAdapter {
 	}
 
 	@Override
-	public boolean setInput(PortObject input) {
+	public void setInput(PortObject input) throws WrongConnectionException {
+		String msg = null;
 		if (input instanceof BufferedInstances) {
 			BufferedInstances candidate = (BufferedInstances) input;
 			if (candidate.getInstances().attribute(INPUT_ATTRIBUTE.name()) == null)
-				return false;
+				msg = "required attribute is missing";
 			mStatus = candidate;
-			return true;
+		} else {
+			msg = "invalid input type";
 		}
-		return false;
+		if (msg != null)
+			throw new WrongConnectionException(msg);
 	}
-
-	@Override
-	public boolean ready() {
-		return mStatus != null;
-	}
-
 
 	@Override
 	public PortObject getOutput() {
 		return mStatus;
 	}
 
-	@Override
-	public Set<ServerParameter> getParameters() {
-		return new HashSet<ServerParameter>();
-	}
-	
 	@Override
 	public void run() {
 		mStatus = new BufferedInstances(ecg(mStatus.getInstances()));

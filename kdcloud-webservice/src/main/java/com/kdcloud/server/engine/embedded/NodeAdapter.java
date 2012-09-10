@@ -2,6 +2,7 @@ package com.kdcloud.server.engine.embedded;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.kdcloud.server.entity.ServerParameter;
 
@@ -29,7 +30,7 @@ public abstract class NodeAdapter implements Node {
 	}
 
 	@Override
-	public void run() throws Exception {
+	public void run(Logger logger) throws Exception {
 		
 	}
 	

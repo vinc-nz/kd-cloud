@@ -3,6 +3,7 @@ package com.kdcloud.server.engine.embedded;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.DenseInstance;
@@ -19,7 +20,7 @@ public class QRS extends NodeAdapter {
 	public static final Attribute OUTPUT_ATTRIBUTE = new Attribute("rr");
 
 	private BufferedInstances mStatus;
-	
+
 	public static ArrayList<Attribute> getInputSpec() {
 		ArrayList<Attribute> attinfo = new ArrayList<Attribute>(1);
 		attinfo.add(INPUT_ATTRIBUTE);
@@ -158,7 +159,7 @@ public class QRS extends NodeAdapter {
 	public static double[] readData(Instances data) {
 		Vector<Double> sign = new Vector<Double>();
 		for (Instance i : data) {
-			sign.add(i.value(INPUT_ATTRIBUTE));
+			sign.add(i.value(0));
 		}
 		double[] res = new double[sign.size()];
 		for (int i = 0; i < sign.size(); i++) {
@@ -201,9 +202,12 @@ public class QRS extends NodeAdapter {
 		String msg = null;
 		if (input instanceof BufferedInstances) {
 			BufferedInstances candidate = (BufferedInstances) input;
-			if (candidate.getInstances().attribute(INPUT_ATTRIBUTE.name()) == null)
-				msg = "required attribute is missing";
-			mStatus = candidate;
+			if (candidate.getInstances().numAttributes() == 0
+					|| !candidate.getInstances().attribute(0)
+							.equals(INPUT_ATTRIBUTE))
+				msg = "invalid instances header";
+			else
+				mStatus = candidate;
 		} else {
 			msg = "invalid input type";
 		}
@@ -217,8 +221,17 @@ public class QRS extends NodeAdapter {
 	}
 
 	@Override
-	public void run() {
-		mStatus = new BufferedInstances(ecg(mStatus.getInstances()));
+	public void run(Logger logger) {
+		Instances instances = mStatus.getInstances();
+		if (instances.size() < 2) {
+			logger.info("input size is too small, doing nothing");
+			mStatus = new BufferedInstances(null);
+		} else {
+			String msg = "qrs input size: " + instances.size() + "    mean: "
+					+ instances.meanOrMode(0);
+			logger.info(msg);
+			mStatus = new BufferedInstances(ecg(instances));
+		}
 	}
 
 }

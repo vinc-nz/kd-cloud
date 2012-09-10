@@ -2,6 +2,7 @@ package com.kdcloud.server.engine.embedded;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.kdcloud.server.dao.UserDao;
 import com.kdcloud.server.entity.DataTable;
@@ -60,7 +61,7 @@ public class UserDataWriter extends NodeAdapter {
 	}
 
 	@Override
-	public void run() {
+	public void run(Logger logger) {
 		DataTable table = new DataTable();
 		table.setInstances(new Instances(mState.getInstances()));
 		user.setTable(table);

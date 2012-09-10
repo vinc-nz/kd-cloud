@@ -2,6 +2,7 @@ package com.kdcloud.server.engine.embedded;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.kdcloud.server.entity.ServerParameter;
 
@@ -15,6 +16,6 @@ public interface Node extends Serializable {
 	
 	public void configure(WorkerConfiguration config) throws WrongConfigurationException;
 	
-	public void run() throws Exception;
+	public void run(Logger logger) throws Exception;
 
 }

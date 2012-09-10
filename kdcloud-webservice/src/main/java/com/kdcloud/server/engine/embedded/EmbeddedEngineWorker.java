@@ -95,7 +95,7 @@ public class EmbeddedEngineWorker implements Worker {
 			mNode = iterator.next();
 			logger.info("executing %s node".replace("%s", mNode.getClass()
 					.getSimpleName()));
-			mNode.run();
+			mNode.run(logger);
 		}
 	}
 	

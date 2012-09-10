@@ -120,22 +120,22 @@ public class ServerResourceTest {
 
 	@Test
 	public void testGlobalData() {
+		Workflow workflow = EmbeddedEngine.getQRSWorkflow();
+		Instances instances = new Instances("test", workflow.getInputSpec(), 0);
 		String[] ids = { "a", "b", "c" };
 		for (String s : ids) {
 			User user = new User();
 			user.setId(s);
 			userDataResource.user = user;
-			userDataResource.createDataset();
+			userDataResource.createDataset(instances);
 		}
 		GlobalDataServerResource globalDataResource = new GlobalDataServerResource(application);
 		assertTrue(globalDataResource.getAllUsersWithData().contains(ids[0]));
 		assertEquals(ids.length, globalDataResource.getAllUsersWithData()
 				.size());
 
-		Workflow workflow = EmbeddedEngine.getQRSWorkflow();
 		GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource(application, workflow);
 		Form form = new Form();
-		form.add(ServerParameter.USER_ID.getName(), USER_ID);
 		assertEquals(ids.length, globalAnalysisResource.execute(form).size());
 	}
 

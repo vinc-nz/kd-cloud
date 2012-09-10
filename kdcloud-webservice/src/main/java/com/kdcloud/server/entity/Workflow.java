@@ -35,6 +35,7 @@ public class Workflow implements Serializable {
 	@Persistent(serialized="true")
 	ArrayList<Attribute> inputSpec = new ArrayList<Attribute>();
 	
+	@Persistent(serialized="true")
 	Serializable executionData;
 
 	public String getEncodedKey() {

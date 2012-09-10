@@ -1,10 +1,11 @@
 package com.kdcloud.server.engine.embedded;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import com.kdcloud.server.entity.ServerParameter;
 
-public interface Node {
+public interface Node extends Serializable {
 	
 	public void setInput(PortObject input) throws WrongConnectionException;
 	

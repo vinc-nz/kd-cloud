@@ -1,4 +1,4 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain.datastore;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -7,6 +7,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.datanucleus.annotations.Unowned;
+import com.kdcloud.server.domain.Report;
 
 @PersistenceCapable
 public class Task {

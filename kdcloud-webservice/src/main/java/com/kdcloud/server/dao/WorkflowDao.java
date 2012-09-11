@@ -2,7 +2,7 @@ package com.kdcloud.server.dao;
 
 import java.util.List;
 
-import com.kdcloud.server.entity.Workflow;
+import com.kdcloud.server.domain.datastore.Workflow;
 
 public interface WorkflowDao {
 	

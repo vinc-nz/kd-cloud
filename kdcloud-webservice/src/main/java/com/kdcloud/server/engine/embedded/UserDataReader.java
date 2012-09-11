@@ -3,8 +3,8 @@ package com.kdcloud.server.engine.embedded;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kdcloud.server.entity.ServerParameter;
-import com.kdcloud.server.entity.User;
+import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.server.domain.datastore.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.weka.core.Instances;
 

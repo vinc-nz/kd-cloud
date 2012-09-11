@@ -2,8 +2,8 @@ package com.kdcloud.server.rest.api;
 
 import org.restlet.resource.Get;
 
-import com.kdcloud.server.entity.Report;
-import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.server.domain.Report;
+import com.kdcloud.server.domain.ServerParameter;
 
 /**
  * URI /report/{id}

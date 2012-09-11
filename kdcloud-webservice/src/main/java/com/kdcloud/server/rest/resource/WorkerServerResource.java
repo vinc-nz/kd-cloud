@@ -5,11 +5,11 @@ import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import com.kdcloud.server.domain.Report;
+import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.server.domain.datastore.Task;
 import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.engine.Worker;
-import com.kdcloud.server.entity.Report;
-import com.kdcloud.server.entity.ServerParameter;
-import com.kdcloud.server.entity.Task;
 
 public abstract class WorkerServerResource extends KDServerResource {
 

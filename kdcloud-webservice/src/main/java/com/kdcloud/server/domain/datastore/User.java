@@ -1,4 +1,4 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain.datastore;
 
 import java.util.HashSet;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +13,10 @@ import org.restlet.representation.Representation;
 
 import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.Instances;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
+@XStreamAlias("server-action")
 public class ServerAction implements Serializable {
 
 	/**
@@ -27,10 +30,12 @@ public class ServerAction implements Serializable {
 	
 	ServerMethod method;
 	
-	ArrayList<Attribute> dataSpec;
-	
-	Set<ServerParameter> uriParams;
 	Set<ServerParameter> postParams;
+	
+	@XStreamOmitField
+	Set<ServerParameter> uriParams;
+	
+	@XStreamOmitField
 	ArrayList<Parameter> postForm;
 	
 	boolean repeat;
@@ -61,7 +66,6 @@ public class ServerAction implements Serializable {
 		this.method = serverAction.method;
 		this.repeat = serverAction.repeat;
 		this.sleepTime = serverAction.sleepTime;
-		this.dataSpec = serverAction.dataSpec;
 		this.uri = newUri;
 		this.uriParams = ServerParameter.getParamsFromUri(uri);
 		this.postParams = serverAction.postParams;
@@ -107,15 +111,6 @@ public class ServerAction implements Serializable {
 		this.sleepTime = sleepTime;
 	}
 	
-	public ArrayList<Attribute> getDataSpec() {
-		return dataSpec;
-	}
-
-	public void setDataSpec(ArrayList<Attribute> dataSpec) {
-		this.dataSpec = dataSpec;
-	}
-
-
 	public List<ServerParameter> getParams() {
 		ArrayList<ServerParameter> params = 
 				new ArrayList<ServerParameter>(uriParams.size() + postParams.size());

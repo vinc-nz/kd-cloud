@@ -6,7 +6,7 @@ import org.restlet.Application;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Put;
 
-import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.domain.datastore.DataTable;
 import com.kdcloud.server.rest.api.UserDataResource;
 import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.Instances;

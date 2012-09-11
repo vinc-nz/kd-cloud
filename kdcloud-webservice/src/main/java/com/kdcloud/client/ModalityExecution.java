@@ -12,11 +12,11 @@ import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
-import com.kdcloud.server.entity.Modality;
-import com.kdcloud.server.entity.Report;
-import com.kdcloud.server.entity.ServerAction;
-import com.kdcloud.server.entity.ServerMethod;
-import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.server.domain.Report;
+import com.kdcloud.server.domain.ServerAction;
+import com.kdcloud.server.domain.ServerMethod;
+import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.server.domain.datastore.ModEntity;
 import com.kdcloud.weka.core.DenseInstance;
 import com.kdcloud.weka.core.Instance;
 import com.kdcloud.weka.core.Instances;
@@ -24,17 +24,17 @@ import com.kdcloud.weka.core.Instances;
 public class ModalityExecution extends Thread {
 
 	String serverUri;
-	Modality modality;
+	ModEntity modality;
 	ChallengeResponse auth;
 	
 
-	public ModalityExecution(String serverUri, Modality modality) {
+	public ModalityExecution(String serverUri, ModEntity modality) {
 		super();
 		this.serverUri = serverUri;
 		this.modality = modality;
 	}
 	
-	public ModalityExecution(String serverUri, Modality modality,
+	public ModalityExecution(String serverUri, ModEntity modality,
 			ChallengeResponse auth) {
 		super();
 		this.serverUri = serverUri;

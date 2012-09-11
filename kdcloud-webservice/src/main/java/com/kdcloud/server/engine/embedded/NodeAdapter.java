@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.server.domain.ServerParameter;
 
 public abstract class NodeAdapter implements Node {
 

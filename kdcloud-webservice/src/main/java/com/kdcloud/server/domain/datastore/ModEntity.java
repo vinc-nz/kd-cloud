@@ -1,7 +1,8 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain.datastore;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -9,10 +10,10 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.kdcloud.weka.core.Attribute;
+import com.kdcloud.server.domain.ServerAction;
 
 @PersistenceCapable
-public class Workflow implements Serializable {
+public class ModEntity implements Serializable {
 	
 	/**
 	 * 
@@ -26,18 +27,13 @@ public class Workflow implements Serializable {
 
 	@Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
-	Long id;
+	private Long id;
 	
 	String name;
 	
-	String description;
-	
 	@Persistent(serialized="true")
-	ArrayList<Attribute> inputSpec = new ArrayList<Attribute>();
+	List<ServerAction> serverCommands = new LinkedList<ServerAction>();
 	
-	@Persistent(serialized="true")
-	Serializable executionData;
-
 	public String getEncodedKey() {
 		return encodedKey;
 	}
@@ -62,30 +58,12 @@ public class Workflow implements Serializable {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
+	public List<ServerAction> getServerCommands() {
+		return serverCommands;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setServerCommands(List<ServerAction> serverCommands) {
+		this.serverCommands = serverCommands;
 	}
-
-	public ArrayList<Attribute> getInputSpec() {
-		return inputSpec;
-	}
-
-	public void setInputSpec(ArrayList<Attribute> inputSpec) {
-		this.inputSpec = inputSpec;
-	}
-
-	public Serializable getExecutionData() {
-		return executionData;
-	}
-
-	public void setExecutionData(Serializable executionData) {
-		this.executionData = executionData;
-	}
-	
-	
 
 }

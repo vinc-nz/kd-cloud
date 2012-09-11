@@ -1,4 +1,4 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -6,6 +6,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamContainedType;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamInclude;
+
+@XStreamAlias("server-parameter")
 public class ServerParameter implements Serializable {
 
 	/**
@@ -32,6 +39,7 @@ public class ServerParameter implements Serializable {
 		return params;
 	}
 
+	@XStreamAsAttribute
 	private String name;
 
 	public ServerParameter() {

@@ -1,15 +1,11 @@
 package com.kdcloud.server.rest.api;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 
-import com.kdcloud.server.entity.DataRow;
-import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.weka.core.Instances;
 
 /**

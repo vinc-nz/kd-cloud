@@ -1,4 +1,4 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain;
 
 import java.io.Serializable;
 import java.util.Date;

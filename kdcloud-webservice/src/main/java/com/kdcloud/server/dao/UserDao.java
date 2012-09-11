@@ -2,7 +2,7 @@ package com.kdcloud.server.dao;
 
 import java.util.List;
 
-import com.kdcloud.server.entity.User;
+import com.kdcloud.server.domain.datastore.User;
 
 public interface UserDao {
 	

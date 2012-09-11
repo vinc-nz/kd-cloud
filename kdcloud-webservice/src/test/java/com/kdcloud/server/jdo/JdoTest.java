@@ -12,12 +12,12 @@ import org.junit.Test;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.entity.DataTable;
-import com.kdcloud.server.entity.Modality;
-import com.kdcloud.server.entity.ServerAction;
-import com.kdcloud.server.entity.ServerMethod;
-import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.entity.User;
+import com.kdcloud.server.domain.ServerAction;
+import com.kdcloud.server.domain.ServerMethod;
+import com.kdcloud.server.domain.datastore.DataTable;
+import com.kdcloud.server.domain.datastore.ModEntity;
+import com.kdcloud.server.domain.datastore.Task;
+import com.kdcloud.server.domain.datastore.User;
 
 public class JdoTest {
 
@@ -61,7 +61,7 @@ public class JdoTest {
 //		pm.makePersistent(user);
 //		Assert.assertEquals(user.getTables().size(), 0);
 
-		Modality m = new Modality();
+		ModEntity m = new ModEntity();
 		ServerAction test = new ServerAction();
 		test.setMethod(ServerMethod.GET);
 		m.getServerCommands().add(test);

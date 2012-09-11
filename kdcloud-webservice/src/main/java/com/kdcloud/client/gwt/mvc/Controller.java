@@ -9,7 +9,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.kdcloud.client.gwt.rest.KDClient;
-import com.kdcloud.server.entity.Dataset;
+import com.kdcloud.server.domain.Dataset;
 
 public class Controller {
 	

@@ -2,14 +2,14 @@ package com.kdcloud.server.dao;
 
 import java.util.List;
 
-import com.kdcloud.server.entity.Modality;
+import com.kdcloud.server.domain.datastore.ModEntity;
 
 public interface ModalityDao {
 	
-	public Modality findById(Long id);
-	public void save(Modality modality);
-	public void delete(Modality modality);
+	public ModEntity findById(Long id);
+	public void save(ModEntity modality);
+	public void delete(ModEntity modality);
 	public void deleteAll();
-	public List<Modality> getAll();
+	public List<ModEntity> getAll();
 
 }

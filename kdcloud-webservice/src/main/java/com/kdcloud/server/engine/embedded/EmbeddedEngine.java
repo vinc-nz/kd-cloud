@@ -2,10 +2,10 @@ package com.kdcloud.server.engine.embedded;
 
 import java.util.logging.Logger;
 
+import com.kdcloud.server.domain.datastore.Workflow;
 import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.engine.UnsupportedWorkflowException;
 import com.kdcloud.server.engine.Worker;
-import com.kdcloud.server.entity.Workflow;
 
 public class EmbeddedEngine implements KDEngine {
 

@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import com.kdcloud.server.domain.datastore.Workflow;
 import com.kdcloud.server.engine.KDEngine;
-import com.kdcloud.server.engine.UnsupportedWorkflowException;
 import com.kdcloud.server.engine.Worker;
 
 public class EmbeddedEngine implements KDEngine {
@@ -13,7 +12,6 @@ public class EmbeddedEngine implements KDEngine {
 
 	public static Workflow getQRSWorkflow() {
 		Workflow workflow = new Workflow();
-		workflow.setInputSpec(QRS.getInputSpec());
 		SequenceFlow flow = new SequenceFlow();
 		flow.add(new UserDataReader());
 		flow.add(new QRS());

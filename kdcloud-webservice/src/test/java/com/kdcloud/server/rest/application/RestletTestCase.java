@@ -17,6 +17,7 @@ import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
+import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.routing.Router;
@@ -25,6 +26,7 @@ import org.restlet.security.MapVerifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.kdcloud.server.domain.ModalityList;
 import com.kdcloud.server.rest.api.ModalitiesResource;
 
 public class RestletTestCase {
@@ -101,8 +103,10 @@ public class RestletTestCase {
 				+ ModalitiesResource.URI);
 		data.setChallengeResponse(authentication);
 		Representation rep = data.get();
+		XstreamRepresentation<ModalityList> xstream = 
+				new XstreamRepresentation<ModalityList>(rep, ModalityList.class);
 		try {
-			System.out.println(rep.getText());
+			System.out.println(xstream.getObject().asList().size());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,6 +1,5 @@
 package com.kdcloud.server.domain;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -12,19 +11,18 @@ public class Modality {
 
 	String name;
 
-	List<ServerAction> serverCommands = new LinkedList<ServerAction>();
+	List<ServerAction> serverCommands;
+	
+	InputSpecification inputSpecification;
 
-	public Modality() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Modality(Long id, String name, List<ServerAction> serverCommands) {
+	public Modality(Long id, String name, List<ServerAction> serverCommands,
+			InputSpecification inputSpecification) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.serverCommands = serverCommands;
+		this.inputSpecification = inputSpecification;
 	}
-
 
 	public String getName() {
 		return name;
@@ -32,6 +30,14 @@ public class Modality {
 
 	public List<ServerAction> getServerCommands() {
 		return serverCommands;
+	}
+
+	public InputSpecification getInputSpecification() {
+		return inputSpecification;
+	}
+
+	public void setInputSpecification(InputSpecification inputSpecification) {
+		this.inputSpecification = inputSpecification;
 	}
 
 }

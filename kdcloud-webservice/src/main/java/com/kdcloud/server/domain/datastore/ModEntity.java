@@ -10,6 +10,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.kdcloud.server.domain.InputSource;
 import com.kdcloud.server.domain.ServerAction;
 
 @PersistenceCapable
@@ -33,6 +34,9 @@ public class ModEntity implements Serializable {
 	
 	@Persistent(serialized="true")
 	List<ServerAction> serverCommands = new LinkedList<ServerAction>();
+	
+	@Persistent(serialized="true")
+	List<InputSource> inputSources = new LinkedList<InputSource>();
 	
 	public String getEncodedKey() {
 		return encodedKey;
@@ -64,6 +68,14 @@ public class ModEntity implements Serializable {
 
 	public void setServerCommands(List<ServerAction> serverCommands) {
 		this.serverCommands = serverCommands;
+	}
+
+	public List<InputSource> getInputSources() {
+		return inputSources;
+	}
+
+	public void setInputSources(List<InputSource> inputSources) {
+		this.inputSources = inputSources;
 	}
 
 }

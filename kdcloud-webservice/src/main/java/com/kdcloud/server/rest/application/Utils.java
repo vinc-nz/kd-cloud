@@ -1,10 +1,12 @@
 package com.kdcloud.server.rest.application;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.restlet.Context;
 
 import com.kdcloud.server.dao.ModalityDao;
+import com.kdcloud.server.domain.InputSource;
 import com.kdcloud.server.domain.ServerAction;
 import com.kdcloud.server.domain.ServerMethod;
 import com.kdcloud.server.domain.ServerParameter;
@@ -27,6 +29,7 @@ public class Utils {
 		logger.info("new workflow with id " + workflow.getId());
 
 		ModEntity dataFeed = new ModEntity();
+		dataFeed.setInputSources(Arrays.asList(InputSource.HEARTBEAT));
 		dataFeed.setName("Data Feed");
 		ServerAction createDataset = new ServerAction(UserDataResource.URI,
 				ServerParameter.DATASET_ID.getName(), ServerMethod.PUT, false,

@@ -1,15 +1,12 @@
 package com.kdcloud.server.domain.datastore;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-
-import com.kdcloud.weka.core.Attribute;
 
 @PersistenceCapable
 public class Workflow implements Serializable {
@@ -31,9 +28,6 @@ public class Workflow implements Serializable {
 	String name;
 	
 	String description;
-	
-	@Persistent(serialized="true")
-	ArrayList<Attribute> inputSpec = new ArrayList<Attribute>();
 	
 	@Persistent(serialized="true")
 	Serializable executionData;
@@ -68,14 +62,6 @@ public class Workflow implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public ArrayList<Attribute> getInputSpec() {
-		return inputSpec;
-	}
-
-	public void setInputSpec(ArrayList<Attribute> inputSpec) {
-		this.inputSpec = inputSpec;
 	}
 
 	public Serializable getExecutionData() {

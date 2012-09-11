@@ -67,7 +67,7 @@ public class FileDataReader extends NodeAdapter {
 	public PortObject getOutput() {
 		double[] sign = readData(mFile);
 		ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-		attrs.add(QRS.INPUT_ATTRIBUTE);
+		attrs.add(new Attribute("sign"));
 		Instances data = new Instances("file", attrs, 20000);
 		for (int i = 0; i < sign.length; i++) {
 			double[] row = { sign[i] };

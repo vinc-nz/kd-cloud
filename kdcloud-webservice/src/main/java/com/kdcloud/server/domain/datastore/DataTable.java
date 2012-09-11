@@ -5,7 +5,6 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.persistence.FieldResult;
 
 import com.google.appengine.datanucleus.annotations.Unowned;
 import com.kdcloud.weka.core.Instances;

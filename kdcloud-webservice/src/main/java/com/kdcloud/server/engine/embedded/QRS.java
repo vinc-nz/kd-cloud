@@ -16,16 +16,10 @@ public class QRS extends NodeAdapter {
 	public static final int windowsSize = 15;
 	public static final int sampling_rate_ms = 10;
 
-	public static final Attribute INPUT_ATTRIBUTE = new Attribute("sign");
 	public static final Attribute OUTPUT_ATTRIBUTE = new Attribute("rr");
 
 	private BufferedInstances mStatus;
-
-	public static ArrayList<Attribute> getInputSpec() {
-		ArrayList<Attribute> attinfo = new ArrayList<Attribute>(1);
-		attinfo.add(INPUT_ATTRIBUTE);
-		return attinfo;
-	}
+	private int index = 0;
 
 	public static double[] highPass(double[] sig0, int nsamp) {
 		double[] highPass = new double[nsamp];
@@ -196,15 +190,21 @@ public class QRS extends NodeAdapter {
 		}
 		return result;
 	}
+	
+	@Override
+	public void configure(WorkerConfiguration config)
+			throws WrongConfigurationException {
+		if (config.containsKey("index")) {
+			index = (Integer) config.get("index");
+		}
+	}
 
 	@Override
 	public void setInput(PortObject input) throws WrongConnectionException {
 		String msg = null;
 		if (input instanceof BufferedInstances) {
 			BufferedInstances candidate = (BufferedInstances) input;
-			if (candidate.getInstances().numAttributes() == 0
-					|| !candidate.getInstances().attribute(0)
-							.equals(INPUT_ATTRIBUTE))
+			if (candidate.getInstances().numAttributes() <= index)
 				msg = "invalid instances header";
 			else
 				mStatus = candidate;
@@ -228,7 +228,7 @@ public class QRS extends NodeAdapter {
 			mStatus = new BufferedInstances(null);
 		} else {
 			String msg = "qrs input size: " + instances.size() + "    mean: "
-					+ instances.meanOrMode(0);
+					+ instances.meanOrMode(index);
 			logger.info(msg);
 			mStatus = new BufferedInstances(ecg(instances));
 		}

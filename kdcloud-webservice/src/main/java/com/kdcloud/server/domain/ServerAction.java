@@ -11,7 +11,6 @@ import org.restlet.data.Parameter;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 
-import com.kdcloud.weka.core.Attribute;
 import com.kdcloud.weka.core.Instances;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;

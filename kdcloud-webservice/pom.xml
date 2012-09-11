@@ -154,6 +154,12 @@
 	      <version>${restlet.version}</version>
 	    </dependency>
 	    
+	     <dependency>
+	      <groupId>org.restlet.jee</groupId>
+	      <artifactId>org.restlet.ext.xstream</artifactId>
+	      <version>${restlet.version}</version>
+	    </dependency>
+	    
 	    <dependency>
 	      <groupId>org.restlet.gae</groupId>
 	      <artifactId>org.restlet.ext.gwt</artifactId>
@@ -172,7 +178,7 @@
 	         <artifactId>reflections</artifactId>
 	         <version>0.9.8</version>
      	</dependency>
-	    
+     	
 <!-- 	    gmc server by local repo -->
 		<dependency>
 	      <groupId>com.google.android</groupId>

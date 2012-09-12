@@ -10,6 +10,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Put;
 
+import com.kdcloud.server.domain.Dataset;
 import com.kdcloud.server.domain.datastore.DataTable;
 import com.kdcloud.server.rest.api.UserDataResource;
 import com.kdcloud.server.rest.ext.InstancesRepresentation;
@@ -30,7 +31,7 @@ public class UserDataServerResource extends KDServerResource implements UserData
 	
 	@Override
 	@Put
-	public Long createDataset(Representation representation) {
+	public Dataset createDataset(Representation representation) {
 		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
 		Instances instances = null;
 		try {
@@ -47,7 +48,7 @@ public class UserDataServerResource extends KDServerResource implements UserData
 //		user.getTables().add(dataset);
 		user.setTable(dataset);
 		userDao.save(user);
-		return dataset.getId();
+		return new Dataset(dataset.getId());
 	}
 
 
@@ -58,7 +59,7 @@ public class UserDataServerResource extends KDServerResource implements UserData
 		userDao.delete(user);
 	}
 
-	public Long createDataset() {
+	public Dataset createDataset() {
 		String name = "Dataset of user " + user.getId();
 		Instances data = new Instances(name, new ArrayList<Attribute>(), 0);
 		return createDataset(new InstancesRepresentation(data));

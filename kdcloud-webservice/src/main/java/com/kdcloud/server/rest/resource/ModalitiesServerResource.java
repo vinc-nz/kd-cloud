@@ -24,7 +24,7 @@ public class ModalitiesServerResource extends KDServerResource implements Modali
 	}
 
 	@Override
-	@Get("xml")
+	@Get
 	public ModalityList listModalities() {
 		List<Modality> list = new LinkedList<Modality>();
 		for (ModEntity e : modalityDao.getAll()) {

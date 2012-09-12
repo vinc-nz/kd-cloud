@@ -4,6 +4,8 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Put;
 
+import com.kdcloud.server.domain.Dataset;
+
 import weka.core.Instances;
 
 
@@ -23,7 +25,7 @@ public interface UserDataResource {
 	 * @return the dataset id
 	 */
 	@Put
-	public Long createDataset(Representation representation);
+	public Dataset createDataset(Representation representation);
 	
 	
 	@Delete

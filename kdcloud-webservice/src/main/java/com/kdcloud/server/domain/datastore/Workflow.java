@@ -1,17 +1,20 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain.datastore;
+
+import java.io.Serializable;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.persistence.FieldResult;
-
-import com.google.appengine.datanucleus.annotations.Unowned;
-import weka.core.Instances;
 
 @PersistenceCapable
-public class DataTable {
+public class Workflow implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -22,32 +25,12 @@ public class DataTable {
     @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
 	Long id;
 	
-	@Persistent(serialized="true")
-	Object instances;
-	
-	@Persistent
-	@Unowned
-	User owner;
-	
 	String name;
 	
 	String description;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Instances getInstances() {
-		return (Instances) instances;
-	}
-
-	public void setInstances(Instances instances) {
-		this.instances = instances;
-	}
+	
+	@Persistent(serialized="true")
+	Serializable executionData;
 
 	public String getEncodedKey() {
 		return encodedKey;
@@ -57,12 +40,12 @@ public class DataTable {
 		this.encodedKey = encodedKey;
 	}
 
-	public User getOwner() {
-		return owner;
+	public Long getId() {
+		return id;
 	}
 
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -80,12 +63,15 @@ public class DataTable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof DataTable)
-			return ((DataTable) obj).id.equals(this.id);
-		return false;
+
+	public Serializable getExecutionData() {
+		return executionData;
 	}
+
+	public void setExecutionData(Serializable executionData) {
+		this.executionData = executionData;
+	}
+	
+	
 
 }

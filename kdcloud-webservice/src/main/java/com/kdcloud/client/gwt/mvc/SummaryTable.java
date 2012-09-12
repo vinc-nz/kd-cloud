@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import com.google.gwt.view.client.ListDataProvider;
-import com.kdcloud.server.entity.Dataset;
+import com.kdcloud.server.domain.Dataset;
 
 public class SummaryTable extends VerticalPanel implements ViewComponent {
 

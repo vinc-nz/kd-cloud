@@ -2,8 +2,8 @@ package com.kdcloud.server.engine;
 
 import java.util.Set;
 
-import com.kdcloud.server.entity.Report;
-import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.server.domain.Report;
+import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public interface Worker extends Runnable {

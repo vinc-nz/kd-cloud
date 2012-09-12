@@ -1,10 +1,13 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.restlet.data.Form;
 
+import com.kdcloud.server.domain.ServerAction;
+import com.kdcloud.server.domain.ServerMethod;
+import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.server.rest.api.DatasetResource;
 import com.kdcloud.server.rest.api.WorkflowResource;
 

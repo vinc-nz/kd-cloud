@@ -1,16 +1,18 @@
 package com.kdcloud.server.rest.application;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.restlet.Context;
 
 import com.kdcloud.server.dao.ModalityDao;
+import com.kdcloud.server.domain.InputSource;
+import com.kdcloud.server.domain.ServerAction;
+import com.kdcloud.server.domain.ServerMethod;
+import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.server.domain.datastore.ModEntity;
+import com.kdcloud.server.domain.datastore.Workflow;
 import com.kdcloud.server.engine.embedded.EmbeddedEngine;
-import com.kdcloud.server.entity.Modality;
-import com.kdcloud.server.entity.ServerAction;
-import com.kdcloud.server.entity.ServerMethod;
-import com.kdcloud.server.entity.ServerParameter;
-import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.rest.api.WorkflowResource;
@@ -26,22 +28,21 @@ public class Utils {
 		pc.getWorkflowDao().save(workflow);
 		logger.info("new workflow with id " + workflow.getId());
 
-		Modality dataFeed = new Modality();
+		ModEntity dataFeed = new ModEntity();
+		dataFeed.setInputSources(Arrays.asList(InputSource.HEARTBEAT));
 		dataFeed.setName("Data Feed");
 		ServerAction createDataset = new ServerAction(UserDataResource.URI,
 				ServerParameter.DATASET_ID.getName(), ServerMethod.PUT, false,
 				10 * 60 * 1000);
-		createDataset.setDataSpec(workflow.getInputSpec());
 		dataFeed.getServerCommands().add(createDataset);
 		logger.info("modality " + dataFeed.getName() + " action " + createDataset);
 		ServerAction uploadData = new ServerAction(DatasetResource.URI, null,
 				ServerMethod.PUT, true, 10 * 60 * 1000);
-		uploadData.setDataSpec(workflow.getInputSpec());
 		dataFeed.getServerCommands().add(uploadData);
 		logger.info("modality " + dataFeed.getName() + " action " + uploadData);
 		modalityDao.save(dataFeed);
 
-		Modality singleAnalysis = new Modality();
+		ModEntity singleAnalysis = new ModEntity();
 		singleAnalysis.setName("Single Analysis");
 		ServerAction analyze = new ServerAction(WorkflowResource.URI, null,
 				ServerMethod.POST, true, 0);
@@ -52,7 +53,7 @@ public class Utils {
 		logger.info("modality " + singleAnalysis.getName() + " action " + analyze);
 		modalityDao.save(singleAnalysis);
 
-		Modality globalAnalysis = new Modality();
+		ModEntity globalAnalysis = new ModEntity();
 		globalAnalysis.setName("Global Analysis");
 		ServerAction globalAnalyze = new ServerAction(
 				GlobalAnalysisResource.URI, null, ServerMethod.POST, true, 0);

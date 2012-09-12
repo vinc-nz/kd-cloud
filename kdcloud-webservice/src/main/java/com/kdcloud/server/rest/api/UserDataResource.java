@@ -24,10 +24,6 @@ public interface UserDataResource {
 	@Put
 	public Long createDataset(Instances instances);
 	
-//	@Get
-//	public ArrayList<Dataset> listDataset();
-//	@Get
-//	public Long createDataset();
 	
 	@Delete
 	public void deleteAllData();

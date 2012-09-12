@@ -7,7 +7,7 @@ import org.restlet.client.resource.Get;
 import org.restlet.client.resource.Put;
 import org.restlet.client.resource.Result;
 
-import com.kdcloud.server.entity.Dataset;
+import com.kdcloud.server.domain.Dataset;
 
 public interface UserDataResourceProxy extends ClientProxy {
 	

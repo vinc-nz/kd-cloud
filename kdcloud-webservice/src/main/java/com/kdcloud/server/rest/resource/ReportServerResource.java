@@ -4,9 +4,9 @@ import org.restlet.Application;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
-import com.kdcloud.server.entity.Report;
-import com.kdcloud.server.entity.ServerParameter;
-import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.domain.Report;
+import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.server.domain.datastore.Task;
 import com.kdcloud.server.rest.api.ReportResource;
 
 public class ReportServerResource extends KDServerResource implements ReportResource {

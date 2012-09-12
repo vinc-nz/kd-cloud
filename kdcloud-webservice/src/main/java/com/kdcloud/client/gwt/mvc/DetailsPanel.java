@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.kdcloud.server.entity.Dataset;
+import com.kdcloud.server.domain.Dataset;
 
 public class DetailsPanel extends VerticalPanel implements ViewComponent {
 	

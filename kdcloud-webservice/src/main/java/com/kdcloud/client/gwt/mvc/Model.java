@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.kdcloud.server.entity.Dataset;
+import com.kdcloud.server.domain.Dataset;
 
 public class Model {
 

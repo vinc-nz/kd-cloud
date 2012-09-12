@@ -1,18 +1,17 @@
 package com.kdcloud.server.rest.api;
 
-import java.util.ArrayList;
-
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 
-import com.kdcloud.server.entity.Modality;
+import com.kdcloud.server.domain.Modality;
+import com.kdcloud.server.domain.ModalityList;
 
 public interface ModalitiesResource {
 	
 	public static final String URI = "/modalities";
 	
 	@Get
-	public ArrayList<Modality> listModalities();
+	public ModalityList listModalities();
 	
 	@Post
 	public void createModality(Modality modality);

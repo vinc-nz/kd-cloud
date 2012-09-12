@@ -6,7 +6,7 @@ import org.restlet.Application;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Put;
 
-import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.domain.datastore.DataTable;
 import com.kdcloud.server.rest.api.UserDataResource;
 import weka.core.Attribute;
 import weka.core.Instances;
@@ -35,12 +35,7 @@ public class UserDataServerResource extends KDServerResource implements UserData
 		return dataset.getId();
 	}
 
-//	@Override
-//	@Get
-//	public Collection<DataTable> listDataset() {
-//		ArrayList<DataTable> list = new ArrayList<DataTable>(user.getTables());
-//		return list;
-//	}
+
 
 	@Override
 	@Delete
@@ -48,8 +43,6 @@ public class UserDataServerResource extends KDServerResource implements UserData
 		userDao.delete(user);
 	}
 
-//	@Override
-//	@Get
 	public Long createDataset() {
 		String name = "Dataset of user " + user.getId();
 		Instances data = new Instances(name, new ArrayList<Attribute>(), 0);

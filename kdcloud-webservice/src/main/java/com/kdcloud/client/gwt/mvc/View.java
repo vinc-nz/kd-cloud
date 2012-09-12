@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.user.client.Window;
-import com.kdcloud.server.entity.Dataset;
+import com.kdcloud.server.domain.Dataset;
 
 public class View implements ViewComponent {
 	

@@ -1,6 +1,6 @@
 package com.kdcloud.server.rest.application;
 
-import java.io.Serializable;
+import java.io.IOException;
 
 import junit.framework.Assert;
 
@@ -15,9 +15,8 @@ import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
-import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
-import org.restlet.representation.ObjectRepresentation;
+import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.routing.Router;
@@ -26,10 +25,8 @@ import org.restlet.security.MapVerifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.engine.embedded.EmbeddedEngine;
-import com.kdcloud.server.rest.resource.UserDataServerResource;
-import weka.core.DenseInstance;
-import weka.core.Instances;
+import com.kdcloud.server.domain.ModalityList;
+import com.kdcloud.server.rest.api.ModalitiesResource;
 
 public class RestletTestCase {
 
@@ -55,6 +52,7 @@ public class RestletTestCase {
 		@Override
 		public void handle(Request request, Response response) {
 			helper.setUp();
+			Utils.initDatabase(new GAEContext(getLogger()));
 			super.handle(request, response);
 			helper.tearDown();
 		}
@@ -101,22 +99,17 @@ public class RestletTestCase {
 				"login", "secret");
 
 		ClientResource data = new ClientResource(BASE_URI
-				+ UserDataServerResource.URI);
+				+ ModalitiesResource.URI);
 		data.setChallengeResponse(authentication);
-		Instances instances = new Instances("test", EmbeddedEngine.getQRSWorkflow().getInputSpec(), 0);
-		instances.add(new DenseInstance(0, new double[]{1, 2}));
-		ObjectRepresentation<Serializable> instancesRep = new ObjectRepresentation<Serializable>(instances);
+		Representation rep = data.get();
+		XstreamRepresentation<ModalityList> xstream = 
+				new XstreamRepresentation<ModalityList>(rep, ModalityList.class);
 		try {
-			Representation response = data
-					.put(instancesRep, MediaType.APPLICATION_JAVA_OBJECT);
-			ObjectRepresentation<Serializable> id = new ObjectRepresentation<Serializable>(
-					response);
-			Assert.assertTrue(id.getObject() instanceof Long);
-		} catch (Exception e) {
+			System.out.println(xstream.getObject().asList().size());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Assert.fail();
 		}
-
 	}
 
 }

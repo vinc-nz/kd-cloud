@@ -1,11 +1,7 @@
-package com.kdcloud.server.entity;
+package com.kdcloud.server.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.w3c.dom.Document;
 
 import weka.core.Instances;
 

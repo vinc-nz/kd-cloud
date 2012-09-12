@@ -3,7 +3,7 @@ package com.kdcloud.server.tasks;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
-import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.domain.datastore.Task;
 
 
 

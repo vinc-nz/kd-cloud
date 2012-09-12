@@ -3,7 +3,7 @@ package com.kdcloud.server.rest.api;
 import org.restlet.data.Form;
 import org.restlet.resource.Post;
 
-import com.kdcloud.server.entity.ServerParameter;
+import com.kdcloud.server.domain.ServerParameter;
 
 /**
  * URI /process/ecg/{id}

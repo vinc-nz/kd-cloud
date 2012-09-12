@@ -12,14 +12,15 @@ import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
+import weka.core.DenseInstance;
+import weka.core.Instance;
+import weka.core.Instances;
+
 import com.kdcloud.server.entity.Modality;
 import com.kdcloud.server.entity.Report;
 import com.kdcloud.server.entity.ServerAction;
 import com.kdcloud.server.entity.ServerMethod;
 import com.kdcloud.server.entity.ServerParameter;
-import com.kdcloud.weka.core.DenseInstance;
-import com.kdcloud.weka.core.Instance;
-import com.kdcloud.weka.core.Instances;
 
 public class ModalityExecution extends Thread {
 

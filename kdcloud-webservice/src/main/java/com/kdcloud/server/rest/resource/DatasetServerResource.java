@@ -11,7 +11,7 @@ import org.restlet.resource.Put;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.rest.api.DatasetResource;
-import com.kdcloud.weka.core.Instances;
+import weka.core.Instances;
 
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
 	

@@ -6,7 +6,7 @@ import java.util.Set;
 import com.kdcloud.server.entity.ServerParameter;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.weka.core.Instances;
+import weka.core.Instances;
 
 public class UserDataReader extends NodeAdapter {
 	

@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
-import com.kdcloud.weka.core.Instances;
+import weka.core.Instances;
 
 public class Report implements Serializable {
 

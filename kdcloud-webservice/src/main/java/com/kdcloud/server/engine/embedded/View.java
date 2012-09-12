@@ -1,6 +1,6 @@
 package com.kdcloud.server.engine.embedded;
 
-import com.kdcloud.weka.core.Instances;
+import weka.core.Instances;
 
 public class View implements PortObject {
 	

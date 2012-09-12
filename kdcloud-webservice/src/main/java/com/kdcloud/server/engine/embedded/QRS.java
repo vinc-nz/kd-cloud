@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import com.kdcloud.weka.core.Attribute;
-import com.kdcloud.weka.core.DenseInstance;
-import com.kdcloud.weka.core.Instance;
-import com.kdcloud.weka.core.Instances;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instance;
+import weka.core.Instances;
 
 public class QRS extends NodeAdapter {
 

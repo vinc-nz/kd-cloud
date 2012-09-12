@@ -172,6 +172,13 @@
 	         <artifactId>reflections</artifactId>
 	         <version>0.9.8</version>
      	</dependency>
+     	
+	    <dependency>
+	        <groupId>nz.ac.waikato.cms.weka</groupId>
+	        <artifactId>weka-dev</artifactId>
+	        <version>3.7.7</version>
+	    </dependency>
+	    
 	    
 <!-- 	    gmc server by local repo -->
 		<dependency>

@@ -3,7 +3,7 @@ package com.kdcloud.server.rest.api;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Put;
 
-import com.kdcloud.weka.core.Instances;
+import weka.core.Instances;
 
 
 /**

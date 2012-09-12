@@ -8,7 +8,7 @@ import javax.jdo.annotations.PrimaryKey;
 import javax.persistence.FieldResult;
 
 import com.google.appengine.datanucleus.annotations.Unowned;
-import com.kdcloud.weka.core.Instances;
+import weka.core.Instances;
 
 @PersistenceCapable
 public class DataTable {
@@ -23,7 +23,7 @@ public class DataTable {
 	Long id;
 	
 	@Persistent(serialized="true")
-	Instances instances;
+	Object instances;
 	
 	@Persistent
 	@Unowned
@@ -42,7 +42,7 @@ public class DataTable {
 	}
 
 	public Instances getInstances() {
-		return instances;
+		return (Instances) instances;
 	}
 
 	public void setInstances(Instances instances) {

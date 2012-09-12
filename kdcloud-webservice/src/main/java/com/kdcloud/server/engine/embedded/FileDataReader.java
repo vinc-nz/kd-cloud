@@ -7,9 +7,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import com.kdcloud.weka.core.Attribute;
-import com.kdcloud.weka.core.DenseInstance;
-import com.kdcloud.weka.core.Instances;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instances;
 
 public class FileDataReader extends NodeAdapter {
 	

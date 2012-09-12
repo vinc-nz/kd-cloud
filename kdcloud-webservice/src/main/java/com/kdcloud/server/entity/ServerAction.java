@@ -11,8 +11,8 @@ import org.restlet.data.Parameter;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 
-import com.kdcloud.weka.core.Attribute;
-import com.kdcloud.weka.core.Instances;
+import weka.core.Attribute;
+import weka.core.Instances;
 
 public class ServerAction implements Serializable {
 

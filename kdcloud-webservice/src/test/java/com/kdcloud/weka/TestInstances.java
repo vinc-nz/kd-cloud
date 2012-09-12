@@ -2,8 +2,8 @@ package com.kdcloud.weka;
 
 import java.util.ArrayList;
 
-import com.kdcloud.weka.core.Attribute;
-import com.kdcloud.weka.core.Instances;
+import weka.core.Attribute;
+import weka.core.Instances;
 
 public class TestInstances {
 

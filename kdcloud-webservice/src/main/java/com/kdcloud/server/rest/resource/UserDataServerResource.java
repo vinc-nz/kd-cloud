@@ -8,8 +8,8 @@ import org.restlet.resource.Put;
 
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.rest.api.UserDataResource;
-import com.kdcloud.weka.core.Attribute;
-import com.kdcloud.weka.core.Instances;
+import weka.core.Attribute;
+import weka.core.Instances;
 
 public class UserDataServerResource extends KDServerResource implements UserDataResource {
 	

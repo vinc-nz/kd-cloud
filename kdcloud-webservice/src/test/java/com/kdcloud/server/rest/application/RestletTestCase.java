@@ -28,8 +28,8 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.engine.embedded.EmbeddedEngine;
 import com.kdcloud.server.rest.resource.UserDataServerResource;
-import com.kdcloud.weka.core.DenseInstance;
-import com.kdcloud.weka.core.Instances;
+import weka.core.DenseInstance;
+import weka.core.Instances;
 
 public class RestletTestCase {
 

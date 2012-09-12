@@ -28,8 +28,8 @@ import com.kdcloud.server.rest.api.ModalitiesResource;
 import com.kdcloud.server.rest.api.UserDataResource;
 import com.kdcloud.server.rest.api.WorkflowResource;
 import com.kdcloud.server.rest.application.Utils;
-import com.kdcloud.weka.core.DenseInstance;
-import com.kdcloud.weka.core.Instances;
+import weka.core.DenseInstance;
+import weka.core.Instances;
 
 public class ServerResourceTest {
 

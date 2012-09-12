@@ -1,5 +1,6 @@
 package com.kdcloud.server.rest.api;
 
+import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Put;
 
@@ -22,7 +23,7 @@ public interface UserDataResource {
 	 * @return the dataset id
 	 */
 	@Put
-	public Long createDataset(Instances instances);
+	public Long createDataset(Representation representation);
 	
 	
 	@Delete

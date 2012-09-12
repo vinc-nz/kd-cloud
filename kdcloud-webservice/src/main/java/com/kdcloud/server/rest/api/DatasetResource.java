@@ -1,5 +1,6 @@
 package com.kdcloud.server.rest.api;
 
+import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
@@ -24,7 +25,7 @@ public interface DatasetResource {
 	 * @param values the data
 	 */
 	@Put
-	public void uploadData(Instances data);
+	public void uploadData(Representation representation);
 	
 	@Post
 	public void addCommitter(String email);

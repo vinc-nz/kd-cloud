@@ -1,6 +1,7 @@
 package com.kdcloud.server.rest.application;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import junit.framework.Assert;
 
@@ -15,18 +16,27 @@ import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
+import org.restlet.ext.xml.XmlRepresentation;
 import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.MapVerifier;
+import org.xml.sax.InputSource;
+
+import weka.core.DenseInstance;
+import weka.core.Instances;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.kdcloud.server.domain.InputSpecification;
 import com.kdcloud.server.domain.ModalityList;
 import com.kdcloud.server.rest.api.ModalitiesResource;
+import com.kdcloud.server.rest.api.UserDataResource;
+import com.kdcloud.server.rest.ext.InstancesRepresentation;
 
 public class RestletTestCase {
 
@@ -98,18 +108,12 @@ public class RestletTestCase {
 		ChallengeResponse authentication = new ChallengeResponse(scheme,
 				"login", "secret");
 
-		ClientResource data = new ClientResource(BASE_URI
-				+ ModalitiesResource.URI);
-		data.setChallengeResponse(authentication);
-		Representation rep = data.get();
-		XstreamRepresentation<ModalityList> xstream = 
-				new XstreamRepresentation<ModalityList>(rep, ModalityList.class);
-		try {
-			System.out.println(xstream.getObject().asList().size());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ClientResource cr = new ClientResource(BASE_URI
+				+ UserDataResource.URI);
+		cr.setChallengeResponse(authentication);
+		Instances instances = InputSpecification.newInstances("test", 3);
+//		instances.add(new DenseInstance(1, new double[] {1,2,3}));
+		cr.put(new InstancesRepresentation(MediaType.APPLICATION_JSON, instances));
 	}
 
 }

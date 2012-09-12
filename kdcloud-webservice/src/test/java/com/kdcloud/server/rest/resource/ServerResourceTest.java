@@ -16,12 +16,14 @@ import weka.core.Instances;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.kdcloud.server.domain.InputSpecification;
 import com.kdcloud.server.domain.Report;
 import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.server.domain.datastore.DataTable;
 import com.kdcloud.server.domain.datastore.User;
 import com.kdcloud.server.domain.datastore.Workflow;
 import com.kdcloud.server.engine.embedded.EmbeddedEngine;
+import com.kdcloud.server.rest.ext.InstancesRepresentation;
 
 public class ServerResourceTest {
 
@@ -70,7 +72,7 @@ public class ServerResourceTest {
 		double[] cells = { 1, 2 };
 		Instances data = new Instances(dataset.getInstances());
 		data.add(new DenseInstance(0, cells));
-		datasetResource.uploadData(data);
+		datasetResource.uploadData(new InstancesRepresentation(data));
 		
 		assertEquals(1, datasetResource.getData().size());
 
@@ -101,8 +103,8 @@ public class ServerResourceTest {
 	@Test
 	public void testWorkflow() {
 		Workflow workflow = EmbeddedEngine.getQRSWorkflow();
-		Instances instances = new Instances("test", workflow.getInputSpec(), 0);
-		userDataResource.createDataset(instances);
+		Instances instances = InputSpecification.newInstances("test", 1);
+		userDataResource.createDataset(new InstancesRepresentation(instances));
 		WorkflowServerResource workflowResource = new WorkflowServerResource(application, workflow);
 		Form form = new Form();
 		form.add(ServerParameter.USER_ID.getName(), USER_ID);
@@ -113,13 +115,13 @@ public class ServerResourceTest {
 	@Test
 	public void testGlobalData() {
 		Workflow workflow = EmbeddedEngine.getQRSWorkflow();
-		Instances instances = new Instances("test", workflow.getInputSpec(), 0);
+		Instances instances = InputSpecification.newInstances("test", 1);
 		String[] ids = { "a", "b", "c" };
 		for (String s : ids) {
 			User user = new User();
 			user.setId(s);
 			userDataResource.user = user;
-			userDataResource.createDataset(instances);
+			userDataResource.createDataset(new InstancesRepresentation(instances));
 		}
 		GlobalDataServerResource globalDataResource = new GlobalDataServerResource(application);
 		assertTrue(globalDataResource.getAllUsersWithData().contains(ids[0]));

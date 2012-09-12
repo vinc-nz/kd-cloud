@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.data.Form;
+import org.restlet.representation.Representation;
 
 import weka.core.DenseInstance;
 import weka.core.Instances;
@@ -17,7 +18,6 @@ import weka.core.Instances;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.domain.InputSpecification;
-import com.kdcloud.server.domain.Report;
 import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.server.domain.datastore.DataTable;
 import com.kdcloud.server.domain.datastore.User;
@@ -108,7 +108,7 @@ public class ServerResourceTest {
 		WorkflowServerResource workflowResource = new WorkflowServerResource(application, workflow);
 		Form form = new Form();
 		form.add(ServerParameter.USER_ID.getName(), USER_ID);
-		Report r = workflowResource.execute(form);
+		Representation r = workflowResource.execute(form);
 		assertNotNull(r);
 	}
 
@@ -130,7 +130,7 @@ public class ServerResourceTest {
 
 		GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource(application, workflow);
 		Form form = new Form();
-		assertEquals(ids.length, globalAnalysisResource.execute(form).size());
+		globalAnalysisResource.execute(form);
 	}
 
 	@Test

@@ -2,7 +2,10 @@ package com.kdcloud.server.engine;
 
 import java.util.Set;
 
-import com.kdcloud.server.domain.Report;
+import org.w3c.dom.Document;
+
+import weka.core.Instances;
+
 import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.server.persistence.PersistenceContext;
 
@@ -25,6 +28,8 @@ public interface Worker extends Runnable {
 	
 	public boolean configure();
 
-	public Report getReport();
+	public Document getDom();
+	
+	public Instances getInstances();
 
 }

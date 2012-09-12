@@ -7,7 +7,10 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.kdcloud.server.domain.Report;
+import org.w3c.dom.Document;
+
+import weka.core.Instances;
+
 import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.server.engine.Worker;
 import com.kdcloud.server.persistence.PersistenceContext;
@@ -111,10 +114,17 @@ public class EmbeddedEngineWorker implements Worker {
 	}
 
 	@Override
-	public Report getReport() {
+	public Document getDom() {
 		if (mState instanceof View) {
-			View v = (View) mState;
-			return new Report(v.getData(), v.getViewSpec());
+			return ((View) mState).getDom();
+		}
+		return null;
+	}
+
+	@Override
+	public Instances getInstances() {
+		if (mState instanceof BufferedInstances) {
+			return ((BufferedInstances) mState).getInstances();
 		}
 		return null;
 	}
@@ -123,5 +133,4 @@ public class EmbeddedEngineWorker implements Worker {
 	public int getStatus() {
 		return status;
 	}
-
 }

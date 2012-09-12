@@ -1,12 +1,19 @@
 package com.kdcloud.server.rest.resource;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Status;
+import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.kdcloud.server.domain.Report;
 import com.kdcloud.server.domain.ServerParameter;
@@ -40,18 +47,30 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 
 	@Override
 	@Post
-	public ArrayList<Report> execute(Form form) {
-		List<User> users = userDao.list();
-		ArrayList<Report> globalReport = new ArrayList<Report>(users.size());
-		for (User subject : users) {
-			form.add(ServerParameter.USER_ID.getName(), subject.getId());
-			Task task = new Task();
-			task.setApplicant(user);
-			task.setWorkflow(workflow);
-			globalReport.add(execute(task, form));
-			form.removeFirst(ServerParameter.USER_ID.getName());
+	public Representation execute(Form form) {
+		try {
+			DomRepresentation representation = new DomRepresentation(
+	                MediaType.TEXT_XML);
+			Document d = representation.getDocument();
+			Element globalReport = d.createElement("reports");
+			d.appendChild(globalReport);
+			List<User> users = userDao.list();
+			for (User subject : users) {
+				form.add(ServerParameter.USER_ID.getName(), subject.getId());
+				Task task = new Task();
+				task.setApplicant(user);
+				task.setWorkflow(workflow);
+				Report report = execute(task, form);
+				Node reportNode = report.getDom().getFirstChild();
+				globalReport.appendChild(d.importNode(reportNode, true));
+				form.removeFirst(ServerParameter.USER_ID.getName());
+			}
+			return representation;
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, "error generating xml", e);
+			setStatus(Status.SERVER_ERROR_INTERNAL);
+			return null;
 		}
-		return globalReport;
 	}
 
 }

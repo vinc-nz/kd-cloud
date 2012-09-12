@@ -18,7 +18,8 @@ public class QRS extends NodeAdapter {
 
 	public static final Attribute OUTPUT_ATTRIBUTE = new Attribute("rr");
 
-	private BufferedInstances mStatus;
+	private BufferedInstances input;
+	private BufferedInstances output;
 	private int index = 0;
 
 	public static double[] highPass(double[] sig0, int nsamp) {
@@ -161,11 +162,17 @@ public class QRS extends NodeAdapter {
 		}
 		return res;
 	}
-
-	public static Instances ecg(Instances data) {
+	
+	public QRS() {
 		ArrayList<Attribute> attrs = new ArrayList<Attribute>(1);
 		attrs.add(OUTPUT_ATTRIBUTE);
-		Instances result = new Instances("rr", attrs, data.numInstances() / 100);
+		Instances result = new Instances("rr", attrs, 1000);
+		output = new BufferedInstances(result);
+	}
+
+	public Instances ecg() {
+		Instances data = input.getInstances();
+		Instances result = output.getInstances();
 		double[] sign = readData(data);
 		int nsamp = sign.length;
 		double[] highPass = highPass(sign, nsamp);
@@ -207,7 +214,7 @@ public class QRS extends NodeAdapter {
 			if (candidate.getInstances().numAttributes() <= index)
 				msg = "invalid instances header";
 			else
-				mStatus = candidate;
+				this.input = candidate;
 		} else {
 			msg = "invalid input type";
 		}
@@ -217,20 +224,19 @@ public class QRS extends NodeAdapter {
 
 	@Override
 	public PortObject getOutput() {
-		return mStatus;
+		return output;
 	}
 
 	@Override
 	public void run(Logger logger) {
-		Instances instances = mStatus.getInstances();
+		Instances instances = input.getInstances();
 		if (instances.size() < 2) {
 			logger.info("input size is too small, doing nothing");
-			mStatus = new BufferedInstances(null);
 		} else {
 			String msg = "qrs input size: " + instances.size() + "    mean: "
 					+ instances.meanOrMode(index);
 			logger.info(msg);
-			mStatus = new BufferedInstances(ecg(instances));
+			ecg();
 		}
 	}
 

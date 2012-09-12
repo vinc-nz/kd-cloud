@@ -42,9 +42,7 @@ public class QueueWorkerServerResource extends WorkerServerResource {
 		Report report = execute(task, form);
 
 		getLogger().info("work done");
-		String label = "analysis requested by %s".replace("%s", task
-				.getApplicant().getId());
-		report.setName(label);
+		
 		task.setReport(report);
 		taskDao.save(task);
 		notifyApplicant(task);

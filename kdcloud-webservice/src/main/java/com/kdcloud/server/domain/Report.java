@@ -3,45 +3,51 @@ package com.kdcloud.server.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.w3c.dom.Document;
+
 import weka.core.Instances;
 
 public class Report implements Serializable {
-
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	String name;
-
 	Date date = new Date();
-
+	
+	Document dom;
+	
 	Instances data;
 	
-	String viewSpec;
-	
 	public Report() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public Report(Instances data, String viewSpec) {
+	public Report(Document dom) {
+		super();
+		this.dom = dom;
+	}
+
+
+	public Report(Instances data) {
+		super();
 		this.data = data;
-		this.viewSpec = viewSpec;
+	}
+	
+
+	public Report(Document dom, Instances data) {
+		super();
+		this.dom = dom;
+		this.data = data;
 	}
 
-	public String getName() {
-		return name;
+	public Document getDom() {
+		return dom;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDom(Document dom) {
+		this.dom = dom;
 	}
 
 	public Instances getData() {
@@ -52,12 +58,10 @@ public class Report implements Serializable {
 		this.data = data;
 	}
 
-	public String getViewSpec() {
-		return viewSpec;
+	public Date getDate() {
+		return date;
 	}
-
-	public void setViewSpec(String viewSpec) {
-		this.viewSpec = viewSpec;
-	}
+	
+	
 
 }

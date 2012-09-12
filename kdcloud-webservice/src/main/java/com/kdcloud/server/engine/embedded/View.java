@@ -1,24 +1,26 @@
 package com.kdcloud.server.engine.embedded;
 
-import weka.core.Instances;
+import javax.xml.parsers.DocumentBuilder;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 public class View implements PortObject {
 	
-	private String mXml;
-	private BufferedInstances reference;
+	Document dom;
 	
-	public View(String xml, BufferedInstances reference) {
-		super();
-		this.mXml = xml;
-		this.reference = reference;
+
+	public View(Document viewSpec, DocumentBuilder db) {
+        Node originalRoot = viewSpec.getDocumentElement();
+
+        dom = db.newDocument();
+        Node copiedRoot = dom.importNode(originalRoot, true);
+        dom.appendChild(copiedRoot);
 	}
 	
-	public String getViewSpec() {
-		return mXml;
-	}
 	
-	public Instances getData() {
-		return reference.getInstances();
+	public Document getDom() {
+		return dom;
 	}
 	
 }

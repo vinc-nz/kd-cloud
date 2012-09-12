@@ -40,8 +40,9 @@ public abstract class WorkerServerResource extends KDServerResource {
 		}
 		if (worker.configure())
 			worker.run();
-		if (worker.getStatus() == Worker.STATUS_JOB_COMPLETED)
-			return worker.getReport();
+		if (worker.getStatus() == Worker.STATUS_JOB_COMPLETED) {
+			return new Report(worker.getDom(), worker.getInstances());
+		}
 		else
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 		return null;

@@ -35,7 +35,7 @@ public class Task {
 	Workflow workflow;
 	
 	@Persistent(serialized = "true")
-	Report report = new Report();
+	Report report;
 	
 	public Task(DataTable table, Workflow workflow) {
 		this.workingTable = table;

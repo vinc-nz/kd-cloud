@@ -1,7 +1,12 @@
 package com.kdcloud.server.rest.resource;
 
+import java.util.logging.Level;
+
 import org.restlet.Application;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Status;
+import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
@@ -10,6 +15,7 @@ import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.server.domain.datastore.Task;
 import com.kdcloud.server.domain.datastore.Workflow;
 import com.kdcloud.server.rest.api.WorkflowResource;
+import com.kdcloud.server.rest.ext.InstancesRepresentation;
 
 public class WorkflowServerResource extends WorkerServerResource implements
 		WorkflowResource {
@@ -35,11 +41,16 @@ public class WorkflowServerResource extends WorkerServerResource implements
 
 	@Override
 	@Post
-	public Report execute(Form form) {
+	public Representation execute(Form form) {
 		Task task = new Task();
 		task.setApplicant(user);
 		task.setWorkflow(workflow);
-		return execute(task, form);
+		Report report = execute(task, form);
+		if (report.getDom() != null)
+			return new DomRepresentation(MediaType.APPLICATION_XML, report.getDom());
+		if (report.getData() != null)
+			return new InstancesRepresentation(MediaType.TEXT_CSV, report.getData());
+		return null;
 	}
 
 }

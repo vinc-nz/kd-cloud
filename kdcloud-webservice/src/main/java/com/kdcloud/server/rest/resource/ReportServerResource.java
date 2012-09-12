@@ -1,6 +1,8 @@
 package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
+import org.restlet.data.MediaType;
+import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
@@ -8,6 +10,7 @@ import com.kdcloud.server.domain.Report;
 import com.kdcloud.server.domain.ServerParameter;
 import com.kdcloud.server.domain.datastore.Task;
 import com.kdcloud.server.rest.api.ReportResource;
+import com.kdcloud.server.rest.ext.InstancesRepresentation;
 
 public class ReportServerResource extends KDServerResource implements ReportResource {
 	
@@ -37,8 +40,12 @@ public class ReportServerResource extends KDServerResource implements ReportReso
 
 	@Override
 	@Get
-	public Report retrive() {
-		return report;
+	public Representation retrive() {
+		if (report.getDom() != null)
+			return new DomRepresentation(MediaType.APPLICATION_XML, report.getDom());
+		if (report.getData() != null)
+			return new InstancesRepresentation(MediaType.TEXT_CSV, report.getData());
+		return null;
 	}
 
 }

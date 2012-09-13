@@ -95,7 +95,9 @@ public class ServerParameter implements Serializable {
 	}
 
 	public int hashCode() {
-		return value.hashCode();
+		if (isXPathReference())
+			return value.hashCode();
+		return getName().hashCode();
 	};
 
 	String getPattern() {

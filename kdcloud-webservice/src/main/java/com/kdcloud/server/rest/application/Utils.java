@@ -48,7 +48,7 @@ public class Utils {
 				ServerMethod.POST, true, 0);
 		analyze = analyze.setParameter(ServerParameter.WORKFLOW_ID,
 				Long.toString(workflow.getId()));
-		analyze.addParameter(ServerParameter.USER_ID);
+		analyze.addParameter(ServerParameter.USER_ID.toInputReference());
 		singleAnalysis.getServerCommands().add(analyze);
 		logger.info("modality " + singleAnalysis.getName() + " action " + analyze);
 		modalityDao.save(singleAnalysis);

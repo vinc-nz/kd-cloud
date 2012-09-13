@@ -8,11 +8,11 @@ import java.util.Set;
 
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
-import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 
 import weka.core.Instances;
 
+import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -132,7 +132,7 @@ public class ServerAction implements Serializable {
 	}
 	
 	public Representation getPutRepresentation(Instances instances) {
-		return new ObjectRepresentation<Serializable>(instances);
+		return new InstancesRepresentation(instances);
 	}
 	
 	@Override

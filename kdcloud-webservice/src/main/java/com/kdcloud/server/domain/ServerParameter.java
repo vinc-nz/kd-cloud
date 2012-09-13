@@ -16,6 +16,9 @@ public class ServerParameter implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static final String INPUT_PREFIX = "input:";
+	private static final String XPATH_PREFIX = "xpath:";
 
 	public static final ServerParameter DATASET_ID = new ServerParameter(
 			"datasetId");
@@ -28,14 +31,14 @@ public class ServerParameter implements Serializable {
 
 	public static Set<ServerParameter> getParamsFromUri(String uri) {
 		Set<ServerParameter> params = new HashSet<ServerParameter>();
-		Matcher m = Pattern.compile("\\{\\w+\\}").matcher(uri);
+		Matcher m = Pattern.compile("\\{.+?\\}").matcher(uri);
 		while (m.find()) {
 			String param = m.group().replaceAll("[\\{\\}]", "");
 			params.add(new ServerParameter(param));
 		}
 		return params;
 	}
-
+	
 	@XStreamAsAttribute
 	private String value;
 
@@ -43,17 +46,36 @@ public class ServerParameter implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ServerParameter(String name) {
+	public ServerParameter(String value) {
 		super();
-		this.value = name;
+		this.value = value;
 	}
 
-	public void setName(String name) {
-		this.value = name;
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	public String getValue() {
+		return value;
 	}
 
 	public String getName() {
-		return value;
+		if (isXPathReference())
+			return "";
+		return value.replaceAll(INPUT_PREFIX, "");
+	}
+	
+	public boolean isXPathReference() {
+		return value.contains(XPATH_PREFIX);
+	}
+	
+	public boolean isInputReference() {
+		return value.contains(INPUT_PREFIX);
+	}
+	
+	public ServerParameter toInputReference() {
+		String newValue = (isInputReference() ? value : INPUT_PREFIX + value);
+		return new ServerParameter(newValue);
 	}
 
 	@Override
@@ -63,8 +85,12 @@ public class ServerParameter implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ServerParameter)
-			return ((ServerParameter) obj).value.equals(value);
+		if (obj instanceof ServerParameter) {
+			ServerParameter other = (ServerParameter) obj;
+			if (isXPathReference() && other.isXPathReference())
+				return value.equals(other.value);
+			return getName().equals(other.getName());
+		}
 		return false;
 	}
 

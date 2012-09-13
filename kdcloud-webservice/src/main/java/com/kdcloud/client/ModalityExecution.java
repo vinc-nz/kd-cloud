@@ -136,7 +136,7 @@ public class ModalityExecution extends Thread {
 					// System.out.println("REC REPORT - SIZE ISTANZA: " +
 					// instances.size());
 					Report report = (Report) object;
-					report.setName(modality.getName());
+					report.setValue(modality.getName());
 				} else if (object instanceof List<?>) {
 					List<Report> reportList = (List<Report>) object;
 

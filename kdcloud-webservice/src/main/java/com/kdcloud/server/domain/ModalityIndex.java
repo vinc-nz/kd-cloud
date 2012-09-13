@@ -8,12 +8,12 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 @XStreamAlias("modalities")
-public class ModalityList implements Iterable<Modality>, Serializable {
+public class ModalityIndex implements Iterable<Modality>, Serializable {
 
 	@XStreamImplicit
 	List<Modality> list;
 
-	public ModalityList(List<Modality> list) {
+	public ModalityIndex(List<Modality> list) {
 		super();
 		this.list = list;
 	}

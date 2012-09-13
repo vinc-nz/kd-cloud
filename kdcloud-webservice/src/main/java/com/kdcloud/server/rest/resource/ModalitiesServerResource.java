@@ -9,7 +9,7 @@ import org.restlet.resource.Get;
 
 import com.kdcloud.server.domain.InputSpecification;
 import com.kdcloud.server.domain.Modality;
-import com.kdcloud.server.domain.ModalityList;
+import com.kdcloud.server.domain.ModalityIndex;
 import com.kdcloud.server.domain.datastore.ModEntity;
 import com.kdcloud.server.rest.api.ModalitiesResource;
 
@@ -25,14 +25,14 @@ public class ModalitiesServerResource extends KDServerResource implements Modali
 
 	@Override
 	@Get
-	public ModalityList listModalities() {
+	public ModalityIndex listModalities() {
 		List<Modality> list = new LinkedList<Modality>();
 		for (ModEntity e : modalityDao.getAll()) {
 			InputSpecification spec = new InputSpecification(e.getInputSources());
 			list.add(new Modality(e.getId(), e.getName(), e.getServerCommands(), spec));
 		}
 		getLogger().info("fetched " + list.size() + " modalities");
-		return new ModalityList(list);
+		return new ModalityIndex(list);
 	}
 
 	@Override

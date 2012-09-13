@@ -6,12 +6,12 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.dao.DataTableDao;
 import com.kdcloud.server.dao.ModalityDao;
 import com.kdcloud.server.dao.TaskDao;
 import com.kdcloud.server.dao.UserDao;
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.User;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 

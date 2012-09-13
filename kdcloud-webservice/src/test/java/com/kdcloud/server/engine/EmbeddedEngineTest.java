@@ -1,6 +1,7 @@
 package com.kdcloud.server.engine;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,16 +9,13 @@ import org.junit.Test;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.User;
-import com.kdcloud.server.domain.datastore.Workflow;
+import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.engine.embedded.EmbeddedEngine;
 import com.kdcloud.server.engine.embedded.FileDataReader;
-import com.kdcloud.server.engine.embedded.QRS;
-import com.kdcloud.server.engine.embedded.ReportGenerator;
 import com.kdcloud.server.engine.embedded.SequenceFlow;
-import com.kdcloud.server.engine.embedded.UserDataReader;
 import com.kdcloud.server.engine.embedded.UserDataWriter;
+import com.kdcloud.server.entity.User;
+import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;

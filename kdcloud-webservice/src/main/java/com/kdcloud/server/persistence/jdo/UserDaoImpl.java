@@ -8,8 +8,8 @@ import javax.jdo.Query;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.kdcloud.server.dao.UserDao;
-import com.kdcloud.server.domain.datastore.DataTable;
-import com.kdcloud.server.domain.datastore.User;
+import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.User;
 
 public class UserDaoImpl implements UserDao {
 	

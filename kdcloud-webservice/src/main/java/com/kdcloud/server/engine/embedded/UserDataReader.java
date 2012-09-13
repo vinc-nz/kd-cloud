@@ -3,10 +3,11 @@ package com.kdcloud.server.engine.embedded;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.User;
-import com.kdcloud.server.persistence.PersistenceContext;
 import weka.core.Instances;
+
+import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.server.entity.User;
+import com.kdcloud.server.persistence.PersistenceContext;
 
 public class UserDataReader extends NodeAdapter {
 	

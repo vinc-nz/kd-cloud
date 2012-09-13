@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 
 import weka.core.Instances;
 
-import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public interface Worker extends Runnable {

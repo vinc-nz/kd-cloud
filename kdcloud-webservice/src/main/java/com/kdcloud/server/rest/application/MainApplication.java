@@ -9,7 +9,7 @@ import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 
-import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.rest.resource.QueueWorkerServerResource;
 import com.kdcloud.server.tasks.TaskQueue;
 

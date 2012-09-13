@@ -4,14 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.restlet.Application;
-import org.restlet.client.resource.Post;
+import org.restlet.resource.Post;
 import org.restlet.resource.Get;
 
-import com.kdcloud.server.domain.InputSpecification;
-import com.kdcloud.server.domain.Modality;
-import com.kdcloud.server.domain.ModalityIndex;
-import com.kdcloud.server.domain.datastore.ModEntity;
-import com.kdcloud.server.rest.api.ModalitiesResource;
+import com.kdcloud.lib.domain.InputSpecification;
+import com.kdcloud.lib.domain.Modality;
+import com.kdcloud.lib.domain.ModalityIndex;
+import com.kdcloud.lib.rest.api.ModalitiesResource;
+import com.kdcloud.server.entity.ModEntity;
 
 public class ModalitiesServerResource extends KDServerResource implements ModalitiesResource {
 	

@@ -27,9 +27,9 @@ import weka.core.Instances;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.domain.InputSpecification;
-import com.kdcloud.server.rest.api.UserDataResource;
-import com.kdcloud.server.rest.ext.InstancesRepresentation;
+import com.kdcloud.lib.domain.InputSpecification;
+import com.kdcloud.lib.rest.api.UserDataResource;
+import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
 public class RestletTestCase {
 

@@ -12,12 +12,13 @@
   <!-- Specify hard-coded project properties here -->
 	<properties>
 		<gae.version>1.7.0</gae.version>
-		<gwt.version>2.4.0</gwt.version>
 		<restlet.version>2.2-SNAPSHOT</restlet.version>
 		<gae.port>8888</gae.port>
 		<gae.application.version>master</gae.application.version>
 		<datanucleus.version>3.0.1</datanucleus.version>
 		<jdo.version>3.0</jdo.version>
+		<weka.version>3.7.7-SNAPSHOT</weka.version>
+		<gwt.version>2.4.0</gwt.version>
 	</properties>
   
 	<repositories>
@@ -29,6 +30,20 @@
 	</repositories>
 
 	<dependencies>
+	    
+	    <dependency>
+	        <groupId>com.kdcloud</groupId>
+	        <artifactId>kdcloud-lib</artifactId>
+	        <version>0.0.1-SNAPSHOT</version>
+	    </dependency>
+	    
+	    <dependency>
+	        <groupId>com.kdcloud</groupId>
+	        <artifactId>weka-stripped</artifactId>
+	        <version>${weka.version}</version>
+	    </dependency>
+	    
+	    
 	    <!-- Google App Engine API -->
 	    <dependency>
 	      <groupId>com.google.appengine</groupId>
@@ -95,46 +110,6 @@
 			<scope>provided</scope>
 		</dependency>
 		
-		<!-- GWT dependencies -->
-	    <dependency>
-	      <groupId>com.google.gwt</groupId>
-	      <artifactId>gwt-servlet</artifactId>
-	      <version>${gwt.version}</version>
-	      <scope>runtime</scope>
-	    </dependency>
-	
-	    <dependency>
-	      <groupId>com.google.gwt</groupId>
-	      <artifactId>gwt-user</artifactId>
-	      <version>${gwt.version}</version>
-	      <scope>provided</scope>
-	    </dependency>
-	    
-<!-- 	    <dependency> -->
-<!-- 	      <groupId>com.google.gwt</groupId> -->
-<!-- 	      <artifactId>gwt-oauth2</artifactId> -->
-<!-- 	      <version>0.2-alpha</version> -->
-<!-- 	    </dependency> -->
-	    
-	    <dependency>
-	      <groupId>org.restlet.gwt</groupId>
-	      <artifactId>org.restlet</artifactId>
-	      <version>${restlet.version}</version>
-	      <exclusions>
-	          <exclusion>
-	              <groupId>com.google.gwt</groupId>
-	              <artifactId>gwt-dev</artifactId>
-	          </exclusion>
-	      </exclusions>
-	    </dependency>
-	    
-	    <dependency>
-	        <groupId>com.allen-sauer.gwt.log</groupId>
-	        <artifactId>gwt-log</artifactId>
-	        <version>3.1.8</version>
-	    </dependency>
-
-
 <!-- 		restlet dependencies -->
 		<dependency>
 	      <groupId>org.restlet.gae</groupId>
@@ -179,13 +154,6 @@
 	         <version>0.9.8</version>
      	</dependency>
      	
-	    <dependency>
-	        <groupId>nz.ac.waikato.cms.weka</groupId>
-	        <artifactId>weka-dev</artifactId>
-	        <version>3.7.7</version>
-	    </dependency>
-	    
-	    
 <!-- 	    gmc server by local repo -->
 		<dependency>
 	      <groupId>com.google.android</groupId>

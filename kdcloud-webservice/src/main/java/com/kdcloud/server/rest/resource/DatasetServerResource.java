@@ -11,12 +11,12 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.DataTable;
-import com.kdcloud.server.rest.api.DatasetResource;
-import com.kdcloud.server.rest.ext.InstancesRepresentation;
-
 import weka.core.Instances;
+
+import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.lib.rest.api.DatasetResource;
+import com.kdcloud.lib.rest.ext.InstancesRepresentation;
+import com.kdcloud.server.entity.DataTable;
 
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
 	

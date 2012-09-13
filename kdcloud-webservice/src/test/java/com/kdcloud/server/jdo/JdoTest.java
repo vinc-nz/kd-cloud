@@ -12,12 +12,12 @@ import org.junit.Test;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.domain.ServerAction;
-import com.kdcloud.server.domain.ServerMethod;
-import com.kdcloud.server.domain.datastore.DataTable;
-import com.kdcloud.server.domain.datastore.ModEntity;
-import com.kdcloud.server.domain.datastore.Task;
-import com.kdcloud.server.domain.datastore.User;
+import com.kdcloud.lib.domain.ServerAction;
+import com.kdcloud.lib.domain.ServerMethod;
+import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.ModEntity;
+import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.entity.User;
 
 public class JdoTest {
 

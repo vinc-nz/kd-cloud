@@ -2,7 +2,7 @@ package com.kdcloud.server.engine.embedded;
 
 import java.util.HashMap;
 
-import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class WorkerConfiguration extends HashMap<String, Object> {

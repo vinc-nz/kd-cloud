@@ -6,8 +6,8 @@ import java.util.List;
 import org.restlet.Application;
 import org.restlet.resource.Get;
 
-import com.kdcloud.server.domain.datastore.User;
-import com.kdcloud.server.rest.api.GlobalDataResource;
+import com.kdcloud.lib.rest.api.GlobalDataResource;
+import com.kdcloud.server.entity.User;
 
 public class GlobalDataServerResource extends KDServerResource implements GlobalDataResource {
 	

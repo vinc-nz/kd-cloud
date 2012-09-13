@@ -6,11 +6,11 @@ import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
-import com.kdcloud.server.domain.Report;
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.Task;
-import com.kdcloud.server.rest.api.ReportResource;
-import com.kdcloud.server.rest.ext.InstancesRepresentation;
+import com.kdcloud.lib.domain.Report;
+import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.lib.rest.api.ReportResource;
+import com.kdcloud.lib.rest.ext.InstancesRepresentation;
+import com.kdcloud.server.entity.Task;
 
 public class ReportServerResource extends KDServerResource implements ReportResource {
 	

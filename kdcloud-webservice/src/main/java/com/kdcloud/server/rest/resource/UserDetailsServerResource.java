@@ -3,7 +3,7 @@ package com.kdcloud.server.rest.resource;
 import org.restlet.Application;
 import org.restlet.resource.Get;
 
-import com.kdcloud.server.rest.api.UserDetailsResource;
+import com.kdcloud.lib.rest.api.UserDetailsResource;
 
 public class UserDetailsServerResource extends KDServerResource implements
 		UserDetailsResource {

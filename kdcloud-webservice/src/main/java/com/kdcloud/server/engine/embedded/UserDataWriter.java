@@ -1,19 +1,15 @@
 package com.kdcloud.server.engine.embedded;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import weka.core.Instances;
-import weka.core.converters.ArffSaver;
 
+import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.dao.UserDao;
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.DataTable;
-import com.kdcloud.server.domain.datastore.User;
+import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class UserDataWriter extends NodeAdapter {

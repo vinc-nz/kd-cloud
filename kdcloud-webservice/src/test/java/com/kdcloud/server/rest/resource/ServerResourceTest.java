@@ -12,18 +12,16 @@ import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 
-import weka.core.DenseInstance;
-import weka.core.Instances;
-
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.server.domain.InputSpecification;
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.DataTable;
-import com.kdcloud.server.domain.datastore.User;
-import com.kdcloud.server.domain.datastore.Workflow;
+import com.kdcloud.lib.domain.InputSpecification;
+import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.engine.embedded.EmbeddedEngine;
-import com.kdcloud.server.rest.ext.InstancesRepresentation;
+import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.User;
+import com.kdcloud.server.entity.Workflow;
+import weka.core.*;
 
 public class ServerResourceTest {
 

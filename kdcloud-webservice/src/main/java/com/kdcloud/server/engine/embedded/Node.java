@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.kdcloud.server.domain.ServerParameter;
+import com.kdcloud.lib.domain.ServerParameter;
 
 public interface Node extends Serializable {
 	

@@ -1,6 +1,6 @@
 package com.kdcloud.server.dao;
 
-import com.kdcloud.server.domain.datastore.DataTable;
+import com.kdcloud.server.entity.DataTable;
 
 public interface DataTableDao {
 	

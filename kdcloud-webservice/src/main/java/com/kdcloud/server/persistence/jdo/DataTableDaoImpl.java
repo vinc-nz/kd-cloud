@@ -3,7 +3,7 @@ package com.kdcloud.server.persistence.jdo;
 import javax.jdo.PersistenceManager;
 
 import com.kdcloud.server.dao.DataTableDao;
-import com.kdcloud.server.domain.datastore.DataTable;
+import com.kdcloud.server.entity.DataTable;
 
 public class DataTableDaoImpl extends AbstractDao<DataTable> implements DataTableDao {
 	

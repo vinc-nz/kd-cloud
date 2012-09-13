@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Sender;
-import com.kdcloud.server.domain.datastore.Task;
-import com.kdcloud.server.domain.datastore.User;
+import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.entity.User;
 
 public abstract class Notification {
 	

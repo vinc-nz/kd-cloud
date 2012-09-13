@@ -15,12 +15,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.kdcloud.server.domain.Report;
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.Task;
-import com.kdcloud.server.domain.datastore.User;
-import com.kdcloud.server.domain.datastore.Workflow;
-import com.kdcloud.server.rest.api.GlobalAnalysisResource;
+import com.kdcloud.lib.domain.Report;
+import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.lib.rest.api.GlobalAnalysisResource;
+import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.entity.User;
+import com.kdcloud.server.entity.Workflow;
 
 public class GlobalAnalysisServerResource extends WorkerServerResource
 		implements GlobalAnalysisResource {

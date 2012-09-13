@@ -5,10 +5,10 @@ import java.util.HashMap;
 import org.restlet.Context;
 import org.restlet.Request;
 
-import com.kdcloud.server.domain.datastore.Task;
-import com.kdcloud.server.domain.datastore.User;
 import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.engine.embedded.EmbeddedEngine;
+import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;

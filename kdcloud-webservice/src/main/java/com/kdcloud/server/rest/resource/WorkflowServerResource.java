@@ -1,21 +1,18 @@
 package com.kdcloud.server.rest.resource;
 
-import java.util.logging.Level;
-
 import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
-import com.kdcloud.server.domain.Report;
-import com.kdcloud.server.domain.ServerParameter;
-import com.kdcloud.server.domain.datastore.Task;
-import com.kdcloud.server.domain.datastore.Workflow;
-import com.kdcloud.server.rest.api.WorkflowResource;
-import com.kdcloud.server.rest.ext.InstancesRepresentation;
+import com.kdcloud.lib.domain.Report;
+import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.lib.rest.api.WorkflowResource;
+import com.kdcloud.lib.rest.ext.InstancesRepresentation;
+import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.entity.Workflow;
 
 public class WorkflowServerResource extends WorkerServerResource implements
 		WorkflowResource {

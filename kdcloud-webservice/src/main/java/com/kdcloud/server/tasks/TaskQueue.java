@@ -1,6 +1,6 @@
 package com.kdcloud.server.tasks;
 
-import com.kdcloud.server.domain.datastore.Task;
+import com.kdcloud.server.entity.Task;
 
 public interface TaskQueue {
 	

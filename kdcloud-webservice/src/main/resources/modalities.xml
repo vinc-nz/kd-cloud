@@ -1,0 +1,50 @@
+<modalities>
+  <modality>
+    <name>Data Feed</name>
+    <serverCommands>
+      <server-action>
+        <uri>/data</uri>
+        <method>PUT</method>
+        <postParams/>
+        <repeat>false</repeat>
+        <sleepTime>600000</sleepTime>
+      </server-action>
+      <server-action>
+        <uri>/data/{datasetId}</uri>
+        <method>PUT</method>
+        <postParams/>
+        <repeat>true</repeat>
+        <sleepTime>600000</sleepTime>
+      </server-action>
+    </serverCommands>
+    <inputSpecification>
+      <input-source>HEARTBEAT</input-source>
+    </inputSpecification>
+  </modality>
+  <modality>
+    <name>Single Analysis</name>
+    <serverCommands class="linked-list">
+      <server-action>
+        <uri>/workflow/test</uri>
+        <method>POST</method>
+        <postParams>
+          <server-parameter value="input:userId"/>
+        </postParams>
+        <repeat>true</repeat>
+        <sleepTime>0</sleepTime>
+      </server-action>
+    </serverCommands>
+  </modality>
+  <modality>
+    <name>Global Analysis</name>
+    <serverCommands class="linked-list">
+      <server-action>
+        <uri>/global/workflow/test</uri>
+        <method>POST</method>
+        <postParams/>
+        <repeat>true</repeat>
+        <sleepTime>0</sleepTime>
+      </server-action>
+    </serverCommands>
+  </modality>
+</modalities>

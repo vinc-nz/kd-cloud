@@ -37,7 +37,7 @@ public class ServerParameter implements Serializable {
 	}
 
 	@XStreamAsAttribute
-	private String name;
+	private String value;
 
 	public ServerParameter() {
 		// TODO Auto-generated constructor stub
@@ -45,35 +45,35 @@ public class ServerParameter implements Serializable {
 
 	public ServerParameter(String name) {
 		super();
-		this.name = name;
+		this.value = name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.value = name;
 	}
 
 	public String getName() {
-		return name;
+		return value;
 	}
 
 	@Override
 	public String toString() {
-		return "{" + name + "}";
+		return "{" + value + "}";
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ServerParameter)
-			return ((ServerParameter) obj).name.equals(name);
+			return ((ServerParameter) obj).value.equals(value);
 		return false;
 	}
 
 	public int hashCode() {
-		return name.hashCode();
+		return value.hashCode();
 	};
 
 	String getPattern() {
-		return "\\{" + name + "\\}";
+		return "\\{" + value + "\\}";
 	}
 
 }

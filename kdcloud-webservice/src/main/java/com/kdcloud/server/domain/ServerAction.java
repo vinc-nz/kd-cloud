@@ -26,8 +26,6 @@ public class ServerAction implements Serializable {
 	
 	String uri;
 	
-	String outputLabel;
-	
 	ServerMethod method;
 	
 	Set<ServerParameter> postParams;
@@ -51,7 +49,6 @@ public class ServerAction implements Serializable {
 			boolean repeat, long sleepTime) {
 		super();
 		this.uri = uri;
-		this.outputLabel = outputLabel;
 		this.method = method;
 		this.repeat = repeat;
 		this.sleepTime = sleepTime;
@@ -62,7 +59,6 @@ public class ServerAction implements Serializable {
 
 
 	ServerAction(ServerAction serverAction, String newUri, ArrayList<Parameter> newPostForm) {
-		this.outputLabel = serverAction.outputLabel;
 		this.method = serverAction.method;
 		this.repeat = serverAction.repeat;
 		this.sleepTime = serverAction.sleepTime;
@@ -85,15 +81,6 @@ public class ServerAction implements Serializable {
 	public String getUri() {
 		return uri;
 	}
-
-	public String getOutputLabel() {
-		return outputLabel;
-	}
-
-	public void setOutputLabel(String outputLabel) {
-		this.outputLabel = outputLabel;
-	}
-
 
 	public boolean isRepeat() {
 		return repeat;

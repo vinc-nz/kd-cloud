@@ -12,4 +12,8 @@ public class Dataset {
 		this.id = id;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
 }

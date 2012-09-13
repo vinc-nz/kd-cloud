@@ -1,11 +1,12 @@
 package com.kdcloud.server.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("modality")
-public class Modality {
+public class Modality implements Serializable {
 	
 	Long id;
 

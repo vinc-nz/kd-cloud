@@ -51,7 +51,7 @@ public class ServerResourceTest {
 
 	@Test
 	public void testUserData() {
-		Long id = userDataResource.createDataset();
+		Long id = userDataResource.createDataset().getId();
 		assertNotNull(id);
 
 		User u = userDataResource.userDao.findById(USER_ID);
@@ -65,7 +65,7 @@ public class ServerResourceTest {
 
 	@Test
 	public void testDataset() {
-		Long id = userDataResource.createDataset();
+		Long id = userDataResource.createDataset().getId();
 		DataTable dataset = userDataResource.dataTableDao.findById(id);
 
 		DatasetServerResource datasetResource = new DatasetServerResource(application, dataset);

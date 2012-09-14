@@ -54,9 +54,9 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 			Document d = representation.getDocument();
 			Element globalReport = d.createElement("reports");
 			d.appendChild(globalReport);
-			List<User> users = userDao.list();
+			List<User> users = userDao.getAll();
 			for (User subject : users) {
-				form.add(ServerParameter.USER_ID.getName(), subject.getId());
+				form.add(ServerParameter.USER_ID.getName(), subject.getName());
 				Task task = new Task();
 				task.setApplicant(user);
 				task.setWorkflow(workflow);

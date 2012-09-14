@@ -7,11 +7,9 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import com.kdcloud.lib.domain.ServerParameter;
-import com.kdcloud.server.dao.DataTableDao;
-import com.kdcloud.server.dao.ModalityDao;
-import com.kdcloud.server.dao.TaskDao;
-import com.kdcloud.server.dao.UserDao;
+import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
+import com.kdcloud.server.persistence.DataAccessObject;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 
@@ -20,10 +18,8 @@ public abstract class KDServerResource extends ServerResource {
 	private PersistenceContext persistenceContext;
 	private UserProvider userProvider;
 
-	UserDao userDao;
-	DataTableDao dataTableDao;
-	TaskDao taskDao;
-	ModalityDao modalityDao;
+	DataAccessObject<User> userDao;
+	DataAccessObject<Task> taskDao;
 
 	User user;
 
@@ -45,9 +41,7 @@ public abstract class KDServerResource extends ServerResource {
 				(PersistenceContextFactory) inject(PersistenceContextFactory.class);
 		persistenceContext = pcf.get();
 		userDao = persistenceContext.getUserDao();
-		dataTableDao = persistenceContext.getDataTableDao();
 		taskDao = persistenceContext.getTaskDao();
-		modalityDao = persistenceContext.getModalityDao();
 	}
 
 	protected String getParameter(ServerParameter serverParameter) {

@@ -22,11 +22,11 @@ public class GlobalDataServerResource extends KDServerResource implements Global
 	@Override
 	@Get
 	public ArrayList<String> getAllUsersWithData() {
-		List<User> users = userDao.list();
+		List<User> users = userDao.getAll();
 		ArrayList<String> userIds = new ArrayList<String>(users.size());
-		for (User user : userDao.list()) {
+		for (User user : userDao.getAll()) {
 			if (user.getTable() != null)
-				userIds.add(user.getId());
+				userIds.add(user.getName());
 		}
 		return userIds;
 	}

@@ -24,14 +24,8 @@ public class DataTable {
 	@Persistent(serialized="true")
 	Object instances;
 	
-	@Persistent
-	@Unowned
-	User owner;
-	
 	String name;
 	
-	String description;
-
 	public Long getId() {
 		return id;
 	}
@@ -56,14 +50,6 @@ public class DataTable {
 		this.encodedKey = encodedKey;
 	}
 
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -72,14 +58,6 @@ public class DataTable {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof DataTable)

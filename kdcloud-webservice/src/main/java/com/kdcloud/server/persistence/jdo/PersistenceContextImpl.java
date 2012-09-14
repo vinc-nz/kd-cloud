@@ -1,11 +1,9 @@
 package com.kdcloud.server.persistence.jdo;
 import javax.jdo.PersistenceManager;
 
-import com.kdcloud.server.dao.DataTableDao;
-import com.kdcloud.server.dao.ModalityDao;
-import com.kdcloud.server.dao.TaskDao;
-import com.kdcloud.server.dao.UserDao;
-import com.kdcloud.server.dao.WorkflowDao;
+import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.entity.User;
+import com.kdcloud.server.persistence.DataAccessObject;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class PersistenceContextImpl implements PersistenceContext {
@@ -18,26 +16,7 @@ public class PersistenceContextImpl implements PersistenceContext {
 		this.pm = pm;
 	}
 
-	@Override
-	public UserDao getUserDao() {
-		return new UserDaoImpl(pm);
-	}
 	
-	@Override
-	public DataTableDao getDataTableDao() {
-		return new DataTableDaoImpl(pm);
-	}
-	
-	@Override
-	public TaskDao getTaskDao() {
-		return new TaskDaoImpl(pm);
-	}
-	
-	@Override
-	public ModalityDao getModalityDao() {
-		return new ModalityDaoImpl(pm);
-	}
-
 	@Override
 	public void beginTransaction() {
 		pm.currentTransaction().begin();
@@ -53,9 +32,16 @@ public class PersistenceContextImpl implements PersistenceContext {
 		pm.close();
 	}
 
+
 	@Override
-	public WorkflowDao getWorkflowDao() {
-		return new WorkflowDaoImpl(pm);
+	public DataAccessObject<User> getUserDao() {
+		return new DataAccessObjectImpl<User>(User.class, pm);
+	}
+
+
+	@Override
+	public DataAccessObject<Task> getTaskDao() {
+		return new DataAccessObjectImpl<Task>(Task.class, pm);
 	}
 	
 }

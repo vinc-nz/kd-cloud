@@ -19,7 +19,7 @@ public class UserProviderImpl implements UserProvider {
 		String id = getUserId(request);
 		UserDao userDao = pc.getUserDao();
 		if (id != null) {
-			User user = userDao.findById(id);
+			User user = userDao.findByName(id);
 			if (user == null) {
 				user = new User(id);
 				userDao.save(user);

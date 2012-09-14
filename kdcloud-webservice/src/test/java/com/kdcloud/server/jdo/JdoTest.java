@@ -12,11 +12,9 @@ import org.junit.Test;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.lib.domain.ServerAction;
-import com.kdcloud.lib.domain.ServerMethod;
 import com.kdcloud.server.entity.DataTable;
-import com.kdcloud.server.entity.ModEntity;
-import com.kdcloud.server.entity.Task;
+import com.kdcloud.server.entity.Entry;
+import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
 
 public class JdoTest {
@@ -44,28 +42,22 @@ public class JdoTest {
 		PersistenceManager pm = pmfInstance.getPersistenceManager();
 		User user = new User();
 		String name = "name";
-		user.setId(name);
+		user.setName(name);
+		Group group = new Group();
+		group.setName("test");
+		user.getGroups().add(group);
+		Entry e = new Entry();
+		e.setUser(user);
+		DataTable table = new DataTable();
+		table.setName("test");
+		e.setDataTable(table);
+		group.getEntries().add(e);
 
-		DataTable dataTable = new DataTable();
-//		user.getTables().add(dataTable);
-		user.setTable(dataTable);
 		pm.makePersistent(user);
-		Assert.assertEquals(dataTable.getOwner().getId(), name);
-
-		Task t = new Task();
-		t.setWorkingTable(dataTable);
-		t.setApplicant(user);
-		pm.makePersistent(t);
-
-//		user.getTables().clear();
-//		pm.makePersistent(user);
-//		Assert.assertEquals(user.getTables().size(), 0);
-
-		ModEntity m = new ModEntity();
-		ServerAction test = new ServerAction();
-		test.setMethod(ServerMethod.GET);
-		m.getServerCommands().add(test);
-		pm.makePersistent(m);
+		Assert.assertNotNull(user.getEncodedKey());
+		Assert.assertNotNull(group.getEncodedKey());
+		Assert.assertNotNull(e.getEncodedKey());
+		Assert.assertNotNull(table.getEncodedKey());
 	}
 
 }

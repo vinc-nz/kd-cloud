@@ -37,7 +37,7 @@ public class UserDataWriter extends NodeAdapter {
 			msg = "no persistence context in configuration";
 		userDao = pc.getUserDao();
 		if (userId != null)
-			user = userDao.findById(userId);
+			user = userDao.findByName(userId);
 		if (user == null)
 			msg = "not a valid user in configuration";
 		if (msg != null)

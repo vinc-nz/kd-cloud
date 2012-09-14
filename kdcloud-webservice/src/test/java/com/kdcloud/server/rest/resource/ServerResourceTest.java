@@ -52,7 +52,7 @@ public class ServerResourceTest {
 		Long id = userDataResource.createDataset().getId();
 		assertNotNull(id);
 
-		User u = userDataResource.userDao.findById(USER_ID);
+		User u = userDataResource.userDao.findByName(USER_ID);
 		assertNotNull(u);
 		
 		assertNotNull(u.getTable());
@@ -117,7 +117,7 @@ public class ServerResourceTest {
 		String[] ids = { "a", "b", "c" };
 		for (String s : ids) {
 			User user = new User();
-			user.setId(s);
+			user.setName(s);
 			userDataResource.user = user;
 			userDataResource.createDataset(new InstancesRepresentation(instances));
 		}

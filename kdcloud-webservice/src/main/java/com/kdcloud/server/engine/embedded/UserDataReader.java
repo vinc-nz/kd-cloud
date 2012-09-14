@@ -30,7 +30,7 @@ public class UserDataReader extends NodeAdapter {
 		if (pc == null)
 			msg = "no persistence context in configuration";
 		if (userId != null)
-			user = pc.getUserDao().findById(userId);
+			user = pc.getUserDao().findByName(userId);
 		if (user == null)
 			msg = "not a valid user in configuration";
 		else if (user.getTable() == null)

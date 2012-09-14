@@ -20,7 +20,7 @@ public class UserDetailsServerResource extends KDServerResource implements
 	@Override
 	@Get
 	public String getUserId() {
-		return user.getId();
+		return user.getName();
 	}
 
 }

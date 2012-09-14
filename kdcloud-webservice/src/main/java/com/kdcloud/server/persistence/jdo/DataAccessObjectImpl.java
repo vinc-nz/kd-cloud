@@ -48,6 +48,7 @@ public class DataAccessObjectImpl<T> implements DataAccessObject<T> {
 			setId(e, k.getId());
 			return true;
 		} catch (Exception e1) {
+			e1.printStackTrace();
 			return false;
 		}
 	}

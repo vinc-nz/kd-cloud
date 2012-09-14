@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 import org.restlet.representation.Representation;
@@ -13,10 +15,7 @@ import org.restlet.representation.Representation;
 import weka.core.Instances;
 
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-@XStreamAlias("server-action")
 public class ServerAction implements Serializable {
 
 	/**
@@ -24,16 +23,16 @@ public class ServerAction implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@XmlElement
 	String uri;
 	
 	ServerMethod method;
 	
+	@XmlElement(name="postParameter")
 	Set<ServerParameter> postParams;
 	
-	@XStreamOmitField
 	Set<ServerParameter> uriParams;
 	
-	@XStreamOmitField
 	ArrayList<Parameter> postForm;
 	
 	boolean repeat;

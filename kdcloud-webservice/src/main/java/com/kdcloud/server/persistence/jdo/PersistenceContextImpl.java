@@ -1,6 +1,7 @@
 package com.kdcloud.server.persistence.jdo;
 import javax.jdo.PersistenceManager;
 
+import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataAccessObject;
@@ -42,6 +43,12 @@ public class PersistenceContextImpl implements PersistenceContext {
 	@Override
 	public DataAccessObject<Task> getTaskDao() {
 		return new DataAccessObjectImpl<Task>(Task.class, pm);
+	}
+
+
+	@Override
+	public DataAccessObject<Group> getGroupDao() {
+		return new DataAccessObjectImpl<Group>(Group.class, pm);
 	}
 	
 }

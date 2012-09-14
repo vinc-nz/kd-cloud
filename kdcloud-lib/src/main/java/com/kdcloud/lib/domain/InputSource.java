@@ -2,14 +2,17 @@ package com.kdcloud.lib.domain;
 
 import weka.core.Attribute;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-@XStreamAlias("input-source")
 public enum InputSource {
-	HEARTBEAT;
+	HEARTBEAT,
+	UNKNOWN;
 	
 	public String toString() {
-		return "heartbeat";
+		switch (this) {
+		case HEARTBEAT:
+			return "heartbeat";
+		default:
+			return "unknown";
+		}
 	};
 	
 	public Attribute toAttribute() {

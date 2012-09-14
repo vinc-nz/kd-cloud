@@ -4,18 +4,25 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import javax.xml.bind.annotation.XmlElement;
 
-@XStreamAlias("modality")
 public class Modality implements Serializable {
 	
+	@XmlElement
 	Long id;
-
+	
+	@XmlElement
 	String name;
-
-	List<ServerAction> serverCommands;
 	
 	InputSpecification inputSpecification;
+
+	@XmlElement(name="action")
+	List<ServerAction> serverCommands;
+	
+	
+	public Modality() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Modality(Long id, String name, List<ServerAction> serverCommands,
 			InputSpecification inputSpecification) {

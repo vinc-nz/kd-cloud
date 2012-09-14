@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<modalities>
+    <modality>
+        <name>Data Feed</name>
+        <action>
+            <uri>/data</uri>
+            <method>PUT</method>
+            <repeat>false</repeat>
+            <sleepTime>600000</sleepTime>
+        </action>
+        <action>
+            <uri>/data/{groupId}</uri>
+            <method>PUT</method>
+            <repeat>true</repeat>
+            <sleepTime>600000</sleepTime>
+        </action>
+        <inputSpecification>
+            <source>HEARTBEAT</source>
+        </inputSpecification>
+    </modality>
+    <modality>
+        <name>Single Analysis</name>
+        <action>
+            <uri>/workflow/test</uri>
+            <postParameter value="input:userId"/>
+            <method>POST</method>
+            <repeat>true</repeat>
+            <sleepTime>0</sleepTime>
+        </action>
+    </modality>
+    <modality>
+        <name>Global Analysis</name>
+        <action>
+            <uri>/global/workflow/test</uri>
+            <method>POST</method>
+            <repeat>true</repeat>
+            <sleepTime>0</sleepTime>
+        </action>
+    </modality>
+</modalities>

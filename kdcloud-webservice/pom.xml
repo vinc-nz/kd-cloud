@@ -130,8 +130,8 @@
 	    </dependency>
 	    
 	     <dependency>
-	      <groupId>org.restlet.jee</groupId>
-	      <artifactId>org.restlet.ext.xstream</artifactId>
+	      <groupId>org.restlet.gae</groupId>
+	      <artifactId>org.restlet.ext.jaxb</artifactId>
 	      <version>${restlet.version}</version>
 	    </dependency>
 	    

@@ -35,7 +35,7 @@ public class Group {
 	public void setEncodedKey(String encodedKey) {
 		this.encodedKey = encodedKey;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -60,6 +60,28 @@ public class Group {
 		this.entries = entries;
 	}
 	
-	
+	public DataTable getTable(User user) {
+		for (Entry e : entries) {
+			if (e.user.equals(user))
+				return e.dataTable;
+		}
+		return null;
+	}
+
+	public boolean removeEntry(User user) {
+		Entry toRemove = null;
+		for (Entry e : entries) {
+			if (e.user.equals(user))
+				toRemove = e;
+		}
+		return (toRemove == null ? false : entries.remove(toRemove));
+	}
+
+	public List<User> getUsers() {
+		List<User> users = new LinkedList<User>();
+		for (Entry e : entries)
+			users.add(e.getUser());
+		return users;
+	}
 
 }

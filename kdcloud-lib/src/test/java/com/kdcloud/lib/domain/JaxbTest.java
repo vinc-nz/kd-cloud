@@ -1,32 +1,34 @@
 package com.kdcloud.lib.domain;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import com.kdcloud.lib.rest.api.DatasetResource;
 import com.kdcloud.lib.rest.api.GlobalAnalysisResource;
 import com.kdcloud.lib.rest.api.UserDataResource;
 import com.kdcloud.lib.rest.api.WorkflowResource;
-import com.thoughtworks.xstream.XStream;
 
-public class XstreamTest {
+public class JaxbTest {
 	
 	public static void main(String[] args) {
-//		generateXml();
+		generateXml();
 		readXml();
 	}
 	
 	public static void readXml() {
-		XStream stream = new XStream();
-		stream.processAnnotations(ModalityIndex.class);
-		ModalityIndex index = (ModalityIndex) stream.fromXML(new File("basic.xml"));
-		for (Modality modality : index) {
-			System.out.println(modality.getName());
+		try {
+			JAXBContext context = JAXBContext.newInstance(JaxbTest.class.getPackage().getName());
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			ModalityIndex index = (ModalityIndex) unmarshaller.unmarshal(new File("basic.xml"));
+			System.out.println(index.asList().iterator().next().getServerCommands().size());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -62,15 +64,25 @@ public class XstreamTest {
 		list.add(globalAnalysis);
 		
 		ModalityIndex index = new ModalityIndex(list);
-		XStream stream = new XStream();
-		stream.autodetectAnnotations(true);
+		
 		try {
-			FileOutputStream out = new FileOutputStream("basic.xml");
-			stream.toXML(index, out);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			JAXBContext context = JAXBContext.newInstance(JaxbTest.class.getPackage().getName());
+		    Marshaller m = context.createMarshaller();
+		    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		    FileOutputStream out = new FileOutputStream("basic.xml");
+		    m.marshal(index, out);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	    
+//		XStream stream = new XStream();
+//		stream.autodetectAnnotations(true);
+//		try {
+//			stream.toXML(index, out);
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 }

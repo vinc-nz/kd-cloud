@@ -8,7 +8,6 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 
 import weka.core.Instances;
@@ -17,30 +16,32 @@ import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.DatasetResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.Group;
 
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
 	
-	private DataTable dataset;
+	private Group group;
 
 	public DatasetServerResource() {
 		super();
 	}
 
-
-	DatasetServerResource(Application application, DataTable dataset) {
+	DatasetServerResource(Application application, Group group) {
 		super(application);
-		this.dataset = dataset;
+		this.group = group;
+	}
+	
+	private DataTable getTable() {
+		DataTable dataset = group.getTable(user);
+		return (dataset == null ? new DataTable() : dataset);
 	}
 
 
 	@Override
 	public Representation handle() {
-		//TODO possibly add user restrictions here
-		String id = getParameter(ServerParameter.DATASET_ID);
-		dataset = dataTableDao.findById(Long.parseLong(id));
-		if (dataset == null) {
-			return notFound();
-		}
+		String groupName = getParameter(ServerParameter.GROUP_ID);
+		group = groupDao.findByName(groupName);
+		//TODO error if group does not exist
 		return super.handle();
 	}
 	
@@ -49,53 +50,49 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	@Put
 	public void uploadData(Representation representation) {
 		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
-		Instances data = null;
 		try {
-			data = instancesRepresentation.getInstances();
+			Instances data = instancesRepresentation.getInstances();
+			uploadData(data);
 		} catch (IOException e) {
 			getLogger().log(Level.INFO, "got an invalid request", e);
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			//TODO return an error representation
 		}
-		if (data != null) {
-			if (dataset.getInstances().equalHeaders(data)) {
-				Instances newInstances = new Instances(dataset.getInstances());
-				newInstances.addAll(data);
-				dataset.setInstances(newInstances);
-				dataTableDao.update(dataset);
-				getLogger().info(newInstances.size() + " instances merged succeffully");
-			}
-			else {
-				String error = "provided data does not match the dataset specification";
-				getLogger().info(error);
-				setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE,  error);
-			}
+		
+	}
+	
+	public void uploadData(Instances newData) {
+		DataTable dataset = getTable();
+		Instances storedData = dataset.getInstances();
+		if (storedData == null) {
+			dataset.setInstances(newData);
+			getLogger().info("created new dataset with size: " + newData.size());
 		}
+		else if (storedData.equalHeaders(newData)) {
+			newData.addAll(storedData);
+			dataset.setInstances(newData);
+			getLogger().info(newData.size() + " instances merged succeffully");
+		} else {
+			String error = "provided data does not match the dataset specification";
+			getLogger().info(error);
+			setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, error);
+		}
+		groupDao.save(group);
 	}
 
 	@Override
 	@Get
-	public Instances getData() {
-		if (dataset.getOwner().equals(user))
-			return dataset.getInstances();
-		forbidden();
-		return null;
+	public Representation getData() {
+		DataTable dataset = getTable();
+		if (dataset.getInstances() == null)
+			return null;
+		return new InstancesRepresentation(dataset.getInstances());
 	}
 
 	@Override
 	@Delete
-	public void deleteDataset() {
-//		if (user.getTables().remove(dataset))
-//			userDao.save(user);
-//		else
-//			forbid();
-	}
-
-
-	@Override
-	@Post
-	public void addCommitter(String email) {
-		// TODO Auto-generated method stub
-		
+	public void deleteData() {
+		group.removeEntry(user);
 	}
 
 }

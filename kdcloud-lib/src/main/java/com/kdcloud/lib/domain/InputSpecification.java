@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import weka.core.Attribute;
 import weka.core.Instances;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
 public class InputSpecification implements Iterable<InputSource> {
 	
-	@XStreamImplicit
+	@XmlElement(name="source")
 	List<InputSource> sources;
 	
 	public static Instances newInstances(String relationalName, int numAttributes) {
@@ -21,6 +21,10 @@ public class InputSpecification implements Iterable<InputSource> {
 			info.add(new Attribute(attrName));
 		}
 		return new Instances(relationalName, info, 0);
+	}
+	
+	public InputSpecification() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public InputSpecification(List<InputSource> sources) {

@@ -24,8 +24,6 @@ public class DataTable {
 	@Persistent(serialized="true")
 	Object instances;
 	
-	String name;
-	
 	public Long getId() {
 		return id;
 	}
@@ -48,14 +46,6 @@ public class DataTable {
 
 	public void setEncodedKey(String encodedKey) {
 		this.encodedKey = encodedKey;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	@Override

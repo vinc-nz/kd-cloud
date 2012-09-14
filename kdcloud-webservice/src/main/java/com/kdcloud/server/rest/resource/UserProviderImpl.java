@@ -4,6 +4,7 @@ import org.restlet.Request;
 
 import com.kdcloud.server.dao.UserDao;
 import com.kdcloud.server.entity.User;
+import com.kdcloud.server.persistence.DataAccessObject;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class UserProviderImpl implements UserProvider {
@@ -17,7 +18,7 @@ public class UserProviderImpl implements UserProvider {
 	@Override
 	public User getUser(Request request, PersistenceContext pc) {
 		String id = getUserId(request);
-		UserDao userDao = pc.getUserDao();
+		DataAccessObject<User> userDao = pc.getUserDao();
 		if (id != null) {
 			User user = userDao.findByName(id);
 			if (user == null) {

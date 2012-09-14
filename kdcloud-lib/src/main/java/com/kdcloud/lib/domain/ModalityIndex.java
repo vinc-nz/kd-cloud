@@ -4,14 +4,18 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@XStreamAlias("modalities")
+@XmlRootElement(name="modalities")
 public class ModalityIndex implements Iterable<Modality>, Serializable {
 
-	@XStreamImplicit
+	@XmlElement(name="modality")
 	List<Modality> list;
+	
+	public ModalityIndex() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public ModalityIndex(List<Modality> list) {
 		super();

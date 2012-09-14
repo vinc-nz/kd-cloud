@@ -7,6 +7,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataAccessObject;
@@ -19,6 +20,7 @@ public abstract class KDServerResource extends ServerResource {
 	private UserProvider userProvider;
 
 	DataAccessObject<User> userDao;
+	DataAccessObject<Group> groupDao;
 	DataAccessObject<Task> taskDao;
 
 	User user;
@@ -42,6 +44,7 @@ public abstract class KDServerResource extends ServerResource {
 		persistenceContext = pcf.get();
 		userDao = persistenceContext.getUserDao();
 		taskDao = persistenceContext.getTaskDao();
+		groupDao = persistenceContext.getGroupDao();
 	}
 
 	protected String getParameter(ServerParameter serverParameter) {

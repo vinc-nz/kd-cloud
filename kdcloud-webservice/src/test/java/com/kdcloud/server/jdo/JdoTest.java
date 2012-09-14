@@ -49,7 +49,6 @@ public class JdoTest {
 		Entry e = new Entry();
 		e.setUser(user);
 		DataTable table = new DataTable();
-		table.setName("test");
 		e.setDataTable(table);
 		group.getEntries().add(e);
 

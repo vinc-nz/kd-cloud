@@ -6,10 +6,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
 
-@XStreamAlias("server-parameter")
 public class ServerParameter implements Serializable {
 
 	/**
@@ -25,6 +23,7 @@ public class ServerParameter implements Serializable {
 	public static final ServerParameter TASK_ID = new ServerParameter("taskId");
 	public static final ServerParameter MODALITY_ID = new ServerParameter("modalityId");
 	public static final ServerParameter WORKFLOW_ID = new ServerParameter("workflowId");
+	public static final ServerParameter GROUP_ID = new ServerParameter("groupId");
 
 	public static Set<ServerParameter> getParamsFromUri(String uri) {
 		Set<ServerParameter> params = new HashSet<ServerParameter>();
@@ -36,8 +35,8 @@ public class ServerParameter implements Serializable {
 		return params;
 	}
 	
-	@XStreamAsAttribute
-	private String value;
+	@XmlAttribute(name="value")
+	private String mValue;
 
 	public ServerParameter() {
 		// TODO Auto-generated constructor stub
@@ -45,21 +44,21 @@ public class ServerParameter implements Serializable {
 
 	public ServerParameter(String value) {
 		super();
-		this.value = value;
+		this.mValue = value;
 	}
 
 	public void setValue(String value) {
-		this.value = value;
+		this.mValue = value;
 	}
 	
-	public String getValue() {
-		return value;
+	public String value() {
+		return mValue;
 	}
 
 	public String getName() {
 		if (isXPathReference())
 			return null;
-		return value.replaceAll(INPUT_PREFIX, "");
+		return mValue.replaceAll(INPUT_PREFIX, "");
 	}
 	
 	public boolean isReference() {
@@ -67,44 +66,44 @@ public class ServerParameter implements Serializable {
 	}
 	
 	public boolean isXPathReference() {
-		return value.contains(XPATH_PREFIX);
+		return mValue.contains(XPATH_PREFIX);
 	}
 	
 	public String getXPathExpression() {
 		if (!isXPathReference())
 			return null;
-		return value.replaceAll(XPATH_PREFIX, "");
+		return mValue.replaceAll(XPATH_PREFIX, "");
 	}
 	
 	public boolean isInputReference() {
-		return value.contains(INPUT_PREFIX);
+		return mValue.contains(INPUT_PREFIX);
 	}
 	
 	public ServerParameter toInputReference() {
 		String newValue;
 		if (isXPathReference())
-			newValue = value.replace(XPATH_PREFIX, INPUT_PREFIX);
+			newValue = mValue.replace(XPATH_PREFIX, INPUT_PREFIX);
 		else if (isInputReference())
-			newValue = value;
+			newValue = mValue;
 		else
-			newValue = INPUT_PREFIX + value;
+			newValue = INPUT_PREFIX + mValue;
 		return new ServerParameter(newValue);
 	}
 	
 	public ServerParameter toXPathReference() {
 		String newValue;
 		if (isXPathReference())
-			newValue = value;
+			newValue = mValue;
 		else if (isInputReference())
-			newValue = value.replace(INPUT_PREFIX, XPATH_PREFIX);
+			newValue = mValue.replace(INPUT_PREFIX, XPATH_PREFIX);
 		else
-			newValue = XPATH_PREFIX + value;
+			newValue = XPATH_PREFIX + mValue;
 		return new ServerParameter(newValue);
 	}
 
 	@Override
 	public String toString() {
-		return "{" + value + "}";
+		return "{" + mValue + "}";
 	}
 
 	@Override
@@ -115,7 +114,7 @@ public class ServerParameter implements Serializable {
 				return getXPathExpression().equals(other.getXPathExpression());
 			if (isInputReference())
 				return getName().equals(other.getName());
-			return value.equals(other.value);
+			return mValue.equals(other.mValue);
 		}
 		return false;
 	}
@@ -128,7 +127,7 @@ public class ServerParameter implements Serializable {
 	};
 
 	String getPattern() {
-		return "\\{" + value + "\\}";
+		return "\\{" + mValue + "\\}";
 	}
 
 }

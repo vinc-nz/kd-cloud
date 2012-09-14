@@ -2,22 +2,26 @@ package com.kdcloud.lib.domain;
 
 import java.io.Serializable;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@XStreamAlias("dataset")
+@XmlRootElement(name="dataset")
 public class Dataset implements Serializable {
 	
-	@XStreamAsAttribute
-	Long id;
+	@XmlAttribute
+	Long mId;
+	
+	public Dataset() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Dataset(Long id) {
 		super();
-		this.id = id;
+		this.mId = id;
 	}
 
 	public Long getId() {
-		return id;
+		return mId;
 	}
 
 }

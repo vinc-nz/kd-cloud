@@ -65,11 +65,11 @@ public class Utils {
 	}
 
 	public static void initDatabase(Context context) {
-		PersistenceContextFactory pcf = (PersistenceContextFactory) context
-				.getAttributes().get(PersistenceContextFactory.class.getName());
-		PersistenceContext pc = pcf.get();
-		cleanDatabase(pc);
-		addStandardModalities(pc, context.getLogger());
+//		PersistenceContextFactory pcf = (PersistenceContextFactory) context
+//				.getAttributes().get(PersistenceContextFactory.class.getName());
+//		PersistenceContext pc = pcf.get();
+//		cleanDatabase(pc);
+//		addStandardModalities(pc, context.getLogger());
 	}
 
 	public static void cleanDatabase(PersistenceContext pc) {

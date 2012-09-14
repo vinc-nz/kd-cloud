@@ -1,19 +1,23 @@
 package com.kdcloud.server.rest.resource;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.io.File;
+import java.net.URI;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
 import org.restlet.Application;
-import org.restlet.resource.Post;
 import org.restlet.resource.Get;
+import org.restlet.resource.Put;
 
-import com.kdcloud.lib.domain.InputSpecification;
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalityIndex;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
 import com.kdcloud.server.entity.ModEntity;
 
 public class ModalitiesServerResource extends KDServerResource implements ModalitiesResource {
+	
+	private static final String STANDARD_MODALITIES_FILE = "modalities.xml";
 	
 	public ModalitiesServerResource() {
 		super();
@@ -26,22 +30,22 @@ public class ModalitiesServerResource extends KDServerResource implements Modali
 	@Override
 	@Get
 	public ModalityIndex listModalities() {
-		List<Modality> list = new LinkedList<Modality>();
-		for (ModEntity e : modalityDao.getAll()) {
-			InputSpecification spec = new InputSpecification(e.getInputSources());
-			list.add(new Modality(e.getId(), e.getName(), e.getServerCommands(), spec));
+		try {
+			JAXBContext context = JAXBContext.newInstance(ModalityIndex.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			URI uri = getClass().getClassLoader().getResource(STANDARD_MODALITIES_FILE).toURI();
+			ModalityIndex index = (ModalityIndex) unmarshaller.unmarshal(new File(uri));
+			return index;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-		getLogger().info("fetched " + list.size() + " modalities");
-		return new ModalityIndex(list);
 	}
 
 	@Override
-	@Post
+	@Put
 	public void createModality(Modality modality) {
-		ModEntity e = new ModEntity();
-		e.setName(modality.getName());
-		e.setServerCommands(modality.getServerCommands());
-		modalityDao.save(e);
+		//TODO stub
 	}
 
 }

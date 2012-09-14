@@ -15,21 +15,19 @@ import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
+import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.MapVerifier;
 
-import weka.core.Instances;
-
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.lib.domain.InputSpecification;
-import com.kdcloud.lib.rest.api.UserDataResource;
-import com.kdcloud.lib.rest.ext.InstancesRepresentation;
+import com.kdcloud.lib.rest.api.ModalitiesResource;
 
 public class RestletTestCase {
 
@@ -102,14 +100,12 @@ public class RestletTestCase {
 				"login", "secret");
 
 		ClientResource cr = new ClientResource(BASE_URI
-				+ UserDataResource.URI);
+				+ ModalitiesResource.URI);
 		cr.setChallengeResponse(authentication);
-		Instances instances = InputSpecification.newInstances("test", 3);
-//		instances.add(new DenseInstance(1, new double[] {1,2,3}));
-		Representation out = cr.put(new InstancesRepresentation(instances), MediaType.TEXT_XML);
-		System.out.println(out.getMediaType());
+		Representation out = cr.get(MediaType.TEXT_XML);
 		try {
-			System.out.println(out.getText());
+			DomRepresentation rep = new DomRepresentation(out);
+			System.out.println(rep.getText());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -5,8 +5,8 @@
   <classpathentry kind="src" path="src/main/java" including="**/*.java"/>
   <classpathentry kind="src" path="src/main/resources" excluding="**/*.java"/>
   <classpathentry kind="output" path="target/classes"/>
-  <classpathentry kind="var" path="M2_REPO/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1.jar" sourcepath="M2_REPO/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar" sourcepath="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/activation/activation/1.1/activation-1.1.jar" sourcepath="M2_REPO/javax/activation/activation/1.1/activation-1.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/jdo/jdo-api/3.0/jdo-api-3.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/transaction/transaction-api/1.1/transaction-api-1.1.jar" sourcepath="M2_REPO/javax/transaction/transaction-api/1.1/transaction-api-1.1-sources.jar"/>
@@ -18,12 +18,12 @@
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-api-1.0-sdk/1.7.0/appengine-api-1.0-sdk-1.7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1.jar" sourcepath="M2_REPO/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/apache/geronimo/specs/geronimo-jpa_3.0_spec/1.1.1/geronimo-jpa_3.0_spec-1.1.1.jar" sourcepath="M2_REPO/org/apache/geronimo/specs/geronimo-jpa_3.0_spec/1.1.1/geronimo-jpa_3.0_spec-1.1.1-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/org/apache/geronimo/specs/geronimo-jpa_3.0_spec/1.1.1/geronimo-jpa_3.0_spec-1.1.1-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/org/apache/geronimo/specs/geronimo-jpa_3.0_spec/1.1.1/geronimo-jpa_3.0_spec-1.1.1-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/datanucleus/datanucleus-core/3.0.1/datanucleus-core-3.0.1.jar" sourcepath="M2_REPO/org/datanucleus/datanucleus-core/3.0.1/datanucleus-core-3.0.1-sources.jar"/>
@@ -31,7 +31,7 @@
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/orm/datanucleus-appengine/2.0.0/datanucleus-appengine-2.0.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2.jar" sourcepath="M2_REPO/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.servlet/2.2-SNAPSHOT/org.restlet.ext.servlet-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.servlet/2.2-SNAPSHOT/org.restlet.ext.servlet-2.2-SNAPSHOT-sources.jar"/>
@@ -39,18 +39,18 @@
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.oauth/2.2-SNAPSHOT/org.restlet.ext.oauth-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.oauth/2.2-SNAPSHOT/org.restlet.ext.oauth-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.5/commons-codec-1.5.jar" sourcepath="M2_REPO/commons-codec/commons-codec/1.5/commons-codec-1.5-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/commons-codec/commons-codec/1.5/commons-codec-1.5-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/commons-codec/commons-codec/1.5/commons-codec-1.5-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.lib.org.json/2.0/org.restlet.lib.org.json-2.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-dbcp/commons-dbcp/1.3/commons-dbcp-1.3.jar" sourcepath="M2_REPO/commons-dbcp/commons-dbcp/1.3/commons-dbcp-1.3-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/commons-dbcp/commons-dbcp/1.3/commons-dbcp-1.3-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/commons-dbcp/commons-dbcp/1.3/commons-dbcp-1.3-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/commons-pool/commons-pool/1.5.6/commons-pool-1.5.6.jar" sourcepath="M2_REPO/commons-pool/commons-pool/1.5.6/commons-pool-1.5.6-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/commons-pool/commons-pool/1.5.6/commons-pool-1.5.6-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/commons-pool/commons-pool/1.5.6/commons-pool-1.5.6-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/freemarker/freemarker/2.3.19/freemarker-2.3.19.jar" sourcepath="M2_REPO/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar"/>
@@ -60,13 +60,13 @@
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.wadl/2.2-SNAPSHOT/org.restlet.ext.wadl-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.wadl/2.2-SNAPSHOT/org.restlet.ext.wadl-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.xml/2.2-SNAPSHOT/org.restlet.ext.xml-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.xml/2.2-SNAPSHOT/org.restlet.ext.xml-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.net/2.2-SNAPSHOT/org.restlet.ext.net-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.net/2.2-SNAPSHOT/org.restlet.ext.net-2.2-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.jaxb/2.2-SNAPSHOT/org.restlet.ext.jaxb-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.jaxb/2.2-SNAPSHOT/org.restlet.ext.jaxb-2.2-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/sun/xml/bind/jaxb-impl/2.1.12/jaxb-impl-2.1.12.jar" sourcepath="M2_REPO/com/sun/xml/bind/jaxb-impl/2.1.12/jaxb-impl-2.1.12-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.jaxb/2.2-SNAPSHOT/org.restlet.ext.jaxb-2.2-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/sun/xml/bind/jaxb-impl/2.1.12/jaxb-impl-2.1.12.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.gwt/2.2-SNAPSHOT/org.restlet.ext.gwt-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.gwt/2.2-SNAPSHOT/org.restlet.ext.gwt-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.3.0/gwt-servlet-2.3.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-servlet/2.3.0/gwt-servlet-2.3.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar" sourcepath="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.5/junit-4.5.jar" sourcepath="M2_REPO/junit/junit/4.5/junit-4.5-sources.jar"/>
@@ -79,17 +79,17 @@
   <classpathentry kind="var" path="M2_REPO/com/google/android/gcm-server/1.0-r3/gcm-server-1.0-r3.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar" sourcepath="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-classic/0.9.24/logback-classic-0.9.24.jar" sourcepath="M2_REPO/ch/qos/logback/logback-classic/0.9.24/logback-classic-0.9.24-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/ch/qos/logback/logback-classic/0.9.24/logback-classic-0.9.24-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/ch/qos/logback/logback-classic/0.9.24/logback-classic-0.9.24-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-core/0.9.24/logback-core-0.9.24.jar" sourcepath="M2_REPO/ch/qos/logback/logback-core/0.9.24/logback-core-0.9.24-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/ch/qos/logback/logback-core/0.9.24/logback-core-0.9.24-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/ch/qos/logback/logback-core/0.9.24/logback-core-0.9.24-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/restlet/jse/org.restlet.ext.simple/2.2-SNAPSHOT/org.restlet.ext.simple-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/jse/org.restlet.ext.simple/2.2-SNAPSHOT/org.restlet.ext.simple-2.2-SNAPSHOT-sources.jar"/>
@@ -98,7 +98,7 @@
   <classpathentry kind="var" path="M2_REPO/org/restlet/jse/org.restlet.ext.ssl/2.2-SNAPSHOT/org.restlet.ext.ssl-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/jse/org.restlet.ext.ssl/2.2-SNAPSHOT/org.restlet.ext.ssl-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jsslutils/jsslutils/1.0.5/jsslutils-1.0.5.jar" sourcepath="M2_REPO/org/jsslutils/jsslutils/1.0.5/jsslutils-1.0.5-sources.jar">
     <attributes>
-      <attribute value="jar:file:/home/vincenzo/.m2/repository/org/jsslutils/jsslutils/1.0.5/jsslutils-1.0.5-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/spax/.m2/repository/org/jsslutils/jsslutils/1.0.5/jsslutils-1.0.5-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/appengine-api-labs/1.7.0/appengine-api-labs-1.7.0.jar"/>

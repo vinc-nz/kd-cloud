@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.restlet.Application;
+import org.restlet.data.MediaType;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
@@ -31,7 +32,8 @@ public class ModalitiesServerResource extends KDServerResource implements Modali
 	@Get
 	public ModalityIndex listModalities() {
 		try {
-			JAXBContext context = JAXBContext.newInstance(ModalityIndex.class);
+			JAXBContext context = 
+					JAXBContext.newInstance(ModalityIndex.class.getPackage().getName(), getClass().getClassLoader());
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			URI uri = getClass().getClassLoader().getResource(STANDARD_MODALITIES_FILE).toURI();
 			ModalityIndex index = (ModalityIndex) unmarshaller.unmarshal(new File(uri));

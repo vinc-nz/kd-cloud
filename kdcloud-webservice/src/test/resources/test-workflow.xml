@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workflow>
+    <node>
+        <type>FileDataReader</type>
+        <parameter>
+            <name>filename</name>
+            <value>ecg_small.txt</value>
+        </parameter>
+    </node>
+    <node>
+        <type>UserDataWriter</type>
+    </node>
+</workflow>

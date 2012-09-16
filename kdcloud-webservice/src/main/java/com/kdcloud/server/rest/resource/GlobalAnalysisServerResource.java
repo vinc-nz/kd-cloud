@@ -1,6 +1,5 @@
 package com.kdcloud.server.rest.resource;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -37,7 +36,7 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 	
 	@Override
 	public Representation handle() {
-		String workflowId = getParameter(ServerParameter.WORKFLOW_ID);
+		workflowId = getParameter(ServerParameter.WORKFLOW_ID);
 		return super.handle();
 	}
 
@@ -45,7 +44,6 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 	@Post
 	public Representation execute(Form form) {
 		try {
-			InputStream workflow = Utils.loadFile(workflowId);
 			DomRepresentation representation = new DomRepresentation(
 	                MediaType.TEXT_XML);
 			Document d = representation.getDocument();
@@ -54,7 +52,7 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 			List<User> users = userDao.getAll();
 			for (User subject : users) {
 				form.add(ServerParameter.USER_ID.getName(), subject.getName());
-				Report report = execute(form, workflow);
+				Report report = execute(form, Utils.loadFile(workflowId));
 				Node reportNode = report.getDom().getFirstChild();
 				globalReport.appendChild(d.importNode(reportNode, true));
 				form.removeFirst(ServerParameter.USER_ID.getName());

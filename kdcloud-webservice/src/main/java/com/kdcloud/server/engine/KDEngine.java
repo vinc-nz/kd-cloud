@@ -6,6 +6,6 @@ import java.io.InputStream;
 
 public interface KDEngine {
 
-	public Worker getWorker(InputStream input);
+	public Worker getWorker(InputStream input) throws Exception;
 	
 }

@@ -32,7 +32,13 @@ public abstract class WorkerServerResource extends KDServerResource {
 	
 
 	public Report execute(Form form, InputStream input) {
-		Worker worker = engine.getWorker(input);
+		Worker worker;
+		try {
+			worker = engine.getWorker(input);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 		worker.setPersistenceContext(getPersistenceContext());
 		for (ServerParameter param : worker.getParameters()) {
 			String value = form.getFirstValue(param.getName());

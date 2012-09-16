@@ -13,11 +13,8 @@ import weka.core.Instances;
 
 public class FileDataReader extends NodeAdapter {
 	
+	String filename;
 	File mFile;
-	
-	public FileDataReader(String filename) {
-		loadFile(filename);
-	}
 	
 	public static double[] readData(File file) {
 		BufferedReader in = null;
@@ -50,12 +47,13 @@ public class FileDataReader extends NodeAdapter {
 	public void configure(WorkerConfiguration config) throws WrongConfigurationException {
 		String filename = (String) config.get("filename");
 		if (filename != null)
-			loadFile(filename);
+			this.filename = filename;
+		loadFile();
 		if (mFile == null)
 			throw new WrongConfigurationException("input file not valid");
 	}
 	
-	private void loadFile(String filename) {
+	private void loadFile() {
 		try {
 			URI uri = getClass().getClassLoader().getResource(filename).toURI();
 			mFile = new File(uri);

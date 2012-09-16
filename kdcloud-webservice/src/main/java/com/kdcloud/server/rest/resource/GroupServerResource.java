@@ -1,5 +1,6 @@
 package com.kdcloud.server.rest.resource;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,9 +40,7 @@ public class GroupServerResource extends KDServerResource implements
 	public boolean create() {
 		Group group = groupDao.findByName(groupName);
 		if (group == null) {
-			group = new Group();
-			group.setName(groupName);
-			groupDao.save(group);
+			groupDao.save(new Group(groupName));
 			return true;
 		}
 		return false;
@@ -52,7 +51,7 @@ public class GroupServerResource extends KDServerResource implements
 	public UserIndex getSubsribedUsers() {
 		Group group = groupDao.findByName(groupName);
 		//TODO error if group does not exis
-		List<User> users = group.getUsers();
+		Collection<User> users = group.getUsers();
 		List<String> names = new LinkedList<String>();
 		for (User user : users) {
 			names.add(user.getName());

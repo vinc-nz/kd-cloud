@@ -1,7 +1,10 @@
 package com.kdcloud.server.entity;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -17,16 +20,24 @@ public class Group {
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
     private String encodedKey;
 	
-	@Persistent
-	@Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
-	private Long id;
+//	@Persistent
+//	@Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
+//	private Long id;
 	
 	@Persistent
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String name;
 	
 	@Persistent
-	private List<Entry> entries = new LinkedList<Entry>();
+	private List<TableEntry> entries = new LinkedList<TableEntry>();
+
+	public Group() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Group(String name) {
+		this.name = name;
+	}
 
 	public String getEncodedKey() {
 		return encodedKey;
@@ -36,13 +47,13 @@ public class Group {
 		this.encodedKey = encodedKey;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+//	public Long getId() {
+//		return id;
+//	}
+//
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 
 	public String getName() {
 		return name;
@@ -52,36 +63,28 @@ public class Group {
 		this.name = name;
 	}
 
-	public List<Entry> getEntries() {
+	public List<TableEntry> getEntries() {
 		return entries;
 	}
 
-	public void setEntries(List<Entry> entries) {
+	public void setEntries(List<TableEntry> entries) {
 		this.entries = entries;
 	}
 	
-	public DataTable getTable(User user) {
-		for (Entry e : entries) {
-			if (e.user.equals(user))
-				return e.dataTable;
-		}
-		return null;
+	public Set<User> getUsers() {
+		return map().keySet();
 	}
-
-	public boolean removeEntry(User user) {
-		Entry toRemove = null;
-		for (Entry e : entries) {
-			if (e.user.equals(user))
-				toRemove = e;
-		}
-		return (toRemove == null ? false : entries.remove(toRemove));
+	
+	public void addEntry(User user, DataTable dataTable) {
+		entries.add(new TableEntry(user, dataTable));
 	}
-
-	public List<User> getUsers() {
-		List<User> users = new LinkedList<User>();
-		for (Entry e : entries)
-			users.add(e.getUser());
-		return users;
+	
+	public Map<User, DataTable> map() {
+		HashMap<User, DataTable> map = new HashMap<User, DataTable>(entries.size());
+		for (TableEntry e : entries) {
+			map.put(e.user, e.dataTable);
+		}
+		return map;
 	}
 
 }

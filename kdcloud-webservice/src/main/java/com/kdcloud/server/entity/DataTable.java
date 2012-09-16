@@ -6,7 +6,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.datanucleus.annotations.Unowned;
 import weka.core.Instances;
 
 @PersistenceCapable
@@ -17,20 +16,20 @@ public class DataTable {
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
 	private String encodedKey;
 
-	@Persistent
-    @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
-	Long id;
+//	@Persistent
+//    @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
+//	Long id;
 	
 	@Persistent(serialized="true")
 	Object instances;
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+//	public Long getId() {
+//		return id;
+//	}
+//
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 
 	public Instances getInstances() {
 		return (Instances) instances;
@@ -48,11 +47,11 @@ public class DataTable {
 		this.encodedKey = encodedKey;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof DataTable)
-			return ((DataTable) obj).id.equals(this.id);
-		return false;
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (obj instanceof DataTable)
+//			return ((DataTable) obj).id.equals(this.id);
+//		return false;
+//	}
 
 }

@@ -24,7 +24,7 @@ public class DataAccessObjectImpl<T> implements DataAccessObject<T> {
 		Key k = KeyFactory.createKey(clazz.getSimpleName(), keyId);
 		try {
 			T e = pm.getObjectById(clazz, k);
-			setId(e, keyId);
+//			setId(e, keyId);
 			return e;
 		} catch (Exception e) {
 			return null;
@@ -44,8 +44,8 @@ public class DataAccessObjectImpl<T> implements DataAccessObject<T> {
 	public boolean save(T e) {
 		try {
 			pm.makePersistent(e);
-			Key k = getKey(e);
-			setId(e, k.getId());
+//			Key k = getKey(e);
+//			setId(e, k.getId());
 			return true;
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -67,9 +67,9 @@ public class DataAccessObjectImpl<T> implements DataAccessObject<T> {
 		return KeyFactory.stringToKey(encodedKey);
 	}
 	
-	public void setId(T e, Long id) throws Exception {
-		clazz.getMethod("setId", Long.class).invoke(e, id);
-	}
+//	public void setId(T e, Long id) throws Exception {
+//		clazz.getMethod("setId", Long.class).invoke(e, id);
+//	}
 	
 	public Long getId(T e) throws Exception {
 		return (Long) clazz.getMethod("getId").invoke(e);
@@ -85,12 +85,12 @@ public class DataAccessObjectImpl<T> implements DataAccessObject<T> {
 
 	public void update(T e) {
 		pm.makePersistent(e); 
-		try {
-			Key k = getKey(e);
-			setId(e, k.getId());
-		} catch (Exception thrown) {
-			thrown.printStackTrace();
-		}
+//		try {
+//			Key k = getKey(e);
+//			setId(e, k.getId());
+//		} catch (Exception thrown) {
+//			thrown.printStackTrace();
+//		}
 	}
 
 	public void deleteAll() {
@@ -101,14 +101,14 @@ public class DataAccessObjectImpl<T> implements DataAccessObject<T> {
 	public List<T> getAll() {
 		Query q = pm.newQuery(clazz);
 		List<T> list = (List<T>) q.execute();
-		for (T e : list) {
-			try {
-				Key k = getKey(e);
-				setId(e, k.getId());
-			} catch (Exception thrown) {
-				thrown.printStackTrace();
-			}
-		}
+//		for (T e : list) {
+//			try {
+//				Key k = getKey(e);
+//				setId(e, k.getId());
+//			} catch (Exception thrown) {
+//				thrown.printStackTrace();
+//			}
+//		}
 		return list;
 	}
 

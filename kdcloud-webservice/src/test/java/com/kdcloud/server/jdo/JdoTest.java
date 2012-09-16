@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.entity.DataTable;
-import com.kdcloud.server.entity.Entry;
+import com.kdcloud.server.entity.TableEntry;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
 
@@ -40,19 +40,15 @@ public class JdoTest {
 	@Test
 	public void test() {
 		PersistenceManager pm = pmfInstance.getPersistenceManager();
-		User user = new User();
-		String name = "name";
-		user.setName(name);
-		Group group = new Group();
-		group.setName("test");
-		user.getGroups().add(group);
-		Entry e = new Entry();
+		User user = new User("name");
+		Group group = new Group("test");
+		TableEntry e = new TableEntry();
 		e.setUser(user);
 		DataTable table = new DataTable();
 		e.setDataTable(table);
 		group.getEntries().add(e);
 
-		pm.makePersistent(user);
+		pm.makePersistent(group);
 		Assert.assertNotNull(user.getEncodedKey());
 		Assert.assertNotNull(group.getEncodedKey());
 		Assert.assertNotNull(e.getEncodedKey());

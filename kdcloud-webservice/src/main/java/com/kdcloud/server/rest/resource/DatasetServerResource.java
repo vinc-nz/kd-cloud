@@ -17,6 +17,7 @@ import com.kdcloud.lib.rest.api.DatasetResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
+import com.kdcloud.server.entity.TableEntry;
 
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
 	
@@ -32,8 +33,13 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	}
 	
 	private DataTable getTable() {
-		DataTable dataset = group.getTable(user);
-		return (dataset == null ? new DataTable() : dataset);
+		DataTable dataset = group.map().get(user);
+		if (dataset == null) {
+			dataset = new DataTable();
+			group.getEntries().add(new TableEntry(user, dataset));
+			groupDao.save(group);
+		}
+		return dataset;
 	}
 
 
@@ -41,7 +47,8 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	public Representation handle() {
 		String groupName = getParameter(ServerParameter.GROUP_ID);
 		group = groupDao.findByName(groupName);
-		//TODO error if group does not exist
+		if (group == null)
+			return notFound();
 		return super.handle();
 	}
 	
@@ -84,15 +91,17 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	@Get
 	public Representation getData() {
 		DataTable dataset = getTable();
-		if (dataset.getInstances() == null)
+		if (dataset.getInstances() == null) {
+			getLogger().info("no data");
 			return null;
+		}
 		return new InstancesRepresentation(dataset.getInstances());
 	}
 
 	@Override
 	@Delete
 	public void deleteData() {
-		group.removeEntry(user);
+		group.map().remove(user);
 	}
 
 }

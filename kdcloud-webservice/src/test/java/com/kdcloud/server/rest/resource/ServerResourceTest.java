@@ -2,7 +2,8 @@ package com.kdcloud.server.rest.resource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,16 +13,17 @@ import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 
+import weka.core.DenseInstance;
+import weka.core.Instances;
+
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.lib.domain.InputSpecification;
+import com.kdcloud.lib.domain.ModalityIndex;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
-import com.kdcloud.server.engine.embedded.EmbeddedEngine;
-import com.kdcloud.server.entity.DataTable;
+import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.entity.Workflow;
-import weka.core.*;
 
 public class ServerResourceTest {
 
@@ -35,11 +37,15 @@ public class ServerResourceTest {
 
 	private Application application = new Application(context);
 	
-	UserDataServerResource userDataResource = new UserDataServerResource(application);
-
+	private Group group;
+	
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
+		GroupServerResource resource = new GroupServerResource(application, "test");
+		resource.create();
+		group = resource.groupDao.findByName("test");
+		assertNotNull(group);
 	}
 
 	@After
@@ -48,43 +54,26 @@ public class ServerResourceTest {
 	}
 
 	@Test
-	public void testUserData() {
-		Long id = userDataResource.createDataset().getId();
-		assertNotNull(id);
-
-		User u = userDataResource.userDao.findByName(USER_ID);
-		assertNotNull(u);
-		
-		assertNotNull(u.getTable());
-		
-		DataTable dataset = userDataResource.dataTableDao.findById(id);
-		assertNotNull(dataset.getId());
-	}
-
-	@Test
 	public void testDataset() {
-		Long id = userDataResource.createDataset().getId();
-		DataTable dataset = userDataResource.dataTableDao.findById(id);
-
-		DatasetServerResource datasetResource = new DatasetServerResource(application, dataset);
+		DatasetServerResource datasetResource = new DatasetServerResource(application, group);
 		double[] cells = { 1, 2 };
-		Instances data = new Instances(dataset.getInstances());
+		Instances data = new Instances(InputSpecification.newInstances("test", 2));
 		data.add(new DenseInstance(0, cells));
 		datasetResource.uploadData(new InstancesRepresentation(data));
 		
-		assertEquals(1, datasetResource.getData().size());
-
-//		datasetResource.deleteDataset();
-//		assertNull(datasetResource.dataTableDao.findById(id));
+		Representation out = datasetResource.getData();
+		try {
+			assertEquals(1, new InstancesRepresentation(out).getInstances().size());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Test
 	public void testModalities() {
-//		Utils.initDatabase(context);
-//		
-//		ModalitiesServerResource modalitiesResource = new ModalitiesServerResource(application);
-//		List<ModEntity> list = modalitiesResource.listModalities().asList();
-//		assertEquals(3, list.size());
+		ModalitiesServerResource modalitiesResource = new ModalitiesServerResource(application);
+		ModalityIndex index = modalitiesResource.listModalities();
+		assertEquals(3, index.asList().size());
 //
 //		ModEntity modality = list.get(0);
 //		modality.setName("test");
@@ -100,34 +89,32 @@ public class ServerResourceTest {
 
 	@Test
 	public void testWorkflow() {
-		Workflow workflow = EmbeddedEngine.getQRSWorkflow();
 		Instances instances = InputSpecification.newInstances("test", 1);
-		userDataResource.createDataset(new InstancesRepresentation(instances));
-		WorkflowServerResource workflowResource = new WorkflowServerResource(application, workflow);
+		DatasetServerResource resource = new DatasetServerResource(application, group);
+		resource.uploadData(new InstancesRepresentation(instances));
+		WorkflowServerResource workflowResource = new WorkflowServerResource(application, "ecg.xml");
 		Form form = new Form();
 		form.add(ServerParameter.USER_ID.getName(), USER_ID);
+		form.add(ServerParameter.GROUP_ID.getName(), "test");
 		Representation r = workflowResource.execute(form);
 		assertNotNull(r);
 	}
 
 	@Test
 	public void testGlobalData() {
-		Workflow workflow = EmbeddedEngine.getQRSWorkflow();
+		DatasetServerResource resource = new DatasetServerResource(application, group);
 		Instances instances = InputSpecification.newInstances("test", 1);
 		String[] ids = { "a", "b", "c" };
 		for (String s : ids) {
 			User user = new User();
 			user.setName(s);
-			userDataResource.user = user;
-			userDataResource.createDataset(new InstancesRepresentation(instances));
+			resource.user = user;
+			resource.uploadData(new InstancesRepresentation(instances));
 		}
-		GlobalDataServerResource globalDataResource = new GlobalDataServerResource(application);
-		assertTrue(globalDataResource.getAllUsersWithData().contains(ids[0]));
-		assertEquals(ids.length, globalDataResource.getAllUsersWithData()
-				.size());
 
-		GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource(application, workflow);
+		GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource(application, "ecg.xml");
 		Form form = new Form();
+		form.add(ServerParameter.GROUP_ID.getName(), "test");
 		globalAnalysisResource.execute(form);
 	}
 

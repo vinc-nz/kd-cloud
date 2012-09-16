@@ -53,7 +53,6 @@ public class RestletTestCase {
 		@Override
 		public void handle(Request request, Response response) {
 			helper.setUp();
-			Utils.initDatabase(new GAEContext(getLogger()));
 			super.handle(request, response);
 			helper.tearDown();
 		}

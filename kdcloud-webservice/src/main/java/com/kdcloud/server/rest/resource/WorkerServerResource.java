@@ -1,5 +1,7 @@
 package com.kdcloud.server.rest.resource;
 
+import java.io.InputStream;
+
 import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
@@ -9,7 +11,6 @@ import com.kdcloud.lib.domain.Report;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.engine.Worker;
-import com.kdcloud.server.entity.Task;
 
 public abstract class WorkerServerResource extends KDServerResource {
 
@@ -30,8 +31,8 @@ public abstract class WorkerServerResource extends KDServerResource {
 	}
 	
 
-	public Report execute(Task task, Form form) {
-		Worker worker = engine.getWorker(task.getWorkflow());
+	public Report execute(Form form, InputStream input) {
+		Worker worker = engine.getWorker(input);
 		worker.setPersistenceContext(getPersistenceContext());
 		for (ServerParameter param : worker.getParameters()) {
 			String value = form.getFirstValue(param.getName());

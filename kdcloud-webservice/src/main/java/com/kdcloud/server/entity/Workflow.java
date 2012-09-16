@@ -25,7 +25,9 @@ public class Workflow implements Serializable {
     @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
 	Long id;
 	
-	String name;
+	@Persistent
+	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
+	private String name;
 	
 	String description;
 	

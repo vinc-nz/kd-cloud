@@ -1,5 +1,7 @@
 package com.kdcloud.server.entity;
 
+import java.io.InputStream;
+
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -92,6 +94,11 @@ public class Task {
 
 	public void setApplicant(User applicant) {
 		this.applicant = applicant;
+	}
+
+	public InputStream getStream() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

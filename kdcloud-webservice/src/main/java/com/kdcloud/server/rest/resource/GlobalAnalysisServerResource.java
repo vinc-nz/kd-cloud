@@ -1,6 +1,6 @@
 package com.kdcloud.server.rest.resource;
 
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -18,30 +18,26 @@ import org.w3c.dom.Node;
 import com.kdcloud.lib.domain.Report;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.GlobalAnalysisResource;
-import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.entity.Workflow;
+import com.kdcloud.server.rest.application.Utils;
 
 public class GlobalAnalysisServerResource extends WorkerServerResource
 		implements GlobalAnalysisResource {
 	
-	private Workflow workflow;
+	private String workflowId;
 
 	public GlobalAnalysisServerResource() {
 		super();
 	}
 
-	GlobalAnalysisServerResource(Application application, Workflow workflow) {
+	GlobalAnalysisServerResource(Application application, String workflowId) {
 		super(application);
-		this.workflow = workflow;
+		this.workflowId = workflowId;
 	}
 	
 	@Override
 	public Representation handle() {
 		String workflowId = getParameter(ServerParameter.WORKFLOW_ID);
-		workflow = getPersistenceContext().getWorkflowDao().findById(new Long(workflowId));
-		if (workflow == null)
-			return notFound();
 		return super.handle();
 	}
 
@@ -49,6 +45,7 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 	@Post
 	public Representation execute(Form form) {
 		try {
+			InputStream workflow = Utils.loadFile(workflowId);
 			DomRepresentation representation = new DomRepresentation(
 	                MediaType.TEXT_XML);
 			Document d = representation.getDocument();
@@ -57,16 +54,13 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 			List<User> users = userDao.getAll();
 			for (User subject : users) {
 				form.add(ServerParameter.USER_ID.getName(), subject.getName());
-				Task task = new Task();
-				task.setApplicant(user);
-				task.setWorkflow(workflow);
-				Report report = execute(task, form);
+				Report report = execute(form, workflow);
 				Node reportNode = report.getDom().getFirstChild();
 				globalReport.appendChild(d.importNode(reportNode, true));
 				form.removeFirst(ServerParameter.USER_ID.getName());
 			}
 			return representation;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			getLogger().log(Level.SEVERE, "error generating xml", e);
 			setStatus(Status.SERVER_ERROR_INTERNAL);
 			return null;

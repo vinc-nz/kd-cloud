@@ -17,14 +17,18 @@ import weka.core.Instances;
 
 public class ReportGenerator extends NodeAdapter {
 
-	String xmlFilename;
+	String view;
 	Document viewSpec;
 	DocumentBuilder db;
 	BufferedInstances input;
 	View output;
 
 	public ReportGenerator(String xmlFilename) {
-		this.xmlFilename = xmlFilename;
+		this.view = xmlFilename;
+	}
+	
+	public ReportGenerator() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -47,7 +51,7 @@ public class ReportGenerator extends NodeAdapter {
 		}
 		String filename = (String) config.get("view");
 		if (filename != null)
-			xmlFilename = filename;
+			view = filename;
 		loadXmlFromFile();
 		if (viewSpec == null)
 			throw new WrongConfigurationException();
@@ -56,7 +60,7 @@ public class ReportGenerator extends NodeAdapter {
 
 	private boolean loadXmlFromFile() {
 		try {
-			URI uri = getClass().getClassLoader().getResource(xmlFilename)
+			URI uri = getClass().getClassLoader().getResource(view)
 					.toURI();
 			viewSpec = db.parse(new File(uri));
 			return true;

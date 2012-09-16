@@ -20,12 +20,12 @@ public class EmbeddedEngineWorker implements Worker {
 	private int status = STATUS_WAITING_CONFIGURATION;
 	private Logger logger;
 	private WorkerConfiguration mConfig;
-	private ArrayList<Node> mFlow;
+	private Node[] mFlow;
 	private Set<ServerParameter> params;
 	private Node mNode;
 	private PortObject mState;
 
-	public EmbeddedEngineWorker(Logger logger, SequenceFlow flow) {
+	public EmbeddedEngineWorker(Logger logger, Node[] flow) {
 		super();
 		this.logger = logger;
 		this.mFlow = flow;
@@ -41,8 +41,8 @@ public class EmbeddedEngineWorker implements Worker {
 	public void prepareNodes()
 			throws WrongConnectionException, WrongConfigurationException,
 			RuntimeException {
-		for (Iterator<Node> iterator = mFlow.iterator(); iterator.hasNext();) {
-			mNode = iterator.next();
+		for (int i = 0; i < mFlow.length; i++) {
+			mNode = mFlow[i];
 			logger.info("configuring %s node".replace("%s", mNode.getClass().getSimpleName()));
 			mNode.setInput(mState);
 			mNode.configure(mConfig);
@@ -94,8 +94,8 @@ public class EmbeddedEngineWorker implements Worker {
 	
 
 	public void runNodes() throws Exception {
-		for (Iterator<Node> iterator = mFlow.iterator(); iterator.hasNext();) {
-			mNode = iterator.next();
+		for (int i = 0; i < mFlow.length; i++) {
+			mNode = mFlow[i];
 			logger.info("executing %s node".replace("%s", mNode.getClass()
 					.getSimpleName()));
 			mNode.run(logger);

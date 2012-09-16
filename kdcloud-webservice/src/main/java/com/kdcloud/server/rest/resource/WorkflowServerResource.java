@@ -1,5 +1,7 @@
 package com.kdcloud.server.rest.resource;
 
+import java.io.InputStream;
+
 import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -11,38 +13,37 @@ import com.kdcloud.lib.domain.Report;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.WorkflowResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
-import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.entity.Workflow;
+import com.kdcloud.server.rest.application.Utils;
 
 public class WorkflowServerResource extends WorkerServerResource implements
 		WorkflowResource {
 
-	private Workflow workflow;
+	private String workflowId;
 
 	public WorkflowServerResource() {
 	}
 
-	public WorkflowServerResource(Application application, Workflow workflow) {
+	public WorkflowServerResource(Application application, String workflowId) {
 		super(application);
-		this.workflow = workflow;
+		this.workflowId = workflowId;
 	}
 	
 	@Override
 	public Representation handle() {
-		String workflowId = getParameter(ServerParameter.WORKFLOW_ID);
-		workflow = getPersistenceContext().getWorkflowDao().findById(new Long(workflowId));
-		if (workflow == null)
-			return notFound();
+		workflowId = getParameter(ServerParameter.WORKFLOW_ID);
 		return super.handle();
 	}
 
 	@Override
 	@Post
 	public Representation execute(Form form) {
-		Task task = new Task();
-		task.setApplicant(user);
-		task.setWorkflow(workflow);
-		Report report = execute(task, form);
+		InputStream workflow;
+		try {
+			workflow = Utils.loadFile(workflowId);
+		} catch (Exception e) {
+			return notFound();
+		}
+		Report report = execute(form, workflow);
 		if (report.getDom() != null)
 			return new DomRepresentation(MediaType.APPLICATION_XML, report.getDom());
 		if (report.getData() != null)

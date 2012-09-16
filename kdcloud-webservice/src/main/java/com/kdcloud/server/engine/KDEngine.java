@@ -1,11 +1,11 @@
 package com.kdcloud.server.engine;
 
-import com.kdcloud.server.entity.Workflow;
+import java.io.InputStream;
 
 
 
 public interface KDEngine {
 
-	public Worker getWorker(Workflow workflow);
+	public Worker getWorker(InputStream input);
 	
 }

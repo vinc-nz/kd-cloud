@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workflow>
+    <node>
+        <type>UserDataReader</type>
+    </node>
+    <node>
+        <type>QRS</type>
+    </node>
+    <node>
+        <type>ReportGenerator</type>
+        <parameter>
+            <name>view</name>
+            <value>view.xml</value>
+        </parameter>
+    </node>
+</workflow>

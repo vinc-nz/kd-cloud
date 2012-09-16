@@ -1,8 +1,7 @@
 package com.kdcloud.server.engine.embedded;
 
-import java.io.Serializable;
 
 
-public interface PortObject extends Serializable {
+public interface PortObject {
 
 }

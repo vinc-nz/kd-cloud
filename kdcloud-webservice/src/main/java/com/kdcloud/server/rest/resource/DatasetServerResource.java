@@ -47,8 +47,10 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	public Representation handle() {
 		String groupName = getParameter(ServerParameter.GROUP_ID);
 		group = groupDao.findByName(groupName);
-		if (group == null)
-			return notFound();
+		if (group == null) {
+			group = new Group(groupName);
+			groupDao.save(group);
+		}
 		return super.handle();
 	}
 	

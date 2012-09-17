@@ -21,10 +21,16 @@
     <modality>
         <name>Single Analysis</name>
         <action>
+            <uri>/group/london-marathon</uri>
+            <method>GET</method>
+            <repeat>false</repeat>
+            <sleepTime>0</sleepTime>
+        </action>
+        <action>
             <uri>/workflow/ecg.xml</uri>
             <postParameter>
                 <name>userId</name>
-                <reference>user</reference>
+                <reference>users/user</reference>
             </postParameter>
              <postParameter>
                 <name>groupId</name>

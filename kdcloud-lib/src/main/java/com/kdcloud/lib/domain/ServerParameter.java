@@ -6,8 +6,12 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
+import org.restlet.data.Parameter;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ServerParameter implements Serializable {
 
 	/**
@@ -15,9 +19,8 @@ public class ServerParameter implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final String INPUT_PREFIX = "input:";
-	private static final String XPATH_PREFIX = "xpath:";
-
+	private static final String REFERENCE_PREFIX = "xpath:";
+	
 	public static final ServerParameter DATASET_ID = new ServerParameter("datasetId");
 	public static final ServerParameter USER_ID = new ServerParameter("userId");
 	public static final ServerParameter TASK_ID = new ServerParameter("taskId");
@@ -35,99 +38,102 @@ public class ServerParameter implements Serializable {
 		return params;
 	}
 	
-	@XmlAttribute(name="value")
-	private String mValue;
-
-	public ServerParameter() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public ServerParameter(String value) {
-		super();
-		this.mValue = value;
-	}
-
-	public void setValue(String value) {
-		this.mValue = value;
+	public static String newReference(String reference) {
+		if (reference.contains(REFERENCE_PREFIX))
+			return reference;
+		return REFERENCE_PREFIX + reference;
 	}
 	
-	public String value() {
-		return mValue;
+	private final String name;
+	private final String value;
+	private final String reference;
+
+	public ServerParameter() {
+		this(null, null, null);
+	}
+
+	public ServerParameter(String representation) {
+		this.value = null;
+		if (representation.contains(REFERENCE_PREFIX)) {
+			this.name = null;
+			this.reference = representation.replace(REFERENCE_PREFIX, "");
+		}
+		else {
+			this.name = representation;
+			this.reference = null;
+		}
+	}
+	
+	public ServerParameter(String name, String value, String reference) {
+		super();
+		this.name = name;
+		this.value = value;
+		this.reference = reference;
 	}
 
 	public String getName() {
-		if (isXPathReference())
-			return null;
-		return mValue.replaceAll(INPUT_PREFIX, "");
+		return name;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public boolean hasReference() {
+		return reference != null;
 	}
 	
-	public boolean isReference() {
-		return isXPathReference() || isInputReference();
+	public boolean hasValue() {
+		return value != null;
 	}
 	
-	public boolean isXPathReference() {
-		return mValue.contains(XPATH_PREFIX);
+	public ServerParameter toReference(String reference) {
+		return new ServerParameter(name, null, reference);
 	}
 	
-	public String getXPathExpression() {
-		if (!isXPathReference())
-			return null;
-		return mValue.replaceAll(XPATH_PREFIX, "");
+	public ServerParameter toValue(String value) {
+		return new ServerParameter(name, value, null);
 	}
 	
-	public boolean isInputReference() {
-		return mValue.contains(INPUT_PREFIX);
-	}
-	
-	public ServerParameter toInputReference() {
-		String newValue;
-		if (isXPathReference())
-			newValue = mValue.replace(XPATH_PREFIX, INPUT_PREFIX);
-		else if (isInputReference())
-			newValue = mValue;
-		else
-			newValue = INPUT_PREFIX + mValue;
-		return new ServerParameter(newValue);
-	}
-	
-	public ServerParameter toXPathReference() {
-		String newValue;
-		if (isXPathReference())
-			newValue = mValue;
-		else if (isInputReference())
-			newValue = mValue.replace(INPUT_PREFIX, XPATH_PREFIX);
-		else
-			newValue = XPATH_PREFIX + mValue;
-		return new ServerParameter(newValue);
+	public Parameter toRestletParameter() {
+		return new Parameter(name, value);
 	}
 
 	@Override
 	public String toString() {
-		return "{" + mValue + "}";
+		if (value != null)
+			return value;
+		String repr = (reference != null ? REFERENCE_PREFIX + reference : name);
+		return "{" + repr + "}";
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ServerParameter) {
 			ServerParameter other = (ServerParameter) obj;
-			if (isXPathReference() && other.isXPathReference())
-				return getXPathExpression().equals(other.getXPathExpression());
-			if (isInputReference())
-				return getName().equals(other.getName());
-			return mValue.equals(other.mValue);
+			if (this.name == null) {
+				if (other.name == null)
+					return this.reference.equals(other.reference);
+				return false;
+			}
+			return this.name.equals(other.name);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		if (isXPathReference())
-			return getXPathExpression().hashCode();
-		return getName().hashCode();
+		if (name != null)
+			return name.hashCode();
+		return reference.hashCode();
 	};
 
 	String getPattern() {
-		return "\\{" + mValue + "\\}";
+		return "\\{" + name + "\\}";
 	}
 
 }

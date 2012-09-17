@@ -11,18 +11,8 @@ public class ServerParameterTest {
 		String uri = "/test/{param}";
 		ServerParameter param = ServerParameter.getParamsFromUri(uri).iterator().next();
 		assertEquals("param", param.getName());
-		assertEquals(new ServerParameter("input:param"), param.toInputReference());
-		assertEquals(new ServerParameter("xpath:param"), param.toXPathReference());
-		assertTrue(param.toInputReference().equals(param));
-		assertFalse(param.toXPathReference().equals(param));
-	}
-	
-	@Test
-	public void test2() {
-		String uri = "/test/{input:param}";
-		ServerParameter param = ServerParameter.getParamsFromUri(uri).iterator().next();
-		assertTrue(param.isInputReference());
-		assertEquals("param", param.getName());
+		assertEquals("{xpath:test}", param.toReference("test").toString());
+		assertEquals("x", param.toValue("x").toString());
 	}
 	
 	@Test
@@ -30,8 +20,8 @@ public class ServerParameterTest {
 		String expr = "/this/is[1]/an[last()-1]/xpath[@lang='eng']/expression";
 		String uri = "/test/{xpath:" + expr + "}/test";
 		ServerParameter param = ServerParameter.getParamsFromUri(uri).iterator().next();
-		assertTrue(param.isXPathReference());
-		assertEquals(expr, param.getXPathExpression());
+		assertTrue(param.hasReference());
+		assertEquals(expr, param.getReference());
 	}
 
 }

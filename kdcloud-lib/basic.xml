@@ -3,16 +3,16 @@
     <modality>
         <name>Data Feed</name>
         <action>
-            <uri>/data</uri>
-            <method>PUT</method>
+            <uri>/data/london-marathon</uri>
+            <method>DELETE</method>
             <repeat>false</repeat>
-            <sleepTime>600000</sleepTime>
+            <sleepTime>0</sleepTime>
         </action>
         <action>
-            <uri>/data/{groupId}</uri>
+            <uri>/data/london-marathon</uri>
             <method>PUT</method>
             <repeat>true</repeat>
-            <sleepTime>600000</sleepTime>
+            <sleepTime>60000</sleepTime>
         </action>
         <inputSpecification>
             <source>HEARTBEAT</source>
@@ -21,11 +21,18 @@
     <modality>
         <name>Single Analysis</name>
         <action>
-            <uri>/workflow/test</uri>
-            <postParameter value="input:userId"/>
+            <uri>/workflow/ecg.xml</uri>
+            <postParameter>
+                <name>userId</name>
+                <reference>user</reference>
+            </postParameter>
+             <postParameter>
+                <name>groupId</name>
+                <value>london-marathon</value>
+            </postParameter>
             <method>POST</method>
             <repeat>true</repeat>
-            <sleepTime>0</sleepTime>
+            <sleepTime>6000000</sleepTime>
         </action>
     </modality>
     <modality>

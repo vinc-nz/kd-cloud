@@ -3,9 +3,12 @@ package com.kdcloud.lib.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.restlet.data.Form;
@@ -16,6 +19,7 @@ import weka.core.Instances;
 
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
+@XmlAccessorType(XmlAccessType.NONE)
 public class ServerAction implements Serializable {
 
 	/**
@@ -26,12 +30,11 @@ public class ServerAction implements Serializable {
 	@XmlElement
 	String uri;
 	
+	@XmlElement
 	ServerMethod method;
 	
 	@XmlElement(name="postParameter")
 	Set<ServerParameter> postParams;
-	
-	Set<ServerParameter> uriParams;
 	
 	ArrayList<Parameter> postForm;
 	
@@ -44,14 +47,13 @@ public class ServerAction implements Serializable {
 	}
 
 
-	public ServerAction(String uri, String outputLabel, ServerMethod method,
+	public ServerAction(String uri, ServerMethod method,
 			boolean repeat, long sleepTime) {
 		super();
 		this.uri = uri;
 		this.method = method;
 		this.repeat = repeat;
 		this.sleepTime = sleepTime;
-		this.uriParams = ServerParameter.getParamsFromUri(uri);
 		this.postParams = new HashSet<ServerParameter>();
 		this.postForm = new ArrayList<Parameter>();
 	}
@@ -62,7 +64,6 @@ public class ServerAction implements Serializable {
 		this.repeat = serverAction.repeat;
 		this.sleepTime = serverAction.sleepTime;
 		this.uri = newUri;
-		this.uriParams = ServerParameter.getParamsFromUri(uri);
 		this.postParams = serverAction.postParams;
 		this.postForm = newPostForm;
 	}
@@ -98,15 +99,18 @@ public class ServerAction implements Serializable {
 	}
 	
 	public List<ServerParameter> getParams() {
-		ArrayList<ServerParameter> params = 
-				new ArrayList<ServerParameter>(uriParams.size() + postParams.size());
-		params.addAll(uriParams);
-		params.addAll(postParams);
+		List<ServerParameter> params = 
+				new LinkedList<ServerParameter>();
+		params.addAll(ServerParameter.getParamsFromUri(uri));
+		for (ServerParameter p : postParams) {
+			if (!p.hasValue())
+				params.add(p);
+		}
 		return params;
 	}
 	
 	public boolean hasParameters() {
-		return uriParams.isEmpty() && postParams.isEmpty();
+		return !getParams().isEmpty();
 	}
 	
 	public boolean addParameter(ServerParameter param) {
@@ -116,7 +120,7 @@ public class ServerAction implements Serializable {
 	public ServerAction setParameter(ServerParameter param, String value) {
 		String newUri = uri;
 		ArrayList<Parameter> newPostForm = postForm;
-		if (uriParams.contains(param)) {
+		if (ServerParameter.getParamsFromUri(uri).contains(param)) {
 			newUri = uri.replaceAll(param.getPattern(), value);
 		} else if (postParams.contains(param)) {
 			newPostForm = new ArrayList<Parameter>(postForm);
@@ -127,6 +131,11 @@ public class ServerAction implements Serializable {
 	}
 	
 	public Representation getPostRepresentation() {
+		for (ServerParameter p : postParams) {
+			Parameter restletParameter = p.toRestletParameter();
+			if (!postForm.contains(restletParameter) && p.hasValue())
+				postForm.add(restletParameter);
+		}
 		return new Form(postForm).getWebRepresentation();
 	}
 	

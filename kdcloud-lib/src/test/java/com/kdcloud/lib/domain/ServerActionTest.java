@@ -13,14 +13,13 @@ public class ServerActionTest {
 
 	@Test
 	public void test() {
-		ServerAction action = new ServerAction(WorkflowResource.URI, null,
+		ServerAction action = new ServerAction(WorkflowResource.URI,
 				ServerMethod.GET, false, 0);
-		Assert.assertEquals(1, action.uriParams.size());
-		Assert.assertTrue(action.uriParams.contains(ServerParameter.WORKFLOW_ID));
 		action = action.setParameter(ServerParameter.WORKFLOW_ID, "1");
 		Assert.assertEquals("/workflow/1", action.uri);
 		action.addParameter(ServerParameter.USER_ID);
 		action = action.setParameter(ServerParameter.USER_ID, "test");
-		Assert.assertEquals("test", new Form(action.postForm).getFirstValue("userId"));
+		Assert.assertEquals("test",
+				new Form(action.postForm).getFirstValue("userId"));
 	}
 }

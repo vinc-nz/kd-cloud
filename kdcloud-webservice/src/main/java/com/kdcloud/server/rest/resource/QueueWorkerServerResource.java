@@ -39,7 +39,13 @@ public class QueueWorkerServerResource extends WorkerServerResource {
 	public void pullTask(Form form) {
 		getLogger().info("ready to work on data");
 
-		Report report = execute(form, task.getStream());
+		Report report = null;
+		try {
+			report = execute(form, task.getStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		getLogger().info("work done");
 		

@@ -1,10 +1,13 @@
 package com.kdcloud.server.rest.resource;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
@@ -40,10 +43,17 @@ public class WorkflowServerResource extends WorkerServerResource implements
 		InputStream workflow;
 		try {
 			workflow = Utils.loadFile(workflowId);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			return notFound();
 		}
-		Report report = execute(form, workflow);
+		Report report;
+		try {
+			report = execute(form, workflow);
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, e.getMessage(), e);
+			setStatus(Status.SERVER_ERROR_INTERNAL);
+			return null;
+		}
 		if (report.getDom() != null)
 			return new DomRepresentation(MediaType.APPLICATION_XML, report.getDom());
 		if (report.getData() != null)

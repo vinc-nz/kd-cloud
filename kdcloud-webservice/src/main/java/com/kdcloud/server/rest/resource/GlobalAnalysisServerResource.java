@@ -1,5 +1,6 @@
 package com.kdcloud.server.rest.resource;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -58,7 +59,7 @@ public class GlobalAnalysisServerResource extends WorkerServerResource
 				form.removeFirst(ServerParameter.USER_ID.getName());
 			}
 			return representation;
-		} catch (Exception e) {
+		} catch (IOException e) {
 			getLogger().log(Level.SEVERE, "error generating xml", e);
 			setStatus(Status.SERVER_ERROR_INTERNAL);
 			return null;

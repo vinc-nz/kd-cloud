@@ -1,6 +1,10 @@
 package com.kdcloud.server.rest.resource;
 
+import java.io.IOException;
+import java.util.logging.Level;
+
 import org.restlet.Application;
+import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
@@ -26,8 +30,9 @@ public class ModalitiesServerResource extends KDServerResource implements Modali
 	public ModalityIndex listModalities() {
 		try {
 			return (ModalityIndex) Utils.loadObjectFromXml(STANDARD_MODALITIES_FILE, ModalityIndex.class);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, "error loading modalities", e);
+			setStatus(Status.SERVER_ERROR_INTERNAL);
 			return null;
 		}
 	}

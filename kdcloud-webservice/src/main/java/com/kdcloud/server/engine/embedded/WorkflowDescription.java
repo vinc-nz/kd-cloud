@@ -1,6 +1,7 @@
 package com.kdcloud.server.engine.embedded;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class WorkflowDescription {
 	@XmlElement(name="node")
 	List<NodeFactory> nodes = new LinkedList<NodeFactory>();
 	
-	public Node[] getInstance() throws Exception {
+	public Node[] getInstance() throws IOException {
 		Node[] workflow = new Node[nodes.size()];
 		int i = 0;
 		for (NodeFactory factory : nodes) {

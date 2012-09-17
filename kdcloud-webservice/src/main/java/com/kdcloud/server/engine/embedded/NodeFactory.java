@@ -1,5 +1,6 @@
 package com.kdcloud.server.engine.embedded;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,16 +29,20 @@ public class NodeFactory {
 		public String value;
 	}
 
-	public Node create() throws Exception {
-		String packageName = Node.class.getPackage().getName();
-		String className = packageName + "." + type;
-		Class<? extends Node> clazz = Class.forName(className).asSubclass(
-				Node.class);
-		Node node = clazz.newInstance();
-		for (InitParam p : parameters) {
-			clazz.getDeclaredField(p.name).set(node, p.value);
+	public Node create() throws IOException {
+		try {
+			String packageName = Node.class.getPackage().getName();
+			String className = packageName + "." + type;
+			Class<? extends Node> clazz = Class.forName(className).asSubclass(
+					Node.class);
+			Node node = clazz.newInstance();
+			for (InitParam p : parameters) {
+				clazz.getDeclaredField(p.name).set(node, p.value);
+			}
+			return node;
+		} catch (Exception e) {
+			throw new IOException("error creating node " + type);
 		}
-		return node;
 	}
 
 }

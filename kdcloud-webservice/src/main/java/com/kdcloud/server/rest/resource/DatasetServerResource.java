@@ -103,7 +103,8 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	@Override
 	@Delete
 	public void deleteData() {
-		//TODO delete data
+		group.removeEntry(user);
+		groupDao.save(group);
 	}
 
 }

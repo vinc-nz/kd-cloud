@@ -75,8 +75,16 @@ public class Group {
 		return map().keySet();
 	}
 	
-	public void addEntry(User user, DataTable dataTable) {
-		entries.add(new TableEntry(user, dataTable));
+	public boolean addEntry(User user, DataTable dataTable) {
+		return entries.add(new TableEntry(user, dataTable));
+	}
+	
+	public boolean removeEntry(User user) {
+		for (TableEntry e : entries) {
+			if (user.equals(e.user))
+				return entries.remove(e);
+		}
+		return false;
 	}
 	
 	public Map<User, DataTable> map() {

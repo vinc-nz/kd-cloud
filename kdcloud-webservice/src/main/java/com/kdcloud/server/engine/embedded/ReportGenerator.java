@@ -1,7 +1,6 @@
 package com.kdcloud.server.engine.embedded;
 
-import java.io.File;
-import java.net.URI;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -52,22 +51,18 @@ public class ReportGenerator extends NodeAdapter {
 		String filename = (String) config.get("view");
 		if (filename != null)
 			view = filename;
-		loadXmlFromFile();
-		if (viewSpec == null)
-			throw new WrongConfigurationException();
+		try {
+			loadXmlFromFile();
+		} catch (Exception e) {
+			throw new WrongConfigurationException("error loading view");
+		}
 		output = new View(viewSpec, db);
 	}
 
-	private boolean loadXmlFromFile() {
-		try {
-			URI uri = getClass().getClassLoader().getResource(view)
-					.toURI();
-			viewSpec = db.parse(new File(uri));
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
+	private void loadXmlFromFile() throws Exception {
+		InputStream stream = getClass().getClassLoader().getResourceAsStream(
+				view);
+		viewSpec = db.parse(stream);
 	}
 
 	@Override

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +69,10 @@ public class ServerResourceTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		datasetResource.deleteData();
+		group = datasetResource.groupDao.findByName("test");
+		Assert.assertNull(group.map().get(new User(USER_ID)));
 	}
 
 	@Test

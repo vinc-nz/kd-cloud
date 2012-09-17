@@ -12,7 +12,7 @@
             <uri>/data/london-marathon</uri>
             <method>PUT</method>
             <repeat>true</repeat>
-            <sleepTime>60000</sleepTime>
+            <sleepTime>60</sleepTime>
         </action>
         <inputSpecification>
             <source>HEARTBEAT</source>
@@ -30,7 +30,7 @@
             <uri>/workflow/ecg.xml</uri>
             <postParameter>
                 <name>userId</name>
-                <reference>users/user</reference>
+                <reference>//users/user</reference>
             </postParameter>
              <postParameter>
                 <name>groupId</name>
@@ -38,16 +38,20 @@
             </postParameter>
             <method>POST</method>
             <repeat>true</repeat>
-            <sleepTime>6000000</sleepTime>
+            <sleepTime>60</sleepTime>
         </action>
     </modality>
     <modality>
         <name>Global Analysis</name>
         <action>
-            <uri>/global/workflow/test</uri>
+            <uri>/global/workflow/ecg.xml</uri>
+             <postParameter>
+                <name>groupId</name>
+                <value>london-marathon</value>
+            </postParameter>
             <method>POST</method>
             <repeat>true</repeat>
-            <sleepTime>0</sleepTime>
+            <sleepTime>60</sleepTime>
         </action>
     </modality>
 </modalities>

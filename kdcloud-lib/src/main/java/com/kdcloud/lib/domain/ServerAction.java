@@ -43,7 +43,8 @@ public class ServerAction implements Serializable {
 	long sleepTime;
 	
 	public ServerAction() {
-		// TODO Auto-generated constructor stub
+		this.postParams = new HashSet<ServerParameter>();
+		this.postForm = new ArrayList<Parameter>();
 	}
 
 
@@ -59,13 +60,13 @@ public class ServerAction implements Serializable {
 	}
 
 
-	ServerAction(ServerAction serverAction, String newUri, ArrayList<Parameter> newPostForm) {
+	public ServerAction(ServerAction serverAction) {
 		this.method = serverAction.method;
 		this.repeat = serverAction.repeat;
 		this.sleepTime = serverAction.sleepTime;
-		this.uri = newUri;
+		this.uri = serverAction.uri;
 		this.postParams = serverAction.postParams;
-		this.postForm = newPostForm;
+		this.postForm = serverAction.postForm;
 	}
 
 
@@ -93,6 +94,10 @@ public class ServerAction implements Serializable {
 	public long getSleepTime() {
 		return sleepTime;
 	}
+	
+	public long getSleepTimeInMillis() {
+		return sleepTime * 1000;
+	}
 
 	public void setSleepTime(long sleepTime) {
 		this.sleepTime = sleepTime;
@@ -117,17 +122,12 @@ public class ServerAction implements Serializable {
 		return postParams.add(param);
 	}
 
-	public ServerAction setParameter(ServerParameter param, String value) {
-		String newUri = uri;
-		ArrayList<Parameter> newPostForm = postForm;
+	public void setParameter(ServerParameter param, String value) {
 		if (ServerParameter.getParamsFromUri(uri).contains(param)) {
-			newUri = uri.replaceAll(param.getPattern(), value);
-		} else if (postParams.contains(param)) {
-			newPostForm = new ArrayList<Parameter>(postForm);
-			Parameter postParam = new Parameter(param.getName(), value);
-			newPostForm.add(postParam);
+			uri = uri.replaceAll(param.getPattern(), value);
+		} else if (postParams.remove(param)) {
+			postForm.add(new Parameter(param.getName(), value));
 		}
-		return new ServerAction(this, newUri, newPostForm);
 	}
 	
 	public Representation getPostRepresentation() {

@@ -1,5 +1,6 @@
 package com.kdcloud.lib.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import weka.core.Attribute;
 import weka.core.Instances;
 
-public class InputSpecification implements Iterable<InputSource> {
+public class InputSpecification implements Iterable<InputSource>, Serializable {
 	
 	@XmlElement(name="source")
 	List<InputSource> sources;

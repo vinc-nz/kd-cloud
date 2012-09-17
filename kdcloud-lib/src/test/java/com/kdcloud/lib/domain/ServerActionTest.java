@@ -15,10 +15,10 @@ public class ServerActionTest {
 	public void test() {
 		ServerAction action = new ServerAction(WorkflowResource.URI,
 				ServerMethod.GET, false, 0);
-		action = action.setParameter(ServerParameter.WORKFLOW_ID, "1");
+		action.setParameter(ServerParameter.WORKFLOW_ID, "1");
 		Assert.assertEquals("/workflow/1", action.uri);
 		action.addParameter(ServerParameter.USER_ID);
-		action = action.setParameter(ServerParameter.USER_ID, "test");
+		action.setParameter(ServerParameter.USER_ID, "test");
 		Assert.assertEquals("test",
 				new Form(action.postForm).getFirstValue("userId"));
 	}

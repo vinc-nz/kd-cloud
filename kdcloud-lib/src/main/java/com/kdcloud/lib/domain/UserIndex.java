@@ -9,6 +9,8 @@ public class UserIndex implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	
 	List<String> users;
 	
 	public UserIndex() {

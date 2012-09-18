@@ -6,6 +6,7 @@ import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 
@@ -22,6 +23,8 @@ public class MainApplication extends Application {
 		Context applicationContext = new GAEContext(getLogger());
 
 		Router router = new Router(getContext());
+		
+		router.attach("/xml", new Directory(getContext(), "war:///"));
 		
 		router.attach(TaskQueue.WORKER_URI + ServerParameter.TASK_ID, QueueWorkerServerResource.class);
 

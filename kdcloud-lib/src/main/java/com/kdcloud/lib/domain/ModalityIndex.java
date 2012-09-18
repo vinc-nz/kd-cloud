@@ -10,6 +10,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="modalities")
 public class ModalityIndex implements Iterable<Modality>, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	@XmlElement(name="modality")
 	List<Modality> list;
 	

@@ -12,6 +12,12 @@ import weka.core.Instances;
 
 public class InputSpecification implements Iterable<InputSource>, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	@XmlElement(name="source")
 	List<InputSource> sources;
 	

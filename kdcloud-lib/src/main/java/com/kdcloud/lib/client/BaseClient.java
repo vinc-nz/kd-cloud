@@ -41,8 +41,10 @@ public abstract class BaseClient implements Runnable {
 	Document executionLog;
 	DocumentBuilder documentBuilder;
 	XPath xpath;
+	Queue<ServerAction> queue;
 	private boolean canRun;
 	private boolean repeatAllowed;
+	private ServerAction currentAction;
 
 	public abstract void log(String message, Throwable thrown);
 
@@ -63,11 +65,16 @@ public abstract class BaseClient implements Runnable {
 
 	public abstract void report(Document view);
 
-	public boolean isRepeatAllowed() {
+	
+	/**
+	 * checks if a single 
+	 * @return
+	 */
+	public synchronized boolean isRepeatAllowed() {
 		return repeatAllowed;
 	}
 
-	public void setRepeatAllowed(boolean repeatAllowed) {
+	public synchronized void setRepeatAllowed(boolean repeatAllowed) {
 		this.repeatAllowed = repeatAllowed;
 	}
 	
@@ -148,29 +155,28 @@ public abstract class BaseClient implements Runnable {
 			InterruptedException {
 		startModalityExecution();
 		log("executing " + modality.getName());
-		Queue<ServerAction> queue = new LinkedList<ServerAction>(
+		queue = new LinkedList<ServerAction>(
 				modality.getServerCommands());
 		while (canRun() && !queue.isEmpty()) {
-			ServerAction action = queue.poll();
-			if (repeatAllowed && action.isRepeat())
-				queue.add(new ServerAction(action));
-			while (action.hasParameters())
-				setActionParameter(action);
+			currentAction = queue.poll();
+			if (repeatAllowed && currentAction.isRepeat())
+				queue.add(new ServerAction(currentAction));
+			while (currentAction.hasParameters())
+				setActionParameter();
 			try {
-				executeAction(action);
+				executeAction();
 			} catch (ResourceException e) {
-				handleError(resource.getStatus(), e);
+				handleResourceException(resource.getStatus(), e);
 				throw new IOException(e);
 			}
-			Thread.sleep(action.getSleepTimeInMillis());
+			Thread.sleep(currentAction.getSleepTimeInMillis());
 		}
 	}
 
-	protected void handleError(Status status, ResourceException e) {
-	}
+	public abstract void handleResourceException(Status status, ResourceException e);
 
-	protected void setActionParameter(ServerAction action) throws IOException {
-		ServerParameter parameter = action.getParams().get(0);
+	protected void setActionParameter() throws IOException {
+		ServerParameter parameter = currentAction.getParams().get(0);
 		String value = null;
 		try {
 			log("executing xpath expression: " + parameter.getReference());
@@ -189,7 +195,7 @@ public abstract class BaseClient implements Runnable {
 			throw new IOException(e);
 		}
 		log("setting parameter: " + parameter.getName() + ":" + value);
-		action.setParameter(parameter, value);
+		currentAction.setParameter(parameter, value);
 	}
 
 	public String handleChoice(String parameterName, NodeList result) {
@@ -205,13 +211,17 @@ public abstract class BaseClient implements Runnable {
 		log("fetching " + reference);
 		resource.setReference(reference);
 	}
+	
+	public void retryRequest() throws ResourceException, IOException {
+		executeAction();
+	}
 
-	protected void executeAction(ServerAction action) throws IOException,
+	public void executeAction() throws IOException,
 			ResourceException {
-		setResourceReference(action.getUri());
+		setResourceReference(currentAction.getUri());
 		beforeRequest();
 		Representation entity = null;
-		switch (action.getMethod()) {
+		switch (currentAction.getMethod()) {
 		case GET:
 			log("executing GET");
 			entity = resource.get(MediaType.APPLICATION_ALL_XML);
@@ -219,7 +229,7 @@ public abstract class BaseClient implements Runnable {
 		case PUT:
 			log("executing PUT");
 			Instances data = getData();
-			Representation putRep = action.getPutRepresentation(data);
+			Representation putRep = currentAction.getPutRepresentation(data);
 			entity = resource.put(putRep);
 			break;
 		case DELETE:
@@ -228,7 +238,7 @@ public abstract class BaseClient implements Runnable {
 			break;
 		case POST:
 			log("executing POST");
-			Representation postRep = action.getPostRepresentation();
+			Representation postRep = currentAction.getPostRepresentation();
 			entity = resource.post(postRep);
 		default:
 			break;

@@ -8,6 +8,8 @@ import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 import org.w3c.dom.Document;
 
 import weka.core.DenseInstance;
@@ -17,6 +19,13 @@ import com.kdcloud.lib.domain.InputSpecification;
 import com.kdcloud.lib.domain.Modality;
 
 public class StubClient extends BaseClient {
+	
+	
+
+	public StubClient(String url) throws ParserConfigurationException {
+		super(url);
+		// TODO Auto-generated constructor stub
+	}
 
 	public StubClient(String url, Modality modality)
 			throws ParserConfigurationException {
@@ -80,22 +89,31 @@ public class StubClient extends BaseClient {
 		System.out.println("this is a report");
 	}
 	
-//	public static void main(String[] args) throws Exception {
-//		String url = "http://localhost:8888";
-//		BaseClient kdcloud = new StubClient();
-//		kdcloud.setAccessToken("secret");
-//		List<Modality> modalities = StubClient.getModalities(url);
-//		Modality dataFeed = modalities.get(0);
-//		kdcloud.executeModality(dataFeed);
-//		Modality single = modalities.get(1);
-//		kdcloud.executeModality(single);
-//		Modality global = modalities.get(2);
-//		kdcloud.executeModality(global);
-//	}
+	public static void main(String[] args) throws Exception {
+		String url = "http://localhost:8888";
+		BaseClient kdcloud = new StubClient(url);
+		kdcloud.setAccessToken("secret");
+		List<Modality> modalities = StubClient.getModalities(url);
+		Modality dataFeed = modalities.get(0);
+		kdcloud.setModality(dataFeed);
+		kdcloud.executeModality();
+		Modality single = modalities.get(1);
+		kdcloud.setModality(single);
+		kdcloud.executeModality();
+		Modality global = modalities.get(2);
+		kdcloud.setModality(global);
+		kdcloud.executeModality();
+	}
 
 	@Override
 	public void log(String message) {
 		System.out.println(message);
+	}
+
+	@Override
+	public void handleResourceException(Status status, ResourceException e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

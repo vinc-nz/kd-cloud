@@ -7,10 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 import org.restlet.representation.Representation;
@@ -19,7 +15,6 @@ import weka.core.Instances;
 
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
-@XmlAccessorType(XmlAccessType.NONE)
 public class ServerAction implements Serializable {
 
 	/**
@@ -27,13 +22,10 @@ public class ServerAction implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@XmlElement
 	String uri;
 	
-	@XmlElement
 	ServerMethod method;
 	
-	@XmlElement(name="postParameter")
 	Set<ServerParameter> postParams;
 	
 	ArrayList<Parameter> postForm;

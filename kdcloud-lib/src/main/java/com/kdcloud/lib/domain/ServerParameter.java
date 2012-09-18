@@ -6,12 +6,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-
 import org.restlet.data.Parameter;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class ServerParameter implements Serializable {
 
 	/**

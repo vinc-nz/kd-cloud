@@ -4,11 +4,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-
-@XmlAccessorType(XmlAccessType.NONE)
 public class Modality implements Serializable {
 	
 	/**
@@ -18,13 +13,10 @@ public class Modality implements Serializable {
 
 	int id;
 	
-	@XmlElement
 	String name;
 	
-	@XmlElement
 	InputSpecification inputSpecification;
 
-	@XmlElement(name="action")
 	List<ServerAction> serverCommands = new LinkedList<ServerAction>();;
 	
 	

@@ -3,13 +3,12 @@ package com.kdcloud.lib.domain;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name="users")
 public class UserIndex implements Serializable {
 	
-	@XmlElement(name="user")
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	List<String> users;
 	
 	public UserIndex() {

@@ -6,8 +6,6 @@ import org.restlet.resource.Put;
 
 import com.kdcloud.lib.domain.Dataset;
 
-import weka.core.Instances;
-
 
 /**
  * URI /data

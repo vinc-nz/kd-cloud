@@ -8,7 +8,6 @@ import org.restlet.representation.Representation;
 
 import weka.core.Instances;
 import weka.core.converters.Loader;
-import weka.core.converters.Saver;
 
 public abstract class AbstractInstancesRepresentation extends CharacterRepresentation {
 	

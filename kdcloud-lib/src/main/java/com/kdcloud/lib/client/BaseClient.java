@@ -264,8 +264,8 @@ public abstract class BaseClient implements Runnable {
 			report(view);
 		} else {
 			log("storing last output");
-			Node child = executionLog.importNode(
-					lastOutput.getDocumentElement(), true);
+			Node child = executionLog
+					.adoptNode(lastOutput.getDocumentElement());
 			executionLog.getDocumentElement().appendChild(child);
 		}
 	}

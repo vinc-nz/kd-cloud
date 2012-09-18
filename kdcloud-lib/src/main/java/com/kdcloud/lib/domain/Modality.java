@@ -4,38 +4,31 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+@XmlAccessorType(XmlAccessType.NONE)
 public class Modality implements Serializable {
 	
-	@XmlElement
-	Long id;
+	int id;
 	
 	@XmlElement
 	String name;
 	
+	@XmlElement
 	InputSpecification inputSpecification;
 
 	@XmlElement(name="action")
-	List<ServerAction> serverCommands;
+	List<ServerAction> serverCommands = new LinkedList<ServerAction>();;
 	
 	
-	public Modality() {
-		// TODO Auto-generated constructor stub
+	public int getId() {
+		return id;
 	}
 
-	public Modality(Long id, String name, List<ServerAction> serverCommands,
-			InputSpecification inputSpecification) {
-		super();
+	public void setId(int id) {
 		this.id = id;
-		this.name = name;
-		this.serverCommands = serverCommands;
-		this.inputSpecification = inputSpecification;
-	}
-
-	public Modality(String name) {
-		this.name = name;
-		this.serverCommands = new LinkedList<ServerAction>();
 	}
 
 	public String getName() {

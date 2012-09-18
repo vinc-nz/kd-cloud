@@ -13,10 +13,11 @@ import com.kdcloud.lib.domain.ModalityIndex;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
 import com.kdcloud.server.rest.application.Utils;
 
-public class ModalitiesServerResource extends KDServerResource implements ModalitiesResource {
-	
+public class ModalitiesServerResource extends KDServerResource implements
+		ModalitiesResource {
+
 	private static final String STANDARD_MODALITIES_FILE = "modalities.xml";
-	
+
 	public ModalitiesServerResource() {
 		super();
 	}
@@ -29,7 +30,13 @@ public class ModalitiesServerResource extends KDServerResource implements Modali
 	@Get
 	public ModalityIndex listModalities() {
 		try {
-			return (ModalityIndex) Utils.loadObjectFromXml(STANDARD_MODALITIES_FILE, ModalityIndex.class);
+			ModalityIndex index = (ModalityIndex) Utils.loadObjectFromXml(
+					STANDARD_MODALITIES_FILE, ModalityIndex.class);
+			int id = 1;
+			for (Modality modality : index) {
+				modality.setId(id++);
+			}
+			return index;
 		} catch (IOException e) {
 			getLogger().log(Level.SEVERE, "error loading modalities", e);
 			setStatus(Status.SERVER_ERROR_INTERNAL);
@@ -40,7 +47,7 @@ public class ModalitiesServerResource extends KDServerResource implements Modali
 	@Override
 	@Put
 	public void createModality(Modality modality) {
-		//TODO stub
+		// TODO stub
 	}
 
 }

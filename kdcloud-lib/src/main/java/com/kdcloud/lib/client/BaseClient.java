@@ -90,7 +90,7 @@ public abstract class BaseClient implements Runnable {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		this.documentBuilder = dbf.newDocumentBuilder();
 		this.executionLog = this.documentBuilder.newDocument();
-		Element rootElement = this.executionLog.createElement("execution");
+		Element rootElement = this.executionLog.createElementNS("dummy", "execution");
 		this.executionLog.appendChild(rootElement);
 		this.resource = new ClientResource(url);
 		XPathFactory xPathfactory = XPathFactory.newInstance();

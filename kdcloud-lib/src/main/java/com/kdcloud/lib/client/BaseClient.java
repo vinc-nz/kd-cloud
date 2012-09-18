@@ -329,7 +329,7 @@ public abstract class BaseClient implements Runnable {
 		if (elementName.contains("report")) {
 			Document view = documentBuilder.newDocument();
 			Element toImport = lastOutput.getDocumentElement();
-			view.appendChild(view.importNode(toImport, true));
+			view.appendChild(view.adoptNode(toImport));
 			report(view);
 		} else {
 			log("storing last output");

@@ -9,6 +9,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="users")
 public class UserIndex implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	@XmlElement(name="user")
 	List<String> users;
 	

@@ -3,6 +3,7 @@ package com.kdcloud.lib.client;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -80,9 +81,10 @@ public class StubClient extends BaseClient {
 	}
 	
 //	public static void main(String[] args) throws Exception {
-//		BaseClient kdcloud = new StubClient("http://localhost:8888");
+//		String url = "http://localhost:8888";
+//		BaseClient kdcloud = new StubClient();
 //		kdcloud.setAccessToken("secret");
-//		List<Modality> modalities = kdcloud.getModalities();
+//		List<Modality> modalities = StubClient.getModalities(url);
 //		Modality dataFeed = modalities.get(0);
 //		kdcloud.executeModality(dataFeed);
 //		Modality single = modalities.get(1);

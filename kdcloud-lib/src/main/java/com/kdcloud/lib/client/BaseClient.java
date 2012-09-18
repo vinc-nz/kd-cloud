@@ -70,6 +70,11 @@ public abstract class BaseClient implements Runnable {
 	public void setRepeatAllowed(boolean repeatAllowed) {
 		this.repeatAllowed = repeatAllowed;
 	}
+	
+
+	public BaseClient(String url) throws ParserConfigurationException {
+		this(url, null);
+	}
 
 	public BaseClient(String url, Modality modality) throws ParserConfigurationException {
 		super();
@@ -99,8 +104,17 @@ public abstract class BaseClient implements Runnable {
 		return canRun;
 	}
 	
-	public Modality getModality() {
+	public synchronized Modality getModality() {
 		return modality;
+	}
+	
+	/**
+	 * changes client modality, stops the execution of the previous if any
+	 * @param modality
+	 */
+	public synchronized void setModality(Modality modality) {
+		this.canRun = false;
+		this.modality = modality;
 	}
 
 	public void setAccessToken(String token) {
@@ -110,9 +124,15 @@ public abstract class BaseClient implements Runnable {
 	}
 
 	public static List<Modality> getModalities(String url) {
+		return getModalities(url, null);
+	}
+	
+	public static List<Modality> getModalities(String url, String accessToken) {
 		ClientResource cr = new ClientResource(url + ModalitiesResource.URI);
+		if (accessToken != null)
+			cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login",
+					accessToken);
 		return cr.wrap(ModalitiesResource.class).listModalities().asList();
-
 	}
 	
 	@Override
@@ -189,6 +209,7 @@ public abstract class BaseClient implements Runnable {
 	protected void executeAction(ServerAction action) throws IOException,
 			ResourceException {
 		setResourceReference(action.getUri());
+		beforeRequest();
 		Representation entity = null;
 		switch (action.getMethod()) {
 		case GET:
@@ -217,6 +238,9 @@ public abstract class BaseClient implements Runnable {
 		} else {
 			log("received entity is empty, doing nothing");
 		}
+	}
+
+	public void beforeRequest() {
 	}
 
 	protected void handleEntity(Representation entity) throws IOException {

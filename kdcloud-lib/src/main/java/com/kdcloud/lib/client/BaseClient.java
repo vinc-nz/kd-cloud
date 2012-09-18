@@ -33,32 +33,35 @@ import com.kdcloud.lib.domain.ServerAction;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
 
-public abstract class BaseClient {
-	
+public abstract class BaseClient implements Runnable {
+
 	String baseUri;
+	Modality modality;
 	ClientResource resource;
 	Document executionLog;
 	DocumentBuilder documentBuilder;
 	XPath xpath;
 	private boolean canRun;
 	private boolean repeatAllowed;
-	
+
 	public abstract void log(String message, Throwable thrown);
-	
+
 	public abstract void log(String message);
-	
+
 	public abstract Instances getData();
-	
+
 	/**
 	 * returns a selected string between the ones in choices
-	 * @param parameterName a string specifing the semantic meaning of the choices
-	 * @param choices the possibles choice alternatives
+	 * 
+	 * @param parameterName
+	 *            a string specifing the semantic meaning of the choices
+	 * @param choices
+	 *            the possibles choice alternatives
 	 * @return the choosen alternative
 	 */
 	public abstract String handleChoice(String parameterName, String[] choices);
-	
+
 	public abstract void report(Document view);
-	
 
 	public boolean isRepeatAllowed() {
 		return repeatAllowed;
@@ -68,53 +71,65 @@ public abstract class BaseClient {
 		this.repeatAllowed = repeatAllowed;
 	}
 
-	public BaseClient(String url) throws ParserConfigurationException {
+	public BaseClient(String url, Modality modality) throws ParserConfigurationException {
 		super();
 		this.baseUri = url;
+		this.modality = modality;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		this.documentBuilder = dbf.newDocumentBuilder();
 		this.executionLog = this.documentBuilder.newDocument();
 		Element rootElement = this.executionLog.createElement("execution");
 		this.executionLog.appendChild(rootElement);
-		this.resource = new ClientResource(baseUri + ModalitiesResource.URI);
+		this.resource = new ClientResource(url);
 		XPathFactory xPathfactory = XPathFactory.newInstance();
 		this.xpath = xPathfactory.newXPath();
 		this.canRun = true;
 		this.repeatAllowed = true;
 	}
-	
+
 	public synchronized void stopModalityExecution() {
 		canRun = false;
 	}
-	
+
 	public synchronized void startModalityExecution() {
 		canRun = true;
 	}
-	
+
 	public synchronized boolean canRun() {
 		return canRun;
 	}
 	
+	public Modality getModality() {
+		return modality;
+	}
+
 	public void setAccessToken(String token) {
 		log("setting access token");
-		resource.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login", token);
+		resource.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login",
+				token);
+	}
+
+	public static List<Modality> getModalities(String url) {
+		ClientResource cr = new ClientResource(url + ModalitiesResource.URI);
+		return cr.wrap(ModalitiesResource.class).listModalities().asList();
+
 	}
 	
-	public List<Modality> getModalities() throws IOException {
-		log("getting modalities");
-		setResourceReference(ModalitiesResource.URI);
+	@Override
+	public void run() {
 		try {
-			return resource.wrap(ModalitiesResource.class).listModalities().asList();
-		} catch (ResourceException e) {
-			handleError(resource.getStatus(), e);
-			throw new IOException(e);
+			executeModality();
+		} catch (Exception e) {
+			log(e.getMessage(), e);
 		}
 	}
-	
-	public void executeModality(Modality modality) throws IOException, InterruptedException {
+
+	public void executeModality() throws IOException,
+			InterruptedException {
 		startModalityExecution();
 		log("executing " + modality.getName());
-		Queue<ServerAction> queue = new LinkedList<ServerAction>(modality.getServerCommands());
+		Queue<ServerAction> queue = new LinkedList<ServerAction>(
+				modality.getServerCommands());
 		while (canRun() && !queue.isEmpty()) {
 			ServerAction action = queue.poll();
 			if (repeatAllowed && action.isRepeat())
@@ -140,20 +155,23 @@ public abstract class BaseClient {
 		try {
 			log("executing xpath expression: " + parameter.getReference());
 			XPathExpression expr = xpath.compile(parameter.getReference());
-			NodeList result = (NodeList) expr.evaluate(executionLog, XPathConstants.NODESET);
+			NodeList result = (NodeList) expr.evaluate(executionLog,
+					XPathConstants.NODESET);
 			log("expression result length: " + result.getLength());
 			if (result.getLength() == 0)
-				throw new IOException("cannot execute request: missing parameter");
+				throw new IOException(
+						"cannot execute request: missing parameter");
 			if (result.getLength() == 1)
 				value = result.item(0).getTextContent();
-			else value = handleChoice(parameter.getName(), result);
+			else
+				value = handleChoice(parameter.getName(), result);
 		} catch (XPathExpressionException e) {
 			throw new IOException(e);
 		}
 		log("setting parameter: " + parameter.getName() + ":" + value);
 		action.setParameter(parameter, value);
 	}
-	
+
 	public String handleChoice(String parameterName, NodeList result) {
 		String[] choices = new String[result.getLength()];
 		for (int i = 0; i < choices.length; i++) {
@@ -168,7 +186,8 @@ public abstract class BaseClient {
 		resource.setReference(reference);
 	}
 
-	protected void executeAction(ServerAction action) throws IOException, ResourceException {
+	protected void executeAction(ServerAction action) throws IOException,
+			ResourceException {
 		setResourceReference(action.getUri());
 		Representation entity = null;
 		switch (action.getMethod()) {
@@ -211,7 +230,8 @@ public abstract class BaseClient {
 			report(view);
 		} else {
 			log("storing last output");
-			Node child = executionLog.importNode(lastOutput.getDocumentElement(), true);
+			Node child = executionLog.importNode(
+					lastOutput.getDocumentElement(), true);
 			executionLog.getDocumentElement().appendChild(child);
 		}
 	}

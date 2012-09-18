@@ -3,7 +3,6 @@ package com.kdcloud.lib.client;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,10 +17,10 @@ import com.kdcloud.lib.domain.Modality;
 
 public class StubClient extends BaseClient {
 
-	
-	public StubClient(String url) throws ParserConfigurationException {
-		super(url);
-		setRepeatAllowed(false);
+	public StubClient(String url, Modality modality)
+			throws ParserConfigurationException {
+		super(url, modality);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -80,17 +79,17 @@ public class StubClient extends BaseClient {
 		System.out.println("this is a report");
 	}
 	
-	public static void main(String[] args) throws Exception {
-		BaseClient kdcloud = new StubClient("http://localhost:8888");
-		kdcloud.setAccessToken("secret");
-		List<Modality> modalities = kdcloud.getModalities();
-		Modality dataFeed = modalities.get(0);
-		kdcloud.executeModality(dataFeed);
-		Modality single = modalities.get(1);
-		kdcloud.executeModality(single);
-		Modality global = modalities.get(2);
-		kdcloud.executeModality(global);
-	}
+//	public static void main(String[] args) throws Exception {
+//		BaseClient kdcloud = new StubClient("http://localhost:8888");
+//		kdcloud.setAccessToken("secret");
+//		List<Modality> modalities = kdcloud.getModalities();
+//		Modality dataFeed = modalities.get(0);
+//		kdcloud.executeModality(dataFeed);
+//		Modality single = modalities.get(1);
+//		kdcloud.executeModality(single);
+//		Modality global = modalities.get(2);
+//		kdcloud.executeModality(global);
+//	}
 
 	@Override
 	public void log(String message) {

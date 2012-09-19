@@ -7,6 +7,7 @@ import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataAccessObject;
 import com.kdcloud.server.persistence.PersistenceContext;
+import com.kdcloud.server.persistence.VirtualDirectoryDao;
 
 public class PersistenceContextImpl implements PersistenceContext {
     
@@ -56,6 +57,12 @@ public class PersistenceContextImpl implements PersistenceContext {
 	@Override
 	public DataAccessObject<DataTable> getDataTableDao() {
 		return new DataAccessObjectImpl<DataTable>(DataTable.class, pm);
+	}
+
+
+	@Override
+	public VirtualDirectoryDao getVirtualDirectoryDao() {
+		return new VirtualDirectoryDaoImpl(pm);
 	}
 	
 }

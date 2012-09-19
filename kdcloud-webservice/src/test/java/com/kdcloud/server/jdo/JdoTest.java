@@ -54,5 +54,5 @@ public class JdoTest {
 		Assert.assertNotNull(e.getEncodedKey());
 		Assert.assertNotNull(table.getEncodedKey());
 	}
-
+	
 }

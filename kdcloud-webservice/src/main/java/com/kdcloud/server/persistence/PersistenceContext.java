@@ -16,11 +16,14 @@ public interface PersistenceContext {
 
 	public DataAccessObject<DataTable> getDataTableDao();
 	
+	public VirtualDirectoryDao getVirtualDirectoryDao();
+	
 	public void beginTransaction();
 	
 	public void commitTransaction();
 	
 	public void close();
+
 
 
 

@@ -14,6 +14,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Blob;
+
 @PersistenceCapable
 public class VirtualFile {
 	
@@ -26,7 +28,18 @@ public class VirtualFile {
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	String name;
 	
-	byte[] content;
+	Blob content;
+	
+	public VirtualFile() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	public VirtualFile(String name) {
+		super();
+		this.name = name;
+	}
+
 	
 	public String getEncodedKey() {
 		return encodedKey;
@@ -44,26 +57,40 @@ public class VirtualFile {
 		this.name = name;
 	}
 
-	public byte[] getContent() {
-		return content;
-	}
-
-	public void setContent(byte[] content) {
+	public void setContent(Blob content) {
 		this.content = content;
+	}
+	
+	public void setStream(ByteArrayOutputStream out) {
+		content = new Blob(out.toByteArray());
 	}
 
 	public InputStream getStream() {
-		return new ByteArrayInputStream(content);
+		return new ByteArrayInputStream(content.getBytes());
 	}
 	
 	public Object readObject() throws IOException, ClassNotFoundException {
 		return new ObjectInputStream(getStream()).readObject();
 	}
 	
-	public void writeObject(Object obj) {
-		ObjectOutput out = new ObjectOutputStream(new ByteArrayOutputStream());
+	public void writeObject(Object obj) throws IOException {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		ObjectOutput out = new ObjectOutputStream(stream);
 		out.writeObject(obj);
 		out.close();
+		setStream(stream);
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof VirtualFile)
+			return ((VirtualFile) obj).name.equals(obj);
+		return false;
 	}
 
 }

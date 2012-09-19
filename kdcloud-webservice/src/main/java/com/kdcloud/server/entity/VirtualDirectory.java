@@ -2,7 +2,7 @@ package com.kdcloud.server.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.Iterator;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -11,7 +11,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
-public class VirtualDirectory {
+public class VirtualDirectory implements Iterable<VirtualFile> {
 	
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -57,6 +57,11 @@ public class VirtualDirectory {
 
 	public void setFiles(Collection<VirtualFile> files) {
 		this.files = files;
+	}
+
+	@Override
+	public Iterator<VirtualFile> iterator() {
+		return files.iterator();
 	}
 	
 

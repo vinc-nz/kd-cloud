@@ -6,17 +6,19 @@ import java.util.logging.Level;
 import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.Put;
 
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalityIndex;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
+import com.kdcloud.server.entity.VirtualDirectory;
+import com.kdcloud.server.entity.VirtualFile;
 import com.kdcloud.server.rest.application.Utils;
 
 public class ModalitiesServerResource extends KDServerResource implements
 		ModalitiesResource {
 
 	private static final String STANDARD_MODALITIES_FILE = "modalities.xml";
+	private static final String USER_MODALITIES_DIRECTORY = "modalities";
 
 	public ModalitiesServerResource() {
 		super();
@@ -30,8 +32,8 @@ public class ModalitiesServerResource extends KDServerResource implements
 	@Get
 	public ModalityIndex listModalities() {
 		try {
-			ModalityIndex index = (ModalityIndex) Utils.loadObjectFromXml(
-					STANDARD_MODALITIES_FILE, ModalityIndex.class);
+			ModalityIndex index = loadStandardModalities();
+			addUserDefinedModalities(index);
 			int id = 1;
 			for (Modality modality : index) {
 				modality.setId(id++);
@@ -43,11 +45,19 @@ public class ModalitiesServerResource extends KDServerResource implements
 			return null;
 		}
 	}
-
-	@Override
-	@Put
-	public void createModality(Modality modality) {
-		// TODO stub
+	
+	public ModalityIndex loadStandardModalities() throws IOException {
+		return (ModalityIndex) Utils.loadObjectFromXml(
+				STANDARD_MODALITIES_FILE, ModalityIndex.class);
+	}
+	
+	public void addUserDefinedModalities(ModalityIndex index) throws IOException {
+		VirtualDirectory modalitiesDirectory = directoryDao.findByName(USER_MODALITIES_DIRECTORY);
+		if (modalitiesDirectory != null)
+			for (VirtualFile file : modalitiesDirectory) {
+				Modality m = (Modality) file.readObject();
+				index.asList().add(m);
+			}
 	}
 
 }

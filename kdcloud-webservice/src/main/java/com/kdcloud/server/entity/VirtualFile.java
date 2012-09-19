@@ -69,8 +69,13 @@ public class VirtualFile {
 		return new ByteArrayInputStream(content.getBytes());
 	}
 	
-	public Object readObject() throws IOException, ClassNotFoundException {
-		return new ObjectInputStream(getStream()).readObject();
+	public Object readObject() throws IOException {
+		try {
+			return new ObjectInputStream(getStream()).readObject();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void writeObject(Object obj) throws IOException {

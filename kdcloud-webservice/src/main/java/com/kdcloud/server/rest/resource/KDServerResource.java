@@ -13,6 +13,7 @@ import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataAccessObject;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
+import com.kdcloud.server.persistence.VirtualDirectoryDao;
 
 public abstract class KDServerResource extends ServerResource {
 
@@ -22,6 +23,7 @@ public abstract class KDServerResource extends ServerResource {
 	DataAccessObject<User> userDao;
 	DataAccessObject<Group> groupDao;
 	DataAccessObject<Task> taskDao;
+	VirtualDirectoryDao directoryDao;
 
 	User user;
 
@@ -45,6 +47,7 @@ public abstract class KDServerResource extends ServerResource {
 		userDao = persistenceContext.getUserDao();
 		taskDao = persistenceContext.getTaskDao();
 		groupDao = persistenceContext.getGroupDao();
+		directoryDao = persistenceContext.getVirtualDirectoryDao();
 	}
 
 	protected String getParameter(ServerParameter serverParameter) {

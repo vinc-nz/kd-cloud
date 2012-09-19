@@ -27,6 +27,8 @@ public class ServerParameter implements Serializable {
 	public static final ServerParameter MODALITY_ID = new ServerParameter("modalityId");
 	public static final ServerParameter WORKFLOW_ID = new ServerParameter("workflowId");
 	public static final ServerParameter GROUP_ID = new ServerParameter("groupId");
+	public static final ServerParameter VIEW_ID =  new ServerParameter("viewId");
+
 
 	public static Set<ServerParameter> getParamsFromUri(String uri) {
 		Set<ServerParameter> params = new HashSet<ServerParameter>();

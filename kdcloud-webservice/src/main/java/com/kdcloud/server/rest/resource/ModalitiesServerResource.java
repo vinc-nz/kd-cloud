@@ -18,7 +18,6 @@ public class ModalitiesServerResource extends KDServerResource implements
 		ModalitiesResource {
 
 	private static final String STANDARD_MODALITIES_FILE = "modalities.xml";
-	private static final String USER_MODALITIES_DIRECTORY = "modalities";
 
 	public ModalitiesServerResource() {
 		super();
@@ -45,14 +44,16 @@ public class ModalitiesServerResource extends KDServerResource implements
 			return null;
 		}
 	}
-	
+
 	public ModalityIndex loadStandardModalities() throws IOException {
 		return (ModalityIndex) Utils.loadObjectFromXml(
 				STANDARD_MODALITIES_FILE, ModalityIndex.class);
 	}
-	
-	public void addUserDefinedModalities(ModalityIndex index) throws IOException {
-		VirtualDirectory modalitiesDirectory = directoryDao.findByName(USER_MODALITIES_DIRECTORY);
+
+	public void addUserDefinedModalities(ModalityIndex index)
+			throws IOException {
+		VirtualDirectory modalitiesDirectory = directoryDao
+				.findByName(UserModalityServerResource.USER_MODALITIES_DIRECTORY);
 		if (modalitiesDirectory != null)
 			for (VirtualFile file : modalitiesDirectory) {
 				Modality m = (Modality) file.readObject();

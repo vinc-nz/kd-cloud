@@ -13,6 +13,9 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable
 public class VirtualDirectory implements Iterable<VirtualFile> {
 	
+	public static final String VIEW_DIRECTORY = "views";
+	public static final String USER_MODALITIES_DIRECTORY = "modalities";
+	
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")

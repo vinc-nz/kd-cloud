@@ -1,5 +1,6 @@
 package com.kdcloud.server.engine.embedded;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
@@ -11,6 +12,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.kdcloud.server.entity.VirtualDirectory;
+import com.kdcloud.server.entity.VirtualFile;
+import com.kdcloud.server.persistence.PersistenceContext;
+import com.kdcloud.server.persistence.VirtualDirectoryDao;
+
 import weka.core.Instance;
 import weka.core.Instances;
 
@@ -20,6 +26,7 @@ public class ReportGenerator extends NodeAdapter {
 	Document viewSpec;
 	DocumentBuilder db;
 	BufferedInstances input;
+	VirtualDirectoryDao virtualDirectoryDao;
 	View output;
 
 	public ReportGenerator(String xmlFilename) {
@@ -48,6 +55,12 @@ public class ReportGenerator extends NodeAdapter {
 		} catch (ParserConfigurationException e) {
 			throw new WrongConfigurationException();
 		}
+		PersistenceContext pc = config.getPersistenceContext();
+		if (pc == null) {
+			String msg = "no persistence context in configuration";
+			throw new WrongConfigurationException(msg);
+		}
+		virtualDirectoryDao = pc.getVirtualDirectoryDao();
 		String filename = (String) config.get("view");
 		if (filename != null)
 			view = filename;
@@ -62,7 +75,17 @@ public class ReportGenerator extends NodeAdapter {
 	private void loadXmlFromFile() throws Exception {
 		InputStream stream = getClass().getClassLoader().getResourceAsStream(
 				view);
-		viewSpec = db.parse(stream);
+		if (stream != null)
+			viewSpec = db.parse(stream);
+		else {
+			VirtualDirectory directory = virtualDirectoryDao.findByName(VirtualDirectory.VIEW_DIRECTORY);
+			if (directory == null)
+				throw new IOException();
+			VirtualFile file = virtualDirectoryDao.findFileByName(directory, view);
+			if (file == null)
+				throw new IOException();
+			viewSpec = (Document) file.readObject();
+		}
 	}
 
 	@Override

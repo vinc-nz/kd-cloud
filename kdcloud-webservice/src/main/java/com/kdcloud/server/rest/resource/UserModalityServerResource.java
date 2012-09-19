@@ -8,11 +8,10 @@ import org.restlet.resource.Post;
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.UserModalityResource;
+import com.kdcloud.server.entity.VirtualDirectory;
 
 public class UserModalityServerResource extends VirtualDirectoryServerResource implements
 		UserModalityResource {
-	
-	public static final String USER_MODALITIES_DIRECTORY = "modalities";
 	
 	String modalityId;
 	
@@ -35,13 +34,13 @@ public class UserModalityServerResource extends VirtualDirectoryServerResource i
 	@Override
 	@Get
 	public Modality getModality() {
-		return (Modality) getObject(USER_MODALITIES_DIRECTORY, modalityId);
+		return (Modality) getObject(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId);
 	}
 
 	@Override
 	@Post
 	public void saveModality(Modality modality) {
-		saveObject(USER_MODALITIES_DIRECTORY, modalityId, modality);
+		saveObject(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId, modality);
 	}
 
 	

@@ -8,11 +8,10 @@ import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.ViewResource;
+import com.kdcloud.server.entity.VirtualDirectory;
 
 public class ViewServerResource extends VirtualDirectoryServerResource implements
 		ViewResource {
-	
-	public static final String VIEW_DIRECTORY = "views";
 	
 	String viewId;
 
@@ -34,13 +33,13 @@ public class ViewServerResource extends VirtualDirectoryServerResource implement
 	@Override
 	@Get
 	public Document getView() {
-		return (Document) getObject(VIEW_DIRECTORY, viewId);
+		return (Document) getObject(VirtualDirectory.VIEW_DIRECTORY, viewId);
 	}
 
 	@Override
 	@Post
 	public void saveView(Document view) {
-		saveObject(VIEW_DIRECTORY, viewId, view);
+		saveObject(VirtualDirectory.VIEW_DIRECTORY, viewId, view);
 	}
 
 	

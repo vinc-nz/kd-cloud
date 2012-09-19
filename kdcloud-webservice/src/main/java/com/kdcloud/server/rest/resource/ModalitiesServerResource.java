@@ -53,7 +53,7 @@ public class ModalitiesServerResource extends KDServerResource implements
 	public void addUserDefinedModalities(ModalityIndex index)
 			throws IOException {
 		VirtualDirectory modalitiesDirectory = directoryDao
-				.findByName(UserModalityServerResource.USER_MODALITIES_DIRECTORY);
+				.findByName(VirtualDirectory.USER_MODALITIES_DIRECTORY);
 		if (modalitiesDirectory != null)
 			for (VirtualFile file : modalitiesDirectory) {
 				Modality m = (Modality) file.readObject();

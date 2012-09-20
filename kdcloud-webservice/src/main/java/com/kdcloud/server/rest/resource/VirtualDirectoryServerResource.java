@@ -10,7 +10,7 @@ import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.server.entity.VirtualDirectory;
 import com.kdcloud.server.entity.VirtualFile;
 
-public abstract class VirtualDirectoryServerResource extends KDServerResource {
+public class VirtualDirectoryServerResource extends KDServerResource {
 
 	public VirtualDirectoryServerResource() {
 		super();
@@ -49,7 +49,9 @@ public abstract class VirtualDirectoryServerResource extends KDServerResource {
 			getLogger().info("previous object with same name has been removed");
 		try {
 			file.writeObject(obj);
+			directory.getFiles().add(file);
 			directoryDao.save(directory);
+			getLogger().info("directory updated correctly");
 		} catch (IOException e) {
 			getLogger().log(Level.SEVERE, "error saving object", e);
 			setStatus(Status.SERVER_ERROR_INTERNAL);

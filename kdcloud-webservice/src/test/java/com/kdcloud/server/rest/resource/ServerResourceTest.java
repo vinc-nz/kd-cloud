@@ -21,6 +21,7 @@ import weka.core.Instances;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.lib.domain.InputSpecification;
+import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalityIndex;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
@@ -129,6 +130,14 @@ public class ServerResourceTest {
 		DeviceServerResource deviceResource = new DeviceServerResource(application);
 		deviceResource.register("test");
 		deviceResource.unregister("test");
+	}
+	
+	@Test
+	public void testVFS() {
+		VirtualDirectoryServerResource resource = new VirtualDirectoryServerResource(application);
+		resource.saveObject("test", "test", new Modality());
+		Object obj = resource.getObject("test", "test");
+		assertNotNull(obj);
 	}
 
 //	@Test

@@ -207,7 +207,6 @@ public abstract class BaseClient implements Runnable {
 				executeAction();
 			} catch (ResourceException e) {
 				handleResourceException(resource.getStatus(), e);
-				throw new IOException(e);
 			}
 			Thread.sleep(currentAction.getSleepTimeInMillis());
 		}
@@ -264,18 +263,21 @@ public abstract class BaseClient implements Runnable {
 	/**
 	 * retries the execution of the last server action
 	 * 
-	 * @throws ResourceException
-	 * @throws IOException
+	 * @throws IOException if the requests fails
 	 */
-	public void retryRequest() throws ResourceException, IOException {
-		executeAction();
+	public void retryRequest() throws IOException {
+		try {
+			executeAction();
+		} catch (ResourceException e) {
+			throw new IOException(e);
+		}
 	}
 
 	/**
 	 * executes the current action
 	 * 
-	 * @throws IOException
-	 * @throws ResourceException
+	 * @throws IOException if the client fails to read the response
+	 * @throws ResourceException if there has been an error during the request
 	 */
 	public void executeAction() throws IOException, ResourceException {
 		setResourceReference(currentAction.getUri());
@@ -319,8 +321,8 @@ public abstract class BaseClient implements Runnable {
 	/**
 	 * handles each response
 	 * 
-	 * @param entity
-	 * @throws IOException
+	 * @param entity the response entity
+	 * @throws IOException if the client fails to read the entity
 	 */
 	protected void handleEntity(Representation entity) throws IOException {
 		log("handling entity");

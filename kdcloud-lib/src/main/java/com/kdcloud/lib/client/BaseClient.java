@@ -35,21 +35,43 @@ import com.kdcloud.lib.rest.api.ModalitiesResource;
 
 public abstract class BaseClient implements Runnable {
 
+	// the server url
 	String baseUri;
+
+	// the executing modality
 	Modality modality;
+
+	// used for restlet requests
 	ClientResource resource;
+
+	// stores each (xml) output of any server request
 	Document executionLog;
+
+	// utility factories
 	DocumentBuilder documentBuilder;
 	XPath xpath;
+
+	// queue of actions to execute
 	Queue<ServerAction> queue;
+
+	// used sto stop execution
 	private boolean canRun;
+
+	// whether or not repeating repeatable actions
 	private boolean repeatAllowed;
+
+	// the current executing action
 	private ServerAction currentAction;
 
 	public abstract void log(String message, Throwable thrown);
 
 	public abstract void log(String message);
 
+	/**
+	 * this method is called when a request (PUT) requires data to send
+	 * 
+	 * @return the instances to send
+	 */
 	public abstract Instances getData();
 
 	/**
@@ -63,11 +85,17 @@ public abstract class BaseClient implements Runnable {
 	 */
 	public abstract String handleChoice(String parameterName, String[] choices);
 
+	/**
+	 * this method is called when an xml report is available
+	 * 
+	 * @param view
+	 *            the xml report to handle
+	 */
 	public abstract void report(Document view);
 
-	
 	/**
-	 * checks if a single 
+	 * checks if a single action can be repeated
+	 * 
 	 * @return
 	 */
 	public synchronized boolean isRepeatAllowed() {
@@ -77,24 +105,31 @@ public abstract class BaseClient implements Runnable {
 	public synchronized void setRepeatAllowed(boolean repeatAllowed) {
 		this.repeatAllowed = repeatAllowed;
 	}
-	
 
 	public BaseClient(String url) throws ParserConfigurationException {
 		this(url, null);
 	}
 
-	public BaseClient(String url, Modality modality) throws ParserConfigurationException {
+	public BaseClient(String url, Modality modality)
+			throws ParserConfigurationException {
 		super();
 		this.baseUri = url;
 		this.modality = modality;
+
+		// initialize xml stuff
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		this.documentBuilder = dbf.newDocumentBuilder();
 		this.executionLog = this.documentBuilder.newDocument();
-		Element rootElement = this.executionLog.createElement("execution");
+		Element rootElement = this.executionLog.createElementNS("dummy",
+				"execution");
 		this.executionLog.appendChild(rootElement);
-		this.resource = new ClientResource(url);
 		XPathFactory xPathfactory = XPathFactory.newInstance();
 		this.xpath = xPathfactory.newXPath();
+
+		// creates the client resource
+		this.resource = new ClientResource(url);
+
+		// initialize control variables
 		this.canRun = true;
 		this.repeatAllowed = true;
 	}
@@ -110,13 +145,14 @@ public abstract class BaseClient implements Runnable {
 	public synchronized boolean canRun() {
 		return canRun;
 	}
-	
+
 	public synchronized Modality getModality() {
 		return modality;
 	}
-	
+
 	/**
 	 * changes client modality, stops the execution of the previous if any
+	 * 
 	 * @param modality
 	 */
 	public synchronized void setModality(Modality modality) {
@@ -133,7 +169,7 @@ public abstract class BaseClient implements Runnable {
 	public static List<Modality> getModalities(String url) {
 		return getModalities(url, null);
 	}
-	
+
 	public static List<Modality> getModalities(String url, String accessToken) {
 		ClientResource cr = new ClientResource(url + ModalitiesResource.URI);
 		if (accessToken != null)
@@ -141,7 +177,7 @@ public abstract class BaseClient implements Runnable {
 					accessToken);
 		return cr.wrap(ModalitiesResource.class).listModalities().asList();
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -151,12 +187,16 @@ public abstract class BaseClient implements Runnable {
 		}
 	}
 
-	public void executeModality() throws IOException,
-			InterruptedException {
+	/**
+	 * executed the predefined modality
+	 * 
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public void executeModality() throws IOException, InterruptedException {
 		startModalityExecution();
 		log("executing " + modality.getName());
-		queue = new LinkedList<ServerAction>(
-				modality.getServerCommands());
+		queue = new LinkedList<ServerAction>(modality.getServerCommands());
 		while (canRun() && !queue.isEmpty()) {
 			currentAction = queue.poll();
 			if (repeatAllowed && currentAction.isRepeat())
@@ -167,13 +207,21 @@ public abstract class BaseClient implements Runnable {
 				executeAction();
 			} catch (ResourceException e) {
 				handleResourceException(resource.getStatus(), e);
-				throw new IOException(e);
 			}
 			Thread.sleep(currentAction.getSleepTimeInMillis());
 		}
 	}
 
-	public abstract void handleResourceException(Status status, ResourceException e);
+	/**
+	 * this method is called when a server request does not terminate correctly
+	 * 
+	 * @param status
+	 *            the request status
+	 * @param e
+	 *            the exception thrown by the restlet ClientResource
+	 */
+	public abstract void handleResourceException(Status status,
+			ResourceException e);
 
 	protected void setActionParameter() throws IOException {
 		ServerParameter parameter = currentAction.getParams().get(0);
@@ -211,13 +259,27 @@ public abstract class BaseClient implements Runnable {
 		log("fetching " + reference);
 		resource.setReference(reference);
 	}
-	
-	public void retryRequest() throws ResourceException, IOException {
-		executeAction();
+
+	/**
+	 * retries the execution of the last server action
+	 * 
+	 * @throws IOException if the requests fails
+	 */
+	public void retryRequest() throws IOException {
+		try {
+			executeAction();
+		} catch (ResourceException e) {
+			throw new IOException(e);
+		}
 	}
 
-	public void executeAction() throws IOException,
-			ResourceException {
+	/**
+	 * executes the current action
+	 * 
+	 * @throws IOException if the client fails to read the response
+	 * @throws ResourceException if there has been an error during the request
+	 */
+	public void executeAction() throws IOException, ResourceException {
 		setResourceReference(currentAction.getUri());
 		beforeRequest();
 		Representation entity = null;
@@ -250,9 +312,18 @@ public abstract class BaseClient implements Runnable {
 		}
 	}
 
+	/**
+	 * this method is called before each server request
+	 */
 	public void beforeRequest() {
 	}
 
+	/**
+	 * handles each response
+	 * 
+	 * @param entity the response entity
+	 * @throws IOException if the client fails to read the entity
+	 */
 	protected void handleEntity(Representation entity) throws IOException {
 		log("handling entity");
 		Document lastOutput = new DomRepresentation(entity).getDocument();
@@ -260,12 +331,12 @@ public abstract class BaseClient implements Runnable {
 		if (elementName.contains("report")) {
 			Document view = documentBuilder.newDocument();
 			Element toImport = lastOutput.getDocumentElement();
-			view.appendChild(view.importNode(toImport, true));
+			view.appendChild(view.adoptNode(toImport));
 			report(view);
 		} else {
 			log("storing last output");
-			Node child = executionLog.importNode(
-					lastOutput.getDocumentElement(), true);
+			Node child = executionLog
+					.adoptNode(lastOutput.getDocumentElement());
 			executionLog.getDocumentElement().appendChild(child);
 		}
 	}

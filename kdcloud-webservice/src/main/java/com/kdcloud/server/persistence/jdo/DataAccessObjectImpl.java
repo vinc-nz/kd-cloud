@@ -118,7 +118,6 @@ public class DataAccessObjectImpl<T> implements DataAccessObject<T> {
 					.addChild(child.getSimpleName(), childName).getKey();
 			return pm.getObjectById(child, key);
 		} catch (Exception tr) {
-			tr.printStackTrace();
 			return null;
 		}
 	}

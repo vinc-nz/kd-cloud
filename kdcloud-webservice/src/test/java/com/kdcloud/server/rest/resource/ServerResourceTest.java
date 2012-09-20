@@ -73,7 +73,7 @@ public class ServerResourceTest {
 		
 		datasetResource.deleteData();
 		group = datasetResource.groupDao.findByName("test");
-		Assert.assertNull(group.map().get(new User(USER_ID)));
+		Assert.assertEquals(0, group.getData().size());
 	}
 
 	@Test

@@ -25,24 +25,11 @@ public class Task {
 	
 	@Persistent
 	@Unowned
-	DataTable workingTable;
-	
-	@Persistent
-	@Unowned
 	User applicant;
-	
-	
-	@Persistent
-	@Unowned
-	Workflow workflow;
 	
 	@Persistent(serialized = "true")
 	Report report;
 	
-	public Task(DataTable table, Workflow workflow) {
-		this.workingTable = table;
-		this.workflow = workflow;
-	}
 	
 	public Task() {
 		// TODO Auto-generated constructor stub
@@ -62,22 +49,6 @@ public class Task {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public DataTable getWorkingTable() {
-		return workingTable;
-	}
-
-	public void setWorkingTable(DataTable workingTable) {
-		this.workingTable = workingTable;
-	}
-
-	public Workflow getWorkflow() {
-		return workflow;
-	}
-
-	public void setWorkflow(Workflow workflow) {
-		this.workflow = workflow;
 	}
 
 	public Report getReport() {

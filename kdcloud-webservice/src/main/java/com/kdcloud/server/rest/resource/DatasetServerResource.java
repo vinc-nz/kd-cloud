@@ -17,7 +17,6 @@ import com.kdcloud.lib.rest.api.DatasetResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
-import com.kdcloud.server.entity.TableEntry;
 
 public class DatasetServerResource extends KDServerResource implements DatasetResource {
 	
@@ -33,10 +32,9 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	}
 	
 	private DataTable getTable() {
-		DataTable dataset = group.map().get(user);
+		DataTable dataset = groupDao.findTable(group, user);
 		if (dataset == null) {
-			dataset = new DataTable();
-			group.getEntries().add(new TableEntry(user, dataset));
+			dataset = group.addEntry(user, null);
 			groupDao.save(group);
 		}
 		return dataset;
@@ -103,8 +101,11 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	@Override
 	@Delete
 	public void deleteData() {
-		group.removeEntry(user);
-		groupDao.save(group);
+		DataTable table = groupDao.findTable(group, user);
+		if (table != null) {
+			group.getData().remove(table);
+			groupDao.save(group);
+		}
 	}
 
 }

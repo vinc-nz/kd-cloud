@@ -4,12 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import weka.core.Instances;
-
 import com.kdcloud.lib.domain.ServerParameter;
-import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
-import com.kdcloud.server.entity.TableEntry;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataAccessObject;
 import com.kdcloud.server.persistence.PersistenceContext;
@@ -71,9 +67,7 @@ public class UserDataWriter extends NodeAdapter {
 
 	@Override
 	public void run(Logger logger) {
-		DataTable table = new DataTable();
-		table.setInstances(new Instances(mState.getInstances()));
-		group.getEntries().add(new TableEntry(user, table));
+		group.addEntry(user, mState.getInstances());
 		groupDao.save(group);
 	}
 

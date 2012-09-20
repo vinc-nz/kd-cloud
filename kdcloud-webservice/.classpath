@@ -5,8 +5,8 @@
   <classpathentry kind="src" path="src/main/java" including="**/*.java"/>
   <classpathentry kind="src" path="src/main/resources" excluding="**/*.java"/>
   <classpathentry kind="output" path="target/classes"/>
-  <classpathentry kind="var" path="M2_REPO/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1.jar" sourcepath="M2_REPO/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar" sourcepath="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/activation/activation/1.1/activation-1.1.jar" sourcepath="M2_REPO/javax/activation/activation/1.1/activation-1.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/jdo/jdo-api/3.0/jdo-api-3.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/transaction/transaction-api/1.1/transaction-api-1.1.jar" sourcepath="M2_REPO/javax/transaction/transaction-api/1.1/transaction-api-1.1-sources.jar"/>
@@ -60,8 +60,8 @@
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.wadl/2.2-SNAPSHOT/org.restlet.ext.wadl-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.wadl/2.2-SNAPSHOT/org.restlet.ext.wadl-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.xml/2.2-SNAPSHOT/org.restlet.ext.xml-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.xml/2.2-SNAPSHOT/org.restlet.ext.xml-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.net/2.2-SNAPSHOT/org.restlet.ext.net-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.net/2.2-SNAPSHOT/org.restlet.ext.net-2.2-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.jaxb/2.2-SNAPSHOT/org.restlet.ext.jaxb-2.2-SNAPSHOT.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/sun/xml/bind/jaxb-impl/2.1.12/jaxb-impl-2.1.12.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.jaxb/2.2-SNAPSHOT/org.restlet.ext.jaxb-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.jaxb/2.2-SNAPSHOT/org.restlet.ext.jaxb-2.2-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/sun/xml/bind/jaxb-impl/2.1.12/jaxb-impl-2.1.12.jar" sourcepath="M2_REPO/com/sun/xml/bind/jaxb-impl/2.1.12/jaxb-impl-2.1.12-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/restlet/gae/org.restlet.ext.gwt/2.2-SNAPSHOT/org.restlet.ext.gwt-2.2-SNAPSHOT.jar" sourcepath="M2_REPO/org/restlet/gae/org.restlet.ext.gwt/2.2-SNAPSHOT/org.restlet.ext.gwt-2.2-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.3.0/gwt-servlet-2.3.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-servlet/2.3.0/gwt-servlet-2.3.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar" sourcepath="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-sources.jar">

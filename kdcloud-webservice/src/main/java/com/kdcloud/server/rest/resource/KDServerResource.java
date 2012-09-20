@@ -7,10 +7,10 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import com.kdcloud.lib.domain.ServerParameter;
-import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataAccessObject;
+import com.kdcloud.server.persistence.GroupDao;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.VirtualDirectoryDao;
@@ -21,7 +21,7 @@ public abstract class KDServerResource extends ServerResource {
 	private UserProvider userProvider;
 
 	DataAccessObject<User> userDao;
-	DataAccessObject<Group> groupDao;
+	GroupDao groupDao;
 	DataAccessObject<Task> taskDao;
 	VirtualDirectoryDao directoryDao;
 

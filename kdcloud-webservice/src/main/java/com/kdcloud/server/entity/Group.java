@@ -1,16 +1,15 @@
 package com.kdcloud.server.entity;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import weka.core.Instances;
 
 @PersistenceCapable
 public class Group {
@@ -29,7 +28,7 @@ public class Group {
 	private String name;
 	
 	@Persistent
-	private List<TableEntry> entries = new LinkedList<TableEntry>();
+	private Collection<DataTable> data = new HashSet<DataTable>();
 
 	public Group() {
 		// TODO Auto-generated constructor stub
@@ -63,36 +62,21 @@ public class Group {
 		this.name = name;
 	}
 
-	public List<TableEntry> getEntries() {
-		return entries;
+	public Collection<DataTable> getData() {
+		return data;
 	}
 
-	public void setEntries(List<TableEntry> entries) {
-		this.entries = entries;
+	public void setData(Collection<DataTable> data) {
+		this.data = data;
 	}
 	
-	public Set<User> getUsers() {
-		return map().keySet();
-	}
-	
-	public boolean addEntry(User user, DataTable dataTable) {
-		return entries.add(new TableEntry(user, dataTable));
-	}
-	
-	public boolean removeEntry(User user) {
-		for (TableEntry e : entries) {
-			if (user.equals(e.user))
-				return entries.remove(e);
-		}
-		return false;
-	}
-	
-	public Map<User, DataTable> map() {
-		HashMap<User, DataTable> map = new HashMap<User, DataTable>(entries.size());
-		for (TableEntry e : entries) {
-			map.put(e.user, e.dataTable);
-		}
-		return map;
+	public DataTable addEntry(User user, Instances instances) {
+		DataTable table = new DataTable();
+		table.setOwner(user);
+		table.setName(user.getName());
+		table.setInstances(instances);
+		data.add(table);
+		return table;
 	}
 
 }

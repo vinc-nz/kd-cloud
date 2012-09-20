@@ -41,8 +41,8 @@ public class UserDataReader extends NodeAdapter {
 			group = pc.getGroupDao().findByName(groupId);
 		if (group == null)
 			msg = "not a valid group in configuration";
-		else {
-			table = group.map().get(user);
+		else if (group != null && user != null) {
+			table = pc.getGroupDao().findTable(group, user);
 			if (table == null)
 				msg = "user has no data";
 		}

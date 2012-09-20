@@ -6,6 +6,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.datanucleus.annotations.Unowned;
+
 import weka.core.Instances;
 
 @PersistenceCapable
@@ -18,10 +20,18 @@ public class DataTable {
 
 //	@Persistent
 //    @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
-//	Long id;
+//	private Long id;
+	
+	@Persistent
+	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
+	private String name;
 	
 	@Persistent(serialized="true")
 	Object instances;
+	
+	@Persistent
+	@Unowned
+	User owner;
 	
 //	public Long getId() {
 //		return id;
@@ -30,6 +40,14 @@ public class DataTable {
 //	public void setId(Long id) {
 //		this.id = id;
 //	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Instances getInstances() {
 		return (Instances) instances;
@@ -47,11 +65,24 @@ public class DataTable {
 		this.encodedKey = encodedKey;
 	}
 
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (obj instanceof DataTable)
-//			return ((DataTable) obj).id.equals(this.id);
-//		return false;
-//	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DataTable)
+			return ((DataTable) obj).name.equals(this.name);
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+	public void setOwner(User user) {
+		this.owner = user;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
 
 }

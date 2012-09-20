@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,11 +16,8 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.engine.embedded.EmbeddedEngine;
-import com.kdcloud.server.engine.embedded.FileDataReader;
-import com.kdcloud.server.engine.embedded.UserDataWriter;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;

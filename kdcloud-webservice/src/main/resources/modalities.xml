@@ -2,6 +2,9 @@
 <modalities>
     <modality>
         <name>Data Feed</name>
+        <inputSpecification>
+            <source>HEARTBEAT</source>
+        </inputSpecification>
         <action>
             <uri>/data/london-marathon</uri>
             <method>DELETE</method>
@@ -14,9 +17,6 @@
             <repeat>true</repeat>
             <sleepTime>60</sleepTime>
         </action>
-        <inputSpecification>
-            <source>HEARTBEAT</source>
-        </inputSpecification>
     </modality>
     <modality>
         <name>Single Analysis</name>
@@ -28,6 +28,7 @@
         </action>
         <action>
             <uri>/workflow/ecg.xml</uri>
+            <method>POST</method>
             <postParameter>
                 <name>userId</name>
                 <reference>//users/user</reference>
@@ -36,7 +37,6 @@
                 <name>groupId</name>
                 <value>london-marathon</value>
             </postParameter>
-            <method>POST</method>
             <repeat>true</repeat>
             <sleepTime>60</sleepTime>
         </action>
@@ -45,11 +45,11 @@
         <name>Global Analysis</name>
         <action>
             <uri>/global/workflow/ecg.xml</uri>
+            <method>POST</method>
              <postParameter>
                 <name>groupId</name>
                 <value>london-marathon</value>
             </postParameter>
-            <method>POST</method>
             <repeat>true</repeat>
             <sleepTime>60</sleepTime>
         </action>

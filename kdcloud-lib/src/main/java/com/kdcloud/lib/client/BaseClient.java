@@ -162,8 +162,11 @@ public abstract class BaseClient implements Runnable {
 
 	public void setAccessToken(String token) {
 		log("setting access token");
-		resource.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login",
-				token);
+		setAuthentication("oauth", token);
+	}
+	
+	public void setAuthentication(String userId, String password) {
+		resource.setChallengeResponse(ChallengeScheme.HTTP_BASIC, userId, password);
 	}
 
 	public static List<Modality> getModalities(String url) {
@@ -176,6 +179,11 @@ public abstract class BaseClient implements Runnable {
 			cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login",
 					accessToken);
 		return cr.wrap(ModalitiesResource.class).listModalities().asList();
+	}
+	
+	public List<Modality> getModalities() {
+		setResourceReference(ModalitiesResource.URI);
+		return resource.wrap(ModalitiesResource.class).listModalities().asList();
 	}
 
 	@Override

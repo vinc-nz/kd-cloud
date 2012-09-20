@@ -29,7 +29,7 @@ public class MainApplication extends Application {
 		router.attach(TaskQueue.WORKER_URI + ServerParameter.TASK_ID, QueueWorkerServerResource.class);
 
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null, ChallengeScheme.HTTP_BASIC, "testRealm");
-		guard.setVerifier(new OAuthVerifier());
+		guard.setVerifier(new OAuthVerifier(getLogger(), true));
 		guard.setNext(new KDApplication(applicationContext));
 		router.attachDefault(guard);
 

@@ -16,7 +16,6 @@ import com.kdcloud.lib.domain.Report;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.WorkflowResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
-import com.kdcloud.server.rest.application.Utils;
 
 public class WorkflowServerResource extends WorkerServerResource implements
 		WorkflowResource {
@@ -40,12 +39,9 @@ public class WorkflowServerResource extends WorkerServerResource implements
 	@Override
 	@Post
 	public Representation execute(Form form) {
-		InputStream workflow;
-		try {
-			workflow = Utils.loadFile(workflowId);
-		} catch (IOException e) {
+		InputStream workflow = getClass().getClassLoader().getResourceAsStream(workflowId);
+		if (workflow == null)
 			return notFound();
-		}
 		Report report;
 		try {
 			report = execute(form, workflow);

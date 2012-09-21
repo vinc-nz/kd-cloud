@@ -15,7 +15,7 @@ import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.UserModalityResource;
 import com.kdcloud.server.entity.VirtualDirectory;
 
-public class UserModalityServerResource extends VirtualDirectoryServerResource implements
+public class UserModalityServerResource extends FileServerResource implements
 		UserModalityResource {
 	
 	String modalityId;
@@ -39,7 +39,7 @@ public class UserModalityServerResource extends VirtualDirectoryServerResource i
 	@Override
 	@Get
 	public Modality getModality() {
-		return (Modality) getObject(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId);
+		return (Modality) getObjectFromVirtualDirectory(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class UserModalityServerResource extends VirtualDirectoryServerResource i
 			JAXBContext context = JAXBContext.newInstance(Modality.class.getPackage().getName());
 			Unmarshaller u = context.createUnmarshaller();
 			Modality modality = (Modality) u.unmarshal(xml);
-			saveObject(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId, modality);
+			saveObjectToVirtualDirectory(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId, modality);
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,5 +1,10 @@
 package com.kdcloud.server.rest.resource;
 
+import java.io.InputStream;
+import java.util.logging.Level;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.restlet.Application;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -10,7 +15,7 @@ import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.ViewResource;
 import com.kdcloud.server.entity.VirtualDirectory;
 
-public class ViewServerResource extends VirtualDirectoryServerResource implements
+public class ViewServerResource extends FileServerResource implements
 		ViewResource {
 	
 	String viewId;
@@ -33,13 +38,20 @@ public class ViewServerResource extends VirtualDirectoryServerResource implement
 	@Override
 	@Get
 	public Document getView() {
-		return (Document) getObject(VirtualDirectory.VIEW_DIRECTORY, viewId);
+		InputStream stream = getClass().getClassLoader().getResourceAsStream(viewId);
+		if (stream != null)
+			try {
+				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+			} catch (Exception e) {
+				getLogger().log(Level.SEVERE, "error parsing xml", e);
+			}
+		return (Document) getObjectFromVirtualDirectory(VirtualDirectory.VIEW_DIRECTORY, viewId);
 	}
 
 	@Override
 	@Post
 	public void saveView(Document view) {
-		saveObject(VirtualDirectory.VIEW_DIRECTORY, viewId, view);
+		saveObjectToVirtualDirectory(VirtualDirectory.VIEW_DIRECTORY, viewId, view);
 	}
 
 	

@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 
 import org.restlet.data.Parameter;
 
@@ -48,7 +49,23 @@ public class ServerParameter implements Serializable {
 	
 	private final String name;
 	private final String value;
-	private final String reference;
+	private final Reference reference;
+	
+	static class Reference implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		@XmlAttribute
+		String xpath;
+		
+		@XmlAttribute
+		ReferenceType type = ReferenceType.CHOICE;
+		
+	}
+	
+	public enum ReferenceType {
+		CHOICE,
+		MAP
+	}
 
 	public ServerParameter() {
 		this(null, null, null);
@@ -58,7 +75,8 @@ public class ServerParameter implements Serializable {
 		this.value = null;
 		if (representation.contains(REFERENCE_PREFIX)) {
 			this.name = null;
-			this.reference = representation.replace(REFERENCE_PREFIX, "");
+			this.reference = new Reference();
+			this.reference.xpath = representation.replace(REFERENCE_PREFIX, "");
 		}
 		else {
 			this.name = representation;
@@ -70,7 +88,8 @@ public class ServerParameter implements Serializable {
 		super();
 		this.name = name;
 		this.value = value;
-		this.reference = reference;
+		this.reference = new Reference();
+		this.reference.xpath = reference;
 	}
 
 	public String getName() {
@@ -81,8 +100,12 @@ public class ServerParameter implements Serializable {
 		return value;
 	}
 
-	public String getReference() {
-		return reference;
+	public String getReferenceExpression() {
+		return reference.xpath;
+	}
+	
+	public ReferenceType getReferenceType() {
+		return reference.type;
 	}
 
 	public boolean hasReference() {
@@ -109,7 +132,7 @@ public class ServerParameter implements Serializable {
 	public String toString() {
 		if (value != null)
 			return value;
-		String repr = (reference != null ? REFERENCE_PREFIX + reference : name);
+		String repr = (hasReference() ? REFERENCE_PREFIX + reference.xpath : name);
 		return "{" + repr + "}";
 	}
 

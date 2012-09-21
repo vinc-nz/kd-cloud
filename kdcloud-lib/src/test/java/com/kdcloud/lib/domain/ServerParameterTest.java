@@ -21,7 +21,7 @@ public class ServerParameterTest {
 		String uri = "/test/{xpath:" + expr + "}/test";
 		ServerParameter param = ServerParameter.getParamsFromUri(uri).iterator().next();
 		assertTrue(param.hasReference());
-		assertEquals(expr, param.getReference());
+		assertEquals(expr, param.getReferenceExpression());
 	}
 
 }

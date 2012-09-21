@@ -28,10 +28,14 @@ import org.w3c.dom.NodeList;
 
 import weka.core.Instances;
 
+import com.kdcloud.lib.domain.DataSpecification;
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ServerAction;
 import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.lib.domain.ServerParameter.ReferenceType;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
+import com.kdcloud.lib.rest.api.ViewResource;
+import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
 public abstract class BaseClient implements Runnable {
 
@@ -62,6 +66,9 @@ public abstract class BaseClient implements Runnable {
 
 	// the current executing action
 	private ServerAction currentAction;
+	
+	//the modality output
+	private Instances output;
 
 	public abstract void log(String message, Throwable thrown);
 
@@ -204,9 +211,12 @@ public abstract class BaseClient implements Runnable {
 	public void executeModality() throws IOException, InterruptedException {
 		startModalityExecution();
 		log("executing " + modality.getName());
-		queue = new LinkedList<ServerAction>(modality.getServerCommands());
+		queue = new LinkedList<ServerAction>();
+		queue.add(modality.getInitAction());
+		queue.add(modality.getAction());
 		while (canRun() && !queue.isEmpty()) {
 			currentAction = queue.poll();
+			Thread.sleep(currentAction.getSleepTimeInMillis());
 			if (repeatAllowed && currentAction.isRepeat())
 				queue.add(new ServerAction(currentAction));
 			while (currentAction.hasParameters())
@@ -216,7 +226,6 @@ public abstract class BaseClient implements Runnable {
 			} catch (ResourceException e) {
 				handleResourceException(resource.getStatus(), e);
 			}
-			Thread.sleep(currentAction.getSleepTimeInMillis());
 		}
 	}
 
@@ -233,34 +242,44 @@ public abstract class BaseClient implements Runnable {
 
 	protected void setActionParameter() throws IOException {
 		ServerParameter parameter = currentAction.getParams().get(0);
-		String value = null;
 		try {
-			log("executing xpath expression: " + parameter.getReference());
-			XPathExpression expr = xpath.compile(parameter.getReference());
+			log("executing xpath expression: " + parameter.getReferenceExpression());
+			XPathExpression expr = xpath.compile(parameter.getReferenceExpression());
 			NodeList result = (NodeList) expr.evaluate(executionLog,
 					XPathConstants.NODESET);
 			log("expression result length: " + result.getLength());
-			if (result.getLength() == 0)
-				throw new IOException(
-						"cannot execute request: missing parameter");
-			if (result.getLength() == 1)
-				value = result.item(0).getTextContent();
-			else
-				value = handleChoice(parameter.getName(), result);
+			String[] choices = new String[result.getLength()];
+			for (int i = 0; i < choices.length; i++) {
+				choices[i] = result.item(i).getTextContent();
+			}
+			handleParameter(parameter, choices);
 		} catch (XPathExpressionException e) {
 			throw new IOException(e);
 		}
-		log("setting parameter: " + parameter.getName() + ":" + value);
-		currentAction.setParameter(parameter, value);
 	}
 
-	public String handleChoice(String parameterName, NodeList result) {
-		String[] choices = new String[result.getLength()];
-		for (int i = 0; i < choices.length; i++) {
-			choices[i] = result.item(i).getTextContent();
+	private void handleParameter(ServerParameter parameter, String[] values) throws IOException {
+		if (parameter.getReferenceType() == ReferenceType.CHOICE) {
+			if (values.length == 0)
+				throw new IOException("missing parameter");
+			String value = handleChoice(parameter.getName(), values);
+			log("setting parameter " + parameter.getName() + ":" + value);
+			currentAction.setParameter(parameter, value);
+		} else {
+			Queue<ServerAction> newQueue = new LinkedList<ServerAction>();
+			for (int i = 0; i < values.length; i++) {
+				ServerAction copy = new ServerAction(currentAction);
+				log("setting parameter " + parameter.getName() + ":" + values[i]);
+				copy.setParameter(parameter, values[i]);
+				newQueue.add(copy);
+			}
+			newQueue.addAll(queue);
+			queue = newQueue;
+			currentAction = queue.poll();
 		}
-		return handleChoice(parameterName, choices);
 	}
+
+	
 
 	protected void setResourceReference(String uri) {
 		String reference = baseUri + uri;
@@ -299,6 +318,8 @@ public abstract class BaseClient implements Runnable {
 		case PUT:
 			log("executing PUT");
 			Instances data = getData();
+			if (!modality.getInputSpecification().matchingSpecification(data))
+				throw new IOException("input does not match specification");
 			Representation putRep = currentAction.getPutRepresentation(data);
 			entity = resource.put(putRep);
 			break;
@@ -334,18 +355,34 @@ public abstract class BaseClient implements Runnable {
 	 */
 	protected void handleEntity(Representation entity) throws IOException {
 		log("handling entity");
-		Document lastOutput = new DomRepresentation(entity).getDocument();
-		String elementName = lastOutput.getDocumentElement().getNodeName();
-		if (elementName.contains("report")) {
-			Document view = documentBuilder.newDocument();
-			Element toImport = lastOutput.getDocumentElement();
-			view.appendChild(view.adoptNode(toImport));
-			report(view);
-		} else {
+		MediaType t = entity.getMediaType();
+		if (t.equals(MediaType.APPLICATION_XML) || t.equals(MediaType.TEXT_XML)) {
+			Document lastOutput = new DomRepresentation(entity).getDocument();
+//			DOMImplementation domImpl = lastOutput.getImplementation();
+//			DOMImplementationLS domImplLS = (DOMImplementationLS)domImpl.getFeature("LS", "3.0");
+//			LSSerializer serializer = domImplLS.createLSSerializer();
+//			System.out.println(serializer.writeToString(lastOutput));
 			log("storing last output");
 			Node child = executionLog
 					.adoptNode(lastOutput.getDocumentElement());
 			executionLog.getDocumentElement().appendChild(child);
+		} else {
+			output = new InstancesRepresentation(entity).getInstances();
+			DataSpecification outSpec = modality.getOutputSpecification();
+			if (outSpec == null || outSpec.matchingSpecification(output))
+				throw new IOException("output does not match the specifications");
+			String view = modality.getOutputSpecification().getView();
+			if (view != null)
+				report(view);
 		}
 	}
+
+	private void report(String viewResource) {
+		log("generating report");
+		setResourceReference(viewResource);
+		Document view = resource.wrap(ViewResource.class).getView();
+		XmlReport.mergeWithData(view, output);
+		report(view);
+	}
+	
 }

@@ -3,14 +3,16 @@
     <modality>
         <name>Data Feed</name>
         <inputSpecification>
-            <source>HEARTBEAT</source>
+             <specification>
+	            <type>double</type>
+	            <name>heartbeat</name>
+	            <source>HEARTBEAT</source>
+            </specification>
         </inputSpecification>
-        <action>
+        <init-action>
             <uri>/data/london-marathon</uri>
             <method>DELETE</method>
-            <repeat>false</repeat>
-            <sleepTime>0</sleepTime>
-        </action>
+        </init-action>
         <action>
             <uri>/data/london-marathon</uri>
             <method>PUT</method>
@@ -20,38 +22,56 @@
     </modality>
     <modality>
         <name>Single Analysis</name>
-        <action>
+        <init-action>
             <uri>/group/london-marathon</uri>
             <method>GET</method>
-            <repeat>false</repeat>
-            <sleepTime>0</sleepTime>
-        </action>
+        </init-action>
         <action>
             <uri>/workflow/ecg.xml</uri>
             <method>POST</method>
             <postParameter>
                 <name>userId</name>
-                <reference>//users/user</reference>
+                <reference xpath="//users/user"/>
             </postParameter>
              <postParameter>
                 <name>groupId</name>
                 <value>london-marathon</value>
             </postParameter>
-            <repeat>true</repeat>
-            <sleepTime>60</sleepTime>
+            <repeat>false</repeat>
         </action>
+        <outputSpecification>
+		    <specfication>
+		        <name>rr</name>
+		        <type>DOUBLE</type>
+		    </specfication>
+		    <view>/view/view.xml</view>
+		</outputSpecification>
     </modality>
     <modality>
         <name>Global Analysis</name>
+        <init-action>
+            <uri>/group/london-marathon</uri>
+            <method>GET</method>
+        </init-action>
         <action>
-            <uri>/global/workflow/ecg.xml</uri>
+            <uri>/workflow/ecg.xml</uri>
             <method>POST</method>
+            <postParameter>
+                <name>userId</name>
+                <reference xpath="//users/user" type="MAP"/>
+            </postParameter>
              <postParameter>
                 <name>groupId</name>
                 <value>london-marathon</value>
             </postParameter>
-            <repeat>true</repeat>
-            <sleepTime>60</sleepTime>
+            <repeat>false</repeat>
         </action>
+        <outputSpecification>
+		    <specfication>
+		        <name>rr</name>
+		        <type>DOUBLE</type>
+		    </specfication>
+		    <view>/view/view.xml</view>
+		</outputSpecification>
     </modality>
 </modalities>

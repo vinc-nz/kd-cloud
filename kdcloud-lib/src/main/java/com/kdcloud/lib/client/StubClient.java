@@ -15,7 +15,6 @@ import org.w3c.dom.Document;
 import weka.core.DenseInstance;
 import weka.core.Instances;
 
-import com.kdcloud.lib.domain.InputSpecification;
 import com.kdcloud.lib.domain.Modality;
 
 public class StubClient extends BaseClient {
@@ -70,7 +69,7 @@ public class StubClient extends BaseClient {
 	public Instances getData() {
 		double[] values = readData("ecg_small.txt");
 		log("data length: " + values.length);
-		Instances data = new Instances(InputSpecification.newInstances("test", 1));
+		Instances data = modality.getInputSpecification().newInstances("test");
 		for (int i = 0; i < values.length; i++) {
 			double[] cells = { values[i] };
 			data.add(new DenseInstance(1, cells));
@@ -80,8 +79,7 @@ public class StubClient extends BaseClient {
 
 	@Override
 	public String handleChoice(String parameterName, String[] choices) {
-		// TODO Auto-generated method stub
-		return null;
+		return choices[0];
 	}
 
 	@Override

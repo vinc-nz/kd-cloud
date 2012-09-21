@@ -6,11 +6,4 @@
     <node>
         <type>QRS</type>
     </node>
-    <node>
-        <type>ReportGenerator</type>
-        <parameter>
-            <name>view</name>
-            <value>view.xml</value>
-        </parameter>
-    </node>
 </workflow>

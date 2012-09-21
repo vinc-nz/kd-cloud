@@ -12,9 +12,8 @@ import com.kdcloud.lib.domain.ModalityIndex;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
 import com.kdcloud.server.entity.VirtualDirectory;
 import com.kdcloud.server.entity.VirtualFile;
-import com.kdcloud.server.rest.application.Utils;
 
-public class ModalitiesServerResource extends KDServerResource implements
+public class ModalitiesServerResource extends FileServerResource implements
 		ModalitiesResource {
 
 	private static final String STANDARD_MODALITIES_FILE = "modalities.xml";
@@ -46,7 +45,7 @@ public class ModalitiesServerResource extends KDServerResource implements
 	}
 
 	public ModalityIndex loadStandardModalities() throws IOException {
-		return (ModalityIndex) Utils.loadObjectFromXml(
+		return (ModalityIndex) getObjectFromXml(
 				STANDARD_MODALITIES_FILE, ModalityIndex.class);
 	}
 

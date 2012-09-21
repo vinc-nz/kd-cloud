@@ -40,21 +40,9 @@ public class ServerAction implements Serializable {
 	
 	boolean repeat;
 	
-	long sleepTime;
+	int sleepTime;
 	
 	public ServerAction() {
-		this.postParams = new HashSet<ServerParameter>();
-		this.postForm = new ArrayList<Parameter>();
-	}
-
-
-	public ServerAction(String uri, ServerMethod method,
-			boolean repeat, long sleepTime) {
-		super();
-		this.uri = uri;
-		this.method = method;
-		this.repeat = repeat;
-		this.sleepTime = sleepTime;
 		this.postParams = new HashSet<ServerParameter>();
 		this.postForm = new ArrayList<Parameter>();
 	}
@@ -67,6 +55,16 @@ public class ServerAction implements Serializable {
 		this.uri = serverAction.uri;
 		this.postParams = serverAction.postParams;
 		this.postForm = serverAction.postForm;
+	}
+
+
+	public ServerAction(String uri, ServerMethod method, boolean repeat, int sleepTime) {
+		this.method = method;
+		this.repeat = repeat;
+		this.sleepTime = sleepTime;
+		this.uri = uri;
+		this.postParams = new HashSet<ServerParameter>();
+		this.postForm = new ArrayList<Parameter>();
 	}
 
 
@@ -99,7 +97,7 @@ public class ServerAction implements Serializable {
 		return sleepTime * 1000;
 	}
 
-	public void setSleepTime(long sleepTime) {
+	public void setSleepTime(int sleepTime) {
 		this.sleepTime = sleepTime;
 	}
 	

@@ -1,8 +1,6 @@
 package com.kdcloud.lib.domain;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,10 +22,16 @@ public class Modality implements Serializable {
 	String name;
 	
 	@XmlElement
-	InputSpecification inputSpecification;
+	DataSpecification inputSpecification;
+	
+	@XmlElement(name="init-action")
+	ServerAction initAction;
 
 	@XmlElement(name="action")
-	List<ServerAction> serverCommands = new LinkedList<ServerAction>();;
+	ServerAction action;
+	
+	@XmlElement
+	DataSpecification outputSpecification;
 	
 	
 	public int getId() {
@@ -42,20 +46,42 @@ public class Modality implements Serializable {
 		return name;
 	}
 
-	public List<ServerAction> getServerCommands() {
-		return serverCommands;
-	}
-
-	public InputSpecification getInputSpecification() {
+	public DataSpecification getInputSpecification() {
 		return inputSpecification;
 	}
 
-	public void setInputSpecification(InputSpecification inputSpecification) {
+	public void setInputSpecification(DataSpecification inputSpecification) {
 		this.inputSpecification = inputSpecification;
 	}
 
-	public void setInputSources(List<InputSource> sources) {
-		this.inputSpecification = new InputSpecification(sources);
+	public ServerAction getInitAction() {
+		return initAction;
 	}
+
+	public void setInitAction(ServerAction initAction) {
+		this.initAction = initAction;
+	}
+
+	public ServerAction getAction() {
+		return action;
+	}
+
+	public void setAction(ServerAction action) {
+		this.action = action;
+	}
+
+	public DataSpecification getOutputSpecification() {
+		return outputSpecification;
+	}
+
+	public void setOutputSpecification(DataSpecification outputSpecification) {
+		this.outputSpecification = outputSpecification;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 
 }

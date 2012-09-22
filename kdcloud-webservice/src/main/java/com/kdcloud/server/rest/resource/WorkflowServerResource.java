@@ -52,8 +52,10 @@ public class WorkflowServerResource extends WorkerServerResource implements
 		}
 		if (report.getDom() != null)
 			return new DomRepresentation(MediaType.APPLICATION_XML, report.getDom());
-		if (report.getData() != null)
+		if (report.getData() != null && !report.getData().isEmpty()) {
+			getLogger().info("sending " + report.getData().size() + " instances");
 			return new InstancesRepresentation(MediaType.TEXT_CSV, report.getData());
+		}
 		return null;
 	}
 

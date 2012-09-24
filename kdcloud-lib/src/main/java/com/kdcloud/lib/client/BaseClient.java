@@ -216,7 +216,7 @@ public abstract class BaseClient implements Runnable {
 		queue.add(modality.getAction());
 		while (canRun() && !queue.isEmpty()) {
 			currentAction = queue.poll();
-			Thread.sleep(currentAction.getSleepTimeInMillis());
+			currentAction.waitTriggers();
 			if (repeatAllowed && currentAction.isRepeat())
 				queue.add(new ServerAction(currentAction));
 			while (currentAction.hasParameters())

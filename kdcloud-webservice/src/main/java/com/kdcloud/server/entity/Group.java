@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.kdcloud.lib.domain.DataSpecification;
+
 import weka.core.Instances;
 
 @PersistenceCapable
@@ -29,6 +31,9 @@ public class Group {
 	
 	@Persistent
 	private Collection<DataTable> data = new HashSet<DataTable>();
+	
+	@Persistent(serialized="true")
+	private DataSpecification inputSpecification;
 
 	public Group() {
 		// TODO Auto-generated constructor stub
@@ -78,5 +83,14 @@ public class Group {
 		data.add(table);
 		return table;
 	}
+
+	public DataSpecification getInputSpecification() {
+		return inputSpecification;
+	}
+
+	public void setInputSpecification(DataSpecification inputSpecification) {
+		this.inputSpecification = inputSpecification;
+	}
+	
 
 }

@@ -45,7 +45,7 @@ public class ServerResourceTest {
 	public void setUp() throws Exception {
 		helper.setUp();
 		GroupServerResource resource = new GroupServerResource(application, "test");
-		resource.create();
+		resource.create(null);
 		group = resource.groupDao.findByName("test");
 		assertNotNull(group);
 	}

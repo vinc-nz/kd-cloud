@@ -2,28 +2,28 @@ package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
 import org.restlet.data.MediaType;
-import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
-import com.kdcloud.lib.domain.Report;
+import weka.core.Instances;
+
 import com.kdcloud.lib.domain.ServerParameter;
-import com.kdcloud.lib.rest.api.ReportResource;
+import com.kdcloud.lib.rest.api.TaskResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.Task;
 
-public class ReportServerResource extends KDServerResource implements ReportResource {
+public class TaskServerResource extends KDServerResource implements TaskResource {
 	
-	private Report report;
+	private Task task;
 	
-	public ReportServerResource() {
+	public TaskServerResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	ReportServerResource(Application application, Report report) {
+	TaskServerResource(Application application, Task task) {
 		super(application);
-		this.report = report;
+		this.task = task;
 	}
 	
 	@Override
@@ -34,17 +34,15 @@ public class ReportServerResource extends KDServerResource implements ReportReso
 			return notFound();
 		if (!task.getApplicant().equals(user))
 			return forbidden();
-		report = task.getReport();
 		return super.handle();
 	}
 
 	@Override
 	@Get
-	public Representation retrive() {
-		if (report.getDom() != null)
-			return new DomRepresentation(MediaType.APPLICATION_XML, report.getDom());
-		if (report.getData() != null)
-			return new InstancesRepresentation(MediaType.TEXT_CSV, report.getData());
+	public Representation retriveOutput() {
+		Instances output = task.getOutput();
+		if (output != null && !output.isEmpty())
+			return new InstancesRepresentation(MediaType.TEXT_CSV, output);
 		return null;
 	}
 

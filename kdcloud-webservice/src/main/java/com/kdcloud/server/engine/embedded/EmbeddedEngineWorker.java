@@ -5,8 +5,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.w3c.dom.Document;
-
 import weka.core.Instances;
 
 import com.kdcloud.lib.domain.ServerParameter;
@@ -112,15 +110,7 @@ public class EmbeddedEngineWorker implements Worker {
 	}
 
 	@Override
-	public Document getDom() {
-		if (mState instanceof View) {
-			return ((View) mState).getDom();
-		}
-		return null;
-	}
-
-	@Override
-	public Instances getInstances() {
+	public Instances getOutput() {
 		if (mState instanceof BufferedInstances) {
 			return ((BufferedInstances) mState).getInstances();
 		}

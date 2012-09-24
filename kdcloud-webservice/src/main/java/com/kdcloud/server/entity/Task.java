@@ -8,8 +8,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import weka.core.Instances;
+
 import com.google.appengine.datanucleus.annotations.Unowned;
-import com.kdcloud.lib.domain.Report;
 
 @PersistenceCapable
 public class Task {
@@ -27,8 +28,12 @@ public class Task {
 	@Unowned
 	User applicant;
 	
+	@Persistent
+	@Unowned
+	VirtualFile input;
+	
 	@Persistent(serialized = "true")
-	Report report;
+	Object output;
 	
 	
 	public Task() {
@@ -51,14 +56,6 @@ public class Task {
 		this.id = id;
 	}
 
-	public Report getReport() {
-		return report;
-	}
-
-	public void setReport(Report report) {
-		this.report = report;
-	}
-
 	public User getApplicant() {
 		return applicant;
 	}
@@ -68,8 +65,19 @@ public class Task {
 	}
 
 	public InputStream getStream() {
-		// TODO Auto-generated method stub
-		return null;
+		return input.getStream();
+	}
+
+	public void setOutput(Instances output) {
+		this.output = output;
+	}
+
+	public Instances getOutput() {
+		return (Instances) output;
+	}
+
+	public void setInput(VirtualFile input) {
+		this.input = input;
 	}
 	
 }

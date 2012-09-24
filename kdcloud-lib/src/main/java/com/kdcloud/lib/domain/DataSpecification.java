@@ -7,11 +7,13 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import weka.core.Attribute;
 import weka.core.Instances;
 
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlRootElement
 public class DataSpecification implements Serializable {
 	
 	/**
@@ -36,7 +38,7 @@ public class DataSpecification implements Serializable {
 		HEARTBEAT
 	}
 	
-	@XmlElement(name="specification")
+	@XmlElement(name="column")
 	List<Column> columns;
 	
 	@XmlElement

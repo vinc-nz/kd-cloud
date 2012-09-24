@@ -1,13 +1,15 @@
 package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
-import com.kdcloud.lib.domain.Report;
+import weka.core.Instances;
+
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
@@ -39,19 +41,17 @@ public class QueueWorkerServerResource extends WorkerServerResource {
 	public void pullTask(Form form) {
 		getLogger().info("ready to work on data");
 
-		Report report = null;
 		try {
-			report = execute(form, task.getStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			Instances output = execute(form, task.getStream());
 
-		getLogger().info("work done");
-		
-		task.setReport(report);
-		taskDao.save(task);
-		notifyApplicant(task);
+			getLogger().info("work done");
+
+			task.setOutput(output);
+			taskDao.save(task);
+			notifyApplicant(task);
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, e.getMessage(), e);
+		}
 	}
 
 	public void notifyApplicant(Task task) {

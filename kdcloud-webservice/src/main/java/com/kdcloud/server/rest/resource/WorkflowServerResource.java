@@ -8,11 +8,11 @@ import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
-import com.kdcloud.lib.domain.Report;
+import weka.core.Instances;
+
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.WorkflowResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
@@ -42,19 +42,17 @@ public class WorkflowServerResource extends WorkerServerResource implements
 		InputStream workflow = getClass().getClassLoader().getResourceAsStream(workflowId);
 		if (workflow == null)
 			return notFound();
-		Report report;
+		Instances data;
 		try {
-			report = execute(form, workflow);
+			data = execute(form, workflow);
 		} catch (IOException e) {
 			getLogger().log(Level.SEVERE, e.getMessage(), e);
 			setStatus(Status.SERVER_ERROR_INTERNAL);
 			return null;
 		}
-		if (report.getDom() != null)
-			return new DomRepresentation(MediaType.APPLICATION_XML, report.getDom());
-		if (report.getData() != null && !report.getData().isEmpty()) {
-			getLogger().info("sending " + report.getData().size() + " instances");
-			return new InstancesRepresentation(MediaType.TEXT_CSV, report.getData());
+		if (data != null && !data.isEmpty()) {
+			getLogger().info("sending " + data.size() + " instances");
+			return new InstancesRepresentation(MediaType.TEXT_CSV, data);
 		}
 		return null;
 	}

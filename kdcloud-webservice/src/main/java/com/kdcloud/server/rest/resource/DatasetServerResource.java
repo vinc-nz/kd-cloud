@@ -12,6 +12,7 @@ import org.restlet.resource.Put;
 
 import weka.core.Instances;
 
+import com.kdcloud.lib.domain.DataSpecification;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.DatasetResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
@@ -59,13 +60,22 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
 		try {
 			Instances data = instancesRepresentation.getInstances();
-			uploadData(data);
+			DataSpecification inputSpec = group.getInputSpecification();
+			if (inputSpec != null && !inputSpec.matchingSpecification(data))
+				notAcceptable();
+			else
+				uploadData(data);
 		} catch (IOException e) {
 			getLogger().log(Level.INFO, "got an invalid request", e);
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			//TODO return an error representation
 		}
 		
+	}
+	
+	public void notAcceptable() {
+		getLogger().info("provided data does not match the dataset specification");
+		setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 	}
 	
 	public void uploadData(Instances newData) {
@@ -80,9 +90,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 			dataset.setInstances(newData);
 			getLogger().info(newData.size() + " instances merged succeffully");
 		} else {
-			String error = "provided data does not match the dataset specification";
-			getLogger().info(error);
-			setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, error);
+			notAcceptable();
 		}
 		groupDao.save(group);
 	}
@@ -93,7 +101,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 		DataTable dataset = getTable();
 		if (dataset.getInstances() == null) {
 			getLogger().info("no data");
-			return null;
+			return notFound();
 		}
 		return new InstancesRepresentation(dataset.getInstances());
 	}

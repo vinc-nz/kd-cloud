@@ -2,8 +2,6 @@ package com.kdcloud.server.engine;
 
 import java.util.Set;
 
-import org.w3c.dom.Document;
-
 import weka.core.Instances;
 
 import com.kdcloud.lib.domain.ServerParameter;
@@ -28,8 +26,6 @@ public interface Worker extends Runnable {
 	
 	public boolean configure();
 
-	public Document getDom();
-	
-	public Instances getInstances();
+	public Instances getOutput();
 
 }

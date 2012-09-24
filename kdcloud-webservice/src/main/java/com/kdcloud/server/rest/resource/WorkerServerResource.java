@@ -7,7 +7,8 @@ import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.resource.ResourceException;
 
-import com.kdcloud.lib.domain.Report;
+import weka.core.Instances;
+
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.engine.KDEngine;
 import com.kdcloud.server.engine.Worker;
@@ -30,7 +31,7 @@ public abstract class WorkerServerResource extends KDServerResource {
 		engine = (KDEngine) inject(KDEngine.class);
 	}
 
-	public Report execute(Form form, InputStream input) throws IOException {
+	public Instances execute(Form form, InputStream input) throws IOException {
 		Worker worker = engine.getWorker(input);
 		worker.setPersistenceContext(getPersistenceContext());
 		for (ServerParameter param : worker.getParameters()) {
@@ -42,7 +43,7 @@ public abstract class WorkerServerResource extends KDServerResource {
 		if (worker.configure())
 			worker.run();
 		if (worker.getStatus() == Worker.STATUS_JOB_COMPLETED) {
-			return new Report(worker.getDom(), worker.getInstances());
+			return worker.getOutput();
 		} else {
 			throw new IOException("error during execution");
 		}

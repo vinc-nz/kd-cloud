@@ -10,7 +10,7 @@ import com.kdcloud.lib.domain.ServerParameter;
  * @author spax
  *
  */
-public interface ReportResource {
+public interface TaskResource {
 	
 	
 	
@@ -22,6 +22,6 @@ public interface ReportResource {
 	 * @return
 	 */
 	@Get
-	public Representation retrive();
+	public Representation retriveOutput();
 
 }

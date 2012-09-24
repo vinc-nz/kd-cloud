@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.restlet.data.Form;
@@ -27,20 +28,29 @@ public class ServerAction implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@XmlElement
+	@XmlElement(required=true)
 	String uri;
 	
-	@XmlElement
+	@XmlElement(required=true)
 	ServerMethod method;
 	
-	@XmlElement(name="postParameter")
+	@XmlElement(name="parameter", required=false)
 	Set<ServerParameter> postParams;
+	
+	@XmlElement(required=false)
+	boolean repeat;
+
+	@XmlElement(required=false)
+	Trigger trigger;
 	
 	ArrayList<Parameter> postForm;
 	
-	boolean repeat;
-	
-	int sleepTime;
+	static class Trigger implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		@XmlAttribute
+		int after;
+	}
 	
 	public ServerAction() {
 		this.postParams = new HashSet<ServerParameter>();
@@ -51,7 +61,7 @@ public class ServerAction implements Serializable {
 	public ServerAction(ServerAction serverAction) {
 		this.method = serverAction.method;
 		this.repeat = serverAction.repeat;
-		this.sleepTime = serverAction.sleepTime;
+		this.trigger = serverAction.trigger;
 		this.uri = serverAction.uri;
 		this.postParams = serverAction.postParams;
 		this.postForm = serverAction.postForm;
@@ -61,7 +71,8 @@ public class ServerAction implements Serializable {
 	public ServerAction(String uri, ServerMethod method, boolean repeat, int sleepTime) {
 		this.method = method;
 		this.repeat = repeat;
-		this.sleepTime = sleepTime;
+		this.trigger = new Trigger();
+		this.trigger.after = sleepTime;
 		this.uri = uri;
 		this.postParams = new HashSet<ServerParameter>();
 		this.postForm = new ArrayList<Parameter>();
@@ -89,16 +100,9 @@ public class ServerAction implements Serializable {
 		this.repeat = repeat;
 	}
 
-	public long getSleepTime() {
-		return sleepTime;
-	}
-	
-	public long getSleepTimeInMillis() {
-		return sleepTime * 1000;
-	}
-
-	public void setSleepTime(int sleepTime) {
-		this.sleepTime = sleepTime;
+	public void waitTriggers() throws InterruptedException {
+		if (trigger != null)
+			Thread.sleep(trigger.after * 1000);
 	}
 	
 	public List<ServerParameter> getParams() {

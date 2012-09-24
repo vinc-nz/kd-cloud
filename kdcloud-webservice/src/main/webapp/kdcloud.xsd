@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="modalities" type="modalityIndex"/>
+
+  <xs:element name="modality" type="modality"/>
+
+  <xs:element name="users" type="userIndex"/>
+  
+  <xs:element name="dataSpecification" type="dataSpecification"/>
+
+  <xs:complexType name="column">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="type" type="dataType" minOccurs="0"/>
+      <xs:element name="source" type="inputSource" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dataSpecification">
+    <xs:sequence>
+      <xs:element name="column" type="column" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="view" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userIndex">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="modalityIndex">
+    <xs:sequence>
+      <xs:element ref="modality" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="modality">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="inputSpecification" type="dataSpecification" minOccurs="0"/>
+      <xs:element name="init-action" type="serverAction" minOccurs="0"/>
+      <xs:element name="action" type="serverAction" minOccurs="0"/>
+      <xs:element name="outputSpecification" type="dataSpecification" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="serverAction">
+    <xs:sequence>
+      <xs:element name="uri" type="xs:string"/>
+      <xs:element name="method" type="serverMethod"/>
+      <xs:element name="parameter" type="serverParameter" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="repeat" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="trigger" type="trigger" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="serverParameter">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="value" type="xs:string" minOccurs="0"/>
+      <xs:element name="reference" type="reference" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="reference">
+    <xs:sequence/>
+    <xs:attribute name="xpath" type="xs:string"/>
+    <xs:attribute name="type" type="referenceType"/>
+  </xs:complexType>
+
+  <xs:complexType name="trigger">
+    <xs:sequence/>
+    <xs:attribute name="after" type="xs:int" use="required"/>
+  </xs:complexType>
+
+  <xs:simpleType name="serverMethod">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="GET"/>
+      <xs:enumeration value="PUT"/>
+      <xs:enumeration value="POST"/>
+      <xs:enumeration value="DELETE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="dataType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DOUBLE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="inputSource">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="HEARTBEAT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="referenceType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CHOICE"/>
+      <xs:enumeration value="MAP"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

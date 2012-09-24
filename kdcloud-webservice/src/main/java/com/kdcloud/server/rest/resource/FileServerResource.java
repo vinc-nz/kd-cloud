@@ -50,8 +50,10 @@ public class FileServerResource extends KDServerResource {
 			JAXBContext context = JAXBContext.newInstance(clazz);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			InputStream stream = getClass().getClassLoader().getResourceAsStream(filename);
-			if (stream == null)
+			if (stream == null) {
+				notFound();
 				return null;
+			}
 			return unmarshaller.unmarshal(stream);
 		} catch (JAXBException e) {
 			getLogger().log(Level.SEVERE, "error deserializing object", e);

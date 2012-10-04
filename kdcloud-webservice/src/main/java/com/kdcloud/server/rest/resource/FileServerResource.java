@@ -11,7 +11,6 @@ import javax.xml.bind.Unmarshaller;
 import org.restlet.Application;
 import org.restlet.data.Status;
 
-import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.server.entity.VirtualDirectory;
 import com.kdcloud.server.entity.VirtualFile;
 
@@ -35,7 +34,7 @@ public class FileServerResource extends KDServerResource {
 			if (file == null)
 				error = "no such file";
 			else try {
-				return (Modality) file.readObject();
+				return file.readObject();
 			} catch (IOException e) {
 				error = e.getMessage();
 			}

@@ -33,7 +33,6 @@ public class KDApplication extends Application {
 				.getSubTypesOf(KDServerResource.class);
 
 		for (Class<? extends KDServerResource> clazz : allClasses) {
-			System.out.println(clazz.getSimpleName());
 			try {
 				String uri = clazz.getField("URI").get(null).toString();
 				router.attach(uri, clazz);

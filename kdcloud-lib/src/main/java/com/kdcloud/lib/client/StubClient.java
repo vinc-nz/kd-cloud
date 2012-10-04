@@ -110,8 +110,7 @@ public class StubClient extends BaseClient {
 
 	@Override
 	public void handleResourceException(Status status, ResourceException e) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("fuck!!!");
 	}
 
 }

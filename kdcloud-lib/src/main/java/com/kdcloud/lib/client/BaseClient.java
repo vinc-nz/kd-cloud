@@ -369,7 +369,7 @@ public abstract class BaseClient implements Runnable {
 		} else {
 			output = new InstancesRepresentation(entity).getInstances();
 			DataSpecification outSpec = modality.getOutputSpecification();
-			if (outSpec == null || outSpec.matchingSpecification(output))
+			if (outSpec != null && !outSpec.matchingSpecification(output))
 				throw new IOException("output does not match the specifications");
 			String view = modality.getOutputSpecification().getView();
 			if (view != null)

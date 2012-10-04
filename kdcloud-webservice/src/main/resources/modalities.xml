@@ -23,7 +23,7 @@
     <modality>
         <name>Single Analysis</name>
         <init-action>
-            <uri>/group/london-marathon</uri>
+            <uri>/users/london-marathon</uri>
             <method>GET</method>
         </init-action>
         <action>
@@ -50,7 +50,7 @@
     <modality>
         <name>Global Analysis</name>
         <init-action>
-            <uri>/group/london-marathon</uri>
+            <uri>/users/london-marathon</uri>
             <method>GET</method>
         </init-action>
         <action>

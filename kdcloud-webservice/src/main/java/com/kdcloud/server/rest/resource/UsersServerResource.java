@@ -32,7 +32,7 @@ public class UsersServerResource extends KDServerResource implements
 	@Override
 	public Representation handle() {
 		String groupName = getParameter(ServerParameter.GROUP_ID);
-		Group group = groupDao.findByName(groupName);
+		group = groupDao.findByName(groupName);
 		if (group == null)
 			return notFound();
 		return super.handle();

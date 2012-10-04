@@ -2,6 +2,7 @@ package com.kdcloud.lib.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -70,6 +71,13 @@ public class DataSpecification implements Serializable {
 			info.add(new Attribute("attr" + i));
 		}
 		return new Instances(name, info, 0);
+	}
+
+	public List<InputSource> sources() {
+		LinkedList<InputSource> list = new LinkedList<DataSpecification.InputSource>();
+		for (Column c : columns)
+			list.add(c.source);
+		return list;
 	}
 	
 	

@@ -90,6 +90,7 @@ public class StubClient extends BaseClient {
 	public static void main(String[] args) throws Exception {
 		String url = "http://localhost:8888";
 		BaseClient kdcloud = new StubClient(url);
+		kdcloud.setRepeatAllowed(false);
 		kdcloud.setAuthentication("admin", "admin");
 		List<Modality> modalities = kdcloud.getModalities();
 		Modality dataFeed = modalities.get(0);

@@ -34,7 +34,6 @@ import com.kdcloud.lib.domain.ServerAction;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.domain.ServerParameter.ReferenceType;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
-import com.kdcloud.lib.rest.api.ViewResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
 public abstract class BaseClient implements Runnable {
@@ -126,10 +125,7 @@ public abstract class BaseClient implements Runnable {
 		// initialize xml stuff
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		this.documentBuilder = dbf.newDocumentBuilder();
-		this.executionLog = this.documentBuilder.newDocument();
-		Element rootElement = this.executionLog.createElementNS("dummy",
-				"execution");
-		this.executionLog.appendChild(rootElement);
+		
 		XPathFactory xPathfactory = XPathFactory.newInstance();
 		this.xpath = xPathfactory.newXPath();
 
@@ -210,6 +206,12 @@ public abstract class BaseClient implements Runnable {
 	 */
 	public void executeModality() throws IOException, InterruptedException {
 		startModalityExecution();
+		
+		this.executionLog = this.documentBuilder.newDocument();
+		Element rootElement = this.executionLog.createElementNS("dummy",
+				"execution");
+		this.executionLog.appendChild(rootElement);
+		
 		log("executing " + modality.getName());
 		queue = new LinkedList<ServerAction>();
 		queue.add(modality.getInitAction());
@@ -377,10 +379,13 @@ public abstract class BaseClient implements Runnable {
 		}
 	}
 
-	private void report(String viewResource) {
+	private void report(String viewResource) throws IOException {
 		log("generating report");
 		setResourceReference(viewResource);
-		Document view = resource.wrap(ViewResource.class).getView();
+//		Document view = resource.wrap(ViewResource.class).getView();
+		Representation rep = resource.get();
+		DomRepresentation domRep = new DomRepresentation(rep);
+		Document view = domRep.getDocument();
 		XmlReport.mergeWithData(view, output);
 		report(view);
 	}

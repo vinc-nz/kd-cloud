@@ -23,6 +23,12 @@
 	    </dependency>
 	    <dependency>
 	        <groupId>org.restlet.jse</groupId>
+	        <artifactId>org.restlet.ext.httpclient</artifactId>
+	        <version>${restlet.version}</version>
+	        <scope>provided</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.restlet.jse</groupId>
 	        <artifactId>org.restlet.ext.xml</artifactId>
 	        <version>${restlet.version}</version>
 	        <scope>provided</scope>

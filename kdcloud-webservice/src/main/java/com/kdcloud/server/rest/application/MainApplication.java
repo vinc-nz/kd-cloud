@@ -24,7 +24,7 @@ public class MainApplication extends Application {
 
 		Router router = new Router(getContext());
 		
-		router.attach("/XML", new Directory(getContext(), "war:///"));
+		router.attach("/api", new Directory(getContext(), "war:///"));
 		
 		router.attach(TaskQueue.WORKER_URI + ServerParameter.TASK_ID, QueueWorkerServerResource.class);
 

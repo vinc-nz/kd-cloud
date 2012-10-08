@@ -1,0 +1,686 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="LibreOffice 3.5  (Linux)">
+	<META NAME="CREATED" CONTENT="20121007;10594800">
+	<META NAME="CHANGED" CONTENT="20121008;18415400">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Arial", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "Droid Sans"; font-size: 16pt }
+		H1.ctl { font-family: "Lohit Hindi"; font-size: 16pt }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-family: "Droid Sans"; font-size: 14pt; font-style: italic }
+		H2.ctl { font-family: "Lohit Hindi"; font-size: 14pt; font-style: italic }
+		H3 { margin-bottom: 0.21cm }
+		H3.western { font-family: "Arial", sans-serif }
+		H3.cjk { font-family: "Droid Sans" }
+		H3.ctl { font-family: "Lohit Hindi" }
+		TD P { margin-bottom: 0cm }
+		H4 { margin-bottom: 0.21cm }
+		H4.western { font-family: "Arial", sans-serif; font-size: 11pt; font-style: italic }
+		H4.cjk { font-family: "Droid Sans"; font-size: 11pt; font-style: italic }
+		H4.ctl { font-family: "Lohit Hindi"; font-size: 11pt; font-style: italic }
+		A:link { so-language: zxx }
+		CODE.cjk { font-family: "WenQuanYi Micro Hei", monospace }
+		CODE.ctl { font-family: "Lohit Hindi", monospace }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<DIV ID="Table of Contents1" DIR="LTR">
+	<DIV ID="Table of Contents1_Head" DIR="LTR">
+		<P STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Arial, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><B>KDCLOUD
+		REST API</B></FONT></FONT></P>
+	</DIV>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__653_1333437339">Authentication	</A></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__655_1333437339">API
+	description	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__657_1333437339">/group
+	(POST)	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__659_1333437339">/group
+	(GET)	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__661_1333437339">/data	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__663_1333437339">/users	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__665_1333437339">/modality	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__667_1333437339">/modalities	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__669_1333437339">/view
+	(POST)	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__671_1333437339">/view
+	(GET)	</A></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__673_1333437339">XML
+	specifications	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__675_1333437339">Modalities	</A></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__677_1333437339">structure	</A></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__679_1333437339">tags	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__681_1333437339">Data
+	specification	</A></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__683_1333437339">Structure	</A></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__685_1333437339">tags	</A></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#__RefHeading__687_1333437339">Actions	</A></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__689_1333437339">Structure	</A></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__691_1333437339">tags	</A></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__1260_1333437339">Notes	</A></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#__RefHeading__695_1333437339">Modality
+	Execution	</A></P>
+</DIV>
+<H1 CLASS="western"></H1>
+<H2 CLASS="western"><A NAME="__RefHeading__653_1333437339"></A>Authentication</H2>
+<P>All requests must be authenticated using a Google Account and the
+<A HREF="http://oauth.net/">OAuth</A> protocol. The access token can
+be requested as described <A HREF="https://developers.google.com/accounts/docs/OAuth2Login">here</A>.
+The access token must be transmitted as secret using HTTP BASIC
+authentication. All requests must be done over SSL.</P>
+<H2 CLASS="western"><A NAME="__RefHeading__655_1333437339"></A>API
+description</H2>
+<H3 CLASS="western"><A NAME="__RefHeading__657_1333437339"></A>/group
+(POST)</H3>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>DESCRIPTION</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>Creates or modifies the group with the specified name</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>URL Stucture</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/group/&lt;name&gt;</FONT></P>
+			<P><B>name </B><SPAN STYLE="font-weight: normal">the unique name
+			of the group</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>METHOD</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>POST</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>REQUEST BODY</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>XML</P>
+			<P>Optional</P>
+			<P>Specifies the data specification to be accepted</P>
+			<P><B>Example</B></P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;dataSpecification&gt;
+			</FONT>
+			</P>
+			<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;column&gt;
+			</FONT>
+			</P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	
+			 &lt;name&gt;heartbeat&lt;/name&gt; </FONT>
+			</P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	
+			 &lt;type&gt;DOUBLE&lt;/type&gt; </FONT>
+			</P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	
+			 &lt;source&gt;HEARTBEAT&lt;/source&gt; </FONT>
+			</P>
+			<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;/column&gt;
+			</FONT>
+			</P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;/dataSpecification&gt;
+			</FONT>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><A NAME="__RefHeading__659_1333437339"></A>/group
+(GET)</H3>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>DESCRIPTION</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>Retrives the data specification associated with the group</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>URL Stucture</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/group/&lt;name&gt;</FONT></P>
+			<P><B>name </B><SPAN STYLE="font-weight: normal">the unique name
+			of the group</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>METHOD</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>GET</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>RESPONSE BODY</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>XML</P>
+			<P>Specifies the data specification accepted</P>
+			<P><B>Example</B></P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;dataSpecification&gt;
+			</FONT>
+			</P>
+			<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;column&gt;
+			</FONT>
+			</P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	
+			 &lt;name&gt;heartbeat&lt;/name&gt; </FONT>
+			</P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	
+			 &lt;type&gt;DOUBLE&lt;/type&gt; </FONT>
+			</P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	
+			 &lt;source&gt;HEARTBEAT&lt;/source&gt; </FONT>
+			</P>
+			<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;/column&gt;
+			</FONT>
+			</P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;/dataSpecification&gt;
+			</FONT>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><A NAME="__RefHeading__661_1333437339"></A>/data</H3>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>DESCRIPTION</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>Sends data to the specified group</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>URL Stucture</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/data/&lt;group&gt;</FONT></P>
+			<P><B>group </B><SPAN STYLE="font-weight: normal">the unique name
+			of the group</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>METHOD</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>PUT</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>REQUEST BODY</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>A table of data encoded according to the HTTP media type:</P>
+			<P>CSV for <FONT FACE="Courier New, monospace">text/csv</FONT></P>
+			<P>Arff for <FONT FACE="Courier New, monospace">text/plain</FONT></P>
+			<P>Json for <CODE CLASS="western"><FONT FACE="Courier New, monospace">application/json</FONT></CODE></P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><A NAME="__RefHeading__663_1333437339"></A>/users</H3>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>DESCRIPTION</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>Retrives the names of the users who uploaded data to the
+			specified group</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>URL Stucture</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/users/&lt;group&gt;</FONT></P>
+			<P><B>group </B><SPAN STYLE="font-weight: normal">the unique name
+			of the group</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>METHOD</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>GET</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>RESPONSE BODY</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>XML</P>
+			<P><B>Example</B></P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;users&gt;</FONT></P>
+			<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;user&gt;user1@gmail.com&lt;/user&gt;</FONT></P>
+			<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;user&gt;user2@gmail.com&lt;/user&gt;</FONT></P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;/users&gt;</FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><A NAME="__RefHeading__665_1333437339"></A>/modality</H3>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>DESCRIPTION</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>Creates or modifies the modality with the specified name</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>URL Stucture</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/modality/&lt;name&gt;</FONT></P>
+			<P><B>name </B><SPAN STYLE="font-weight: normal">the unique name
+			of the modality</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>METHOD</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>POST</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>REQUEST BODY</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>XML</P>
+			<P>Required</P>
+			<P>See <A HREF="#1.4.1.modalities|outline">modalities</A></P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><A NAME="__RefHeading__667_1333437339"></A>/modalities</H3>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>DESCRIPTION</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>Retrives all defined modalities</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>URL Stucture</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/modalities</FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>METHOD</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>GET</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>RESPONSE BODY</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>XML</P>
+			<P><B>Structure</B></P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;modalities&gt;</FONT></P>
+			<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;modality/&gt;</FONT></P>
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;/modalities&gt;</FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><A NAME="__RefHeading__669_1333437339"></A>/view
+(POST)</H3>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>DESCRIPTION</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>Creates or modifies the view with the specified name</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>URL Stucture</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/view/&lt;name&gt;</FONT></P>
+			<P><B>name </B><SPAN STYLE="font-weight: normal">the unique name
+			of the view</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>METHOD</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>POST</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>REQUEST BODY</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>XML</P>
+			<P>Required</P>
+			<P>See views</P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><A NAME="__RefHeading__671_1333437339"></A>/view
+(GET)</H3>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>DESCRIPTION</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>Retrives the specified view</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>URL Stucture</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/view/&lt;name&gt;</FONT></P>
+			<P><B>name </B><SPAN STYLE="font-weight: normal">the unique name
+			of the view</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>METHOD</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>GET</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P>REQUEST BODY</P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>XML</P>
+			<P>See views</P>
+		</TD>
+	</TR>
+</TABLE>
+<H2 CLASS="western"><A NAME="__RefHeading__673_1333437339"></A>XML
+specifications</H2>
+<P>All XML inputs can be validated using the following <A HREF="kdcloud.xsd">schema</A>.</P>
+<H3 CLASS="western"><A NAME="__RefHeading__675_1333437339"></A>Modalities</H3>
+<H4 CLASS="western"><A NAME="__RefHeading__677_1333437339"></A>structure</H4>
+<P><FONT FACE="Courier New, monospace">&lt;modality&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;name/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;inputSpecification/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;init-action/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;action/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;outputSpecification/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">&lt;/modality&gt;</FONT></P>
+<H4 CLASS="western"><A NAME="__RefHeading__679_1333437339"></A>tags</H4>
+<UL>
+	<LI><P><FONT FACE="Courier New, monospace">name</FONT> is a generic
+	name for the modality</P>
+	<LI><P><FONT FACE="Courier New, monospace">inputSpecification/outputSpecification
+	</FONT>are data specifications, each one is needed if the modality
+	respectively sends or receives data</P>
+	<LI><P><FONT FACE="Courier New, monospace">init-action/action </FONT>are
+	actions, init-action is optional</P>
+</UL>
+<H3 CLASS="western"><A NAME="__RefHeading__681_1333437339"></A>Data
+specification</H3>
+<H4 CLASS="western"><A NAME="__RefHeading__683_1333437339"></A>Structure</H4>
+<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;dataSpecification&gt;
+</FONT>
+</P>
+<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;column&gt;
+</FONT>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	 
+&lt;name/&gt;</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	 
+&lt;type/&gt;</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">	 
+&lt;source/&gt;</FONT></P>
+<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;/column&gt;
+</FONT>
+</P>
+<P STYLE="font-weight: normal">    <FONT FACE="Courier New, monospace">&lt;view/&gt;</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">&lt;/dataSpecification&gt;
+</FONT>
+</P>
+<H4 CLASS="western"><A NAME="__RefHeading__685_1333437339"></A>tags</H4>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">column</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>A table column. Multiple columns can be specified</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">name</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P STYLE="font-weight: normal">The name of the column</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">type</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>The datatype of the column. Currently it only supports <FONT FACE="Courier New, monospace">DOUBLE</FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">source</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>Optional. Specifies the source sensor to use to gather data.
+			Currently it only supports <FONT FACE="Courier New, monospace">HEARTBEAT</FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">view</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>Optional. Specify the relative URI of the view specification</P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><A NAME="__RefHeading__687_1333437339"></A>Actions</H3>
+<H4 CLASS="western"><A NAME="__RefHeading__689_1333437339"></A>Structure</H4>
+<P><FONT FACE="Courier New, monospace">&lt;action&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;uri/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;method/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;parameter&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">		&lt;name/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">		&lt;value/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">		&lt;reference/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;/parameter&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;repeat/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">	&lt;trigger/&gt;</FONT></P>
+<P><FONT FACE="Courier New, monospace">&lt;/action&gt;</FONT></P>
+<H4 CLASS="western"><A NAME="__RefHeading__691_1333437339"></A>tags</H4>
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">uri</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.1cm">
+			<P>The relative URI to use for the request</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">method</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P STYLE="font-weight: normal">The HTTP method to use for requests</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">parameter</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>Only valid for POST requests. Specifies a parameter for POST
+			forms</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">name</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>The name of the parameter</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">value</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>Optional. The value of the parameter</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">reference</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>Optional. The value of the parameter will be taken using an
+			xpath expression. The expression is specified using the <FONT FACE="Courier New, monospace">xpath</FONT>
+			attribute. An attribute <FONT FACE="Courier New, monospace">type</FONT>
+			defines the reference type, supported types are <FONT FACE="Courier New, monospace">CHOICE</FONT>
+			(default) or <FONT FACE="Courier New, monospace">MAP</FONT>. See
+			<A HREF="#1.5.Modality Execution|outline">modality execution</A>
+			for details.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">repeat</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>Optional. Can be either true or false. Default false. Specifies
+			if the action must be repeated</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">trigger</FONT></P>
+		</TD>
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<P>Optional. Specifies (through XML attributes) a trigger that
+			activates the action. Currently the only trigger supported is
+			<FONT FACE="Courier New, monospace">after</FONT><FONT FACE="Times New Roman, serif">,
+			which activates the action after the specified time (in seconds)</FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<H4 CLASS="western"><A NAME="__RefHeading__1260_1333437339"></A>Notes</H4>
+<UL>
+	<LI><P>All PUT bodies must be an encoded table</P>
+	<LI><P>All POST bodies must be an post form
+	<FONT FACE="Times New Roman, serif">(</FONT><CODE CLASS="western"><FONT FACE="Courier New, monospace">application/x-www-form-urlencoded</FONT></CODE><CODE CLASS="western"><FONT FACE="Times New Roman, serif">)</FONT></CODE></P>
+	<LI><P><FONT FACE="Times New Roman, serif">A parameter must include
+	either a value or a reference</FONT></P>
+</UL>
+<H2 CLASS="western"><A NAME="__RefHeading__695_1333437339"></A><A NAME="1.5.Modality Execution|outline"></A>
+Modality Execution</H2>
+<UL>
+	<LI><P>The client must start collecting data according to
+	inputSpecification</P>
+	<LI><P>The init-action is intended to either prepare the server for
+	the proper action or to retrieve runtime informations. The
+	(eventual) XML output of the action must be stored. The init-action
+	can be executed at the beginning or when triggered if a trigger is
+	specified. Eventual parameters in this action cannot require
+	references</P>
+	<LI><P>The action must be executed after the init-action (if any)
+	and when triggered (if a trigger is specified). Parameter references
+	should be resolved as follows:</P>
+</UL>
+<UL>
+	<UL>
+		<LI><P>use the init-action output XML to evaluate the xpath
+		expression</P>
+		<LI><P>if the reference is of type <FONT FACE="Courier New, monospace">CHOICE</FONT>
+		(default) then let the user choose between the expression results</P>
+		<LI><P> If the reference is of type <FONT FACE="Courier New, monospace">MAP</FONT>
+		a different request must be made using each of the expression
+		results</P>
+	</UL>
+</UL>
+<OL>
+	<P>The action output must match the outputSpecification (if it is
+	present, otherwise must be empty).  The client must also fetch the
+	view specification according to the URI enclosed in the <FONT FACE="Courier New, monospace">view</FONT>
+	tag and generate the report.</P>
+</OL>
+<P>	</P>
+</BODY>
+</HTML>

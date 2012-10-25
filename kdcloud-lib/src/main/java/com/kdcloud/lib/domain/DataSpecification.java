@@ -32,11 +32,11 @@ public class DataSpecification implements Serializable {
 	}
 	
 	public enum DataType {
-		DOUBLE
+		DOUBLE, STRING, TIMESTAMP, INTEGER
 	}
 	
 	public enum InputSource {
-		HEARTBEAT
+		HEARTBEAT, CLOCK
 	}
 	
 	@XmlElement(name="column")

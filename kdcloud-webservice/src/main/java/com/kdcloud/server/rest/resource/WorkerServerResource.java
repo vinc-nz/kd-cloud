@@ -9,9 +9,9 @@ import org.restlet.resource.ResourceException;
 
 import weka.core.Instances;
 
-import com.kdcloud.lib.domain.ServerParameter;
-import com.kdcloud.server.engine.KDEngine;
-import com.kdcloud.server.engine.Worker;
+import com.kdcloud.engine.KDEngine;
+import com.kdcloud.engine.Worker;
+import com.kdcloud.server.persistence.PersistenceContext;
 
 public abstract class WorkerServerResource extends KDServerResource {
 
@@ -33,11 +33,11 @@ public abstract class WorkerServerResource extends KDServerResource {
 
 	public Instances execute(Form form, InputStream input) throws IOException {
 		Worker worker = engine.getWorker(input);
-		worker.setPersistenceContext(getPersistenceContext());
-		for (ServerParameter param : worker.getParameters()) {
-			String value = form.getFirstValue(param.getName());
+		worker.setParameter(PersistenceContext.class.getName(), getPersistenceContext());
+		for (String param : worker.getParameters()) {
+			String value = form.getFirstValue(param);
 			getLogger().info(
-					"setting parameter: " + param.getName() + "=" + value);
+					"setting parameter: " + param + "=" + value);
 			worker.setParameter(param, value);
 		}
 		if (worker.configure())

@@ -5,6 +5,7 @@
   <projects>
     <project>kdcloud-lib</project>
     <project>weka-stripped</project>
+    <project>kdcloud-engine</project>
   </projects>
   <buildSpec>
     <buildCommand>

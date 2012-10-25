@@ -5,8 +5,8 @@ import java.util.logging.Logger;
 
 import org.restlet.Context;
 
-import com.kdcloud.server.engine.KDEngine;
-import com.kdcloud.server.engine.embedded.EmbeddedEngine;
+import com.kdcloud.engine.KDEngine;
+import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
 import com.kdcloud.server.rest.resource.UserProvider;
@@ -28,7 +28,7 @@ public class GAEContext extends Context {
 		attrs.put(TaskQueue.class.getName(), new GAETaskQueue());
 		
 		
-		attrs.put(KDEngine.class.getName(), new EmbeddedEngine(logger));
+		attrs.put(KDEngine.class.getName(), new EmbeddedEngine());
 		
 		attrs.put(UserProvider.class.getName(), new UserProviderImpl());
 		

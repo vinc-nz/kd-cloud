@@ -17,7 +17,7 @@
             <uri>/data/london-marathon</uri>
             <method>PUT</method>
             <repeat>true</repeat>
-						<trigger after="60"/>
+			<trigger after="60"/>
         </action>
     </modality>
     <modality>

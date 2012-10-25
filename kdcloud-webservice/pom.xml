@@ -39,6 +39,12 @@
 	    
 	    <dependency>
 	        <groupId>com.kdcloud</groupId>
+	        <artifactId>kdcloud-engine</artifactId>
+	        <version>0.0.1-SNAPSHOT</version>
+	    </dependency>
+	    
+	    <dependency>
+	        <groupId>com.kdcloud</groupId>
 	        <artifactId>weka-stripped</artifactId>
 	        <version>${weka.version}</version>
 	    </dependency>

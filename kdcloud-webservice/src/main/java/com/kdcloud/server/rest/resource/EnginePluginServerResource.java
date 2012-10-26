@@ -28,6 +28,7 @@ import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeFactory;
 import com.kdcloud.server.rest.application.StreamClassLoader;
 
+
 public class EnginePluginServerResource extends FileServerResource {
 	
 	public static final String URI = "/engine/plugin/{id}";
@@ -60,6 +61,7 @@ public class EnginePluginServerResource extends FileServerResource {
 			loader.loadClass(className).asSubclass(Node.class).newInstance();
 			return true;
 		} catch (Exception e) {
+			setStatus(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 			return false;
 		}
 	}

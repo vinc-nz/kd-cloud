@@ -18,6 +18,7 @@ package com.kdcloud.server.entity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.jdo.annotations.Extension;
@@ -85,6 +86,16 @@ public class VirtualFile {
 		return new ByteArrayInputStream(content.getBytes());
 	}
 	
+	
+	public void write(InputStream in) throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		int next = in.read();
+		while (next > -1) {
+		    bos.write(next);
+		    next = in.read();
+		}
+		setStream(bos);
+	}
 	
 	@Override
 	public int hashCode() {

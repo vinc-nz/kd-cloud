@@ -172,6 +172,7 @@ public abstract class FileServerResource extends KDServerResource {
 		String[] path = getPath().split("\\/");
 		String dirName = path[0];
 		String filename = path[1];
+
 		VirtualDirectory directory = directoryDao.findByName(dirName);
 		if (directory == null)
 			directory = new VirtualDirectory(dirName);
@@ -188,6 +189,19 @@ public abstract class FileServerResource extends KDServerResource {
 		String[] path = getPath().split("\\/");
 		String dirName = path[0];
 		String filename = path[1];
+		VirtualDirectory directory = directoryDao.findByName(dirName);
+		if (directory == null)
+			return false;
+		VirtualFile file = new VirtualFile(filename);
+		if (directory.getFiles().remove(file)) {
+			directoryDao.save(directory);
+			getLogger().info("file removed correctly");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean deleteFile(String dirName, String filename) {
 		VirtualDirectory directory = directoryDao.findByName(dirName);
 		if (directory == null)
 			return false;

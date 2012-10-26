@@ -134,7 +134,7 @@ public class ServerResourceTest {
 	@Test
 	public void testVFS() {
 		FileServerResource resource = new FileServerResource(application);
-		resource.saveObjectToVirtualDirectory("test", "test", new Modality());
+		resource.saveToVirtualDirectory("test", "test", new Modality());
 		Object obj = resource.getObjectFromVirtualDirectory("test", "test");
 		assertNotNull(obj);
 	}

@@ -2,8 +2,10 @@ package com.kdcloud.server.entity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
@@ -13,6 +15,10 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import org.restlet.engine.io.IoUtils;
+
+import sun.misc.IOUtils;
 
 import com.google.appengine.api.datastore.Blob;
 
@@ -84,6 +90,16 @@ public class VirtualFile {
 		out.writeObject(obj);
 		out.close();
 		setStream(stream);
+	}
+	
+	public void write(InputStream in) throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		int next = in.read();
+		while (next > -1) {
+		    bos.write(next);
+		    next = in.read();
+		}
+		setStream(bos);
 	}
 	
 	@Override

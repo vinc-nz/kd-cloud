@@ -8,13 +8,15 @@ import com.kdcloud.engine.embedded.NodeAdapter;
 import com.kdcloud.engine.embedded.WorkerConfiguration;
 import com.kdcloud.engine.embedded.WrongConfigurationException;
 import com.kdcloud.engine.embedded.WrongInputException;
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataAccessObject;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class UserDataWriter extends NodeAdapter {
+	
+	public static final String DEST_USER_PARAMETER = "destinationUser";
+	public static final String DEST_GROUP_PARAMETER = "destinationGroup";
 
 	BufferedInstances mState;
 	DataAccessObject<Group> groupDao;
@@ -34,8 +36,8 @@ public class UserDataWriter extends NodeAdapter {
 	@Override
 	public void configure(WorkerConfiguration config) throws WrongConfigurationException  {
 		String msg = null;
-		String userId = (String) config.get(ServerParameter.USER_ID.getName());
-		String groupId = (String) config.get(ServerParameter.GROUP_ID.getName());
+		String userId = (String) config.get(DEST_USER_PARAMETER);
+		String groupId = (String) config.get(DEST_GROUP_PARAMETER);
 		PersistenceContext pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
 		if (pc == null)
 			msg = "no persistence context in configuration";
@@ -56,7 +58,9 @@ public class UserDataWriter extends NodeAdapter {
 	public Set<String> getParameters() {
 		Set<String> params = new HashSet<String>();
 		if (user == null)
-			params.add(ServerParameter.USER_ID.getName());
+			params.add(DEST_USER_PARAMETER);
+		if (group == null)
+			params.add(DEST_GROUP_PARAMETER);
 		return params;
 	}
 

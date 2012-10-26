@@ -7,13 +7,15 @@ import com.kdcloud.engine.embedded.BufferedInstances;
 import com.kdcloud.engine.embedded.NodeAdapter;
 import com.kdcloud.engine.embedded.WorkerConfiguration;
 import com.kdcloud.engine.embedded.WrongConfigurationException;
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class UserDataReader extends NodeAdapter {
+	
+	public static final String SOURCE_USER_PARAMETER = "sourceUser";
+	public static final String SOURCE_GROUP_PARAMETER = "sourceGroup";
 	
 	User user;
 	Group group;
@@ -32,8 +34,8 @@ public class UserDataReader extends NodeAdapter {
 	@Override
 	public void configure(WorkerConfiguration config) throws WrongConfigurationException {
 		String msg = null;
-		String userId = (String) config.get(ServerParameter.USER_ID.getName());
-		String groupId = (String) config.get(ServerParameter.GROUP_ID.getName());
+		String userId = (String) config.get(SOURCE_USER_PARAMETER);
+		String groupId = (String) config.get(SOURCE_GROUP_PARAMETER);
 		PersistenceContext pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
 		if (pc == null)
 			msg = "no persistence context in configuration";
@@ -58,9 +60,9 @@ public class UserDataReader extends NodeAdapter {
 	public Set<String> getParameters() {
 		Set<String> params = new HashSet<String>();
 		if (user == null)
-			params.add(ServerParameter.USER_ID.getName());
+			params.add(SOURCE_USER_PARAMETER);
 		if (group == null)
-			params.add(ServerParameter.GROUP_ID.getName());
+			params.add(SOURCE_GROUP_PARAMETER);
 		return params;
 	}
 

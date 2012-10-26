@@ -20,10 +20,9 @@ import weka.core.Instances;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.kdcloud.engine.embedded.node.UserDataReader;
 import com.kdcloud.lib.domain.DataSpecification;
-import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalityIndex;
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.Group;
 
@@ -100,8 +99,8 @@ public class ServerResourceTest {
 		resource.uploadData(new InstancesRepresentation(instances));
 		WorkflowServerResource workflowResource = new WorkflowServerResource(application, "ecg.xml");
 		Form form = new Form();
-		form.add(ServerParameter.USER_ID.getName(), USER_ID);
-		form.add(ServerParameter.GROUP_ID.getName(), "test");
+		form.add(UserDataReader.SOURCE_USER_PARAMETER, USER_ID);
+		form.add(UserDataReader.SOURCE_GROUP_PARAMETER, "test");
 		Representation r = workflowResource.execute(form);
 //		assertNotNull(r);
 	}
@@ -131,13 +130,6 @@ public class ServerResourceTest {
 		deviceResource.unregister("test");
 	}
 	
-	@Test
-	public void testVFS() {
-		FileServerResource resource = new FileServerResource(application);
-		resource.saveToVirtualDirectory("test", "test", new Modality());
-		Object obj = resource.getObjectFromVirtualDirectory("test", "test");
-		assertNotNull(obj);
-	}
 
 //	@Test
 //	public void testScheduling() {

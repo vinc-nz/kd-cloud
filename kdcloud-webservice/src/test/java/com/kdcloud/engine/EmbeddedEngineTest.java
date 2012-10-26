@@ -15,7 +15,8 @@ import org.junit.Test;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.engine.embedded.EmbeddedEngine;
-import com.kdcloud.lib.domain.ServerParameter;
+import com.kdcloud.engine.embedded.node.UserDataReader;
+import com.kdcloud.engine.embedded.node.UserDataWriter;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
@@ -49,12 +50,14 @@ public class EmbeddedEngineTest {
 	@Test
 	public void test() throws Exception {
 		for (String desc: descriptions) {
-			URI uri = getClass().getClassLoader().getResource(desc).toURI();
-			InputStream is = new FileInputStream(new File(uri));
+			String path = "workflow/" + desc;
+			InputStream is = getClass().getClassLoader().getResourceAsStream(path);
 			Worker worker = engine.getWorker(is);
 			worker.setParameter(PersistenceContext.class.getName(), pc);
-			worker.setParameter(ServerParameter.USER_ID.getName(), "test");
-			worker.setParameter(ServerParameter.GROUP_ID.getName(), "test");
+			worker.setParameter(UserDataReader.SOURCE_USER_PARAMETER, "test");
+			worker.setParameter(UserDataReader.SOURCE_GROUP_PARAMETER, "test");
+			worker.setParameter(UserDataWriter.DEST_USER_PARAMETER, "test");
+			worker.setParameter(UserDataWriter.DEST_GROUP_PARAMETER, "test");
 			assertTrue(worker.configure());
 			worker.run();
 			assertEquals(Worker.STATUS_JOB_COMPLETED, worker.getStatus());

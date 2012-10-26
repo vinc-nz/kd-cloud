@@ -1,17 +1,12 @@
 package com.kdcloud.server.jdo;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.server.entity.VirtualDirectory;
 import com.kdcloud.server.entity.VirtualFile;
 import com.kdcloud.server.persistence.PersistenceContext;
@@ -39,17 +34,6 @@ public class DaoTest {
 		pc.getVirtualDirectoryDao().save(dir);
 		VirtualFile file = pc.getVirtualDirectoryDao().findFileByName(dir, "test");
 		assertNotNull(file);
-		try {
-			Document dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-			file.writeObject(dom);
-			pc.getVirtualDirectoryDao().save(dir);
-			file = pc.getVirtualDirectoryDao().findFileByName(dir, "test");
-			Document m = (Document) file.readObject();
-			assertNotNull(m);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
 	}
 
 }

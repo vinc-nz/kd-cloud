@@ -1,10 +1,6 @@
 package com.kdcloud.lib.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,24 +18,6 @@ public class ServerParameter implements Serializable {
 	
 	private static final String REFERENCE_PREFIX = "xpath:";
 	
-	public static final ServerParameter DATASET_ID = new ServerParameter("datasetId");
-	public static final ServerParameter USER_ID = new ServerParameter("userId");
-	public static final ServerParameter TASK_ID = new ServerParameter("taskId");
-	public static final ServerParameter MODALITY_ID = new ServerParameter("modalityId");
-	public static final ServerParameter WORKFLOW_ID = new ServerParameter("workflowId");
-	public static final ServerParameter GROUP_ID = new ServerParameter("groupId");
-	public static final ServerParameter VIEW_ID =  new ServerParameter("viewId");
-
-
-	public static Set<ServerParameter> getParamsFromUri(String uri) {
-		Set<ServerParameter> params = new HashSet<ServerParameter>();
-		Matcher m = Pattern.compile("\\{.+?\\}").matcher(uri);
-		while (m.find()) {
-			String param = m.group().replaceAll("[\\{\\}]", "");
-			params.add(new ServerParameter(param));
-		}
-		return params;
-	}
 	
 	public static String newReference(String reference) {
 		if (reference.contains(REFERENCE_PREFIX))
@@ -156,9 +134,5 @@ public class ServerParameter implements Serializable {
 			return name.hashCode();
 		return reference.hashCode();
 	};
-
-	String getPattern() {
-		return "\\{" + name + "\\}";
-	}
 
 }

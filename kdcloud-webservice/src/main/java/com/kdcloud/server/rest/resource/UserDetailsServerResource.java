@@ -13,7 +13,7 @@ public class UserDetailsServerResource extends KDServerResource implements
 	}
 
 	public UserDetailsServerResource(Application application) {
-		super(application);
+		super(application, null);
 	}
 
 	@Override

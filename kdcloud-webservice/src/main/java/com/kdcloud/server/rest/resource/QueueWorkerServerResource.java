@@ -10,7 +10,6 @@ import org.restlet.resource.Post;
 
 import weka.core.Instances;
 
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.gcm.Notification;
@@ -24,13 +23,13 @@ public class QueueWorkerServerResource extends WorkerServerResource {
 	}
 
 	QueueWorkerServerResource(Application application, Task task) {
-		super(application);
+		super(application, null);
 		this.task = task;
 	}
 	
 	@Override
 	public Representation handle() {
-		String id = getParameter(ServerParameter.TASK_ID);
+		String id = getResourceIdentifier();
 		task = taskDao.findById(new Long(id));
 		if (task == null)
 			return notFound();
@@ -63,6 +62,12 @@ public class QueueWorkerServerResource extends WorkerServerResource {
 			} catch (IOException e) {
 				getLogger().info("unable to notify user");
 			}
+	}
+
+	@Override
+	public String getPath() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

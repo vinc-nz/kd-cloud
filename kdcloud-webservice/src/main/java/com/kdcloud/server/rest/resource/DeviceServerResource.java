@@ -13,7 +13,7 @@ public class DeviceServerResource extends KDServerResource implements DeviceReso
 	}
 
 	DeviceServerResource(Application application) {
-		super(application);
+		super(application, null);
 	}
 
 	@Override

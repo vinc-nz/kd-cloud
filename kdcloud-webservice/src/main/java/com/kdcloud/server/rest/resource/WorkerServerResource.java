@@ -21,9 +21,11 @@ public abstract class WorkerServerResource extends FileServerResource {
 		super();
 	}
 
-	WorkerServerResource(Application application) {
-		super(application);
+
+	WorkerServerResource(Application application, String resourceIdentifier) {
+		super(application, resourceIdentifier);
 	}
+
 
 	@Override
 	protected void doInit() throws ResourceException {

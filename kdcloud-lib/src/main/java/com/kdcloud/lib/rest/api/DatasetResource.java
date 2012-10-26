@@ -5,13 +5,11 @@ import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
-import com.kdcloud.lib.domain.ServerParameter;
-
 
 public interface DatasetResource {
 	
 	
-	public static final String URI = "/group/" + ServerParameter.GROUP_ID + "/data";
+	public static final String URI = "/group/{id}/data";
 	
 	@Put
 	public void uploadData(Representation representation);

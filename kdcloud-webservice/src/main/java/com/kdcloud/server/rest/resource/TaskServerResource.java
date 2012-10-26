@@ -6,7 +6,6 @@ import org.restlet.representation.Representation;
 
 import weka.core.Instances;
 
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.TaskResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.Task;
@@ -21,13 +20,13 @@ public class TaskServerResource extends KDServerResource implements TaskResource
 	}
 
 	TaskServerResource(Application application, Task task) {
-		super(application);
+		super(application, null);
 		this.task = task;
 	}
 	
 	@Override
 	public Representation handle() {
-		String taskId = getParameter(ServerParameter.TASK_ID);
+		String taskId = getResourceIdentifier();
 		Task task = taskDao.findById(new Long(taskId));
 		if (task == null)
 			return notFound();

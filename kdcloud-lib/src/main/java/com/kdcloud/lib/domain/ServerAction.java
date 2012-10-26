@@ -108,7 +108,6 @@ public class ServerAction implements Serializable {
 	public List<ServerParameter> getParams() {
 		List<ServerParameter> params = 
 				new LinkedList<ServerParameter>();
-		params.addAll(ServerParameter.getParamsFromUri(uri));
 		for (ServerParameter p : postParams) {
 			if (!p.hasValue())
 				params.add(p);
@@ -120,14 +119,16 @@ public class ServerAction implements Serializable {
 		return !getParams().isEmpty();
 	}
 	
-	public boolean addParameter(ServerParameter param) {
-		return postParams.add(param);
+	public boolean addParameter(String name) {
+		return postParams.add(new ServerParameter(name));
+	}
+	
+	public void setResourceIdentifier(String id) {
+		uri = uri.replace("{id}", id);
 	}
 
 	public void setParameter(ServerParameter param, String value) {
-		if (ServerParameter.getParamsFromUri(uri).contains(param)) {
-			uri = uri.replaceAll(param.getPattern(), value);
-		} else if (postParams.remove(param)) {
+		if (postParams.remove(param)) {
 			postForm.add(new Parameter(param.getName(), value));
 		}
 	}

@@ -11,7 +11,6 @@ import org.restlet.representation.Representation;
 import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.DataSpecification;
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
 
@@ -25,13 +24,13 @@ public class GroupServerResource extends KDServerResource implements
 	}
 
 	GroupServerResource(Application application, String groupName) {
-		super(application);
+		super(application, groupName);
 		this.groupName = groupName;
 	}
 
 	@Override
 	public Representation handle() {
-		groupName = getParameter(ServerParameter.GROUP_ID);
+		groupName = getResourceIdentifier();
 		return super.handle();
 	}
 

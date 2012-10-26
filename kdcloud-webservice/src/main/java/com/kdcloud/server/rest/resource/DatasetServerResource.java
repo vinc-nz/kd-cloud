@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.restlet.Application;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 
 import weka.core.Instances;
 
 import com.kdcloud.lib.domain.DataSpecification;
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.DatasetResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.DataTable;
@@ -25,7 +25,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	}
 
 	DatasetServerResource(Application application, Group group) {
-		super(application);
+		super(application, null);
 		this.group = group;
 	}
 	
@@ -41,7 +41,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 
 	@Override
 	public Representation handle() {
-		String groupName = getParameter(ServerParameter.GROUP_ID);
+		String groupName = getResourceIdentifier();
 		group = groupDao.findByName(groupName);
 		if (group == null) {
 			group = new Group(groupName);
@@ -98,7 +98,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 			getLogger().info("no data");
 			return notFound();
 		}
-		return new InstancesRepresentation(dataset.getInstances());
+		return new InstancesRepresentation(MediaType.TEXT_CSV, dataset.getInstances());
 	}
 
 	@Override

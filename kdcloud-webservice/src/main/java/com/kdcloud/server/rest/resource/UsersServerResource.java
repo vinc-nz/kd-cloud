@@ -6,7 +6,6 @@ import java.util.List;
 import org.restlet.Application;
 import org.restlet.representation.Representation;
 
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.domain.UserIndex;
 import com.kdcloud.lib.rest.api.UsersResource;
 import com.kdcloud.server.entity.DataTable;
@@ -23,14 +22,14 @@ public class UsersServerResource extends KDServerResource implements
 	}
 
 	public UsersServerResource(Application application, Group group) {
-		super(application);
+		super(application, null);
 		this.group = group;
 	}
 
 	
 	@Override
 	public Representation handle() {
-		String groupName = getParameter(ServerParameter.GROUP_ID);
+		String groupName = getResourceIdentifier();
 		group = groupDao.findByName(groupName);
 		if (group == null)
 			return notFound();

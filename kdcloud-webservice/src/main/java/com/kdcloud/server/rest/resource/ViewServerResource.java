@@ -1,53 +1,43 @@
 package com.kdcloud.server.rest.resource;
 
-import java.io.InputStream;
-import java.util.logging.Level;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.restlet.Application;
-import org.restlet.representation.Representation;
+import org.restlet.data.Status;
 import org.w3c.dom.Document;
 
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.rest.api.ViewResource;
-import com.kdcloud.server.entity.VirtualDirectory;
 
 public class ViewServerResource extends FileServerResource implements
 		ViewResource {
 	
-	String viewId;
-
 	public ViewServerResource() {
 		super();
 	}
 
 	public ViewServerResource(Application application, String viewId) {
-		super(application);
-		this.viewId = viewId;
+		super(application, viewId);
 	}
 	
 	@Override
-	public Representation handle() {
-		this.viewId = getParameter(ServerParameter.VIEW_ID);
-		return super.handle();
-	}
-
-	@Override
 	public Document getView() {
-		InputStream stream = getClass().getClassLoader().getResourceAsStream(viewId);
-		if (stream != null)
-			try {
-				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
-			} catch (Exception e) {
-				getLogger().log(Level.SEVERE, "error parsing xml", e);
-			}
-		return (Document) getObjectFromVirtualDirectory(VirtualDirectory.VIEW_DIRECTORY, viewId);
+		Document d = serveStaticXml();
+		if (d != null)
+			return d;
+		return (Document) readObject();
 	}
 
 	@Override
 	public void saveView(Document view) {
-		saveToVirtualDirectory(VirtualDirectory.VIEW_DIRECTORY, viewId, view);
+		try {
+			byte[] bytes = serializeDom(view);
+			write(bytes);
+		} catch (Exception e) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+	}
+
+	@Override
+	public String getPath() {
+		return getActualUri(URI).substring(1);
 	}
 
 	

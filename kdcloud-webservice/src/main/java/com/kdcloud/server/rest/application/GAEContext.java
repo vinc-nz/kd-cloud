@@ -17,6 +17,7 @@ import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.VirtualDirectoryDao;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
+import com.kdcloud.server.rest.resource.EnginePluginServerResource;
 import com.kdcloud.server.rest.resource.UserProvider;
 import com.kdcloud.server.rest.resource.UserProviderImpl;
 import com.kdcloud.server.tasks.GAETaskQueue;
@@ -49,7 +50,7 @@ public class GAEContext extends Context {
 					String jarName = className.replaceAll(".*\\.", "");
 					PersistenceContext pc = pcf.get();
 					VirtualDirectoryDao dao = pc.getVirtualDirectoryDao();
-					VirtualDirectory dir = dao.findByName(VirtualDirectory.ENGINE_EXTENSIONS_DIRECTORY);
+					VirtualDirectory dir = dao.findByName(EnginePluginServerResource.WORKING_DIRECTORY);
 					if (dir == null)
 						throw new ClassCastException();
 					VirtualFile file = dao.findFileByName(dir, jarName);

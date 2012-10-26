@@ -2,23 +2,13 @@ package com.kdcloud.server.entity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-
-import org.restlet.engine.io.IoUtils;
-
-import sun.misc.IOUtils;
 
 import com.google.appengine.api.datastore.Blob;
 
@@ -67,6 +57,10 @@ public class VirtualFile {
 		this.content = content;
 	}
 	
+	public void setContent(byte[] content) {
+		this.content = new Blob(content);
+	}
+	
 	public void setStream(ByteArrayOutputStream out) {
 		content = new Blob(out.toByteArray());
 	}
@@ -75,32 +69,6 @@ public class VirtualFile {
 		return new ByteArrayInputStream(content.getBytes());
 	}
 	
-	public Object readObject() throws IOException {
-		try {
-			return new ObjectInputStream(getStream()).readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public void writeObject(Object obj) throws IOException {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		ObjectOutput out = new ObjectOutputStream(stream);
-		out.writeObject(obj);
-		out.close();
-		setStream(stream);
-	}
-	
-	public void write(InputStream in) throws IOException {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		int next = in.read();
-		while (next > -1) {
-		    bos.write(next);
-		    next = in.read();
-		}
-		setStream(bos);
-	}
 	
 	@Override
 	public int hashCode() {

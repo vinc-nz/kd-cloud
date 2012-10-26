@@ -1,10 +1,14 @@
 package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
+import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalityIndex;
@@ -22,7 +26,7 @@ public class ModalitiesServerResource extends FileServerResource implements
 	}
 
 	public ModalitiesServerResource(Application application) {
-		super(application);
+		super(application, null);
 	}
 
 	@Override
@@ -35,7 +39,7 @@ public class ModalitiesServerResource extends FileServerResource implements
 				modality.setId(id++);
 			}
 			return index;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			getLogger().log(Level.SEVERE, "error loading modalities", e);
 			setStatus(Status.SERVER_ERROR_INTERNAL);
 			return null;
@@ -43,19 +47,24 @@ public class ModalitiesServerResource extends FileServerResource implements
 	}
 
 	public ModalityIndex loadStandardModalities() throws IOException {
-		return (ModalityIndex) getObjectFromXml(
-				STANDARD_MODALITIES_FILE, ModalityIndex.class);
+		return (ModalityIndex) readObjectFromXml(ModalityIndex.class);
 	}
 
-	public void addUserDefinedModalities(ModalityIndex index)
-			throws IOException {
+	public void addUserDefinedModalities(ModalityIndex index) throws Exception {
 		VirtualDirectory modalitiesDirectory = directoryDao
-				.findByName(VirtualDirectory.USER_MODALITIES_DIRECTORY);
+				.findByName(getPath());
 		if (modalitiesDirectory != null)
 			for (VirtualFile file : modalitiesDirectory) {
-				Modality m = (Modality) file.readObject();
+				InputStream is = file.getStream();
+				Document dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+				Modality m = (Modality) readObjectFromXml(dom, Modality.class);
 				index.asList().add(m);
 			}
+	}
+
+	@Override
+	public String getPath() {
+		return STANDARD_MODALITIES_FILE;
 	}
 
 }

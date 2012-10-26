@@ -6,7 +6,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataAccessObject;
@@ -19,6 +18,7 @@ public abstract class KDServerResource extends ServerResource {
 
 	private PersistenceContext persistenceContext;
 	private UserProvider userProvider;
+	private String resourceIdentifier;
 
 	DataAccessObject<User> userDao;
 	GroupDao groupDao;
@@ -30,10 +30,11 @@ public abstract class KDServerResource extends ServerResource {
 	public KDServerResource() {
 	}
 
-	KDServerResource(Application application) {
+	KDServerResource(Application application, String resourceIdentifier) {
 		setApplication(application);
 		doInit();
-		user = userProvider.getUser(null, persistenceContext);
+		this.user = userProvider.getUser(null, persistenceContext);
+		this.resourceIdentifier = resourceIdentifier;
 	}
 
 	@Override
@@ -50,8 +51,14 @@ public abstract class KDServerResource extends ServerResource {
 		directoryDao = persistenceContext.getVirtualDirectoryDao();
 	}
 
-	protected String getParameter(ServerParameter serverParameter) {
-		return (String) getRequestAttributes().get(serverParameter.getName());
+	protected String getResourceIdentifier() {
+		if (getRequest() != null)
+			return (String) getRequestAttributes().get("id");
+		return resourceIdentifier;
+	}
+	
+	protected String getActualUri(String template) {
+		return template.replace("{id}", getResourceIdentifier());
 	}
 
 	protected Representation forbidden() {

@@ -5,11 +5,10 @@ import org.restlet.resource.Put;
 import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.Modality;
-import com.kdcloud.lib.domain.ServerParameter;
 
 public interface UserModalityResource {
 	
-	public static final String URI = "/modality/" + ServerParameter.MODALITY_ID;
+	public static final String URI = "/modality/{id}";
 	
 	@Get
 	public Modality getModality();

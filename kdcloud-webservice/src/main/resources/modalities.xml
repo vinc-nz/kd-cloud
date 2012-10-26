@@ -10,11 +10,11 @@
             </column>
         </inputSpecification>
         <init-action>
-            <uri>/data/london-marathon</uri>
+            <uri>/group/london-marathon/data</uri>
             <method>DELETE</method>
         </init-action>
         <action>
-            <uri>/data/london-marathon</uri>
+            <uri>/group/london-marathon/data</uri>
             <method>PUT</method>
             <repeat>true</repeat>
 			<trigger after="60"/>
@@ -23,18 +23,18 @@
     <modality>
         <name>Single Analysis</name>
         <init-action>
-            <uri>/users/london-marathon</uri>
+            <uri>/group/london-marathon/users</uri>
             <method>GET</method>
         </init-action>
         <action>
             <uri>/workflow/ecg.xml</uri>
             <method>POST</method>
             <parameter>
-                <name>userId</name>
+                <name>sourceUser</name>
                 <reference xpath="//users/user"/>
             </parameter>
              <parameter>
-                <name>groupId</name>
+                <name>sourceGroup</name>
                 <value>london-marathon</value>
             </parameter>
             <repeat>false</repeat>
@@ -50,18 +50,18 @@
     <modality>
         <name>Global Analysis</name>
         <init-action>
-            <uri>/users/london-marathon</uri>
+            <uri>/group/london-marathon/users</uri>
             <method>GET</method>
         </init-action>
         <action>
             <uri>/workflow/ecg.xml</uri>
             <method>POST</method>
             <parameter>
-                <name>userId</name>
+                <name>sourceUser</name>
                 <reference xpath="//users/user" type="MAP"/>
             </parameter>
              <parameter>
-                <name>groupId</name>
+                <name>sourceGroup</name>
                 <value>london-marathon</value>
             </parameter>
             <repeat>false</repeat>

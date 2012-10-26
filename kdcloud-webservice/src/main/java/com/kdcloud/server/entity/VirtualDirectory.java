@@ -13,10 +13,6 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable
 public class VirtualDirectory implements Iterable<VirtualFile> {
 	
-	public static final String VIEW_DIRECTORY = "views";
-	public static final String USER_MODALITIES_DIRECTORY = "modalities";
-	public static final String ENGINE_EXTENSIONS_DIRECTORY = "engine";
-	public static final String WORKFLOWS_DIRECTORY = "workflows";
 	
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

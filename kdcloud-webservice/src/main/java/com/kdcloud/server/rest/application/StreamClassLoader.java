@@ -19,7 +19,6 @@ public class StreamClassLoader extends ClassLoader {
 		JarInputStream is = new JarInputStream(stream);
 		JarEntry entry = is.getNextJarEntry();
 		while (entry != null) {
-			System.out.println("define " + entry.getName());
 			if (entry.getName().contains(".class")) {
 				String className = entry.getName().replace(".class", "").replace('/', '.');
 				byte [] classByte = bufferrizeStream(is);

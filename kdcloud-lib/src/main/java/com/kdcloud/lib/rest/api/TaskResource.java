@@ -14,7 +14,7 @@ public interface TaskResource {
 	
 	
 	
-	public static final String URI = "/report/" + ServerParameter.TASK_ID;
+	public static final String URI = "/task/" + ServerParameter.TASK_ID;
 
 	
 	/**

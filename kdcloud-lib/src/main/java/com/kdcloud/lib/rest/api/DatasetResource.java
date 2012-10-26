@@ -11,7 +11,7 @@ import com.kdcloud.lib.domain.ServerParameter;
 public interface DatasetResource {
 	
 	
-	public static final String URI = "/data/" + ServerParameter.GROUP_ID;
+	public static final String URI = "/group/" + ServerParameter.GROUP_ID + "/data";
 	
 	@Put
 	public void uploadData(Representation representation);

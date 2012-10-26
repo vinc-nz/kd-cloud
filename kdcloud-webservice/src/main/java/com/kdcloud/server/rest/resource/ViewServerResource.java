@@ -7,8 +7,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.restlet.Application;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.ServerParameter;
@@ -36,7 +34,6 @@ public class ViewServerResource extends FileServerResource implements
 	}
 
 	@Override
-	@Get
 	public Document getView() {
 		InputStream stream = getClass().getClassLoader().getResourceAsStream(viewId);
 		if (stream != null)
@@ -49,7 +46,6 @@ public class ViewServerResource extends FileServerResource implements
 	}
 
 	@Override
-	@Post
 	public void saveView(Document view) {
 		saveToVirtualDirectory(VirtualDirectory.VIEW_DIRECTORY, viewId, view);
 	}

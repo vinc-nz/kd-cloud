@@ -8,8 +8,6 @@ import javax.xml.bind.JAXBException;
 import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.DataSpecification;
@@ -38,7 +36,6 @@ public class GroupServerResource extends KDServerResource implements
 	}
 
 	@Override
-	@Post
 	public boolean create(Document inputSpecification) {
 		Group group = groupDao.findByName(groupName);
 		if (group == null)
@@ -60,7 +57,6 @@ public class GroupServerResource extends KDServerResource implements
 	}
 
 	@Override
-	@Get
 	public DataSpecification getInputSpecification() {
 		Group group = groupDao.findByName(groupName);
 		if (group == null) {

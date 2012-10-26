@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Post;
+import org.restlet.resource.Put;
 
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeFactory;
@@ -16,7 +16,7 @@ public class EnginePluginServerResource extends FileServerResource {
 	
 	public static final String URI = "/engine/plugin/{id}";
 	
-	@Post
+	@Put
 	public void addPlugin(Representation rep) {
 		String id = (String) getRequestAttributes().get("id");
 		try {

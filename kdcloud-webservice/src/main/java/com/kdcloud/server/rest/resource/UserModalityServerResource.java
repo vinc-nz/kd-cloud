@@ -5,9 +5,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.restlet.Application;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.Modality;
@@ -37,13 +36,11 @@ public class UserModalityServerResource extends FileServerResource implements
 	}
 
 	@Override
-	@Get
 	public Modality getModality() {
 		return (Modality) getObjectFromVirtualDirectory(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId);
 	}
 
 	@Override
-	@Post
 	public void saveModality(Document xml) {
 		try {
 			JAXBContext context = JAXBContext.newInstance(Modality.class.getPackage().getName());
@@ -51,8 +48,7 @@ public class UserModalityServerResource extends FileServerResource implements
 			Modality modality = (Modality) u.unmarshal(xml);
 			saveToVirtualDirectory(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId, modality);
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}
 

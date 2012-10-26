@@ -18,7 +18,7 @@ public class MainApplication extends Application {
 	
 	@Override
 	public Restlet createInboundRoot() {
-		getLogger().setLevel(Level.FINEST);
+		getLogger().setLevel(Level.INFO);
 		
 		Context applicationContext = new GAEContext(getLogger());
 

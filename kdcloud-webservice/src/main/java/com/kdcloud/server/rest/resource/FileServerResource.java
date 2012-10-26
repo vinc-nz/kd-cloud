@@ -27,11 +27,14 @@ public class FileServerResource extends KDServerResource {
 	
 	public Object getObjectFromVirtualDirectory(String dirName, String filename) {
 		try {
-			return new ObjectInputStream(readFromVirtualDirectory(dirName, filename)).readObject();
+			InputStream is = readFromVirtualDirectory(dirName, filename);
+			if (is != null)
+				return new ObjectInputStream(is).readObject();
 		} catch (Exception e) {
+			getLogger().log(Level.SEVERE, "error loading object", e);
 			setStatus(Status.SERVER_ERROR_INTERNAL);
-			return null;
 		}
+		return null;
 	}
 	
 	public InputStream readFromVirtualDirectory(String dirName, String filename) {

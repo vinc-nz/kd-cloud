@@ -3,7 +3,6 @@ package com.kdcloud.server.rest.resource;
 import org.restlet.Application;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
 
 import weka.core.Instances;
 
@@ -38,7 +37,6 @@ public class TaskServerResource extends KDServerResource implements TaskResource
 	}
 
 	@Override
-	@Get
 	public Representation retriveOutput() {
 		Instances output = task.getOutput();
 		if (output != null && !output.isEmpty())

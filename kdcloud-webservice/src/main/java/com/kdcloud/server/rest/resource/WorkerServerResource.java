@@ -13,7 +13,7 @@ import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.Worker;
 import com.kdcloud.server.persistence.PersistenceContext;
 
-public abstract class WorkerServerResource extends KDServerResource {
+public abstract class WorkerServerResource extends FileServerResource {
 
 	KDEngine engine;
 

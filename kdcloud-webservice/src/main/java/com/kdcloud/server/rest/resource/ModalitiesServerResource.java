@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
-import org.restlet.resource.Get;
 
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalityIndex;
@@ -27,7 +26,6 @@ public class ModalitiesServerResource extends FileServerResource implements
 	}
 
 	@Override
-	@Get
 	public ModalityIndex listModalities() {
 		try {
 			ModalityIndex index = loadStandardModalities();

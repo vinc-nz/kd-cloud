@@ -6,7 +6,7 @@ import com.kdcloud.lib.domain.ModalityIndex;
 
 public interface ModalitiesResource {
 	
-	public static final String URI = "/modalities";
+	public static final String URI = "/modality";
 	
 	@Get
 	public ModalityIndex listModalities();

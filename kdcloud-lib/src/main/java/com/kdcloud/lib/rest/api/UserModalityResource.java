@@ -1,7 +1,7 @@
 package com.kdcloud.lib.rest.api;
 
 import org.restlet.resource.Get;
-import org.restlet.resource.Post;
+import org.restlet.resource.Put;
 import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.Modality;
@@ -14,7 +14,7 @@ public interface UserModalityResource {
 	@Get
 	public Modality getModality();
 	
-	@Post
+	@Put
 	public void saveModality(Document modality); 
 
 }

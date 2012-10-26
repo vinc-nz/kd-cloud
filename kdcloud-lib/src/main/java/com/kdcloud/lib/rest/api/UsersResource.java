@@ -7,7 +7,7 @@ import com.kdcloud.lib.domain.UserIndex;
 
 public interface UsersResource {
 	
-	public static final String URI = "/users/" + ServerParameter.GROUP_ID;
+	public static final String URI = "/group/" + ServerParameter.GROUP_ID + "/users";
 	
 	@Get
 	public UserIndex getSubscribedUsers();

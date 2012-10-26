@@ -6,9 +6,6 @@ import java.util.logging.Level;
 import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Delete;
-import org.restlet.resource.Get;
-import org.restlet.resource.Put;
 
 import weka.core.Instances;
 
@@ -55,7 +52,6 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	
 	
 	@Override
-	@Put
 	public void uploadData(Representation representation) {
 		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
 		try {
@@ -96,7 +92,6 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	}
 
 	@Override
-	@Get
 	public Representation getData() {
 		DataTable dataset = getTable();
 		if (dataset.getInstances() == null) {
@@ -107,7 +102,6 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	}
 
 	@Override
-	@Delete
 	public void deleteData() {
 		DataTable table = groupDao.findTable(group, user);
 		if (table != null) {

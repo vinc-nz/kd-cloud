@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.restlet.Application;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
 
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.domain.UserIndex;
@@ -39,7 +38,6 @@ public class UsersServerResource extends KDServerResource implements
 	}
 
 	@Override
-	@Get
 	public UserIndex getSubscribedUsers() {
 		List<String> names = new LinkedList<String>();
 		for (DataTable t : group.getData()) {

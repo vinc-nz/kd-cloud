@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,8 +14,6 @@ import org.junit.Test;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.engine.KDEngine;
-import com.kdcloud.engine.Worker;
 import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.server.entity.Group;

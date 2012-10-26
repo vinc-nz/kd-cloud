@@ -49,7 +49,7 @@ public class UserModalityServerResource extends FileServerResource implements
 			JAXBContext context = JAXBContext.newInstance(Modality.class.getPackage().getName());
 			Unmarshaller u = context.createUnmarshaller();
 			Modality modality = (Modality) u.unmarshal(xml);
-			saveObjectToVirtualDirectory(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId, modality);
+			saveToVirtualDirectory(VirtualDirectory.USER_MODALITIES_DIRECTORY, modalityId, modality);
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

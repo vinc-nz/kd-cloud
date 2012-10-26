@@ -26,6 +26,12 @@ public class EmbeddedEngine implements KDEngine {
 	public EmbeddedEngine() {
 		logger = Logger.getAnonymousLogger();
 	}
+	
+
+	EmbeddedEngine(Logger logger) {
+		super();
+		this.logger = logger;
+	}
 
 
 	public EmbeddedEngine(Logger logger, NodeLoader nodeLoader) {

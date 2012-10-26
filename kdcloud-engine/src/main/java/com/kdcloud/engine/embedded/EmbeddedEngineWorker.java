@@ -104,6 +104,8 @@ public class EmbeddedEngineWorker implements Worker {
 
 	@Override
 	public Instances getOutput() {
+		if (mState == null)
+			return null;
 		return mState.getInstances();
 	}
 

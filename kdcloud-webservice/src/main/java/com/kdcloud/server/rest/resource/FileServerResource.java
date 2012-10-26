@@ -2,6 +2,7 @@ package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.logging.Level;
 
 import javax.xml.bind.JAXBContext;
@@ -25,6 +26,15 @@ public class FileServerResource extends KDServerResource {
 	}
 	
 	public Object getObjectFromVirtualDirectory(String dirName, String filename) {
+		try {
+			return new ObjectInputStream(readFromVirtualDirectory(dirName, filename)).readObject();
+		} catch (Exception e) {
+			setStatus(Status.SERVER_ERROR_INTERNAL);
+			return null;
+		}
+	}
+	
+	public InputStream readFromVirtualDirectory(String dirName, String filename) {
 		String error = null;
 		VirtualDirectory directory = directoryDao.findByName(dirName);
 		if (directory == null)
@@ -33,11 +43,8 @@ public class FileServerResource extends KDServerResource {
 			VirtualFile file = directoryDao.findFileByName(directory, filename);
 			if (file == null)
 				error = "no such file";
-			else try {
-				return file.readObject();
-			} catch (IOException e) {
-				error = e.getMessage();
-			}
+			else
+				return file.getStream();
 		}
 		getLogger().log(Level.SEVERE, error);
 		notFound();
@@ -60,7 +67,7 @@ public class FileServerResource extends KDServerResource {
 		} 
 	}
 
-	public void saveObjectToVirtualDirectory(String dirName, String filename, Object obj) {
+	public void saveToVirtualDirectory(String dirName, String filename, Object obj) {
 		VirtualDirectory directory = directoryDao.findByName(dirName);
 		if (directory == null)
 			directory = new VirtualDirectory(dirName);
@@ -68,7 +75,10 @@ public class FileServerResource extends KDServerResource {
 		if (directory.getFiles().remove(file))
 			getLogger().info("previous object with same name has been removed");
 		try {
-			file.writeObject(obj);
+			if (obj instanceof InputStream)
+				file.write((InputStream) obj);
+			else
+				file.writeObject(obj);
 			directory.getFiles().add(file);
 			directoryDao.save(directory);
 			getLogger().info("directory updated correctly");
@@ -76,6 +86,19 @@ public class FileServerResource extends KDServerResource {
 			getLogger().log(Level.SEVERE, "error saving object", e);
 			setStatus(Status.SERVER_ERROR_INTERNAL);
 		}
+	}
+	
+	public boolean deleteFile(String dirName, String filename) {
+		VirtualDirectory directory = directoryDao.findByName(dirName);
+		if (directory == null)
+			return false;
+		VirtualFile file = new VirtualFile(filename);
+		if (directory.getFiles().remove(file)) {
+			directoryDao.save(directory);
+			getLogger().info("file removed correctly");
+			return true;
+		}
+		return false;
 	}
 
 }

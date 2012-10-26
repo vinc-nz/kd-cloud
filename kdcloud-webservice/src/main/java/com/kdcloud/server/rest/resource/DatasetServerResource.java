@@ -62,7 +62,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 			Instances data = instancesRepresentation.getInstances();
 			DataSpecification inputSpec = group.getInputSpecification();
 			if (inputSpec != null && !inputSpec.matchingSpecification(data))
-				notAcceptable();
+				unprocessable();
 			else
 				uploadData(data);
 		} catch (IOException e) {
@@ -73,9 +73,9 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 		
 	}
 	
-	public void notAcceptable() {
+	public void unprocessable() {
 		getLogger().info("provided data does not match the dataset specification");
-		setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+		setStatus(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 	}
 	
 	public void uploadData(Instances newData) {
@@ -90,7 +90,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 			dataset.setInstances(newData);
 			getLogger().info(newData.size() + " instances merged succeffully");
 		} else {
-			notAcceptable();
+			unprocessable();
 		}
 		groupDao.save(group);
 	}

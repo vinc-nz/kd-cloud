@@ -51,7 +51,7 @@ public class ViewServerResource extends FileServerResource implements
 	@Override
 	@Post
 	public void saveView(Document view) {
-		saveObjectToVirtualDirectory(VirtualDirectory.VIEW_DIRECTORY, viewId, view);
+		saveToVirtualDirectory(VirtualDirectory.VIEW_DIRECTORY, viewId, view);
 	}
 
 	

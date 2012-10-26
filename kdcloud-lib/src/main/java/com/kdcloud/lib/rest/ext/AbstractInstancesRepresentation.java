@@ -25,7 +25,7 @@ public abstract class AbstractInstancesRepresentation extends CharacterRepresent
 	}
 
 	public AbstractInstancesRepresentation(Representation representation) {
-		super(null);
+		super(representation.getMediaType());
 		this.representation = representation;
 	}
 

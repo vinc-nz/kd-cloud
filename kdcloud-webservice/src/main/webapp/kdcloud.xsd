@@ -87,12 +87,15 @@
   <xs:simpleType name="dataType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="TIMESTAMP"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="inputSource">
     <xs:restriction base="xs:string">
       <xs:enumeration value="HEARTBEAT"/>
+      <xs:enumeration value="CLOCK"/>
     </xs:restriction>
   </xs:simpleType>
 

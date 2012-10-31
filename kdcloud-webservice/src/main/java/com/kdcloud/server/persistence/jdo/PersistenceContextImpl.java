@@ -83,6 +83,11 @@ public class PersistenceContextImpl implements PersistenceContext {
 			return null;
 		}
 	}
+
+	@Override
+	public void close() {
+		pm.close();
+	}
 	
 	
 }

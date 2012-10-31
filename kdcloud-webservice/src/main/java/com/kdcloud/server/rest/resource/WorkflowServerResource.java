@@ -16,16 +16,18 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
 import org.w3c.dom.Document;
 
 import weka.core.Instances;
@@ -65,33 +67,20 @@ public class WorkflowServerResource extends WorkerServerResource implements
 	}
 
 	@Override
-	public void putWorkflow(Document dom) {
-		StoredWorkflow stored = find();
-		if (stored == null) {
-			stored = new StoredWorkflow();
-			stored.setName(getResourceIdentifier());
-			create(stored);
-		}
-		try {
-			byte[] bytes = serializeDom(dom);
-			InputStream is = new ByteArrayInputStream(bytes);
-			engine.getWorker(is); // validate workflow
-			write(bytes);
-		} catch (Exception e) {
-			getLogger().log(Level.INFO, "unable to read workflow", e);
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
+	public void putWorkflow(Representation representation) {
+		createOrUpdate(representation);
 	}
 
 	@Override
 	public Document getWorkflow() {
-		return readDom();
+		InputStream is = read().readWorkflow();
+		try {
+			return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+		} catch (Exception e) {
+			throw new ResourceException(e);
+		}
 	}
 
-	@Override
-	public String getPath() {
-		return getActualUri(URI).substring(1);
-	}
 	
 	public InputStream getStream() {
 		String path = "workflow/" + getResourceIdentifier();
@@ -118,6 +107,25 @@ public class WorkflowServerResource extends WorkerServerResource implements
 	@Override
 	public void delete(StoredWorkflow e) {
 		getPersistenceContext().delete(e);
+	}
+
+	@Override
+	public StoredWorkflow create() {
+		StoredWorkflow stored = new StoredWorkflow();
+		stored.setName(getResourceIdentifier());
+		return stored;
+	}
+
+	@Override
+	public void update(StoredWorkflow resource, Representation representation) {
+		try {
+			if (resource.writeWorkflow(representation.getStream())) {
+				engine.getWorker(resource.readWorkflow()); // validate workflow
+			}
+		} catch (IOException e) {
+			getLogger().log(Level.INFO, "unable to read workflow", e);
+		}
+		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 
 }

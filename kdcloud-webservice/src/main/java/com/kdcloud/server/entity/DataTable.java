@@ -83,6 +83,7 @@ public class DataTable {
 
 	public void setOwner(User user) {
 		this.owner = user;
+		this.name = user.getName();
 	}
 
 	public User getOwner() {

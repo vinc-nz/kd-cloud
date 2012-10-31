@@ -27,17 +27,12 @@ import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeLoader;
-import com.kdcloud.server.entity.VirtualDirectory;
-import com.kdcloud.server.entity.VirtualFile;
+import com.kdcloud.server.entity.StoredPlugin;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.persistence.VirtualDirectoryDao;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
-import com.kdcloud.server.rest.resource.EnginePluginServerResource;
 import com.kdcloud.server.rest.resource.UserProvider;
 import com.kdcloud.server.rest.resource.UserProviderImpl;
-import com.kdcloud.server.tasks.GAETaskQueue;
-import com.kdcloud.server.tasks.TaskQueue;
 
 public class GAEContext extends Context {
 	
@@ -52,8 +47,6 @@ public class GAEContext extends Context {
 		
 		attrs.put(PersistenceContextFactory.class.getName(), pcf);
 		
-		attrs.put(TaskQueue.class.getName(), new GAETaskQueue());
-		
 		
 		NodeLoader loader = new NodeLoader() {
 			
@@ -65,14 +58,10 @@ public class GAEContext extends Context {
 				} catch (ClassNotFoundException e1) {
 					String jarName = className.replaceAll(".*\\.", "");
 					PersistenceContext pc = pcf.get();
-					VirtualDirectoryDao dao = pc.getVirtualDirectoryDao();
-					VirtualDirectory dir = dao.findByName(EnginePluginServerResource.WORKING_DIRECTORY);
-					if (dir == null)
-						throw new ClassCastException();
-					VirtualFile file = dao.findFileByName(dir, jarName);
-					if (file == null)
+					StoredPlugin stored = (StoredPlugin) pc.findByName(StoredPlugin.class, jarName);
+					if (stored == null)
 						throw new ClassNotFoundException();
-					InputStream stream = file.getStream();
+					InputStream stream = stored.readPlugin();
 					pc.close();
 					try {
 						return new StreamClassLoader(stream).loadClass(className).asSubclass(Node.class);

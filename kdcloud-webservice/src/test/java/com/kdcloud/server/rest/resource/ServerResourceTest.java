@@ -61,7 +61,7 @@ public class ServerResourceTest {
 		helper.setUp();
 		GroupServerResource resource = new GroupServerResource(application, "test");
 		resource.create(null);
-		group = resource.groupDao.findByName("test");
+		group = resource.find();
 		assertNotNull(group);
 	}
 
@@ -72,7 +72,7 @@ public class ServerResourceTest {
 
 	@Test
 	public void testDataset() {
-		DatasetServerResource datasetResource = new DatasetServerResource(application, group);
+		DatasetServerResource datasetResource = new DatasetServerResource(application, group.getName());
 		double[] cells = { 1, 2 };
 		Instances data = new Instances(DataSpecification.newInstances("test", 2));
 		data.add(new DenseInstance(0, cells));
@@ -86,7 +86,7 @@ public class ServerResourceTest {
 		}
 		
 		datasetResource.deleteData();
-		group = datasetResource.groupDao.findByName("test");
+		group = datasetResource.findGroup();
 		Assert.assertEquals(0, group.getData().size());
 	}
 
@@ -111,7 +111,7 @@ public class ServerResourceTest {
 	@Test
 	public void testWorkflow() {
 		Instances instances = DataSpecification.newInstances("test", 1);
-		DatasetServerResource resource = new DatasetServerResource(application, group);
+		DatasetServerResource resource = new DatasetServerResource(application, group.getName());
 		resource.uploadData(new InstancesRepresentation(instances));
 		WorkflowServerResource workflowResource = new WorkflowServerResource(application, "ecg.xml");
 		Form form = new Form();

@@ -53,8 +53,8 @@ public class EmbeddedEngineTest {
 		helper.setUp();
 		PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
 		pc = pcf.get();
-		pc.getUserDao().save(new User("test"));
-		pc.getGroupDao().save(new Group("test"));
+		pc.save(new User("test"));
+		pc.save(new Group("test"));
 		engine = new EmbeddedEngine();
 	}
 

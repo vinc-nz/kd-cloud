@@ -23,6 +23,7 @@ import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.DataSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
@@ -43,18 +44,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public void create(Representation rep) {
-		Group group = findOrCreate();
-		if (!rep.isEmpty())
-			try {
-				String contextPath = DataSpecification.class.getPackage().getName();
-				JaxbRepresentation<DataSpecification> jaxb =
-						new JaxbRepresentation<DataSpecification>(rep, contextPath);
-				group.setInputSpecification(jaxb.getObject());
-				save(group);
-			} catch (IOException e) {
-				getLogger().log(Level.INFO, "error reading object", e);
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			}
+		createOrUpdate(rep);
 	}
 
 	@Override
@@ -82,13 +72,24 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 	}
 
 	@Override
-	public Group findOrCreate() {
-		Group group = find();
-		if (group == null) {
-			group = new Group(getResourceIdentifier());
-			create(group);
-		}
-		return group;
+	public Group create() {
+		return new Group(getResourceIdentifier());
+	}
+
+	@Override
+	public void update(Group group, Representation rep) {
+		if (rep != null && !rep.isEmpty())
+			try {
+				String contextPath = DataSpecification.class.getPackage()
+						.getName();
+				JaxbRepresentation<DataSpecification> jaxb = new JaxbRepresentation<DataSpecification>(
+						rep, contextPath);
+				group.setInputSpecification(jaxb.getObject());
+			} catch (IOException e) {
+				getLogger().log(Level.INFO, "error reading object", e);
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+
 	}
 
 }

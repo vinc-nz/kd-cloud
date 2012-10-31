@@ -16,59 +16,75 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Put;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeFactory;
+import com.kdcloud.server.entity.StoredPlugin;
 import com.kdcloud.server.rest.application.StreamClassLoader;
 
+public class EnginePluginServerResource extends
+		BasicServerResource<StoredPlugin> {
 
-public class EnginePluginServerResource extends FileServerResource {
-	
 	public static final String URI = "/engine/plugin/{id}";
-	
+
 	public static final String WORKING_DIRECTORY = "engine";
-	
+
 	@Put
 	public void addPlugin(Representation rep) {
-		String id = getResourceIdentifier();
-		try {
-			addPlugin(id, rep.getStream());
-		} catch (IOException e) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
-	}
-	
-	public void addPlugin(String jarName, InputStream stream) throws IOException {
-		byte[] bytes = serializeInput(stream);
-		write(bytes);
-		InputStream in = new ByteArrayInputStream(bytes);
-		if (!validPlugin(in, jarName)) {
-			setStatus(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-		}
+		createOrUpdate(rep);
 	}
 
-	private boolean validPlugin(InputStream stream, String nodeName) throws IOException {
+	private boolean validPlugin(InputStream stream, String nodeName)
+			throws IOException {
 		ClassLoader loader = new StreamClassLoader(stream);
 		try {
 			String className = NodeFactory.NODE_PACKAGE + "." + nodeName;
 			loader.loadClass(className).asSubclass(Node.class).newInstance();
 			return true;
 		} catch (Exception e) {
-			setStatus(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 			return false;
 		}
 	}
 
 	@Override
-	public String getPath() {
-		return WORKING_DIRECTORY + "/" + getResourceIdentifier();
+	public StoredPlugin find() {
+		return (StoredPlugin) getPersistenceContext().findByName(
+				StoredPlugin.class, getResourceIdentifier());
+	}
+
+	@Override
+	public StoredPlugin create() {
+		StoredPlugin stored = new StoredPlugin();
+		stored.setName(getResourceIdentifier());
+		return stored;
+	}
+
+	@Override
+	public void save(StoredPlugin e) {
+		getPersistenceContext().save(e);
+	}
+
+	@Override
+	public void delete(StoredPlugin e) {
+		getPersistenceContext().delete(e);
+	}
+
+	@Override
+	public void update(StoredPlugin resource, Representation representation) {
+		try {
+			resource.writePlugin(representation.getStream());
+			if (!validPlugin(resource.readPlugin(), getResourceIdentifier()))
+				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
+		} catch (IOException e) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
 	}
 
 }

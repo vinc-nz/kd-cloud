@@ -23,12 +23,9 @@ import org.restlet.Request;
 
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.embedded.EmbeddedEngine;
-import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
-import com.kdcloud.server.tasks.TaskQueue;
 
 public class TestContext extends Context {
 
@@ -40,14 +37,7 @@ public class TestContext extends Context {
 		attrs.put(PersistenceContextFactory.class.getName(),
 				new PCFTest());
 
-		attrs.put(TaskQueue.class.getName(), new TaskQueue() {
-
-			@Override
-			public void push(Task task) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		
 
 		attrs.put(KDEngine.class.getName(), new EmbeddedEngine());
 

@@ -16,10 +16,15 @@
  */
 package com.kdcloud.server.rest.resource;
 
+import java.io.IOException;
+
 import org.restlet.Application;
 import org.restlet.data.Status;
+import org.restlet.ext.xml.DomRepresentation;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
+import org.restlet.resource.ResourceException;
 import org.w3c.dom.Document;
 
 import com.kdcloud.lib.rest.api.ViewResource;
@@ -54,22 +59,30 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 	@Override
 	@Get
 	public Document getView() {
-		View view = read();
-		if (view != null)
-			return view.getSpecification();
-		return null;
+		return read().getSpecification();
 	}
 
 	@Override
 	@Put
-	public void saveView(Document view) {
-		View e = find();
-		if (e == null) {
-			e = new View();
+	public void saveView(Representation representation) {
+		createOrUpdate(representation);
+	}
+
+	@Override
+	public View create() {
+		View v = new View();
+		v.setName(getResourceIdentifier());
+		return v;
+	}
+
+	@Override
+	public void update(View resource, Representation representation) {
+		DomRepresentation dom = new DomRepresentation(representation);
+		try {
+			resource.setSpecification(dom.getDocument());
+		} catch (IOException e) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-		if (!e.setSpecification(view))
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		create(e);
 	}
 
 	

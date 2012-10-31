@@ -16,23 +16,21 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Collection;
 import java.util.logging.Level;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
-import org.w3c.dom.Document;
+import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalityIndex;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
-import com.kdcloud.server.entity.VirtualDirectory;
-import com.kdcloud.server.entity.VirtualFile;
+import com.kdcloud.server.entity.StoredModality;
+import com.kdcloud.server.rest.application.RepresentationUnmarshaller;
 
-public class ModalitiesServerResource extends FileServerResource implements
+public class ModalitiesServerResource extends KDServerResource implements
 		ModalitiesResource {
 
 	private static final String STANDARD_MODALITIES_FILE = "modalities.xml";
@@ -57,30 +55,21 @@ public class ModalitiesServerResource extends FileServerResource implements
 			return index;
 		} catch (Exception e) {
 			getLogger().log(Level.SEVERE, "error loading modalities", e);
-			setStatus(Status.SERVER_ERROR_INTERNAL);
-			return null;
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
 		}
 	}
 
-	public ModalityIndex loadStandardModalities() throws IOException {
-		return (ModalityIndex) readObjectFromXml(ModalityIndex.class);
+	public ModalityIndex loadStandardModalities() throws Exception  {
+		ClientResource cr = new ClientResource("/" + STANDARD_MODALITIES_FILE);
+		return (ModalityIndex) RepresentationUnmarshaller.unmarshal(ModalityIndex.class, cr.get());
 	}
 
 	public void addUserDefinedModalities(ModalityIndex index) throws Exception {
-		VirtualDirectory modalitiesDirectory = directoryDao
-				.findByName(getPath());
-		if (modalitiesDirectory != null)
-			for (VirtualFile file : modalitiesDirectory) {
-				InputStream is = file.getStream();
-				Document dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-				Modality m = (Modality) readObjectFromXml(dom, Modality.class);
-				index.asList().add(m);
+		Collection<Object> collection = getPersistenceContext().getAll(StoredModality.class);
+			for (Object obj : collection) {
+				StoredModality stored = (StoredModality) obj;
+				index.asList().add(stored.getModality());
 			}
-	}
-
-	@Override
-	public String getPath() {
-		return STANDARD_MODALITIES_FILE;
 	}
 
 }

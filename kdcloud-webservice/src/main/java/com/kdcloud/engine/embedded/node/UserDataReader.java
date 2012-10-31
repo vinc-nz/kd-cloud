@@ -56,15 +56,15 @@ public class UserDataReader extends NodeAdapter {
 		if (pc == null)
 			msg = "no persistence context in configuration";
 		if (userId != null)
-			user = pc.getUserDao().findByName(userId);
+			user = (User) pc.findByName(User.class, userId);
 		if (user == null)
 			msg = "not a valid user in configuration";
 		if (groupId != null)
-			group = pc.getGroupDao().findByName(groupId);
+			group = (Group) pc.findByName(Group.class, groupId);
 		if (group == null)
 			msg = "not a valid group in configuration";
 		else if (group != null && user != null) {
-			table = pc.getGroupDao().findTable(group, user);
+			table = (DataTable) pc.findChildByName(group, DataTable.class, user.getName());
 			if (table == null)
 				msg = "user has no data";
 		}

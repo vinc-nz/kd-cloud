@@ -26,7 +26,6 @@ import com.kdcloud.engine.embedded.WrongConfigurationException;
 import com.kdcloud.engine.embedded.WrongInputException;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.DataAccessObject;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class UserDataWriter extends NodeAdapter {
@@ -35,9 +34,9 @@ public class UserDataWriter extends NodeAdapter {
 	public static final String DEST_GROUP_PARAMETER = "destinationGroup";
 
 	BufferedInstances mState;
-	DataAccessObject<Group> groupDao;
 	Group group;
 	User user;
+	PersistenceContext pc;
 	
 	public UserDataWriter() {
 		// TODO Auto-generated constructor stub
@@ -54,16 +53,15 @@ public class UserDataWriter extends NodeAdapter {
 		String msg = null;
 		String userId = (String) config.get(DEST_USER_PARAMETER);
 		String groupId = (String) config.get(DEST_GROUP_PARAMETER);
-		PersistenceContext pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
+		pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
 		if (pc == null)
 			msg = "no persistence context in configuration";
-		groupDao = pc.getGroupDao();
 		if (userId != null)
-			user = pc.getUserDao().findByName(userId);
+			user = (User) pc.findByName(User.class, userId);
 		if (user == null)
 			msg = "not a valid user in configuration";
 		if (groupId != null)
-			group = pc.getGroupDao().findByName(groupId);
+			group = (Group) pc.findByName(Group.class, groupId);
 		if (group == null)
 			msg = "not a valid group in configuration";
 		if (msg != null)
@@ -92,7 +90,7 @@ public class UserDataWriter extends NodeAdapter {
 	@Override
 	public void run() {
 		group.addEntry(user, mState.getInstances());
-		groupDao.save(group);
+		pc.save(group);
 	}
 
 }

@@ -16,6 +16,7 @@
  */
 package com.kdcloud.lib.rest.api;
 
+import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.w3c.dom.Document;
@@ -28,6 +29,6 @@ public interface ViewResource {
 	public Document getView();
 	
 	@Put
-	public void saveView(Document view); 
+	public void saveView(Representation representation); 
 
 }

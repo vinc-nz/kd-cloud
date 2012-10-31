@@ -22,6 +22,7 @@ import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.rest.api.UserModalityResource;
@@ -49,20 +50,7 @@ public class UserModalityServerResource extends BasicServerResource<StoredModali
 
 	@Override
 	public void saveModality(Representation rep) {
-		StoredModality stored = find();
-		if (stored == null) {
-			stored = new StoredModality();
-			stored.setName(getResourceIdentifier());
-		}
-		try {
-			String contextPath = Modality.class.getPackage().getName();
-			JaxbRepresentation<Modality> jaxb =
-					new JaxbRepresentation<Modality>(rep, contextPath);
-			stored.setModality(jaxb.getObject());
-			save(stored);
-		} catch (IOException e) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
+		createOrUpdate(rep);
 	}
 
 	@Override
@@ -79,6 +67,25 @@ public class UserModalityServerResource extends BasicServerResource<StoredModali
 	@Override
 	public void delete(StoredModality e) {
 		getPersistenceContext().delete(e);
+	}
+
+	@Override
+	public StoredModality create() {
+		StoredModality stored = new StoredModality();
+		stored.setName(getResourceIdentifier());
+		return stored;
+	}
+
+	@Override
+	public void update(StoredModality resource, Representation representation) {
+		String contextPath = Modality.class.getPackage().getName();
+		JaxbRepresentation<Modality> jaxb =
+				new JaxbRepresentation<Modality>(representation, contextPath);
+		try {
+			resource.setModality(jaxb.getObject());
+		} catch (IOException e) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
 	}
 
 }

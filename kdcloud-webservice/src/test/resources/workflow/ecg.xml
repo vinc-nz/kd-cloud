@@ -4,6 +4,6 @@
         <type>UserDataReader</type>
     </node>
     <node>
-        <type>Test</type>
+        <type>QRS</type>
     </node>
 </workflow>

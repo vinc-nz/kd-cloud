@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +18,7 @@ import org.w3c.dom.Document;
 
 import com.google.appengine.api.datastore.Blob;
 
+@PersistenceCapable
 public class View {
 	
 	@PrimaryKey

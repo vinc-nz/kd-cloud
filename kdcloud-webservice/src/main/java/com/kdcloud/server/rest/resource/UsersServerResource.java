@@ -20,7 +20,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.restlet.Application;
-import org.restlet.representation.Representation;
+import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.UserIndex;
 import com.kdcloud.lib.rest.api.UsersResource;
@@ -31,29 +32,20 @@ public class UsersServerResource extends KDServerResource implements
 		UsersResource {
 	
 	
-	private Group group;
-	
 	public UsersServerResource() {
 		super();
 	}
 
-	public UsersServerResource(Application application, Group group) {
-		super(application, null);
-		this.group = group;
+	public UsersServerResource(Application application, String groupName) {
+		super(application, groupName);
 	}
 
-	
-	@Override
-	public Representation handle() {
-		String groupName = getResourceIdentifier();
-		group = groupDao.findByName(groupName);
-		if (group == null)
-			return notFound();
-		return super.handle();
-	}
 
 	@Override
 	public UserIndex getSubscribedUsers() {
+		Group group = (Group) getPersistenceContext().getAll(Group.class);
+		if (group == null)
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		List<String> names = new LinkedList<String>();
 		for (DataTable t : group.getData()) {
 			names.add(t.getName());

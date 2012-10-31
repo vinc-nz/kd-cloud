@@ -31,7 +31,7 @@ public interface WorkflowResource {
 	public Representation execute(Form form);
 	
 	@Put
-	public void putWorkflow(Document dom);
+	public void putWorkflow(Representation representation);
 	
 	@Get
 	public Document getWorkflow();

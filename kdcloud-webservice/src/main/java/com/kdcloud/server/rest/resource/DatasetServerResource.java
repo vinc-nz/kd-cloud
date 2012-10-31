@@ -23,6 +23,7 @@ import org.restlet.Application;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
 
 import weka.core.Instances;
 
@@ -32,7 +33,7 @@ import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
 
-public class DatasetServerResource extends BasicServerResource<DataTable> implements DatasetResource {
+public class DatasetServerResource extends BasicServerResource<DataTable> implements DatasetResource  {
 	
 
 	public DatasetServerResource() {
@@ -43,53 +44,9 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 		super(application, groupName);
 	}
 	
-	
-	@Override
-	public void uploadData(Representation representation) {
-		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
-		try {
-			Instances data = instancesRepresentation.getInstances();
-			DataSpecification inputSpec = findGroup().getInputSpecification();
-			if (inputSpec != null && !inputSpec.matchingSpecification(data))
-				unprocessable();
-			else
-				uploadData(data);
-		} catch (IOException e) {
-			getLogger().log(Level.INFO, "got an invalid request", e);
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			//TODO return an error representation
-		}
-		
-	}
-	
-	public void unprocessable() {
-		getLogger().info("provided data does not match the dataset specification");
-		setStatus(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-	}
-	
-	public void uploadData(Instances newData) {
-		DataTable dataset = find();
-		Instances storedData = dataset.getInstances();
-		if (storedData == null) {
-			dataset.setInstances(newData);
-			getLogger().info("created new dataset with size: " + newData.size());
-		}
-		else if (storedData.equalHeaders(newData)) {
-			newData.addAll(storedData);
-			dataset.setInstances(newData);
-			getLogger().info(newData.size() + " instances merged succeffully");
-		} else {
-			unprocessable();
-		}
-		create(dataset);
-	}
-
 	@Override
 	public Representation getData() {
-		DataTable dataset = read();
-		if (dataset != null)
-			return new InstancesRepresentation(MediaType.TEXT_CSV, dataset.getInstances());
-		return null;
+		return new InstancesRepresentation(MediaType.TEXT_CSV, read().getInstances());
 	}
 
 	@Override
@@ -123,6 +80,50 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 		Group group = findGroup();
 		group.getData().remove(e);
 		getPersistenceContext().save(group);
+	}
+
+	@Override
+	public DataTable create() {
+		DataTable table = new DataTable();
+		table.setOwner(user);
+		return table;
+	}
+
+	@Override
+	public void update(DataTable resource, Representation representation) {
+		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
+		try {
+			Instances data = instancesRepresentation.getInstances();
+			DataSpecification inputSpec = findGroup().getInputSpecification();
+			if (inputSpec != null && !inputSpec.matchingSpecification(data))
+				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
+			else
+				update(resource, data);
+		} catch (IOException e) {
+			getLogger().log(Level.INFO, "got an invalid request", e);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+	}
+
+	private void update(DataTable dataset, Instances newData) {
+		Instances storedData = dataset.getInstances();
+		if (storedData == null) {
+			dataset.setInstances(newData);
+			getLogger().info("created new dataset with size: " + newData.size());
+		}
+		else if (storedData.equalHeaders(newData)) {
+			newData.addAll(storedData);
+			dataset.setInstances(newData);
+			getLogger().info(newData.size() + " instances merged succeffully");
+		} else {
+			throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
+		}
+		save(dataset);
+	}
+
+	@Override
+	public void uploadData(Representation representation) {
+		createOrUpdate(representation);
 	}
 
 }

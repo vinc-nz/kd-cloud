@@ -2,6 +2,8 @@ package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
 
 public abstract class BasicServerResource<T> extends KDServerResource {
 	
@@ -16,32 +18,43 @@ public abstract class BasicServerResource<T> extends KDServerResource {
 
 	public abstract T find();
 	
-	public abstract T findOrCreate();
+	public abstract T create();
 	
 	public abstract void save(T e);
 	
 	public abstract void delete(T e);
 	
+	public abstract void update(T resource, Representation representation);
+	
+	public T findOrCreate() {
+		T resource = find();
+		if (resource == null) {
+			resource = create();
+			save(resource);
+			setStatus(Status.SUCCESS_CREATED);
+		}
+		return resource;
+	}
+	
+	public void createOrUpdate(Representation representation) {
+		T resource = findOrCreate();
+		update(resource, representation);
+		save(resource);
+	}
 	
 	public T read() {
 		T resource = find();
 		if (resource == null) {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return null;
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		}
 		setStatus(Status.SUCCESS_OK);
 		return resource;
 	}
 	
-	public void create(T entity) {
-		save(entity);
-		setStatus(Status.SUCCESS_CREATED);
-	}
-	
 	public void remove() {
 		T resource = find();
 		if (resource == null) {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		} else {
 			delete(resource);
 			setStatus(Status.SUCCESS_NO_CONTENT);

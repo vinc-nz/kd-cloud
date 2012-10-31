@@ -15,14 +15,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.kdcloud.server.persistence.jdo;
+import java.util.Collection;
+
 import javax.jdo.PersistenceManager;
 
-import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.DataAccessObject;
-import com.kdcloud.server.persistence.GroupDao;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.VirtualDirectoryDao;
 
 public class PersistenceContextImpl implements PersistenceContext {
     
@@ -34,44 +33,56 @@ public class PersistenceContextImpl implements PersistenceContext {
 		this.pm = pm;
 	}
 
+	@Override
+	public Object findByName(Class<?> clazz, String name) {
+		Key k = KeyFactory.createKey(clazz.getSimpleName(), name);
+		try {
+			return pm.getObjectById(clazz, k);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Object> getAll(Class<?> clazz) {
+		return (Collection<Object>) pm.newQuery(clazz).execute();
+	}
+
+	@Override
+	public void save(Object e) {
+		pm.makePersistent(e);
+	}
+
+	@Override
+	public void delete(Object e) {
+		pm.deletePersistent(e);
+	}
+
+	@Override
+	public void save(Object e, String name) {
+		try {
+			e.getClass().getMethod("setName", String.class).invoke(e, name);
+			pm.makePersistent(e);
+		} catch (Exception thrown) {
+			thrown.printStackTrace();
+		}
+	}
+
+	@Override
+	public Object findChildByName(Object father, Class<?> child,
+			String childName) {
+		try {
+			String fatherName = (String) father.getClass().getMethod("getName")
+					.invoke(father);
+			Key key = new KeyFactory.Builder(father.getClass().getSimpleName(),
+					fatherName).addChild(child.getSimpleName(), childName)
+					.getKey();
+			return pm.getObjectById(child, key);
+		} catch (Exception tr) {
+			return null;
+		}
+	}
 	
-	@Override
-	public void beginTransaction() {
-		pm.currentTransaction().begin();
-	}
-
-	@Override
-	public void commitTransaction() {
-		pm.currentTransaction().commit();
-	}
-
-	@Override
-	public void close() {
-		pm.close();
-	}
-
-
-	@Override
-	public DataAccessObject<User> getUserDao() {
-		return new DataAccessObjectImpl<User>(User.class, pm);
-	}
-
-
-	@Override
-	public DataAccessObject<Task> getTaskDao() {
-		return new DataAccessObjectImpl<Task>(Task.class, pm);
-	}
-
-
-	@Override
-	public GroupDao getGroupDao() {
-		return new GroupDaoImpl(pm);
-	}
-
-
-	@Override
-	public VirtualDirectoryDao getVirtualDirectoryDao() {
-		return new VirtualDirectoryDaoImpl(pm);
-	}
 	
 }

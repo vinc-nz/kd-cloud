@@ -16,24 +16,21 @@
  */
 package com.kdcloud.server.rest.resource;
 
+import java.io.IOException;
 import java.util.logging.Level;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
+import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;
-import org.w3c.dom.Document;
 
 import com.kdcloud.lib.domain.DataSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
 
-public class GroupServerResource extends KDServerResource implements
+public class GroupServerResource extends BasicServerResource<Group> implements
 		GroupResource {
 
-	private String groupName;
 
 	public GroupServerResource() {
 		super();
@@ -41,44 +38,57 @@ public class GroupServerResource extends KDServerResource implements
 
 	GroupServerResource(Application application, String groupName) {
 		super(application, groupName);
-		this.groupName = groupName;
 	}
 
-	@Override
-	public Representation handle() {
-		groupName = getResourceIdentifier();
-		return super.handle();
-	}
 
 	@Override
-	public boolean create(Document inputSpecification) {
-		Group group = groupDao.findByName(groupName);
-		if (group == null)
-			group = new Group(groupName);
-		if (inputSpecification != null)
+	public void create(Representation rep) {
+		Group group = findOrCreate();
+		if (!rep.isEmpty())
 			try {
-				JAXBContext context = JAXBContext
-						.newInstance(DataSpecification.class);
-				DataSpecification spec = (DataSpecification) context
-						.createUnmarshaller().unmarshal(inputSpecification);
-				group.setInputSpecification(spec);
-			} catch (JAXBException e) {
+				String contextPath = DataSpecification.class.getPackage().getName();
+				JaxbRepresentation<DataSpecification> jaxb =
+						new JaxbRepresentation<DataSpecification>(rep, contextPath);
+				group.setInputSpecification(jaxb.getObject());
+				save(group);
+			} catch (IOException e) {
 				getLogger().log(Level.INFO, "error reading object", e);
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return false;
 			}
-		groupDao.save(group);
-		return true;
 	}
 
 	@Override
 	public DataSpecification getInputSpecification() {
-		Group group = groupDao.findByName(groupName);
-		if (group == null) {
-			notFound();
-			return null;
+		Group group = read();
+		if (group != null) {
+			return group.getInputSpecification();
 		}
-		return group.getInputSpecification();
+		return null;
+	}
+
+	@Override
+	public Group find() {
+		return (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
+	}
+
+	@Override
+	public void save(Group e) {
+		getPersistenceContext().save(e);
+	}
+
+	@Override
+	public void delete(Group e) {
+		getPersistenceContext().delete(e);
+	}
+
+	@Override
+	public Group findOrCreate() {
+		Group group = find();
+		if (group == null) {
+			group = new Group(getResourceIdentifier());
+			create(group);
+		}
+		return group;
 	}
 
 }

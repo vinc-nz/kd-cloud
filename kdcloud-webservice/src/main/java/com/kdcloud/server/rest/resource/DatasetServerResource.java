@@ -32,38 +32,15 @@ import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
 
-public class DatasetServerResource extends KDServerResource implements DatasetResource {
+public class DatasetServerResource extends BasicServerResource<DataTable> implements DatasetResource {
 	
-	private Group group;
 
 	public DatasetServerResource() {
 		super();
 	}
 
-	DatasetServerResource(Application application, Group group) {
-		super(application, null);
-		this.group = group;
-	}
-	
-	private DataTable getTable() {
-		DataTable dataset = groupDao.findTable(group, user);
-		if (dataset == null) {
-			dataset = group.addEntry(user, null);
-			groupDao.save(group);
-		}
-		return dataset;
-	}
-
-
-	@Override
-	public Representation handle() {
-		String groupName = getResourceIdentifier();
-		group = groupDao.findByName(groupName);
-		if (group == null) {
-			group = new Group(groupName);
-			groupDao.save(group);
-		}
-		return super.handle();
+	DatasetServerResource(Application application, String groupName) {
+		super(application, groupName);
 	}
 	
 	
@@ -72,7 +49,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
 		try {
 			Instances data = instancesRepresentation.getInstances();
-			DataSpecification inputSpec = group.getInputSpecification();
+			DataSpecification inputSpec = findGroup().getInputSpecification();
 			if (inputSpec != null && !inputSpec.matchingSpecification(data))
 				unprocessable();
 			else
@@ -91,7 +68,7 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 	}
 	
 	public void uploadData(Instances newData) {
-		DataTable dataset = getTable();
+		DataTable dataset = find();
 		Instances storedData = dataset.getInstances();
 		if (storedData == null) {
 			dataset.setInstances(newData);
@@ -104,26 +81,48 @@ public class DatasetServerResource extends KDServerResource implements DatasetRe
 		} else {
 			unprocessable();
 		}
-		groupDao.save(group);
+		create(dataset);
 	}
 
 	@Override
 	public Representation getData() {
-		DataTable dataset = getTable();
-		if (dataset.getInstances() == null) {
-			getLogger().info("no data");
-			return notFound();
-		}
-		return new InstancesRepresentation(MediaType.TEXT_CSV, dataset.getInstances());
+		DataTable dataset = read();
+		if (dataset != null)
+			return new InstancesRepresentation(MediaType.TEXT_CSV, dataset.getInstances());
+		return null;
 	}
 
 	@Override
 	public void deleteData() {
-		DataTable table = groupDao.findTable(group, user);
-		if (table != null) {
-			group.getData().remove(table);
-			groupDao.save(group);
-		}
+		remove();
+	}
+	
+	public Group findGroup() {
+		return (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
+	}
+
+	@Override
+	public DataTable find() {
+		Group group = findGroup();
+		if (group == null)
+			return null;
+		return (DataTable) getPersistenceContext().findChildByName(group, DataTable.class, user.getName());
+	}
+
+	@Override
+	public void save(DataTable e) {
+		Group group = findGroup();
+		if (group == null)
+			group = new Group(getResourceIdentifier());
+		group.getData().add(e);
+		getPersistenceContext().save(group);
+	}
+
+	@Override
+	public void delete(DataTable e) {
+		Group group = findGroup();
+		group.getData().remove(e);
+		getPersistenceContext().save(group);
 	}
 
 }

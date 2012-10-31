@@ -25,9 +25,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.kdcloud.lib.domain.DataSpecification;
-
 import weka.core.Instances;
+
+import com.kdcloud.lib.domain.DataSpecification;
 
 @PersistenceCapable
 public class Group {
@@ -36,10 +36,6 @@ public class Group {
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
     private String encodedKey;
-	
-//	@Persistent
-//	@Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
-//	private Long id;
 	
 	@Persistent
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
@@ -67,14 +63,6 @@ public class Group {
 		this.encodedKey = encodedKey;
 	}
 	
-//	public Long getId() {
-//		return id;
-//	}
-//
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
-
 	public String getName() {
 		return name;
 	}

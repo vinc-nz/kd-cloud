@@ -16,6 +16,7 @@
  */
 package com.kdcloud.lib.rest.api;
 
+import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.w3c.dom.Document;
@@ -30,6 +31,6 @@ public interface UserModalityResource {
 	public Modality getModality();
 	
 	@Put
-	public void saveModality(Document modality); 
+	public void saveModality(Representation rep); 
 
 }

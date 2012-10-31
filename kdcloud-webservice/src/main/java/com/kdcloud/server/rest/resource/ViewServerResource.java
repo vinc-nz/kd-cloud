@@ -18,12 +18,14 @@ package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
+import org.restlet.resource.Get;
+import org.restlet.resource.Put;
 import org.w3c.dom.Document;
 
 import com.kdcloud.lib.rest.api.ViewResource;
+import com.kdcloud.server.entity.View;
 
-public class ViewServerResource extends FileServerResource implements
-		ViewResource {
+public class ViewServerResource extends BasicServerResource<View> implements ViewResource {
 	
 	public ViewServerResource() {
 		super();
@@ -34,26 +36,40 @@ public class ViewServerResource extends FileServerResource implements
 	}
 	
 	@Override
+	public View find() {
+		return (View) getPersistenceContext().findByName(View.class, getResourceIdentifier());
+	}
+
+	
+	@Override
+	public void save(View e) {
+		getPersistenceContext().save(e);
+	}
+
+	@Override
+	public void delete(View e) {
+		getPersistenceContext().delete(e);
+	}
+
+	@Override
+	@Get
 	public Document getView() {
-		Document d = serveStaticXml();
-		if (d != null)
-			return d;
-		return (Document) readObject();
+		View view = read();
+		if (view != null)
+			return view.getSpecification();
+		return null;
 	}
 
 	@Override
+	@Put
 	public void saveView(Document view) {
-		try {
-			byte[] bytes = serializeDom(view);
-			write(bytes);
-		} catch (Exception e) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		View e = find();
+		if (e == null) {
+			e = new View();
 		}
-	}
-
-	@Override
-	public String getPath() {
-		return getActualUri(URI).substring(1);
+		if (!e.setSpecification(view))
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		create(e);
 	}
 
 	

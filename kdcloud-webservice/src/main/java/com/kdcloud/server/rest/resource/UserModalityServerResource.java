@@ -16,14 +16,18 @@
  */
 package com.kdcloud.server.rest.resource;
 
+import java.io.IOException;
+
 import org.restlet.Application;
 import org.restlet.data.Status;
-import org.w3c.dom.Document;
+import org.restlet.ext.jaxb.JaxbRepresentation;
+import org.restlet.representation.Representation;
 
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.rest.api.UserModalityResource;
+import com.kdcloud.server.entity.StoredModality;
 
-public class UserModalityServerResource extends FileServerResource implements
+public class UserModalityServerResource extends BasicServerResource<StoredModality> implements
 		UserModalityResource {
 	
 
@@ -37,25 +41,44 @@ public class UserModalityServerResource extends FileServerResource implements
 	
 	@Override
 	public Modality getModality() {
-		return (Modality) readObjectFromXml(Modality.class);
+		StoredModality stored = read();
+		if (stored != null)
+			return stored.getModality();
+		return null;
 	}
 
 	@Override
-	public void saveModality(Document xml) {
+	public void saveModality(Representation rep) {
+		StoredModality stored = find();
+		if (stored == null) {
+			stored = new StoredModality();
+			stored.setName(getResourceIdentifier());
+		}
 		try {
-			readObjectFromXml(xml, Modality.class); //validate xml
-			byte[] content = serializeDom(xml);
-			write(content);
-		} catch (Exception e) {
+			String contextPath = Modality.class.getPackage().getName();
+			JaxbRepresentation<Modality> jaxb =
+					new JaxbRepresentation<Modality>(rep, contextPath);
+			stored.setModality(jaxb.getObject());
+			save(stored);
+		} catch (IOException e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}
 
 	@Override
-	public String getPath() {
-		return getActualUri(URI);
+	public StoredModality find() {
+		return (StoredModality) getPersistenceContext().findByName(
+				StoredModality.class, getResourceIdentifier());
 	}
 
-	
+	@Override
+	public void save(StoredModality e) {
+		getPersistenceContext().save(e);
+	}
+
+	@Override
+	public void delete(StoredModality e) {
+		getPersistenceContext().delete(e);
+	}
 
 }

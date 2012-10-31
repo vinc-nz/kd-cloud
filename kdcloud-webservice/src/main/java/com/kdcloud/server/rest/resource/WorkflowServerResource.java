@@ -32,10 +32,10 @@ import weka.core.Instances;
 
 import com.kdcloud.lib.rest.api.WorkflowResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
+import com.kdcloud.server.entity.StoredWorkflow;
 
 public class WorkflowServerResource extends WorkerServerResource implements
 		WorkflowResource {
-
 
 	public WorkflowServerResource() {
 	}
@@ -43,13 +43,10 @@ public class WorkflowServerResource extends WorkerServerResource implements
 	public WorkflowServerResource(Application application, String workflowId) {
 		super(application, workflowId);
 	}
-	
 
 	@Override
 	public Representation execute(Form form) {
-		InputStream	workflow = getClass().getClassLoader().getResourceAsStream(getPath());
-		if (workflow == null)
-			workflow = read();
+		InputStream	workflow = getStream();
 		if (workflow != null) {
 			Instances data;
 			try {
@@ -69,10 +66,16 @@ public class WorkflowServerResource extends WorkerServerResource implements
 
 	@Override
 	public void putWorkflow(Document dom) {
+		StoredWorkflow stored = find();
+		if (stored == null) {
+			stored = new StoredWorkflow();
+			stored.setName(getResourceIdentifier());
+			create(stored);
+		}
 		try {
 			byte[] bytes = serializeDom(dom);
 			InputStream is = new ByteArrayInputStream(bytes);
-			engine.getWorker(is); //validate workflow
+			engine.getWorker(is); // validate workflow
 			write(bytes);
 		} catch (Exception e) {
 			getLogger().log(Level.INFO, "unable to read workflow", e);
@@ -88,6 +91,33 @@ public class WorkflowServerResource extends WorkerServerResource implements
 	@Override
 	public String getPath() {
 		return getActualUri(URI).substring(1);
+	}
+	
+	public InputStream getStream() {
+		String path = "workflow/" + getResourceIdentifier();
+		InputStream	stream = getClass().getClassLoader().getResourceAsStream(path);
+		if (stream != null)
+			return stream;
+		StoredWorkflow stored = find();
+		if (stored != null)
+			return stored.readWorkflow();
+		return null;
+	}
+
+	@Override
+	public StoredWorkflow find() {
+		return (StoredWorkflow) getPersistenceContext().findByName(
+				StoredWorkflow.class, getResourceIdentifier());
+	}
+
+	@Override
+	public void save(StoredWorkflow e) {
+		getPersistenceContext().save(e);
+	}
+
+	@Override
+	public void delete(StoredWorkflow e) {
+		getPersistenceContext().delete(e);
 	}
 
 }

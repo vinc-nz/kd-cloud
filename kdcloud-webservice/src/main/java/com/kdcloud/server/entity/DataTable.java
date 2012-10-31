@@ -34,10 +34,6 @@ public class DataTable {
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
 	private String encodedKey;
 
-//	@Persistent
-//    @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
-//	private Long id;
-	
 	@Persistent
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String name;
@@ -48,14 +44,6 @@ public class DataTable {
 	@Persistent
 	@Unowned
 	User owner;
-	
-//	public Long getId() {
-//		return id;
-//	}
-//
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
 	
 	public String getName() {
 		return name;

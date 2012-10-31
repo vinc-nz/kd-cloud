@@ -16,27 +16,16 @@
  */
 package com.kdcloud.server.persistence;
 
-import com.kdcloud.server.entity.Task;
-import com.kdcloud.server.entity.User;
+import java.util.Collection;
+
 
 public interface PersistenceContext {
 	
-
-	public DataAccessObject<User> getUserDao();
+	public Object findByName(Class<?> clazz, String name);
+	public Object findChildByName(Object father, Class<?> child, String name);
+	public Collection<Object> getAll(Class<?> clazz);
+	public void save(Object e);
+	public void save(Object e, String name);
+	public void delete(Object e);
 	
-	public GroupDao getGroupDao();
-
-	public DataAccessObject<Task> getTaskDao();
-
-	public VirtualDirectoryDao getVirtualDirectoryDao();
-	
-	public void beginTransaction();
-	
-	public void commitTransaction();
-	
-	public void close();
-
-
-
-
 }

@@ -77,10 +77,10 @@ public class EnginePluginServerResource extends
 	}
 
 	@Override
-	public void update(StoredPlugin resource, Representation representation) {
+	public void update(StoredPlugin entity, Representation representation) {
 		try {
-			resource.setContent(ConvertUtils.toByteArray(representation));
-			if (!validPlugin(resource.readPlugin(), getResourceIdentifier()))
+			entity.setContent(ConvertUtils.toByteArray(representation));
+			if (!validPlugin(entity.readPlugin(), getResourceIdentifier()))
 				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 		} catch (IOException e) {
 			getLogger().log(Level.INFO, "error reading content", e);

@@ -74,10 +74,10 @@ public class UserModalityServerResource extends BasicServerResource<StoredModali
 	}
 
 	@Override
-	public void update(StoredModality resource, Representation representation) {
+	public void update(StoredModality entity, Representation representation) {
 		try {
 			Modality m = (Modality) ConvertUtils.toObject(Modality.class, representation);
-			resource.setModality(m);
+			entity.setModality(m);
 		} catch (Exception e) {
 			getLogger().log(Level.INFO, "error reading entity", e);
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

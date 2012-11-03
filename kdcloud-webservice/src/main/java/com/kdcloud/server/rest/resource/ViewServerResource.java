@@ -82,10 +82,10 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 	}
 
 	@Override
-	public void update(View resource, Representation representation) {
+	public void update(View entity, Representation representation) {
 		DomRepresentation dom = new DomRepresentation(representation);
 		try {
-			resource.setSpecification(dom.getDocument());
+			entity.setSpecification(dom.getDocument());
 		} catch (IOException e) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		} catch (Exception e) {

@@ -25,7 +25,6 @@ import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.DataSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
-import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
@@ -63,8 +62,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public void delete(Group e) {
-		for (DataTable t : e.getData())
-			getPersistenceContext().delete(t);
+		e.getData().clear();
 		getPersistenceContext().delete(e);
 	}
 

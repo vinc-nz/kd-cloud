@@ -102,11 +102,11 @@ public class WorkflowServerResource extends BasicServerResource<StoredWorkflow> 
 	}
 
 	@Override
-	public void update(StoredWorkflow resource, Representation representation) {
+	public void update(StoredWorkflow entity, Representation representation) {
 		try {
 			byte[] workflow = ConvertUtils.toByteArray(representation);
-			resource.setContent(workflow);
-			engine.getWorker(resource.readWorkflow()); // validate workflow
+			entity.setContent(workflow);
+			engine.getWorker(entity.readWorkflow()); // validate workflow
 		} catch (IOException e) {
 			getLogger().log(Level.INFO, "unable to read workflow", e);
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

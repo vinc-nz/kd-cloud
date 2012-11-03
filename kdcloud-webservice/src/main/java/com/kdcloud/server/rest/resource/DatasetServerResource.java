@@ -35,6 +35,7 @@ import com.kdcloud.server.entity.Group;
 
 public class DatasetServerResource extends BasicServerResource<DataTable> implements DatasetResource  {
 	
+	private Group mGroup;
 
 	public DatasetServerResource() {
 		super();
@@ -42,7 +43,9 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 
 	DatasetServerResource(Application application, String groupName) {
 		super(application, groupName);
+		this.mGroup = new Group(groupName);
 	}
+	
 	
 	@Override
 	public Representation getData() {
@@ -54,51 +57,46 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 		remove();
 	}
 	
-	public Group findGroup() {
-		return (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
-	}
 
 	@Override
 	public DataTable find() {
-		Group group = findGroup();
-		if (group == null)
+		mGroup = findGroup();
+		if (mGroup == null)
 			return null;
-		return (DataTable) getPersistenceContext().findChildByName(group, DataTable.class, user.getName());
+		return (DataTable) getPersistenceContext().findChildByName(mGroup, DataTable.class, user.getName());
 	}
 
 	@Override
 	public void save(DataTable e) {
-		Group group = findGroup();
-		if (group == null)
-			group = new Group(getResourceIdentifier());
-		group.getData().add(e);
-		getPersistenceContext().save(group);
+		mGroup.getData().add(e);
+		getPersistenceContext().save(mGroup);
 	}
 
 	@Override
 	public void delete(DataTable e) {
-		Group group = findGroup();
-		group.getData().remove(e);
-		getPersistenceContext().save(group);
+		mGroup.getData().remove(e);
+		getPersistenceContext().save(mGroup);
 	}
 
 	@Override
 	public DataTable create() {
+		if (mGroup == null)
+			mGroup = new Group(getResourceIdentifier());
 		DataTable table = new DataTable();
 		table.setOwner(user);
 		return table;
 	}
 
 	@Override
-	public void update(DataTable resource, Representation representation) {
+	public void update(DataTable entity, Representation representation) {
 		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
 		try {
 			Instances data = instancesRepresentation.getInstances();
-			DataSpecification inputSpec = findGroup().getInputSpecification();
+			DataSpecification inputSpec = (mGroup != null ? mGroup.getInputSpecification() : null);
 			if (inputSpec != null && !inputSpec.matchingSpecification(data))
 				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 			else
-				update(resource, data);
+				update(entity, data);
 		} catch (IOException e) {
 			getLogger().log(Level.INFO, "got an invalid request", e);
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -124,6 +122,10 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	@Override
 	public void uploadData(Representation representation) {
 		createOrUpdate(representation);
+	}
+
+	public Group findGroup() {
+		return (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
 	}
 
 }

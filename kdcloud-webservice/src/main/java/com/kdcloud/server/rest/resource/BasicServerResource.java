@@ -16,15 +16,32 @@ public abstract class BasicServerResource<T> extends KDServerResource {
 		super(application, resourceIdentifier);
 	}
 
+	
+	/**
+	 * returns the stored resource identified, or null if it does not exist
+	 */
 	public abstract T find();
 	
+	/**
+	 * create a new resource instance to be stored
+	 * @return the instance created
+	 */
 	public abstract T create();
 	
+	
+	/**
+	 * persists the resource
+	 * @param e the resource to be persistet
+	 */
 	public abstract void save(T e);
 	
+	
+	/**
+	 * deletes a persistent resource
+	 */
 	public abstract void delete(T e);
 	
-	public abstract void update(T resource, Representation representation);
+	public abstract void update(T entity, Representation representation);
 	
 	
 	public void createOrUpdate(Representation representation) {

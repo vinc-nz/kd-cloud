@@ -21,14 +21,14 @@ import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
-import org.restlet.resource.ClientResource;
+import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalityIndex;
 import com.kdcloud.lib.rest.api.ModalitiesResource;
 import com.kdcloud.server.entity.StoredModality;
-import com.kdcloud.server.rest.application.RepresentationUnmarshaller;
+import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class ModalitiesServerResource extends KDServerResource implements
 		ModalitiesResource {
@@ -60,8 +60,10 @@ public class ModalitiesServerResource extends KDServerResource implements
 	}
 
 	public ModalityIndex loadStandardModalities() throws Exception  {
-		ClientResource cr = new ClientResource("/" + STANDARD_MODALITIES_FILE);
-		return (ModalityIndex) RepresentationUnmarshaller.unmarshal(ModalityIndex.class, cr.get());
+		Representation rep = fetchLocalResource(STANDARD_MODALITIES_FILE);
+		if (rep != null)
+			return (ModalityIndex) ConvertUtils.toObject(ModalityIndex.class, rep);
+		return new ModalityIndex();
 	}
 
 	public void addUserDefinedModalities(ModalityIndex index) throws Exception {

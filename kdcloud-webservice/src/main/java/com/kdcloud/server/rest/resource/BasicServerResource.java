@@ -26,18 +26,15 @@ public abstract class BasicServerResource<T> extends KDServerResource {
 	
 	public abstract void update(T resource, Representation representation);
 	
-	public T findOrCreate() {
+	
+	public void createOrUpdate(Representation representation) {
 		T resource = find();
 		if (resource == null) {
 			resource = create();
-			save(resource);
 			setStatus(Status.SUCCESS_CREATED);
+		} else {
+			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
-		return resource;
-	}
-	
-	public void createOrUpdate(Representation representation) {
-		T resource = findOrCreate();
 		update(resource, representation);
 		save(resource);
 	}

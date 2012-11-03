@@ -21,6 +21,7 @@ import java.io.InputStream;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
+import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import weka.core.Instances;
@@ -64,7 +65,7 @@ public abstract class WorkerServerResource extends BasicServerResource<StoredWor
 		if (worker.getStatus() == Worker.STATUS_JOB_COMPLETED) {
 			return worker.getOutput();
 		} else {
-			throw new IOException("error during execution");
+			throw new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED);
 		}
 	}
 

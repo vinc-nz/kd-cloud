@@ -16,17 +16,15 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import java.io.IOException;
-
 import org.restlet.Application;
 import org.restlet.data.Status;
-import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.rest.api.UserModalityResource;
 import com.kdcloud.server.entity.StoredModality;
+import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class UserModalityServerResource extends BasicServerResource<StoredModality> implements
 		UserModalityResource {
@@ -78,12 +76,10 @@ public class UserModalityServerResource extends BasicServerResource<StoredModali
 
 	@Override
 	public void update(StoredModality resource, Representation representation) {
-		String contextPath = Modality.class.getPackage().getName();
-		JaxbRepresentation<Modality> jaxb =
-				new JaxbRepresentation<Modality>(representation, contextPath);
 		try {
-			resource.setModality(jaxb.getObject());
-		} catch (IOException e) {
+			Modality m = (Modality) ConvertUtils.toObject(Modality.class, representation);
+			resource.setModality(m);
+		} catch (Exception e) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}

@@ -81,6 +81,7 @@ public class RestletTestCase {
 	public void setUp() {
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, PORT);
+		component.getClients().add(Protocol.CLAP);
 
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null,
 				ChallengeScheme.HTTP_BASIC, "testRealm");

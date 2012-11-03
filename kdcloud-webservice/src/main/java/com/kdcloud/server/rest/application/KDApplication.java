@@ -40,7 +40,6 @@ public class KDApplication extends Application {
 	public Restlet createInboundRoot() {
 
 		Router router = new Router(getContext());
-		router.attach("/test", new TestRestlet());
 		
 		Reflections reflections = new Reflections(
 				"com.kdcloud.server.rest.resource");
@@ -57,18 +56,6 @@ public class KDApplication extends Application {
 
 			}
 		}
-
-//		router.attach(UserDataResource.URI, UserDataServerResource.class);
-//		router.attach(DatasetResource.URI, DatasetServerResource.class);
-//		router.attach(AnalysisResource.URI, AnalysisServerResource.class);
-//		router.attach(SchedulerResource.URI, SchedulerServerResource.class);
-//		router.attach(ReportResource.URI, ReportServerResource.class);
-//		router.attach(DeviceResource.URI, DeviceServerResource.class);
-//		router.attach(UserDetailsResource.URI, UserDetailsServerResource.class);
-//		router.attach(ModalitiesResource.URI, ModalitiesServerResource.class);
-//		router.attach(GlobalAnalysisResource.URI,
-//				GlobalAnalysisServerResource.class);
-//		router.attach(GlobalDataResource.URI, GlobalDataServerResource.class);
 
 		return router;
 	}

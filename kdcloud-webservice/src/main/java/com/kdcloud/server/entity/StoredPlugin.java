@@ -1,8 +1,6 @@
 package com.kdcloud.server.entity;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.jdo.annotations.Extension;
@@ -58,19 +56,8 @@ public class StoredPlugin {
 		this.content = content;
 	}
 	
-	public boolean writePlugin(InputStream in) {
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			int next = in.read();
-			while (next > -1) {
-			    bos.write(next);
-			    next = in.read();
-			}
-			content = new Blob(bos.toByteArray());
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
+	public void setContent(byte[] content) {
+		this.content = new Blob(content);
 	}
 	
 	public InputStream readPlugin() {

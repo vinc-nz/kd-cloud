@@ -94,7 +94,7 @@ public class ServerResourceTest {
 	public void testModalities() {
 		ModalitiesServerResource modalitiesResource = new ModalitiesServerResource(application);
 		ModalityIndex index = modalitiesResource.listModalities();
-		Assert.assertFalse(index.asList().isEmpty());
+		Assert.assertNotNull(index);
 //
 //		ModEntity modality = list.get(0);
 //		modality.setName("test");

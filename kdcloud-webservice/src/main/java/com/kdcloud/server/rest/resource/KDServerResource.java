@@ -17,7 +17,10 @@
 package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
+import org.restlet.data.LocalReference;
+import org.restlet.data.Protocol;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
@@ -61,6 +64,22 @@ public abstract class KDServerResource extends ServerResource {
 	
 	protected String getActualUri(String template) {
 		return template.replace("{id}", getResourceIdentifier());
+	}
+	
+	public Representation fetchLocalResource(String path) {
+		LocalReference ref = new LocalReference(path);
+		ref.setProtocol(Protocol.CLAP);
+		return new ClientResource(ref).get();
+	}
+	
+	public Representation doGet() {
+		if (getRequest() != null) {
+			ClientResource cr = new ClientResource(getRequest().getResourceRef());
+			cr.setChallengeResponse(getRequest().getChallengeResponse());
+			return cr.get();
+		} else {
+			return fetchLocalResource(getResourceIdentifier());
+		}
 	}
 
 

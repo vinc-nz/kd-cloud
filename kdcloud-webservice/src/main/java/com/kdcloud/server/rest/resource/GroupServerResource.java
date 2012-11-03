@@ -16,22 +16,20 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import java.io.IOException;
 import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
-import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.DataSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
+import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class GroupServerResource extends BasicServerResource<Group> implements
 		GroupResource {
-
 
 	public GroupServerResource() {
 		super();
@@ -41,7 +39,6 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 		super(application, groupName);
 	}
 
-
 	@Override
 	public void create(Representation rep) {
 		createOrUpdate(rep);
@@ -49,16 +46,13 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public DataSpecification getInputSpecification() {
-		Group group = read();
-		if (group != null) {
-			return group.getInputSpecification();
-		}
-		return null;
+		return read().getInputSpecification();
 	}
 
 	@Override
 	public Group find() {
-		return (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
+		return (Group) getPersistenceContext().findByName(Group.class,
+				getResourceIdentifier());
 	}
 
 	@Override
@@ -80,12 +74,10 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 	public void update(Group group, Representation rep) {
 		if (rep != null && !rep.isEmpty())
 			try {
-				String contextPath = DataSpecification.class.getPackage()
-						.getName();
-				JaxbRepresentation<DataSpecification> jaxb = new JaxbRepresentation<DataSpecification>(
-						rep, contextPath);
-				group.setInputSpecification(jaxb.getObject());
-			} catch (IOException e) {
+				DataSpecification s = (DataSpecification) ConvertUtils
+						.toObject(DataSpecification.class, rep);
+				group.setInputSpecification(s);
+			} catch (Exception e) {
 				getLogger().log(Level.INFO, "error reading object", e);
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			}

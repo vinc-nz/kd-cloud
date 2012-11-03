@@ -35,6 +35,7 @@ import weka.core.Instances;
 import com.kdcloud.lib.rest.api.WorkflowResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.StoredWorkflow;
+import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class WorkflowServerResource extends WorkerServerResource implements
 		WorkflowResource {
@@ -48,22 +49,18 @@ public class WorkflowServerResource extends WorkerServerResource implements
 
 	@Override
 	public Representation execute(Form form) {
-		InputStream	workflow = getStream();
-		if (workflow != null) {
-			Instances data;
-			try {
-				data = execute(form, workflow);
-			} catch (IOException e) {
-				getLogger().log(Level.SEVERE, e.getMessage(), e);
-				setStatus(Status.SERVER_ERROR_INTERNAL);
-				return null;
-			}
+		try {
+			InputStream workflow = doGet().getStream();
+			Instances data = execute(form, workflow);
 			if (data != null && !data.isEmpty()) {
 				getLogger().info("sending " + data.size() + " instances");
 				return new InstancesRepresentation(MediaType.TEXT_CSV, data);
 			}
+			return null;
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, e.getMessage(), e);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
 		}
-		return null;
 	}
 
 	@Override
@@ -81,17 +78,6 @@ public class WorkflowServerResource extends WorkerServerResource implements
 		}
 	}
 
-	
-	public InputStream getStream() {
-		String path = "workflow/" + getResourceIdentifier();
-		InputStream	stream = getClass().getClassLoader().getResourceAsStream(path);
-		if (stream != null)
-			return stream;
-		StoredWorkflow stored = find();
-		if (stored != null)
-			return stored.readWorkflow();
-		return null;
-	}
 
 	@Override
 	public StoredWorkflow find() {
@@ -119,13 +105,13 @@ public class WorkflowServerResource extends WorkerServerResource implements
 	@Override
 	public void update(StoredWorkflow resource, Representation representation) {
 		try {
-			if (resource.writeWorkflow(representation.getStream())) {
-				engine.getWorker(resource.readWorkflow()); // validate workflow
-			}
+			byte[] workflow = ConvertUtils.toByteArray(representation);
+			resource.setContent(workflow);
+			engine.getWorker(resource.readWorkflow()); // validate workflow
 		} catch (IOException e) {
 			getLogger().log(Level.INFO, "unable to read workflow", e);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 
 }

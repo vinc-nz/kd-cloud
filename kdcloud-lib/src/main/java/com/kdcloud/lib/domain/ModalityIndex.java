@@ -18,6 +18,7 @@ package com.kdcloud.lib.domain;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -36,7 +37,7 @@ public class ModalityIndex implements Iterable<Modality>, Serializable {
 	List<Modality> list;
 	
 	public ModalityIndex() {
-		// TODO Auto-generated constructor stub
+		list = new LinkedList<Modality>();
 	}
 
 	public ModalityIndex(List<Modality> list) {

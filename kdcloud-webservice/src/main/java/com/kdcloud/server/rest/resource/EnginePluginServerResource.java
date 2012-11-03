@@ -27,6 +27,7 @@ import org.restlet.resource.ResourceException;
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeFactory;
 import com.kdcloud.server.entity.StoredPlugin;
+import com.kdcloud.server.rest.application.ConvertUtils;
 import com.kdcloud.server.rest.application.StreamClassLoader;
 
 public class EnginePluginServerResource extends
@@ -79,7 +80,7 @@ public class EnginePluginServerResource extends
 	@Override
 	public void update(StoredPlugin resource, Representation representation) {
 		try {
-			resource.writePlugin(representation.getStream());
+			resource.setContent(ConvertUtils.toByteArray(representation));
 			if (!validPlugin(resource.readPlugin(), getResourceIdentifier()))
 				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 		} catch (IOException e) {

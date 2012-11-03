@@ -66,7 +66,7 @@ public class EmbeddedEngineTest {
 	@Test
 	public void test() throws Exception {
 		for (String desc: descriptions) {
-			String path = "workflow/" + desc;
+			String path = desc;
 			InputStream is = getClass().getClassLoader().getResourceAsStream(path);
 			Worker worker = engine.getWorker(is);
 			worker.setParameter(PersistenceContext.class.getName(), pc);

@@ -12,7 +12,7 @@ public abstract class BasicServerResource<T> extends KDServerResource {
 		super();
 	}
 
-	public BasicServerResource(Application application, String resourceIdentifier) {
+	BasicServerResource(Application application, String resourceIdentifier) {
 		super(application, resourceIdentifier);
 	}
 

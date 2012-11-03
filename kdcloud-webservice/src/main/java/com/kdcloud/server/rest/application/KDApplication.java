@@ -49,11 +49,12 @@ public class KDApplication extends Application {
 
 		for (Class<? extends KDServerResource> clazz : allClasses) {
 			try {
+				getLogger().info("found resource " + clazz.getSimpleName());
 				String uri = clazz.getField("URI").get(null).toString();
 				router.attach(uri, clazz);
 				getLogger().info("mapped uri " + uri);
 			} catch (Exception e) {
-
+				getLogger().info("could not map any uri to the class");
 			}
 		}
 

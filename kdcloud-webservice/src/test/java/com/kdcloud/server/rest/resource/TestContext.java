@@ -26,6 +26,7 @@ import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
+import com.kdcloud.server.rest.application.UserProvider;
 
 public class TestContext extends Context {
 

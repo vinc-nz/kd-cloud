@@ -36,7 +36,7 @@ public class UsersServerResource extends KDServerResource implements
 		super();
 	}
 
-	public UsersServerResource(Application application, String groupName) {
+	UsersServerResource(Application application, String groupName) {
 		super(application, groupName);
 	}
 

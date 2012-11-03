@@ -31,8 +31,6 @@ import com.kdcloud.server.entity.StoredPlugin;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
-import com.kdcloud.server.rest.resource.UserProvider;
-import com.kdcloud.server.rest.resource.UserProviderImpl;
 
 public class GAEContext extends Context {
 	

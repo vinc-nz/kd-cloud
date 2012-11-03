@@ -34,7 +34,7 @@ public class UserModalityServerResource extends BasicServerResource<StoredModali
 		super();
 	}
 
-	public UserModalityServerResource(Application application, String modalityId) {
+	UserModalityServerResource(Application application, String modalityId) {
 		super(application, modalityId);
 	}
 	

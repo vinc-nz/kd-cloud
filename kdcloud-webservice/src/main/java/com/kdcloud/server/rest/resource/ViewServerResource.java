@@ -36,7 +36,7 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 		super();
 	}
 
-	public ViewServerResource(Application application, String viewId) {
+	ViewServerResource(Application application, String viewId) {
 		super(application, viewId);
 	}
 	

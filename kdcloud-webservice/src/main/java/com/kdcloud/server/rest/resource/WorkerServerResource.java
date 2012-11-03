@@ -28,10 +28,9 @@ import weka.core.Instances;
 
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.Worker;
-import com.kdcloud.server.entity.StoredWorkflow;
 import com.kdcloud.server.persistence.PersistenceContext;
 
-public abstract class WorkerServerResource extends BasicServerResource<StoredWorkflow> {
+public class WorkerServerResource extends KDServerResource {
 
 	KDEngine engine;
 

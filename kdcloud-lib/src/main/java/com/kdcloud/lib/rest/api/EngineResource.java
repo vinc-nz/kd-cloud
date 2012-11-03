@@ -14,34 +14,26 @@
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.kdcloud.server.rest.resource;
+package com.kdcloud.lib.rest.api;
 
-import org.restlet.Request;
+import org.restlet.data.Form;
+import org.restlet.representation.Representation;
+import org.restlet.resource.Get;
+import org.restlet.resource.Post;
+import org.restlet.resource.Put;
+import org.w3c.dom.Document;
 
-import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
-
-public class UserProviderImpl implements UserProvider {
-
-	public String getUserId(Request request) {
-		if (request.getClientInfo().getUser() == null)
-			return null;
-		return request.getClientInfo().getUser().getIdentifier();
-	}
-
-	@Override
-	public User getUser(Request request, PersistenceContext pc) {
-		String id = getUserId(request);
-		if (id != null) {
-			User user = (User) pc.findByName(User.class, id);
-			if (user == null) {
-				user = new User(id);
-				pc.save(user);
-			}
-			return user;
-		}
-		return null;
-	}
-
+public interface EngineResource {
+	
+	public static final String URI = "/engine/workflow/{id}";
+	
+	@Post
+	public Representation execute(Form form);
+	
+	@Put
+	public void putWorkflow(Representation representation);
+	
+	@Get
+	public Document getWorkflow();
 
 }

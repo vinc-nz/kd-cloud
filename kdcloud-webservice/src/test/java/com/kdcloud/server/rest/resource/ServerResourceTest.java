@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import junit.framework.Assert;
 
@@ -109,35 +110,23 @@ public class ServerResourceTest {
 	}
 
 	@Test
-	public void testWorkflow() {
+	public void testWorker() {
 		Instances instances = DataSpecification.newInstances("test", 1);
 		DatasetServerResource resource = new DatasetServerResource(application, group.getName());
 		resource.uploadData(new InstancesRepresentation(instances));
-		WorkflowServerResource workflowResource = new WorkflowServerResource(application, "ecg.xml");
+		WorkerServerResource workflowResource = new WorkerServerResource(application, "ecg.xml");
 		Form form = new Form();
 		form.add(UserDataReader.SOURCE_USER_PARAMETER, USER_ID);
 		form.add(UserDataReader.SOURCE_GROUP_PARAMETER, "test");
-		Representation r = workflowResource.execute(form);
-//		assertNotNull(r);
+		InputStream is = getClass().getClassLoader().getResourceAsStream("ecg.xml");
+		try {
+			workflowResource.execute(form, is);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
-//	@Test
-//	public void testGlobalData() {
-//		DatasetServerResource resource = new DatasetServerResource(application, group);
-//		Instances instances = DataSpecification.newInstances("test", 1);
-//		String[] ids = { "a", "b", "c" };
-//		for (String s : ids) {
-//			User user = new User();
-//			user.setName(s);
-//			resource.user = user;
-//			resource.uploadData(new InstancesRepresentation(instances));
-//		}
-//
-//		GlobalAnalysisServerResource globalAnalysisResource = new GlobalAnalysisServerResource(application, "ecg.xml");
-//		Form form = new Form();
-//		form.add(ServerParameter.GROUP_ID.getName(), "test");
-//		globalAnalysisResource.execute(form);
-//	}
 
 	@Test
 	public void testDevices() {
@@ -145,16 +134,6 @@ public class ServerResourceTest {
 		deviceResource.register("test");
 		deviceResource.unregister("test");
 	}
-	
 
-
-//	@Test
-//	public void testScheduling() {
-//		userDataResource.createDataset();
-//		userDataResource.getPersistenceContext().close();
-//		scheduler.requestProcess();
-//		scheduler.getPersistenceContext().close();
-//		worker.pullTask(null);
-//	}
 
 }

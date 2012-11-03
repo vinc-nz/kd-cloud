@@ -23,52 +23,43 @@ import java.util.logging.Level;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.restlet.Application;
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.resource.Get;
+import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 import org.w3c.dom.Document;
 
-import weka.core.Instances;
-
-import com.kdcloud.lib.rest.api.WorkflowResource;
-import com.kdcloud.lib.rest.ext.InstancesRepresentation;
+import com.kdcloud.engine.KDEngine;
 import com.kdcloud.server.entity.StoredWorkflow;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
-public class WorkflowServerResource extends WorkerServerResource implements
-		WorkflowResource {
+public class WorkflowServerResource extends BasicServerResource<StoredWorkflow>  {
+	
+	public static final String URI = "/workflow/{id}";
+	
+	KDEngine engine;
 
 	public WorkflowServerResource() {
 	}
 
-	public WorkflowServerResource(Application application, String workflowId) {
+	WorkflowServerResource(Application application, String workflowId) {
 		super(application, workflowId);
 	}
-
+	
 	@Override
-	public Representation execute(Form form) {
-		try {
-			InputStream workflow = doGet().getStream();
-			Instances data = execute(form, workflow);
-			if (data != null && !data.isEmpty()) {
-				getLogger().info("sending " + data.size() + " instances");
-				return new InstancesRepresentation(MediaType.TEXT_CSV, data);
-			}
-			return null;
-		} catch (IOException e) {
-			getLogger().log(Level.SEVERE, e.getMessage(), e);
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
-		}
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		engine = (KDEngine) inject(KDEngine.class);
 	}
 
+	@Put
 	@Override
-	public void putWorkflow(Representation representation) {
-		createOrUpdate(representation);
+	public void createOrUpdate(Representation representation) {
+		super.createOrUpdate(representation);
 	}
 
-	@Override
+	@Get
 	public Document getWorkflow() {
 		InputStream is = read().readWorkflow();
 		try {

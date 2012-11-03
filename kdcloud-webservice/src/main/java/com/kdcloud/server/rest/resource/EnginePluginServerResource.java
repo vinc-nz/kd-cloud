@@ -18,6 +18,7 @@ package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -47,6 +48,7 @@ public class EnginePluginServerResource extends
 			loader.loadClass(className).asSubclass(Node.class).newInstance();
 			return true;
 		} catch (Exception e) {
+			getLogger().log(Level.INFO, "supplied plugin is not valid", e);
 			return false;
 		}
 	}
@@ -81,6 +83,7 @@ public class EnginePluginServerResource extends
 			if (!validPlugin(resource.readPlugin(), getResourceIdentifier()))
 				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 		} catch (IOException e) {
+			getLogger().log(Level.INFO, "error reading content", e);
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}

@@ -30,6 +30,7 @@ public class EngineServerResource extends WorkerServerResource implements
 				getLogger().info("sending " + data.size() + " instances");
 				return new InstancesRepresentation(MediaType.TEXT_CSV, data);
 			}
+			setStatus(Status.SUCCESS_NO_CONTENT);
 			return null;
 		} catch (IOException e) {
 			getLogger().log(Level.SEVERE, e.getMessage(), e);

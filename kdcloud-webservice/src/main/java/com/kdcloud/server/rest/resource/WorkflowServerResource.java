@@ -65,7 +65,8 @@ public class WorkflowServerResource extends BasicServerResource<StoredWorkflow> 
 		try {
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
 		} catch (Exception e) {
-			throw new ResourceException(e);
+			getLogger().log(Level.SEVERE, "error reading workflow", e);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
 		}
 	}
 

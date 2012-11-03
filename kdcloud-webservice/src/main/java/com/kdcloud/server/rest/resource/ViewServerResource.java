@@ -17,6 +17,7 @@
 package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Status;
@@ -59,7 +60,12 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 	@Override
 	@Get
 	public Document getView() {
-		return read().getSpecification();
+		try {
+			return read().getSpecification();
+		} catch (Exception e) {
+			getLogger().log(Level.SEVERE, "error reading document", e);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+		}
 	}
 
 	@Override
@@ -82,6 +88,9 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 			resource.setSpecification(dom.getDocument());
 		} catch (IOException e) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		} catch (Exception e) {
+			getLogger().log(Level.SEVERE, "error saving document", e);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
 		}
 	}
 

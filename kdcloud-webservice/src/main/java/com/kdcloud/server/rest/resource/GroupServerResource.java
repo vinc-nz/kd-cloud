@@ -78,7 +78,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 						.toObject(DataSpecification.class, rep);
 				group.setInputSpecification(s);
 			} catch (Exception e) {
-				getLogger().log(Level.INFO, "error reading object", e);
+				getLogger().log(Level.INFO, "error reading entity", e);
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			}
 

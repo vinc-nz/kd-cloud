@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.json.JSONObject;
@@ -102,6 +103,7 @@ public class OAuthVerifier implements Verifier {
 				return Verifier.RESULT_VALID;
 			}
 	    } catch (Exception e) {
+	    	logger.log(Level.SEVERE, "error getting authentication server response", e);
 	    }
 	    return Verifier.RESULT_INVALID;
 	}

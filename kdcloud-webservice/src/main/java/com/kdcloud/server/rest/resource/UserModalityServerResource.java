@@ -84,4 +84,9 @@ public class UserModalityServerResource extends BasicServerResource<StoredModali
 		}
 	}
 
+	@Override
+	public void deleteModality() {
+		super.remove();
+	}
+
 }

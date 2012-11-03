@@ -94,6 +94,11 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 		}
 	}
 
+	@Override
+	public void deleteView() {
+		super.remove();
+	}
+
 	
 
 }

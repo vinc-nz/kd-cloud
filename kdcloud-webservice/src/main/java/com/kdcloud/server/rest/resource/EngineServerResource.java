@@ -63,6 +63,14 @@ public class EngineServerResource extends WorkerServerResource implements
 		return workflow;
 	}
 
+	@Override
+	public void deleteWorkflow() {
+		ClientResource cr = wrapWorkflowServerResource();
+		cr.delete();
+		setStatus(cr.getStatus());
+		
+	}
+
 	
 
 }

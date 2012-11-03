@@ -17,6 +17,7 @@
 package com.kdcloud.lib.rest.api;
 
 import org.restlet.representation.Representation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.w3c.dom.Document;
@@ -30,5 +31,8 @@ public interface ViewResource {
 	
 	@Put
 	public void saveView(Representation representation); 
+	
+	@Delete
+	public void deleteView();
 
 }

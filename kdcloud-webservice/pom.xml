@@ -161,12 +161,12 @@
      	</dependency>
      	
 <!-- 	    gmc server by local repo -->
-		<dependency>
-	      <groupId>com.google.android</groupId>
-	      <artifactId>gcm-server</artifactId>
-	      <version>1.0-r3</version>
-	      <type>jar</type>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 	      <groupId>com.google.android</groupId> -->
+<!-- 	      <artifactId>gcm-server</artifactId> -->
+<!-- 	      <version>1.0-r3</version> -->
+<!-- 	      <type>jar</type> -->
+<!-- 		</dependency> -->
 		
 		<!-- These dependencies are here just for enabling logging -->
 		<dependency>

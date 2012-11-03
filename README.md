@@ -12,8 +12,7 @@ kdcloud is a RESTful webservice that allows to perform Knowledge Discovery and a
 
 ## Modules
 
-+ *kdcloud-webservice* The webservice itself.
-+ *kdcloud-engine* The underling engine that executes the analysis. It is intended to be a wrapper of other software such [KNIME](http://knime.org), but currently an embedded engine has been developed.
-+ *kdcloud-lib* A java library that can be used to develop a client application.
-+ *kdcloud-webclient* Intended to be a webclient using GWT. Not developed anymore.
-+ *weka-stripped* A subset of the [weka](http://www.cs.waikato.ac.nz/ml/weka/) API.
++ **kdcloud-webservice** The webservice itself.
++ **kdcloud-engine** The underling engine that executes the analysis. It is intended to be a wrapper of other software such [KNIME](http://knime.org), but currently an embedded engine has been developed.
++ **kdcloud-lib** A java library that can be used to develop a client application.
++ **weka-stripped** A subset of the [weka](http://www.cs.waikato.ac.nz/ml/weka/) API.

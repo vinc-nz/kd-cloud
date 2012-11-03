@@ -6,7 +6,7 @@
 	<META NAME="GENERATOR" CONTENT="LibreOffice 3.6  (Linux)">
 	<META NAME="CREATED" CONTENT="20121007;10594800">
 	<META NAME="CHANGEDBY" CONTENT="spax ">
-	<META NAME="CHANGED" CONTENT="20121027;15020600">
+	<META NAME="CHANGED" CONTENT="20121103;18520300">
 	<STYLE TYPE="text/css">
 	<!--
 		@page { margin: 0.79in }
@@ -40,12 +40,11 @@
 	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#__RefHeading__945_1412767030">Authentication	</A></P>
 	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#__RefHeading__947_1412767030">HTTP
 	methods usage	</A></P>
-	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#__RefHeading__949_1412767030">Standard
-	API errors	</A></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#__RefHeading__949_1412767030">HTTP
+	Status codes	</A></P>
 	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#__RefHeading__951_1412767030">Resource
 	description	</A></P>
-	<P STYLE="margin-left: 0.39in; margin-bottom: 0in"><A HREF="#__RefHeading__953_1412767030">/group
-	(PUT)	</A></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in"><A HREF="#__RefHeading__953_1412767030">/group	</A></P>
 	<P STYLE="margin-left: 0.39in; margin-bottom: 0in"><A HREF="#__RefHeading__955_1412767030">/data	</A></P>
 	<P STYLE="margin-left: 0.39in; margin-bottom: 0in"><A HREF="#__RefHeading__957_1412767030">/users	</A></P>
 	<P STYLE="margin-left: 0.39in; margin-bottom: 0in"><A HREF="#__RefHeading__959_1412767030">/modality
@@ -124,17 +123,44 @@ methods usage</H2>
 		</TD>
 	</TR>
 </TABLE>
-<H2 CLASS="western"><A NAME="__RefHeading__949_1412767030"></A>Standard
-API errors</H2>
+<H2 CLASS="western"><A NAME="__RefHeading__949_1412767030"></A>HTTP
+Status codes</H2>
+<P>Each request may return one of these status codes:</P>
 <TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
 	<COL WIDTH=44*>
 	<COL WIDTH=212*>
 	<TR VALIGN=TOP>
 		<TD WIDTH=17% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
-			<P>400</P>
+			<P>200</P>
 		</TD>
 		<TD WIDTH=83% STYLE="border: 1px solid #000000; padding: 0.04in">
-			<P>Bad representation</P>
+			<P>The request has been completed successfully.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=17% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<P>201</P>
+		</TD>
+		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<P>The request has been completed successfully. A new resource has
+			been created.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=17% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<P>204</P>
+		</TD>
+		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<P>The request has been completed successfully. The response
+			doesn't contain any entity.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=17% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<P>400</P>
+		</TD>
+		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<P>Bad representation.</P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
@@ -142,7 +168,7 @@ API errors</H2>
 			<P>404</P>
 		</TD>
 		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
-			<P>The resource doesn't exist</P>
+			<P>The resource doesn't exist.</P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
@@ -150,7 +176,16 @@ API errors</H2>
 			<P>405</P>
 		</TD>
 		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
-			<P>The HTTP method is not handled for this resource</P>
+			<P>The HTTP method is not handled for this resource.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=17% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<P>412</P>
+		</TD>
+		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<P>The server failed to process the request due to wrong or
+			missing previous related requests.</P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
@@ -159,7 +194,7 @@ API errors</H2>
 		</TD>
 		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
 			<P>The request was well-formed but was unable to be followed due
-			to semantic errors</P>
+			to semantic errors,</P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
@@ -167,7 +202,7 @@ API errors</H2>
 			<P>500</P>
 		</TD>
 		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
-			<P>There was an error during the request handling</P>
+			<P>There was an error during the request handling,</P>
 		</TD>
 	</TR>
 </TABLE>
@@ -175,8 +210,7 @@ API errors</H2>
 </P>
 <H2 CLASS="western"><A NAME="__RefHeading__951_1412767030"></A>Resource
 description</H2>
-<H3 CLASS="western"><A NAME="__RefHeading__953_1412767030"></A>/group
-(PUT)</H3>
+<H3 CLASS="western"><A NAME="__RefHeading__953_1412767030"></A>/group</H3>
 <TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
 	<COL WIDTH=44*>
 	<COL WIDTH=212*>
@@ -468,7 +502,7 @@ description</H2>
 			<P>URL Stucture</P>
 		</TD>
 		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
-			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/workflow/&lt;name&gt;</FONT></P>
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/engine/workflow/&lt;name&gt;</FONT></P>
 			<P><B>name </B><SPAN STYLE="font-weight: normal">the unique name
 			of the </SPAN><SPAN STYLE="font-weight: normal">workflow</SPAN></P>
 		</TD>
@@ -509,7 +543,7 @@ description</H2>
 			<P>URL Stucture</P>
 		</TD>
 		<TD WIDTH=83% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
-			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/workflow/&lt;name&gt;</FONT></P>
+			<P><FONT FACE="Courier New, monospace">https://kd-cloud.appspot.com/engine/workflow/&lt;name&gt;</FONT></P>
 			<P><B>name </B><SPAN STYLE="font-weight: normal">the unique name
 			of the </SPAN><SPAN STYLE="font-weight: normal">workflow</SPAN></P>
 		</TD>
@@ -630,48 +664,48 @@ Data specification</H3>
 </P>
 <H4 CLASS="western"><A NAME="__RefHeading__983_1412767030"></A>tags</H4>
 <TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
-	<COL WIDTH=36*>
-	<COL WIDTH=220*>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">column</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border: 1px solid #000000; padding: 0.04in">
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.04in">
 			<P>A table column. Multiple columns can be specified</P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">name</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
 			<P STYLE="font-weight: normal">The name of the column</P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">type</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
 			<P>The datatype of the column. Supported types are <FONT FACE="Courier New, monospace">DOUBLE,
 			</FONT><FONT FACE="Courier New, monospace">INTEGER, TIMESTAMP</FONT></P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">source</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
 			<P>Optional. Specifies the source sensor to use to gather data.
 			Currently supported ones are <FONT FACE="Courier New, monospace">HEARTBEAT,
 			</FONT><FONT FACE="Courier New, monospace">CLOCK</FONT></P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">view</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
 			<P>Optional. Specify the relative URI of the view specification</P>
 		</TD>
 	</TR>
@@ -687,42 +721,40 @@ Workflows</H3>
 <P><FONT FACE="Courier New, monospace">&lt;/parameter&gt;</FONT></P>
 <P><FONT FACE="Courier New, monospace">&lt;/node&gt;</FONT></P>
 <H4 CLASS="western"><A NAME="__RefHeading__989_1412767030"></A>tags</H4>
-<P><BR><BR>
-</P>
 <TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=0>
-	<COL WIDTH=35*>
-	<COL WIDTH=221*>
+	<COL WIDTH=71*>
+	<COL WIDTH=185*>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">node</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border: 1px solid #000000; padding: 0.04in">
+		<TD WIDTH=72% STYLE="border: 1px solid #000000; padding: 0.04in">
 			<P>An execution unit. Additional nodes can be uploaded as plugins.</P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">parameter</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
 			<P STYLE="font-weight: normal">A static parameter of a node.
 			Multiple workflows could use the same node with different
 			parameters</P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">name</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
 			<P><FONT FACE="Times New Roman, serif">The name of the parameter</FONT></P>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD WIDTH=14% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+		<TD WIDTH=28% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			<P STYLE="font-weight: normal"><FONT FACE="Courier New, monospace">value</FONT></P>
 		</TD>
-		<TD WIDTH=86% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+		<TD WIDTH=72% STYLE="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
 			<P><FONT FACE="Times New Roman, serif">The value of the parameter</FONT></P>
 		</TD>
 	</TR>

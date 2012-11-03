@@ -21,23 +21,20 @@ import java.io.InputStream;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeFactory;
+import com.kdcloud.lib.rest.api.EnginePluginResource;
 import com.kdcloud.server.entity.StoredPlugin;
 import com.kdcloud.server.rest.application.ConvertUtils;
 import com.kdcloud.server.rest.application.StreamClassLoader;
 
 public class EnginePluginServerResource extends
-		BasicServerResource<StoredPlugin> {
+		BasicServerResource<StoredPlugin> implements EnginePluginResource {
 
-	public static final String URI = "/engine/plugin/{id}";
 
-	public static final String WORKING_DIRECTORY = "engine";
-
-	@Put
+	@Override
 	public void addPlugin(Representation rep) {
 		createOrUpdate(rep);
 	}

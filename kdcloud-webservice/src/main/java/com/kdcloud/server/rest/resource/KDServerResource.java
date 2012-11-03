@@ -17,6 +17,7 @@
 package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
+import org.restlet.Request;
 import org.restlet.data.LocalReference;
 import org.restlet.data.Protocol;
 import org.restlet.representation.Representation;
@@ -27,6 +28,7 @@ import org.restlet.resource.ServerResource;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
+import com.kdcloud.server.rest.application.UserProvider;
 
 public abstract class KDServerResource extends ServerResource {
 
@@ -41,9 +43,13 @@ public abstract class KDServerResource extends ServerResource {
 
 	KDServerResource(Application application, String resourceIdentifier) {
 		setApplication(application);
+		Request req = new Request();
+		req.setResourceRef(new LocalReference(resourceIdentifier));
+		req.setProtocol(Protocol.CLAP);
+		setRequest(req);
 		doInit();
-		this.user = userProvider.getUser(null, persistenceContext);
 		this.resourceIdentifier = resourceIdentifier;
+		this.user = userProvider.getUser(null, persistenceContext);
 	}
 
 	@Override
@@ -51,37 +57,27 @@ public abstract class KDServerResource extends ServerResource {
 		super.doInit();
 		userProvider = (UserProvider) inject(UserProvider.class);
 
-		PersistenceContextFactory pcf = 
-				(PersistenceContextFactory) inject(PersistenceContextFactory.class);
+		PersistenceContextFactory pcf = (PersistenceContextFactory) inject(PersistenceContextFactory.class);
 		persistenceContext = pcf.get();
 	}
 
 	protected String getResourceIdentifier() {
-		if (getRequest() != null)
-			return (String) getRequestAttributes().get("id");
-		return resourceIdentifier;
+		if (resourceIdentifier != null)
+			return resourceIdentifier;
+		return (String) getRequestAttributes().get("id");
 	}
-	
-	protected String getActualUri(String template) {
-		return template.replace("{id}", getResourceIdentifier());
-	}
-	
+
 	public Representation fetchLocalResource(String path) {
 		LocalReference ref = new LocalReference(path);
 		ref.setProtocol(Protocol.CLAP);
 		return new ClientResource(ref).get();
 	}
-	
-	public Representation doGet() {
-		if (getRequest() != null) {
-			ClientResource cr = new ClientResource(getRequest().getResourceRef());
-			cr.setChallengeResponse(getRequest().getChallengeResponse());
-			return cr.get();
-		} else {
-			return fetchLocalResource(getResourceIdentifier());
-		}
-	}
 
+	public Representation doGet() {
+		ClientResource cr = new ClientResource(getRequest().getResourceRef());
+		cr.setChallengeResponse(getChallengeResponse());
+		return cr.get();
+	}
 
 	@Override
 	public Representation handle() {
@@ -97,6 +93,10 @@ public abstract class KDServerResource extends ServerResource {
 
 	public PersistenceContext getPersistenceContext() {
 		return persistenceContext;
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 }

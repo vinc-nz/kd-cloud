@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Protocol;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -37,7 +38,7 @@ public class EngineServerResource extends WorkerServerResource implements
 	}
 	
 	public ClientResource wrapWorkflowServerResource() {
-		if (getRequest() == null)
+		if (!getProtocol().equals(Protocol.HTTP) && !getProtocol().equals(Protocol.HTTPS))
 			throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 		String uri = getRequest().getResourceRef().getIdentifier().replace("/engine", "");
 		getLogger().info("forwarding request to " + uri);

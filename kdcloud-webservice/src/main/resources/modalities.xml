@@ -17,7 +17,7 @@
             <uri>/group/london-marathon/data</uri>
             <method>PUT</method>
             <repeat>true</repeat>
-			<trigger after="60"/>
+			<trigger after="10"/>
         </action>
     </modality>
     <modality>
@@ -27,7 +27,7 @@
             <method>GET</method>
         </init-action>
         <action>
-            <uri>/workflow/ecg.xml</uri>
+            <uri>/engine/workflow/ecg.xml</uri>
             <method>POST</method>
             <parameter>
                 <name>sourceUser</name>
@@ -54,7 +54,7 @@
             <method>GET</method>
         </init-action>
         <action>
-            <uri>/workflow/ecg.xml</uri>
+            <uri>/engine/workflow/ecg.xml</uri>
             <method>POST</method>
             <parameter>
                 <name>sourceUser</name>

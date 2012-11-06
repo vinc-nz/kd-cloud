@@ -43,7 +43,7 @@ public class UsersServerResource extends KDServerResource implements
 
 	@Override
 	public UserIndex getSubscribedUsers() {
-		Group group = (Group) getPersistenceContext().getAll(Group.class);
+		Group group = (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
 		if (group == null)
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		List<String> names = new LinkedList<String>();

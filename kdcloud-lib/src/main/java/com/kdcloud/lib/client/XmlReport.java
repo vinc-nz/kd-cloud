@@ -16,12 +16,19 @@
  */
 package com.kdcloud.lib.client;
 
+import java.io.InputStream;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.CSVLoader;
 
 public class XmlReport {
 	
@@ -37,12 +44,20 @@ public class XmlReport {
 
 				int xIndex = getIntValue(pointsElement, "xIndex");
 				int yIndex = getIntValue(pointsElement, "yIndex");
-
+				
+				int xCounter = 0, yCounter = 0;
+				
 				for (Instance instance : data) {
 					Element xValue = dom.createElement("X");
-					xValue.setTextContent(String.valueOf(instance.value(xIndex)));
+					if(getTextValue(pointsElement, "xIndex").equals("counter"))
+						xValue.setTextContent(String.valueOf(xCounter++));
+					else
+						xValue.setTextContent(String.valueOf(instance.value(xIndex)));
 					Element yValue = dom.createElement("Y");
-					yValue.setTextContent(String.valueOf(instance.value(yIndex)));
+					if(getTextValue(pointsElement, "yIndex").equals("counter"))
+						yValue.setTextContent(String.valueOf(yCounter++));
+					else
+						yValue.setTextContent(String.valueOf(instance.value(yIndex)));
 
 					Element pointElement = dom.createElement("point");
 					pointElement.appendChild(xValue);
@@ -145,7 +160,7 @@ public class XmlReport {
 	 * Element points to employee node and tagName is 'name' I will return John
 	 */
 	private static String getTextValue(Element ele, String tagName) {
-		String textVal = null;
+		String textVal = "";
 		NodeList nl = ele.getElementsByTagName(tagName);
 		if (nl != null && nl.getLength() > 0) {
 			Element el = (Element) nl.item(0);
@@ -165,6 +180,21 @@ public class XmlReport {
 		} catch (Exception e) {
 			return 0;
 		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		CSVLoader loader = new CSVLoader();
+		loader.setSource(XmlReport.class.getClassLoader().getResourceAsStream("data.csv"));
+		Instances data = loader.getDataSet();
+//		System.out.println(data.size());
+		InputStream is = XmlReport.class.getClassLoader().getResourceAsStream("view.xml");
+		Document dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+		XmlReport.mergeWithData(dom, data);
+		DOMImplementationLS domImplLS = (DOMImplementationLS) dom
+		    .getImplementation();
+		LSSerializer serializer = domImplLS.createLSSerializer();
+		String str = serializer.writeToString(dom);
+		System.out.println(str);
 	}
 
 }

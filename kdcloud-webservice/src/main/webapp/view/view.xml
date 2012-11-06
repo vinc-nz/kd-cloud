@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <report	xmlns="http://www.w3schools.com"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-    <htmlTitle>My First Report</htmlTitle>
+	
+    <htmlTitle>jxReport: create HTML Reports</htmlTitle>
 
     <bodyCss>
   	    <cssRule>
   	        <ruleName>width</ruleName>
   	        <ruleValue>90%</ruleValue>
   	    </cssRule>
-  	    <cssRule>
+  	    <cssRule> 
   	        <ruleName>margin</ruleName>
   	        <ruleValue>0 auto</ruleValue>
   	    </cssRule>
@@ -22,40 +22,112 @@
   	<cssScript>
   	    #text1 h1{ margin: 0 auto; }
   	</cssScript>
-    
-  	<div>
-  	    <title>Div Test Title</title>
-   	  	<css>
-	  	    <cssRule>
-	  	        <ruleName>border</ruleName>
-	  	        <ruleValue>1px solid blue</ruleValue>
-	  	    </cssRule>
-	  	    <cssRule>
-	  	        <ruleName>padding</ruleName>
-	  	        <ruleValue>20px</ruleValue>
-	  	    </cssRule>
-		</css>
-			    
-	    <textContent id="text1">
-		  	<css>
+  		
+  	<twoCols>
+  	    <left>
+	        <title>Left Coloumn</title>
+  	        
+	        <css>
 		  	    <cssRule>
 		  	        <ruleName>padding</ruleName>
-		  	        <ruleValue>10px 0px</ruleValue>
+		  	        <ruleValue>20px</ruleValue>
+		  	    </cssRule>
+		  	    <cssRule>
+		  	        <ruleName>width</ruleName>
+		  	        <ruleValue>45%</ruleValue>
 		  	    </cssRule>
 			</css>
-			
-	        <content>
-	            <title>Carpe Diem</title>
-	            <paragraph>Dum loquimur fugerit invida
-					aetas: carpe diem, quam minimum credula postero.</paragraph>
-	        </content>
-			<content>
-	            <title>Acta est fabula</title>
-	            <paragraph>The end of the show</paragraph>
-	        </content>
-	    </textContent>
-  	</div>
-
+	        
+  		    <lineChart>
+		        <title>Line Chart</title>
+				
+		        <showLegend>true</showLegend>
+		
+		        <line>
+		            <lineLabel>First Line</lineLabel>
+		            <lineColor>orange</lineColor>
+		            <lineWidth>5</lineWidth>
+		            <showLine>true</showLine>
+		
+		            <markerOptions>
+		                <style>diamond</style>
+		                <color>black</color>
+		            </markerOptions>
+		            
+		           <points>
+		               <xIndex>counter</xIndex>
+		               <yIndex>0</yIndex>
+		           </points>
+		        </line>
+		
+		        <line>
+		            <lineLabel>Second Line</lineLabel>
+		            <lineWidth>6</lineWidth>
+		            <showLine>true</showLine>
+		            <lineColor>blue</lineColor>
+		
+		            <markerOptions>
+		                <style>square</style>
+		                <color>black</color>
+					</markerOptions>
+		            
+		            <point>
+		                <X>2</X>
+		                <Y>5</Y>                    
+		           </point>
+		           <point>
+		                <X>3</X>
+		                <Y>8</Y>                    
+		           </point>
+		           <point>
+		                <X>1</X>
+		                <Y>4</Y>                    
+		           </point>    
+		        </line>
+		    </lineChart>  	        
+  	    </left>
+  	    
+  	    <right>
+	        <title>jxReport</title>
+	        <css>
+		  	    <cssRule>
+		  	        <ruleName>padding</ruleName>
+		  	        <ruleValue>20px 20px 20px 100px</ruleValue>
+		  	    </cssRule>
+		  	    <cssRule>
+		  	        <ruleName>width</ruleName>
+		  	        <ruleValue>40%</ruleValue>
+		  	    </cssRule>
+			</css>
+				    
+		    <textContent id="text1">
+						  	    
+		        <content>
+		            <paragraph>
+		                This library let you create HTML Report from xml code. The generated output is a standalone html file, containing all it needs to show charts, sortable tables, and text.
+		            </paragraph>
+		            <paragraph>
+		                Have a look at http://code.google.com/p/jxreport/ 
+		            </paragraph>
+		        </content>
+		        <content>
+		            <title>Designer and Coder</title>
+		            <paragraph>
+		                Daniele Parisi
+		            </paragraph>
+		            <paragraph>
+		                neb.inf@gmail.com
+		            </paragraph>
+		            <paragraph>
+		                http://www.danieleparisi.com/
+		            </paragraph>
+		            
+		        </content>
+		    </textContent>
+  	    </right>
+  	</twoCols>
+  	
+  	<!-- 
     <textContent id="text1">
 	  	<css>
 	  	    <cssRule>
@@ -64,17 +136,57 @@
 	  	    </cssRule>
 		</css>
 		
-		<content>
-		    <title>Carpe Diem</title>
-		    <paragraph>Dum loquimur fugerit invida
-					aetas: carpe diem, quam minimum credula postero.</paragraph>
-		</content>
+        <content>
+            <title>Carpe Diem</title>
+            <paragraph>Dum loquimur fugerit invida
+				aetas: carpe diem, quam minimum credula postero.</paragraph>
+        </content>
 		<content>
             <title>Acta est fabula</title>
             <paragraph>The end of the show</paragraph>
         </content>
     </textContent>
+    
+    
+    <lineChart id="chart1">
+        
+        <title>Line Chart Title</title>
+        
+   	  	<css>
+	  	    <cssRule>
+	  	        <ruleName>padding</ruleName>
+	  	        <ruleValue>10px 0px</ruleValue>
+	  	    </cssRule>
+		</css>
 
+   	  	<showLegend>true</showLegend>
+        
+        <line>
+            <lineWidth>5</lineWidth>
+            
+			<point>
+				<X>0</X>
+				<Y>1</Y>
+            </point>
+			
+			<point>
+				<X>1</X>
+				<Y>2</Y>                    
+            </point>
+            <point>
+				<X>2</X>
+				<Y>3</Y>                    
+            </point>
+            <point>
+				<X>4</X>
+				<Y>5</Y>                    
+			</point>
+               
+        </line>
+    </lineChart>
+
+	-->
+	
     <table id="table1">
         <title>My new Table</title>
 
@@ -87,15 +199,23 @@
 		
 		<htmlClass>myClass</htmlClass>
 	    
-        <dataCol>
-            <header>Header1</header>
-            <valueIndex>0</valueIndex>
-        </dataCol>
-
-        <dataCol>
-            <header>Header2</header>
-            <valueIndex>0</valueIndex>
-        </dataCol>
+        <col>
+            <header>Header 1</header>
+            <value>1</value>
+            <value>2</value>
+			<value>3</value>
+			<value>4</value>
+            <value>5</value>
+		</col>
+		
+        <col>
+            <header>Header 2</header>
+            <value>1</value>
+            <value>2</value>
+			<value>3</value>
+			<value>4</value>
+            <value>5</value>
+		</col>
 		
     </table>
     
@@ -116,30 +236,128 @@
         <tick>June</tick>
 		<tick>July</tick>
         
+        <barSeries>
+            <title>Hotel</title>
+            <value>200</value>
+            <value>600</value>
+            <value>550</value>
+        </barSeries>
         
-        <dataSeries>
-            <title>Other</title>
-            <valueIndex>0</valueIndex>
-        </dataSeries>
+        <barSeries>
+            <title>B&amp;B</title>
+            <value>800</value>
+            <value>1000</value>
+            <value>150</value>
+        </barSeries>
+
+        <barSeries>
+            <title>Hostel</title>
+            <value>-200</value>
+            <value>100</value>
+            <value>5</value>
+        </barSeries>
         
     </barChart>	
-    
-    <pieChart id="chart4">
-        <title>Piee</title>
-	  	<css>
-	  	    <cssRule>
-	  	        <ruleName>padding</ruleName>
-	  	        <ruleValue>10px 0px</ruleValue>
-	  	    </cssRule>
-		</css>
+  	
+    <twoCols>
+        <left>
+			<pieChart id="chart4">
+			        <title>Piee</title>
+				  	<css>
+				  	    <cssRule>
+				  	        <ruleName>padding</ruleName>
+				  	        <ruleValue>10px 0px</ruleValue>
+				  	    </cssRule>
+					</css>
+					
+			        <showLegend>true</showLegend>        
+			        
+			        <pieSeries>
+			            <title>Cupcakes</title>
+			            <value>40</value>
+			        </pieSeries>
+			        
+			        <pieSeries>
+			            <title>Apples</title>
+			            <value>7</value>
+			        </pieSeries>
+			
+			        <pieSeries>
+			            <title>Peaches</title>
+			            <value>3</value>
+			        </pieSeries>
+			        
+			        <pieSeries>
+			            <title>Muffins</title>
+			            <value>40</value>
+			        </pieSeries>
+			
+			        <pieSeries>
+			            <title>Bananas</title>
+			            <value>10</value>
+			        </pieSeries>
+			        
+				</pieChart>
+			            
+        </left>
+        
+        <right>
+		    <lineChart id="chart5">
+		        
+		        <title>Line Chart Title</title>
+		        <showLegend>true</showLegend>
 		
-        <showLegend>true</showLegend>        
-        
-	<dataColSeries>
-            <title>Other</title>
-            <xIndex>0</xIndex>
-            <yIndex>0</yIndex>
-        </dataColSeries>
-        
-    </pieChart>
+		        <line>
+		            <lineLabel>First Line</lineLabel>
+		            <lineColor>orange</lineColor>
+		            <lineWidth>5</lineWidth>
+		            <showLine>true</showLine>
+		
+		            <markerOptions>
+		                <style>diamond</style>
+		                <color>black</color>
+		            </markerOptions>
+		            
+		            <point>
+		                <X>1</X>
+		                <Y>2</Y>                    
+		           </point>
+		           <point>
+		                <X>2</X>
+		                <Y>3</Y>                    
+		           </point>
+		           <point>
+		                <X>4</X>
+		                <Y>5</Y>                    
+		           </point>    
+		        </line>
+		
+		        <line>
+		            <lineLabel>Second Line</lineLabel>
+		            <lineWidth>6</lineWidth>
+		            <showLine>true</showLine>
+		            <lineColor>blue</lineColor>
+		
+		            <markerOptions>
+		                <style>square</style>
+		                <color>black</color>
+					</markerOptions>
+		            
+		            <point>
+		                <X>2</X>
+		                <Y>5</Y>                    
+		           </point>
+		           <point>
+		                <X>3</X>
+		                <Y>8</Y>                    
+		           </point>
+		           <point>
+		                <X>1</X>
+		                <Y>4</Y>                    
+		           </point>    
+		        </line>
+		    </lineChart>
+        </right>
+    </twoCols>
+
 </report>

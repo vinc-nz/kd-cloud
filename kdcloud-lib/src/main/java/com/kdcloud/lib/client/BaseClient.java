@@ -149,6 +149,7 @@ public abstract class BaseClient implements Runnable {
 
 		// creates the client resource
 		this.resource = new ClientResource(url);
+		this.resource.setRequestEntityBuffering(true);
 
 		// initialize control variables
 		this.canRun = true;

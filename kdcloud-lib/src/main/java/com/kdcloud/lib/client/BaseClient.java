@@ -48,7 +48,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.restlet.data.ChallengeScheme;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -290,7 +289,7 @@ public abstract class BaseClient implements Runnable {
 			}
 			handleParameter(parameter, choices);
 		} catch (XPathExpressionException e) {
-			throw new IOException(e);
+			throw new IOException(e.getMessage());
 		}
 	}
 
@@ -332,7 +331,7 @@ public abstract class BaseClient implements Runnable {
 		try {
 			executeAction();
 		} catch (ResourceException e) {
-			throw new IOException(e);
+			throw new IOException(e.getMessage());
 		}
 	}
 

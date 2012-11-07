@@ -38,9 +38,6 @@ public class DataTable {
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String name;
 	
-	@Persistent(serialized="true")
-	Object instances;
-	
 	@Persistent
 	@Unowned
 	User owner;
@@ -51,14 +48,6 @@ public class DataTable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Instances getInstances() {
-		return (Instances) instances;
-	}
-
-	public void setInstances(Instances instances) {
-		this.instances = instances;
 	}
 
 	public String getEncodedKey() {
@@ -88,6 +77,11 @@ public class DataTable {
 
 	public User getOwner() {
 		return owner;
+	}
+
+	public Instances getInstances() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

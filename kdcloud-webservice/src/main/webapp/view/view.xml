@@ -5,23 +5,39 @@
     <htmlTitle>jxReport: create HTML Reports</htmlTitle>
 
     <bodyCss>
-  	    <cssRule>
-  	        <ruleName>width</ruleName>
-  	        <ruleValue>90%</ruleValue>
-  	    </cssRule>
   	    <cssRule> 
   	        <ruleName>margin</ruleName>
   	        <ruleValue>0 auto</ruleValue>
-  	    </cssRule>
-  	    <cssRule>
-  	        <ruleName>padding</ruleName>
-  	        <ruleValue>20px</ruleValue>
   	    </cssRule>
 	</bodyCss>
 	
   	<cssScript>
   	    #text1 h1{ margin: 0 auto; }
   	</cssScript>
+  	
+  	<lineChart>
+		        <title>Line Chart</title>
+				
+		        <showLegend>false</showLegend>
+		
+		        <line>
+		            <lineLabel>First Line</lineLabel>
+		            <lineColor>orange</lineColor>
+		            <lineWidth>1</lineWidth>
+		            <showLine>true</showLine>
+		
+		            <markerOptions>
+		                <style>diamond</style>
+		                <color>black</color>
+		            </markerOptions>
+		            
+		           <points>
+		               <xIndex>counter</xIndex>
+		               <yIndex>0</yIndex>
+		           </points>
+		        </line>
+		        
+	</lineChart>
   		
   	<twoCols>
   	    <left>

@@ -28,9 +28,11 @@ import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeLoader;
 import com.kdcloud.server.entity.StoredPlugin;
+import com.kdcloud.server.persistence.InstancesSaver;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
+import com.kdcloud.server.persistence.gae.GAESaver;
+import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
 
 public class GAEContext extends Context {
 	
@@ -44,6 +46,8 @@ public class GAEContext extends Context {
 		final PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
 		
 		attrs.put(PersistenceContextFactory.class.getName(), pcf);
+		
+		attrs.put(InstancesSaver.class.getName(), new GAESaver());
 		
 		
 		NodeLoader loader = new NodeLoader() {

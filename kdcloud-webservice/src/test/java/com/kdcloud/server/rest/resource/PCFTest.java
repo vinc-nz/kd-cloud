@@ -17,7 +17,7 @@
 package com.kdcloud.server.rest.resource;
 
 import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
+import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
 
 public class PCFTest extends PersistenceContextFactoryImpl {
 	

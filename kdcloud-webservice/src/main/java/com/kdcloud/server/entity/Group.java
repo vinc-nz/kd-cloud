@@ -79,14 +79,14 @@ public class Group {
 		this.data = data;
 	}
 	
-	public DataTable addEntry(User user, Instances instances) {
-		DataTable table = new DataTable();
-		table.setOwner(user);
-		table.setName(user.getName());
-		table.setInstances(instances);
-		data.add(table);
-		return table;
-	}
+//	public DataTable addEntry(User user, Instances instances) {
+//		DataTable table = new DataTable();
+//		table.setOwner(user);
+//		table.setName(user.getName());
+//		table.setInstances(instances);
+//		data.add(table);
+//		return table;
+//	}
 
 	public DataSpecification getInputSpecification() {
 		return inputSpecification;

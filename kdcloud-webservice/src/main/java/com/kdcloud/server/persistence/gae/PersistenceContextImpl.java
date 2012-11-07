@@ -14,7 +14,7 @@
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.kdcloud.server.persistence.jdo;
+package com.kdcloud.server.persistence.gae;
 import java.util.Collection;
 
 import javax.jdo.PersistenceManager;

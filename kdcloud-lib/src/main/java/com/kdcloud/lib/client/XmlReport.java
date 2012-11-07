@@ -16,6 +16,9 @@
  */
 package com.kdcloud.lib.client;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -52,12 +55,12 @@ public class XmlReport {
 					if(getTextValue(pointsElement, "xIndex").equals("counter"))
 						xValue.setTextContent(String.valueOf(xCounter++));
 					else
-						xValue.setTextContent(String.valueOf(instance.value(xIndex)));
+						xValue.setTextContent(String.valueOf(instance.value(xIndex)).replace(".0", ""));
 					Element yValue = dom.createElement("Y");
 					if(getTextValue(pointsElement, "yIndex").equals("counter"))
 						yValue.setTextContent(String.valueOf(yCounter++));
 					else
-						yValue.setTextContent(String.valueOf(instance.value(yIndex)));
+						yValue.setTextContent(String.valueOf(instance.value(yIndex)).replace(".0", ""));
 
 					Element pointElement = dom.createElement("point");
 					pointElement.appendChild(xValue);
@@ -170,6 +173,11 @@ public class XmlReport {
 		return textVal;
 	}
 
+	private static String getTextValueAsInt(Element ele, String tagName) {
+		String val = getTextValue(ele, tagName);
+		
+		return val.replace(".0", "");
+	}
 	/**
 	 * Calls getTextValue and returns a int value
 	 */
@@ -184,7 +192,7 @@ public class XmlReport {
 	
 	public static void main(String[] args) throws Exception {
 		CSVLoader loader = new CSVLoader();
-		loader.setSource(XmlReport.class.getClassLoader().getResourceAsStream("data.csv"));
+		loader.setSource(XmlReport.class.getClassLoader().getResourceAsStream("rr.txt"));
 		Instances data = loader.getDataSet();
 //		System.out.println(data.size());
 		InputStream is = XmlReport.class.getClassLoader().getResourceAsStream("view.xml");
@@ -194,6 +202,9 @@ public class XmlReport {
 		    .getImplementation();
 		LSSerializer serializer = domImplLS.createLSSerializer();
 		String str = serializer.writeToString(dom);
+//		BufferedWriter writer = new BufferedWriter(new FileWriter("out.xml"));
+//		writer.write(str);
+//		writer.close();
 		System.out.println(str);
 	}
 

@@ -16,9 +16,6 @@
  */
 package com.kdcloud.lib.client;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilderFactory;

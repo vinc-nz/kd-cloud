@@ -219,7 +219,9 @@ public class QRS extends NodeAdapter {
 		String msg = null;
 		if (input instanceof BufferedInstances) {
 			BufferedInstances candidate = (BufferedInstances) input;
-			if (candidate.getInstances().numAttributes() <= index)
+			if (candidate.getInstances() == null)
+				msg = "no data to work on";
+			else if (candidate.getInstances().numAttributes() <= index)
 				msg = "invalid instances header";
 			else
 				this.input = candidate;

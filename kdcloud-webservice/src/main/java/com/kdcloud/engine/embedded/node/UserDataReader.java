@@ -19,6 +19,8 @@ package com.kdcloud.engine.embedded.node;
 import java.util.HashSet;
 import java.util.Set;
 
+import weka.core.Instances;
+
 import com.kdcloud.engine.embedded.BufferedInstances;
 import com.kdcloud.engine.embedded.NodeAdapter;
 import com.kdcloud.engine.embedded.WorkerConfiguration;
@@ -36,6 +38,7 @@ public class UserDataReader extends NodeAdapter {
 	User user;
 	Group group;
 	DataTable table;
+	PersistenceContext pc;
 	
 	public UserDataReader() {
 		// TODO Auto-generated constructor stub
@@ -52,7 +55,7 @@ public class UserDataReader extends NodeAdapter {
 		String msg = null;
 		String userId = (String) config.get(SOURCE_USER_PARAMETER);
 		String groupId = (String) config.get(SOURCE_GROUP_PARAMETER);
-		PersistenceContext pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
+		pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
 		if (pc == null)
 			msg = "no persistence context in configuration";
 		if (userId != null)
@@ -84,7 +87,8 @@ public class UserDataReader extends NodeAdapter {
 
 	@Override
 	public BufferedInstances getOutput() {
-		return new BufferedInstances(table.getInstances());
+		Instances instances = pc.getInstancesMapper().load(table);
+		return new BufferedInstances(instances);
 	}
 
 }

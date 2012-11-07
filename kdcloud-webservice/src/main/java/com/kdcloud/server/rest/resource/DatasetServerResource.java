@@ -36,6 +36,8 @@ import com.kdcloud.server.entity.Group;
 public class DatasetServerResource extends BasicServerResource<DataTable> implements DatasetResource  {
 	
 	private Group mGroup;
+	private DataTable mTable;
+	private Instances mData;
 
 	public DatasetServerResource() {
 		super();
@@ -49,7 +51,9 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	
 	@Override
 	public Representation getData() {
-		return new InstancesRepresentation(MediaType.TEXT_CSV, read().getInstances());
+		DataTable entity = read();
+		Instances instances = getPersistenceContext().getInstancesMapper().load(entity);
+		return new InstancesRepresentation(MediaType.TEXT_CSV, instances);
 	}
 
 	@Override
@@ -70,10 +74,12 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	public void save(DataTable e) {
 		mGroup.getData().add(e);
 		getPersistenceContext().save(mGroup);
+		getPersistenceContext().getInstancesMapper().save(mData, mTable);
 	}
 
 	@Override
 	public void delete(DataTable e) {
+		getPersistenceContext().getInstancesMapper().clear(mTable);
 		mGroup.getData().remove(e);
 		getPersistenceContext().save(mGroup);
 	}
@@ -91,32 +97,15 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	public void update(DataTable entity, Representation representation) {
 		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
 		try {
-			Instances data = instancesRepresentation.getInstances();
+			mData = instancesRepresentation.getInstances();
+			mTable = entity;
 			DataSpecification inputSpec = (mGroup != null ? mGroup.getInputSpecification() : null);
-			if (inputSpec != null && !inputSpec.matchingSpecification(data))
+			if (inputSpec != null && !inputSpec.matchingSpecification(mData))
 				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-			else
-				update(entity, data);
 		} catch (IOException e) {
 			getLogger().log(Level.INFO, "got an invalid request", e);
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-	}
-
-	private void update(DataTable dataset, Instances newData) {
-		Instances storedData = dataset.getInstances();
-		if (storedData == null) {
-			dataset.setInstances(newData);
-			getLogger().info("created new dataset with size: " + newData.size());
-		}
-		else if (storedData.equalHeaders(newData)) {
-			newData.addAll(storedData);
-			dataset.setInstances(newData);
-			getLogger().info(newData.size() + " instances merged succeffully");
-		} else {
-			throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-		}
-		save(dataset);
 	}
 
 	@Override

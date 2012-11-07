@@ -28,5 +28,6 @@ public interface PersistenceContext {
 	public void save(Object e, String name);
 	public void delete(Object e);
 	public void close();
+	public InstancesMapper getInstancesMapper();
 	
 }

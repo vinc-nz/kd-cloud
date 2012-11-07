@@ -25,8 +25,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import weka.core.Instances;
-
 import com.kdcloud.lib.domain.DataSpecification;
 
 @PersistenceCapable

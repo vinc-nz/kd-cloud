@@ -39,7 +39,7 @@ public class GAESaverTest {
 		CSVLoader loader = new CSVLoader();
 		loader.setSource(getClass().getClassLoader().getResourceAsStream("ecg_small.txt"));
 		Instances input = loader.getDataSet();
-		GAESaver saver = new GAESaver();
+		GAEMapper saver = new GAEMapper();
 		DataTable t = new DataTable();
 		t.setName("test");
 		pcf.get().save(t);

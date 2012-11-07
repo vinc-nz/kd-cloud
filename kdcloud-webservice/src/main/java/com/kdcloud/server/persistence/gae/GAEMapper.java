@@ -17,9 +17,9 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.kdcloud.server.entity.DataTable;
-import com.kdcloud.server.persistence.InstancesSaver;
+import com.kdcloud.server.persistence.InstancesMapper;
 
-public class GAESaver implements InstancesSaver {
+public class GAEMapper implements InstancesMapper {
 	
 	
 	@Override
@@ -36,19 +36,23 @@ public class GAESaver implements InstancesSaver {
 		}
 		datastore.put(entities);
 	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public Instances load(DataTable table) {
+	
+	public Iterator<Entity> query(DataTable table) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Key tableKey = KeyFactory.stringToKey(table.getEncodedKey());
 		PreparedQuery q = datastore.prepare(new Query(tableKey));
 		Iterator<Entity> it = q.asIterator();
 		it.next(); // table
+		return it;
+	}
+
+	@Override
+	public Instances load(DataTable table) {
+		Iterator<Entity> it = query(table);
 		if (!it.hasNext())
 			return null;
 		Entity e = it.next();
-		Instances instances = new Instances(e.getKind(), loadAttributes(e), q.countEntities());
+		Instances instances = new Instances(e.getKind(), loadAttributes(e), 1000);
 		do {
 			loadInstance(instances, e);
 			e = (it.hasNext() ? it.next() : null);
@@ -73,6 +77,15 @@ public class GAESaver implements InstancesSaver {
 			row[i] = (Double) e.getProperty(property);
 		}
 		instances.add(new DenseInstance(1, row));
+	}
+	
+	@Override
+	public void clear(DataTable table) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Iterator<Entity> it = query(table);
+		while (it.hasNext()) {
+			datastore.delete(it.next().getKey());
+		}
 	}
 
 }

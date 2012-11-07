@@ -24,8 +24,6 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.datanucleus.annotations.Unowned;
 
-import weka.core.Instances;
-
 @PersistenceCapable
 public class DataTable {
 
@@ -77,11 +75,6 @@ public class DataTable {
 
 	public User getOwner() {
 		return owner;
-	}
-
-	public Instances getInstances() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

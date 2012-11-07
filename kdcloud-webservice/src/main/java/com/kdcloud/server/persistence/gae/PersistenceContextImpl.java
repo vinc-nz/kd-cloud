@@ -21,6 +21,7 @@ import javax.jdo.PersistenceManager;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.kdcloud.server.persistence.InstancesMapper;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class PersistenceContextImpl implements PersistenceContext {
@@ -87,6 +88,11 @@ public class PersistenceContextImpl implements PersistenceContext {
 	@Override
 	public void close() {
 		pm.close();
+	}
+
+	@Override
+	public InstancesMapper getInstancesMapper() {
+		return new GAEMapper();
 	}
 	
 	

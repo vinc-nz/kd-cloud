@@ -34,6 +34,7 @@ import org.restlet.representation.Representation;
 
 import weka.core.DenseInstance;
 import weka.core.Instances;
+import weka.core.converters.CSVLoader;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -110,8 +111,10 @@ public class ServerResourceTest {
 	}
 
 	@Test
-	public void testWorker() {
-		Instances instances = DataSpecification.newInstances("test", 1);
+	public void testWorker() throws IOException {
+		CSVLoader loader = new CSVLoader();
+		loader.setSource(getClass().getClassLoader().getResourceAsStream("ecg_small.txt"));
+		Instances instances = loader.getDataSet();
 		DatasetServerResource resource = new DatasetServerResource(application, group.getName());
 		resource.uploadData(new InstancesRepresentation(instances));
 		WorkerServerResource workflowResource = new WorkerServerResource(application, "ecg.xml");
@@ -119,12 +122,7 @@ public class ServerResourceTest {
 		form.add(UserDataReader.SOURCE_USER_PARAMETER, USER_ID);
 		form.add(UserDataReader.SOURCE_GROUP_PARAMETER, "test");
 		InputStream is = getClass().getClassLoader().getResourceAsStream("ecg.xml");
-		try {
-			workflowResource.execute(form, is);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
+		workflowResource.execute(form, is);
 	}
 
 

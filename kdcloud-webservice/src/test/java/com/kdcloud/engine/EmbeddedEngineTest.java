@@ -37,7 +37,7 @@ import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.persistence.jdo.PersistenceContextFactoryImpl;
+import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
 
 public class EmbeddedEngineTest {
 

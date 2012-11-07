@@ -26,7 +26,11 @@ public class EngineServerResource extends WorkerServerResource implements
 		try {
 			InputStream workflow = wrapWorkflowServerResource().get().getStream();
 			Instances data = execute(form, workflow);
-			if (data != null && !data.isEmpty()) {
+			if (data == null)
+				getLogger().info("no output");
+			else if (data.isEmpty())
+				getLogger().info("output is empty");
+			else {
 				getLogger().info("sending " + data.size() + " instances");
 				return new InstancesRepresentation(MediaType.TEXT_CSV, data);
 			}

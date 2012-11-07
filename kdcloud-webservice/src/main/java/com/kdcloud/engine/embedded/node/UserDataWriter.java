@@ -24,6 +24,7 @@ import com.kdcloud.engine.embedded.NodeAdapter;
 import com.kdcloud.engine.embedded.WorkerConfiguration;
 import com.kdcloud.engine.embedded.WrongConfigurationException;
 import com.kdcloud.engine.embedded.WrongInputException;
+import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
@@ -89,8 +90,11 @@ public class UserDataWriter extends NodeAdapter {
 
 	@Override
 	public void run() {
-		group.addEntry(user, mState.getInstances());
+		DataTable t = new DataTable();
+		t.setOwner(user);
+		group.getData().add(t);
 		pc.save(group);
+		pc.getInstancesMapper().save(mState.getInstances(), t);
 	}
 
 }

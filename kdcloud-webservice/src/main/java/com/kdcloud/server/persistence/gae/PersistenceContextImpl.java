@@ -14,13 +14,14 @@
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.kdcloud.server.persistence.jdo;
+package com.kdcloud.server.persistence.gae;
 import java.util.Collection;
 
 import javax.jdo.PersistenceManager;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.kdcloud.server.persistence.InstancesMapper;
 import com.kdcloud.server.persistence.PersistenceContext;
 
 public class PersistenceContextImpl implements PersistenceContext {
@@ -87,6 +88,11 @@ public class PersistenceContextImpl implements PersistenceContext {
 	@Override
 	public void close() {
 		pm.close();
+	}
+
+	@Override
+	public InstancesMapper getInstancesMapper() {
+		return new GAEMapper();
 	}
 	
 	

@@ -30,6 +30,7 @@
   <classpathentry kind="var" path="M2_REPO/org/datanucleus/datanucleus-core/3.0.1/datanucleus-core-3.0.1.jar" sourcepath="M2_REPO/org/datanucleus/datanucleus-core/3.0.1/datanucleus-core-3.0.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/datanucleus/datanucleus-api-jdo/3.0.1/datanucleus-api-jdo-3.0.1.jar" sourcepath="M2_REPO/org/datanucleus/datanucleus-api-jdo/3.0.1/datanucleus-api-jdo-3.0.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/appengine/orm/datanucleus-appengine/2.0.0/datanucleus-appengine-2.0.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/googlecode/objectify/objectify/3.1/objectify-3.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2.jar" sourcepath="M2_REPO/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2-sources.jar">
     <attributes>
       <attribute value="jar:file:/home/spax/.m2/repository/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2-javadoc.jar!/" name="javadoc_location"/>
@@ -77,7 +78,6 @@
   <classpathentry kind="var" path="M2_REPO/javassist/javassist/3.12.1.GA/javassist-3.12.1.GA.jar" sourcepath="M2_REPO/javassist/javassist/3.12.1.GA/javassist-3.12.1.GA-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar" sourcepath="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar" sourcepath="M2_REPO/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/google/android/gcm-server/1.0-r3/gcm-server-1.0-r3.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar" sourcepath="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-sources.jar">
     <attributes>
       <attribute value="jar:file:/home/spax/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-javadoc.jar!/" name="javadoc_location"/>

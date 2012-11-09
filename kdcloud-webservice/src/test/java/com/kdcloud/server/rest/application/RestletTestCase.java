@@ -16,34 +16,25 @@
  */
 package com.kdcloud.server.rest.application;
 
-import java.io.IOException;
-
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
-import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
-import org.restlet.ext.xml.DomRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
-import org.restlet.security.MapVerifier;
+import org.restlet.security.User;
+import org.restlet.security.Verifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.lib.rest.api.ModalitiesResource;
 
 public class RestletTestCase {
 
@@ -85,9 +76,15 @@ public class RestletTestCase {
 
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null,
 				ChallengeScheme.HTTP_BASIC, "testRealm");
-		MapVerifier mapVerifier = new MapVerifier();
-		mapVerifier.getLocalSecrets().put("login", "secret".toCharArray());
-		guard.setVerifier(mapVerifier);
+		guard.setVerifier(new Verifier() {
+			
+			@Override
+			public int verify(Request request, Response response) {
+				String id = request.getChallengeResponse().getIdentifier();
+				request.getClientInfo().setUser(new User(id));
+				return Verifier.RESULT_VALID;
+			}
+		});
 		guard.setNext(testApp);
 
 		component.getDefaultHost().attachDefault(guard);
@@ -108,24 +105,9 @@ public class RestletTestCase {
 			Assert.fail();
 		}
 	}
-
-	@Test
-	public void test() {
-		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
-		ChallengeResponse authentication = new ChallengeResponse(scheme,
-				"login", "secret");
-
-		ClientResource cr = new ClientResource(BASE_URI
-				+ ModalitiesResource.URI);
-		cr.setChallengeResponse(authentication);
-		Representation out = cr.get(MediaType.TEXT_XML);
-		try {
-			DomRepresentation rep = new DomRepresentation(out);
-			System.out.println(rep.getText());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+	public static String getServerUrl() {
+		return BASE_URI;
 	}
 
 }

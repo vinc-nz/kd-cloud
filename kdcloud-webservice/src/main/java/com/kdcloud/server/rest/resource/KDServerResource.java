@@ -19,6 +19,7 @@ package com.kdcloud.server.rest.resource;
 import org.restlet.Application;
 import org.restlet.Request;
 import org.restlet.data.LocalReference;
+import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -66,6 +67,14 @@ public abstract class KDServerResource extends ServerResource {
 			return resourceIdentifier;
 		return (String) getRequestAttributes().get("id");
 	}
+	
+	protected String getResourceUri() {
+		return getReference().toString().replace(getHostRef().toString(), "");
+	}
+	
+	protected Representation fetchLocally() {
+		return fetchLocalResource(getResourceUri().substring(1));
+	}
 
 	public Representation fetchLocalResource(String path) {
 		LocalReference ref = new LocalReference(path);
@@ -82,8 +91,14 @@ public abstract class KDServerResource extends ServerResource {
 	@Override
 	public Representation handle() {
 		user = userProvider.getUser(getRequest(), persistenceContext);
-		Representation representation = super.handle();
-		return representation;
+		if (getMethod().equals(Method.GET))
+			try {
+				Representation local = fetchLocally();
+				getLogger().info("found locally");
+				getResponse().setEntity(local);
+				return local;
+			} catch (ResourceException e) {}
+		return super.handle();
 	}
 
 	protected Object inject(Class<?> baseClass) {

@@ -15,7 +15,7 @@ public abstract class BasicServerResource<T> extends KDServerResource {
 	BasicServerResource(Application application, String resourceIdentifier) {
 		super(application, resourceIdentifier);
 	}
-
+	
 	
 	/**
 	 * returns the stored resource identified, or null if it does not exist

@@ -67,10 +67,10 @@ public class AngleController {
 
 
 	//array in input {bx, by, bz, fx, fy, fz}
-		public Integer[] computeAngles (Integer[] raw,
+		public int[] computeAngles (int[] raw,
 				int angleSelected) {
 			if(raw == null | raw.length!=6) return null;
-			Integer[] angles = new Integer[4];
+			int[] angles = new int[4];
 			RawData back = new RawData(raw[0], raw[1], raw[2]);
 			this.back_raw_data = back;
 			RawData fore = new RawData(raw[3], raw[4], raw[5]);

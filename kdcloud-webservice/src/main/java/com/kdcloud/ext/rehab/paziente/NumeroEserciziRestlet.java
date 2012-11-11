@@ -1,7 +1,11 @@
 package com.kdcloud.ext.rehab.paziente;
 
-import org.restlet.data.Form;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.restlet.resource.Post;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -14,15 +18,19 @@ public class NumeroEserciziRestlet extends KDServerResource {
 	public static final String URI = "/rehab/numeroesercizi";
 
 	@Post
-	protected String doPost(Form form) {
+	protected Document doPost(Document doc) {
 
-		String ris = "";
+		String n = "";
 		User user = getUser();
 		String username = user.getName();
 		Paziente paziente = getPazienteByUsername(username);
 		//se è lento, evitare la query
 		
-		String getOrUpdate = form.getFirstValue("getorupdate");
+		
+		Element rootEl = doc.getDocumentElement();
+		String getOrUpdate = XMLUtils.getTextValue(rootEl, "getorupdate");
+		
+		
 		if (getOrUpdate.equals("update")) {
 			paziente.setNumeroEserciziRegistrati(paziente
 					.getNumeroEserciziRegistrati() + 1);
@@ -34,14 +42,21 @@ public class NumeroEserciziRestlet extends KDServerResource {
 			Objectify ofy = ObjectifyService.begin();
 
 			ofy.put(paziente);
-			ris =  paziente.getNumeroEserciziRegistrati()
-					+ "- numero esercizi registrati ";
+			n =  paziente.getNumeroEserciziRegistrati()
+					+ "";
 		} else if (getOrUpdate.equals("get")) {
 			
-			ris =  paziente.getNumeroEserciziRegistrati()
+			n =  paziente.getNumeroEserciziRegistrati()
 					+ "";
 
 		}
+		
+		
+		
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("esercizi", n);
+		Document ris = XMLUtils.createXMLResult("numeroeserciziOutput", map);
 		return ris;
 		
 

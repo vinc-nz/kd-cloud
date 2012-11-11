@@ -24,6 +24,16 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
+import com.kdcloud.ext.rehab.paziente.DeleteAllRestlet;
+import com.kdcloud.ext.rehab.paziente.DownloadEsercizioRestlet;
+import com.kdcloud.ext.rehab.paziente.InsertAngoliRestlet;
+import com.kdcloud.ext.rehab.paziente.InsertDataRestlet;
+import com.kdcloud.ext.rehab.paziente.InsertDualModeSessionRestlet;
+import com.kdcloud.ext.rehab.paziente.InsertEsercizioRestlet;
+import com.kdcloud.ext.rehab.paziente.LoginPazienteRestlet;
+import com.kdcloud.ext.rehab.paziente.LogoutPazienteRestlet;
+import com.kdcloud.ext.rehab.paziente.NumeroEserciziRestlet;
+import com.kdcloud.ext.rehab.paziente.RegistraPazienteRestlet;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
 public class KDApplication extends Application {
@@ -57,6 +67,18 @@ public class KDApplication extends Application {
 				getLogger().info("could not map any uri to the class");
 			}
 		}
+		
+		//rehab tutor paziente restlet
+		router.attach(InsertDataRestlet.URI, InsertDataRestlet.class);
+		router.attach(InsertAngoliRestlet.URI, InsertAngoliRestlet.class);
+		router.attach(DownloadEsercizioRestlet.URI, DownloadEsercizioRestlet.class);		
+		router.attach(DeleteAllRestlet.URI, DeleteAllRestlet.class);
+		router.attach(InsertDualModeSessionRestlet.URI, InsertDualModeSessionRestlet.class);
+		router.attach(InsertEsercizioRestlet.URI, InsertEsercizioRestlet.class);		
+		router.attach(LoginPazienteRestlet.URI, LoginPazienteRestlet.class);
+		router.attach(LogoutPazienteRestlet.URI, LogoutPazienteRestlet.class);
+		router.attach(NumeroEserciziRestlet.URI, NumeroEserciziRestlet.class);
+		router.attach(RegistraPazienteRestlet.URI, RegistraPazienteRestlet.class);
 
 		return router;
 	}

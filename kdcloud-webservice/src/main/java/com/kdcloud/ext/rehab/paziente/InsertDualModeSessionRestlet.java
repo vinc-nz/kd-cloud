@@ -1,9 +1,12 @@
 package com.kdcloud.ext.rehab.paziente;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.restlet.data.Form;
 import org.restlet.resource.Post;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -18,13 +21,14 @@ public class InsertDualModeSessionRestlet extends KDServerResource {
 	public static final String URI = "/rehab/insertdualmodesession";
 
 	@Post
-	protected String doPost(Form form) {
+	protected Document doPost(Document doc) {
 
 		User user = getUser();
 		String username = user.getName();
 		
-		String num = form.getFirstValue("numeroEsercizio");
-		int numeroEsercizio = Integer.parseInt(num);
+		//handle document input 
+		Element rootEl = doc.getDocumentElement();
+		int numeroEsercizio = XMLUtils.getIntValue(rootEl,"esercizio");
 		
 		Date data = new Date();
 
@@ -40,7 +44,11 @@ public class InsertDualModeSessionRestlet extends KDServerResource {
 		dms = new DualModeSession(paz, data, numeroEsercizio);
 		ofy.put(dms);
 		
-		return " dual mode session started ";
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("dualmode", "saved");
+		Document ris = XMLUtils.createXMLResult("insertdualmodesessionOutput", map);
+		return ris;
 		
 		
 

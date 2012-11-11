@@ -13,14 +13,14 @@ public class RawDataPacket{
 	int timestamp;
 	Key<Paziente> paziente;
 	Date data;
-	String raw;
-	String angoli;
+	int[] raw;
+	int[] angoli;
 	int elbowknee;
 	
 	public RawDataPacket(){}
 
 	public RawDataPacket(int timestamp, Key<Paziente> paziente, Date data,
-			String raw, String angoli, int elbowknee) {
+			int[] raw, int[] angoli, int elbowknee) {
 		super();
 		this.timestamp = timestamp;
 		this.paziente = paziente;
@@ -54,19 +54,19 @@ public class RawDataPacket{
 		this.data = data;
 	}
 
-	public String getRaw() {
+	public int[] getRaw() {
 		return raw;
 	}
 
-	public void setRaw(String raw) {
+	public void setRaw(int[] raw) {
 		this.raw = raw;
 	}
 
-	public String getAngoli() {
+	public int[] getAngoli() {
 		return angoli;
 	}
 
-	public void setAngoli(String angoli) {
+	public void setAngoli(int[] angoli) {
 		this.angoli = angoli;
 	}
 

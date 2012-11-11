@@ -13,15 +13,15 @@ public class EsercizioRiferimento{
 	int timestamp;
 	Key<Paziente> paziente;
 	Date data;
-	String raw;
-	String angoli;
+	int[] raw;
+	int[] angoli;
 	int elbowknee;
 	int numero;
 	
 	public EsercizioRiferimento(){}
 
 	public EsercizioRiferimento(int timestamp, Key<Paziente> paziente, Date data,
-			String raw, String angoli, int elbowknee, int numero) {
+			int[] raw, int[] angoli, int elbowknee, int numero) {
 		super();
 		this.timestamp = timestamp;
 		this.paziente = paziente;
@@ -56,19 +56,19 @@ public class EsercizioRiferimento{
 		this.data = data;
 	}
 
-	public String getRaw() {
+	public int[] getRaw() {
 		return raw;
 	}
 
-	public void setRaw(String raw) {
+	public void setRaw(int[] raw) {
 		this.raw = raw;
 	}
 
-	public String getAngoli() {
+	public int[] getAngoli() {
 		return angoli;
 	}
 
-	public void setAngoli(String angoli) {
+	public void setAngoli(int[] angoli) {
 		this.angoli = angoli;
 	}
 

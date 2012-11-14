@@ -3,15 +3,18 @@ package com.kdcloud.ext.rehab.paziente;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
+import org.restlet.resource.ResourceException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -24,9 +27,7 @@ public class RegistraPazienteRestlet extends KDServerResource {
 
 	public static final String URI = "/rehab/registrapaziente";
 
-	// @Post("xml")
-	// DomRepresentation acceptReturnXml(Representation entity) {
-	// accept(entity); return .. }
+
 
 	@Post("xml")
 	public DomRepresentation doPost(DomRepresentation d) {
@@ -123,15 +124,16 @@ public class RegistraPazienteRestlet extends KDServerResource {
 
 			DomRepresentation result = new DomRepresentation(
 					MediaType.TEXT_XML, ris);
+			
 
 			return result;
 
-		} catch (Exception e1) {
+		} catch (Exception ex) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			getLogger().log(Level.SEVERE, ex.toString(), ex);
 			return null;
-
 		}
+		
 
 	}
 

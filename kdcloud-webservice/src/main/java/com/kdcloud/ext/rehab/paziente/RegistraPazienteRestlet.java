@@ -1,8 +1,11 @@
 package com.kdcloud.ext.rehab.paziente;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.restlet.data.MediaType;
+import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.resource.Post;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,10 +20,18 @@ public class RegistraPazienteRestlet extends KDServerResource {
 	public static final String URI = "/rehab/registrapaziente";
 
 	@Post
-	protected Document doPost(Document doc) {
+	protected DomRepresentation doPost(DomRepresentation d) {
 
 		// User user = getUser();
 		// String username = user.getName();
+		
+		Document doc = null;
+		try {
+			doc = d.getDocument();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		// handle document input
 		Element rootEl = doc.getDocumentElement();
@@ -50,7 +61,10 @@ public class RegistraPazienteRestlet extends KDServerResource {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("esito", esito);
 		Document ris = XMLUtils.createXMLResult("registrapazienteOutput", map);
-		return ris;
+		
+		DomRepresentation result = new DomRepresentation(MediaType.TEXT_XML, ris);
+		
+		return result;
 
 	}
 

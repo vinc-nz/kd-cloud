@@ -16,6 +16,10 @@
  */
 package com.kdcloud.server.rest.resource;
 
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 import org.restlet.Application;
 import org.restlet.Request;
 import org.restlet.data.LocalReference;
@@ -40,6 +44,7 @@ public abstract class KDServerResource extends ServerResource {
 	User user;
 
 	public KDServerResource() {
+		
 	}
 
 	KDServerResource(Application application, String resourceIdentifier) {
@@ -56,6 +61,16 @@ public abstract class KDServerResource extends ServerResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
+		
+		//FG
+		CopyOnWriteArraySet<Method> s = new CopyOnWriteArraySet<Method>();
+		s.add(Method.PUT);
+		s.add(Method.POST);
+		s.add(Method.GET);
+		setAllowedMethods(s);
+		
+		
+		
 		userProvider = (UserProvider) inject(UserProvider.class);
 
 		PersistenceContextFactory pcf = (PersistenceContextFactory) inject(PersistenceContextFactory.class);

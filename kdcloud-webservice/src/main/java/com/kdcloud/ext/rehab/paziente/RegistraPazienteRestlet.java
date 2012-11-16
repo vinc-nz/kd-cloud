@@ -28,7 +28,44 @@ public class RegistraPazienteRestlet extends KDServerResource {
 	public static final String URI = "/rehab/registrapaziente";
 	
 	@Post("xml")
-	public DomRepresentation ottieniDoc(DomRepresentation input) {
+	public DomRepresentation  acceptItem(DomRepresentation input) {
+		try {
+			//input
+			Document doc = input.getDocument();
+			Element rootEl = doc.getDocumentElement();
+			String username = XMLUtils.getTextValue(rootEl, "username");
+		
+				
+			
+			
+			//output
+			DomRepresentation representation = new DomRepresentation(
+					MediaType.TEXT_XML);
+
+			// Generate a DOM document representing the list of
+			// items.
+			Document d = representation.getDocument();
+			Element r = d.createElement("roooot");
+			d.appendChild(r);
+
+			Element eltName = d.createElement("nome");
+			eltName.appendChild(d.createTextNode(username));
+			r.appendChild(eltName);
+
+			d.normalizeDocument();
+
+			// Returns the XML representation of this document.
+			return representation;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	
+	@Put("xml")
+	public DomRepresentation metodoput(DomRepresentation input) {
 		try {
 			//input
 			Document doc = input.getDocument();

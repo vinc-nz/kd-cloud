@@ -27,9 +27,10 @@ public class RegistraPazienteRestlet extends KDServerResource {
 
 	public static final String URI = "/rehab/registrapaziente";
 	
-	@Post("xml")
-	public DomRepresentation  acceptItem(DomRepresentation input) {
+	@Post  
+    public Representation acceptItem(Representation entity) {
 		try {
+			DomRepresentation input = new DomRepresentation(entity);
 			//input
 			Document doc = input.getDocument();
 			Element rootEl = doc.getDocumentElement();

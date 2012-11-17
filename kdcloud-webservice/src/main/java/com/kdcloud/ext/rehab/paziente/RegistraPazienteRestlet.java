@@ -16,6 +16,13 @@ import com.kdcloud.server.rest.resource.KDServerResource;
 public class RegistraPazienteRestlet extends KDServerResource {
 
 	public static final String URI = "/rehab/registrapaziente";
+	
+
+
+//	public boolean allowPost() {
+//		 return true;
+//	}
+
 
 	@Put
 	public Representation storeItem(Representation entity) {
@@ -52,7 +59,7 @@ public class RegistraPazienteRestlet extends KDServerResource {
 		return null;
 	}
 
-	@Post
+	@Post("xml:xml")
 	public Representation acceptItem(Representation entity) {
 
 		try {
@@ -88,7 +95,7 @@ public class RegistraPazienteRestlet extends KDServerResource {
 	}
 
 	@Get("xml")
-	public Representation toXml() {
+	public Representation provaGet() {
 		// Generate the right representation according to its media type.
 		try {
 			DomRepresentation representation = new DomRepresentation(
@@ -115,6 +122,13 @@ public class RegistraPazienteRestlet extends KDServerResource {
 		return null;
 	}
 
+	
+	
+	
+	
+	
+	
+	
 	// @Post("xml")
 	// public DomRepresentation doPost(DomRepresentation d) {
 	//

@@ -46,6 +46,9 @@ public abstract class KDServerResource extends ServerResource {
 	public KDServerResource() {
 		
 	}
+	
+
+
 
 	KDServerResource(Application application, String resourceIdentifier) {
 		setApplication(application);
@@ -63,11 +66,11 @@ public abstract class KDServerResource extends ServerResource {
 		super.doInit();
 		
 		//FG
-		CopyOnWriteArraySet<Method> s = new CopyOnWriteArraySet<Method>();
-		s.add(Method.PUT);
-		s.add(Method.POST);
-		s.add(Method.GET);
-		setAllowedMethods(s);
+//		CopyOnWriteArraySet<Method> s = new CopyOnWriteArraySet<Method>();
+//		s.add(Method.PUT);
+//		s.add(Method.POST);
+//		s.add(Method.GET);
+//		setAllowedMethods(s);
 		
 		
 		

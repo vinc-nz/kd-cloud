@@ -13,6 +13,7 @@ public abstract class RehabServerResource extends KDServerResource {
 
 	// il paziente in "sessione"
 	// Paziente paziente
+	Paziente paziente;
 
 	@Override
 	public void beforeHandle() {
@@ -28,9 +29,9 @@ public abstract class RehabServerResource extends KDServerResource {
 		}
 
 		Objectify ofy = ObjectifyService.begin();
-		Paziente paz = ofy.query(Paziente.class).filter("username", username)
+		paziente = ofy.query(Paziente.class).filter("username", username)
 				.get();
-		if (paz == null)
+		if (paziente == null)
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 	}
 

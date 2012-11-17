@@ -60,5 +60,32 @@ public class XMLUtils {
 		return null;
 
 	}
+	
+	public static Document createXMLResult(String rootName, Map<String, String> map, Document d) {
+
+		
+		try {
+			
+			Element r = d.createElement(rootName);
+			d.appendChild(r);
+			
+			for(String elementName: map.keySet()){
+				Element eltName = d.createElement(elementName);
+				eltName.appendChild(d.createTextNode(map.get(elementName)));
+				r.appendChild(eltName);
+			}
+			
+
+			d.normalizeDocument();
+			
+			return d;
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
 
 }

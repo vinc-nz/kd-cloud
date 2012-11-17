@@ -16,10 +16,6 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 import org.restlet.Application;
 import org.restlet.Request;
 import org.restlet.data.LocalReference;
@@ -48,8 +44,6 @@ public abstract class KDServerResource extends ServerResource {
 	}
 	
 
-
-
 	KDServerResource(Application application, String resourceIdentifier) {
 		setApplication(application);
 		Request req = new Request();
@@ -64,16 +58,6 @@ public abstract class KDServerResource extends ServerResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		
-		//FG
-//		CopyOnWriteArraySet<Method> s = new CopyOnWriteArraySet<Method>();
-//		s.add(Method.PUT);
-//		s.add(Method.POST);
-//		s.add(Method.GET);
-//		setAllowedMethods(s);
-		
-		
-		
 		userProvider = (UserProvider) inject(UserProvider.class);
 
 		PersistenceContextFactory pcf = (PersistenceContextFactory) inject(PersistenceContextFactory.class);
@@ -105,10 +89,14 @@ public abstract class KDServerResource extends ServerResource {
 		cr.setChallengeResponse(getChallengeResponse());
 		return cr.get();
 	}
-
-	@Override
-	public Representation handle() {
+	
+	public void beforeHandle() {
 		user = userProvider.getUser(getRequest(), persistenceContext);
+	}
+	
+	@Override
+	protected Representation doHandle() throws ResourceException {
+		beforeHandle();
 		if (getMethod().equals(Method.GET))
 			try {
 				Representation local = fetchLocally();
@@ -116,8 +104,9 @@ public abstract class KDServerResource extends ServerResource {
 				getResponse().setEntity(local);
 				return local;
 			} catch (ResourceException e) {}
-		return super.handle();
+		return super.doHandle();
 	}
+
 
 	protected Object inject(Class<?> baseClass) {
 		return getApplication().getContext().getAttributes()

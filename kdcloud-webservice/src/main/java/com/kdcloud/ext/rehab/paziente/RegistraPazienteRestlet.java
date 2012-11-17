@@ -51,12 +51,12 @@ public class RegistraPazienteRestlet extends KDServerResource {
 			Paziente paz = ofy.query(Paziente.class)
 					.filter("username", username).get();
 			if (paz != null) {
-				esito = "errore";
+				esito = "errore: paziente già registrato";
 			} else {
 
 				Paziente paziente = new Paziente(username, nome, cognome);
 				ofy.put(paziente);
-				esito = "OK";
+				esito = "paziente inserito correttamente " + paziente.getUsername();
 			}
 
 			Map<String, String> map = new HashMap<String, String>();

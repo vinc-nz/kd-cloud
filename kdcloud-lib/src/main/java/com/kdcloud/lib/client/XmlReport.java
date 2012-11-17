@@ -1,34 +1,13 @@
-/**
- * Copyright (C) 2012 Vincenzo Pirrone
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
 package com.kdcloud.lib.client;
 
-import java.io.InputStream;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSSerializer;
 
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.converters.CSVLoader;
 
 public class XmlReport {
 	
@@ -170,11 +149,11 @@ public class XmlReport {
 		return textVal;
 	}
 
-	private static String getTextValueAsInt(Element ele, String tagName) {
-		String val = getTextValue(ele, tagName);
-		
-		return val.replace(".0", "");
-	}
+//	private static String getTextValueAsInt(Element ele, String tagName) {
+//		String val = getTextValue(ele, tagName);
+//		
+//		return val.replace(".0", "");
+//	}
 	/**
 	 * Calls getTextValue and returns a int value
 	 */
@@ -187,22 +166,6 @@ public class XmlReport {
 		}
 	}
 	
-	public static void main(String[] args) throws Exception {
-		CSVLoader loader = new CSVLoader();
-		loader.setSource(XmlReport.class.getClassLoader().getResourceAsStream("rr.txt"));
-		Instances data = loader.getDataSet();
-//		System.out.println(data.size());
-		InputStream is = XmlReport.class.getClassLoader().getResourceAsStream("view.xml");
-		Document dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-		XmlReport.mergeWithData(dom, data);
-		DOMImplementationLS domImplLS = (DOMImplementationLS) dom
-		    .getImplementation();
-		LSSerializer serializer = domImplLS.createLSSerializer();
-		String str = serializer.writeToString(dom);
-//		BufferedWriter writer = new BufferedWriter(new FileWriter("out.xml"));
-//		writer.write(str);
-//		writer.close();
-		System.out.println(str);
-	}
+	
 
 }

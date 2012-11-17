@@ -19,9 +19,9 @@
 		        <title>Tachogram</title>
 				
 		        <showLegend>false</showLegend>
-		        <showMarker>false</showMarker>
 		
 		        <line>
+			        <showMarker>false</showMarker>
 		            <lineLabel>First Line</lineLabel>
 		            <lineColor>blue</lineColor>
 		            <lineWidth>1</lineWidth>

@@ -12,7 +12,6 @@ import com.kdcloud.server.rest.resource.KDServerResource;
 public abstract class RehabServerResource extends KDServerResource {
 
 	// il paziente in "sessione"
-	// Paziente paziente
 	Paziente paziente;
 
 	@Override
@@ -23,6 +22,7 @@ public abstract class RehabServerResource extends KDServerResource {
 		// if (paziente == null)
 		User user = getUser();
 		String username = user.getName();
+		
 		try {
 			ObjectifyService.register(Paziente.class);
 		} catch (Exception e) {

@@ -2,9 +2,9 @@ package com.kdcloud.ext.rehab.paziente;
 
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import org.restlet.data.MediaType;
+import org.restlet.ext.xml.DomRepresentation;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -14,32 +14,41 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.kdcloud.ext.rehab.db.EsercizioRiferimento;
 import com.kdcloud.ext.rehab.db.Paziente;
-import com.kdcloud.server.entity.User;
-import com.kdcloud.server.rest.resource.KDServerResource;
 
-
-public class DownloadEsercizioRestlet extends KDServerResource {
+public class DownloadEsercizioRestlet extends RehabServerResource {
 
 	public static final String URI = "/rehab/downloadesercizio";
 
-	@Post
-	protected Document doPost(Document doc) {
+	@Post("xml")
+	public Representation acceptItem(Representation entity) {
 
-		User user = getUser();
-		String username = user.getName();
+		DomRepresentation result = null;
+		Document d = null;
+		try {
+			String username = paziente.getUsername();
 
-		Element rootEl = doc.getDocumentElement();
-		int esercizio = XMLUtils.getIntValue(rootEl, "esercizio");
+			DomRepresentation input = new DomRepresentation(entity);
+			// input
+			Document doc = input.getDocument();
+			Element rootEl = doc.getDocumentElement();
+			int esercizio = XMLUtils.getIntValue(rootEl, "esercizio");
+			// output
+			result = new DomRepresentation(
+					MediaType.TEXT_XML);
+			d = result.getDocument();
+			d = getEsercizioByPazienteAndNumero(username, esercizio, d);
 
-		
-		Document ris = getEsercizioByPazienteAndNumero(username, esercizio);
+		} catch (Exception e) {
+			// ritorna l'xml di errore col messaggio
+			//result = errore..			
+			result = XMLUtils.createXMLError("errore download esercizio", ""+e.getMessage());
+		}
 
-		return ris;
-
+		return result;
 	}
 
 	private Document getEsercizioByPazienteAndNumero(String username,
-			int esercizio) {
+			int esercizio, Document doc) {
 
 		Key<Paziente> paz = new Key<Paziente>(Paziente.class, username);
 
@@ -51,13 +60,9 @@ public class DownloadEsercizioRestlet extends KDServerResource {
 
 		Objectify ofy = ObjectifyService.begin();
 		List<EsercizioRiferimento> list = ofy.query(EsercizioRiferimento.class)
-				.order("timestamp").filter("numero", esercizio).list();
+				.order("timestamp").filter("paziente", paz).filter("numero", esercizio).list();
 
 		try {
-			DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder;
-			docBuilder = dbfac.newDocumentBuilder();
-			Document doc = docBuilder.newDocument();
 			Element root = doc.createElement("downloadesercizioOutput");
 			root.setAttribute("numero", "" + esercizio);
 			doc.appendChild(root);
@@ -78,7 +83,6 @@ public class DownloadEsercizioRestlet extends KDServerResource {
 				child.setAttribute("backline", "" + angles[1]);
 				child.setAttribute("foreline", "" + angles[2]);
 				child.setAttribute("sideangle", "" + angles[3]);
-				
 
 				root.appendChild(child);
 				return doc;

@@ -92,6 +92,7 @@ public abstract class KDServerResource extends ServerResource {
 	
 	public void beforeHandle() {
 		user = userProvider.getUser(getRequest(), persistenceContext);
+		getLogger().info("logged");
 	}
 	
 	@Override
@@ -108,7 +109,7 @@ public abstract class KDServerResource extends ServerResource {
 				getResponse().setEntity(local);
 				return local;
 			} catch (ResourceException e) {}
-		return super.doHandle();
+		return super.handle();
 	}
 
 

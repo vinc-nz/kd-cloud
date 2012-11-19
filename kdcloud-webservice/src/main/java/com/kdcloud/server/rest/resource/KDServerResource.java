@@ -96,8 +96,12 @@ public abstract class KDServerResource extends ServerResource {
 	}
 	
 	@Override
-	protected Representation doHandle() throws ResourceException {
-		beforeHandle();
+	public Representation handle() {
+		try {
+			beforeHandle();
+		} catch (Throwable t) {
+			doCatch(t);
+		}
 		if (getMethod().equals(Method.GET))
 			try {
 				Representation local = fetchLocally();

@@ -149,8 +149,6 @@ public class InsertDataRestlet extends RehabServerResource {
 			d = XMLUtils.createXMLResult("insertdataOutput", map, d);
 
 		} catch (Exception e) {
-			// ritorna l'xml di errore col messaggio
-			// result = errore..
 			result = XMLUtils.createXMLError("errore insert data", ""
 					+ e.getMessage());
 		}

@@ -88,7 +88,7 @@ public class InsertAngoliRestlet extends RehabServerResource {
 		} catch (Exception e) {
 			// ritorna l'xml di errore col messaggio
 			// result = errore..
-			result = XMLUtils.createXMLError("errore download esercizio", ""
+			result = XMLUtils.createXMLError("errore insert angoli", ""
 					+ e.getMessage());
 		}
 

@@ -17,7 +17,7 @@ import com.kdcloud.ext.rehab.db.Paziente;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class DownloadEsercizioRestlet extends KDServerResource{ //RehabServerResource { //
+public class DownloadEsercizioRestlet extends RehabServerResource { //KDServerResource{ //
 
 	public static final String URI = "/rehab/downloadesercizio";
 
@@ -25,23 +25,10 @@ public class DownloadEsercizioRestlet extends KDServerResource{ //RehabServerRes
 	public Representation acceptItem(Representation entity) {
 
 		
-		String username = "";
-		User user = getUser();
-		if(user != null & user.getName() != null)
-			username = "NIENTE null";
-		else if(user == null)
-			username = "user null";
-		else if(user.getName() == null)
-			username = "only username null";
-		
 		DomRepresentation result = null;
 		Document d = null;
 		try {
-			//String username = paziente.getUsername();
-
-			//String username = "fabrizio.granieri@gmail.com";
-			
-			
+			String username = paziente.getUsername();
 
 			DomRepresentation input = new DomRepresentation(entity);
 			// input

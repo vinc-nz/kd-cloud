@@ -32,7 +32,6 @@ import com.kdcloud.ext.rehab.paziente.InsertDataRestlet;
 import com.kdcloud.ext.rehab.paziente.InsertDualModeSessionRestlet;
 import com.kdcloud.ext.rehab.paziente.InsertEsercizioRestlet;
 import com.kdcloud.ext.rehab.paziente.LoginPazienteRestlet;
-import com.kdcloud.ext.rehab.paziente.LogoutPazienteRestlet;
 import com.kdcloud.ext.rehab.paziente.NumeroEserciziRestlet;
 import com.kdcloud.ext.rehab.paziente.RegistraPazienteRestlet;
 import com.kdcloud.server.rest.resource.KDServerResource;
@@ -77,7 +76,6 @@ public class KDApplication extends Application {
 		router.attach(InsertDualModeSessionRestlet.URI, InsertDualModeSessionRestlet.class);
 		router.attach(InsertEsercizioRestlet.URI, InsertEsercizioRestlet.class);		
 		router.attach(LoginPazienteRestlet.URI, LoginPazienteRestlet.class);
-		router.attach(LogoutPazienteRestlet.URI, LogoutPazienteRestlet.class);
 		router.attach(NumeroEserciziRestlet.URI, NumeroEserciziRestlet.class);
 		router.attach(RegistraPazienteRestlet.URI, RegistraPazienteRestlet.class);
 		router.attach(DownloadDataPacketProvaRestlet.URI, DownloadDataPacketProvaRestlet.class);

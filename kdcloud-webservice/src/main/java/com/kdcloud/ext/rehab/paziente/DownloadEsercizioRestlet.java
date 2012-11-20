@@ -1,6 +1,12 @@
 package com.kdcloud.ext.rehab.paziente;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.restlet.data.MediaType;
 import org.restlet.ext.xml.DomRepresentation;
@@ -14,29 +20,81 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.kdcloud.ext.rehab.db.EsercizioRiferimento;
 import com.kdcloud.ext.rehab.db.Paziente;
+import com.kdcloud.ext.rehab.db.RawDataPacket;
+import com.kdcloud.server.entity.User;
+import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class DownloadEsercizioRestlet extends RehabServerResource { 
+public class DownloadEsercizioRestlet extends  RehabServerResource{// KDServerResource { //
+																	
 
 	public static final String URI = "/rehab/downloadesercizio";
 
 	@Post("xml")
 	public Representation acceptItem(Representation entity) {
 
-		
 		DomRepresentation result = null;
 		Document d = null;
 		try {
-			String username = paziente.getUsername();
+			// String username = paziente.getUsername();
+			User user = getUser();
+			String username = user.getName();
 
 			DomRepresentation input = new DomRepresentation(entity);
 			// input
 			Document doc = input.getDocument();
 			Element rootEl = doc.getDocumentElement();
 			int esercizio = XMLUtils.getIntValue(rootEl, "esercizio");
-			// output
+
+			try {
+				ObjectifyService.register(EsercizioRiferimento.class);
+			} catch (Exception e) {
+			}
+			Objectify ofy = ObjectifyService.begin();
+			Key<Paziente> paz = new Key<Paziente>(Paziente.class, username);
+
+			List<EsercizioRiferimento> l = new ArrayList<EsercizioRiferimento>();
+			l = ofy.query(EsercizioRiferimento.class)
+					.filter("numero", esercizio).list();
+			// .filter("paziente", paz).order("timestamp").
+
+			Collections.sort(l);
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();
-			d = getEsercizioByPazienteAndNumero(username, esercizio, d);
+
+			Element root = d.createElement("downloadesercizioOutput");
+			d.appendChild(root);
+			root.setAttribute("numero", "" + esercizio);
+			for (EsercizioRiferimento es : l) {
+				if (es.getPaziente().equals(paz)) {
+					Element eserc = d.createElement("esercizio");
+					eserc.setAttribute("timestamp", "" + es.getTimestamp());
+					Element rawdata = d.createElement("raw");
+					int[] raw = es.getRaw();
+					rawdata.setAttribute("bx", "" + raw[0]);
+					rawdata.setAttribute("by", "" + raw[1]);
+					rawdata.setAttribute("bz", "" + raw[2]);
+					rawdata.setAttribute("fx", "" + raw[3]);
+					rawdata.setAttribute("fy", "" + raw[4]);
+					rawdata.setAttribute("fz", "" + raw[5]);
+//					rawdata.appendChild(d.createTextNode(Arrays.toString(es
+//							.getRaw())));
+					eserc.appendChild(rawdata);
+					Element angles = d.createElement("angles");
+					int[] angoli = es.getAngoli();
+					angles.setAttribute("elbowknee", "" + angoli[0]);
+					angles.setAttribute("backline", "" + angoli[1]);
+					angles.setAttribute("foreline", "" + angoli[2]);
+					angles.setAttribute("sideangle", "" + angoli[3]);
+//					angles.appendChild(d.createTextNode(Arrays.toString(es
+//							.getAngoli())));
+
+					eserc.appendChild(angles);
+					root.appendChild(eserc);
+				}
+			}
+
+			d.normalizeDocument();
+
 
 		} catch (Exception e) {
 			result = XMLUtils.createXMLError("errore download esercizio", ""
@@ -46,57 +104,5 @@ public class DownloadEsercizioRestlet extends RehabServerResource {
 		return result;
 	}
 
-	private Document getEsercizioByPazienteAndNumero(String username,
-			int esercizio, Document doc) throws Exception {
-
-		Key<Paziente> paz = new Key<Paziente>(Paziente.class, username);
-
-		try {
-			ObjectifyService.register(EsercizioRiferimento.class);
-		} catch (Exception e) {
-
-		}
-
-		Objectify ofy = ObjectifyService.begin();
-		//List<EsercizioRiferimento> list = ofy.query(EsercizioRiferimento.class).list();
-				//.filter("numero", esercizio).filter("paziente", paz)
-		//.order("timestamp")
-		EsercizioRiferimento es = ofy.query(EsercizioRiferimento.class).filter("numero", esercizio)
-				.get();
-		
-		Element root = doc.createElement("downloadesercizioOutput");
-		root.setAttribute("numero", "" + esercizio);
-		root.setAttribute("paziente", "" + username);
-		doc.appendChild(root);
-
-//		if (list != null & !list.isEmpty()) {
-
-			
-
-//			for (EsercizioRiferimento es : list) {
-				int[] raw = es.getRaw();
-				int[] angles = es.getAngoli();
-				Element child = doc.createElement("esercizio");
-
-				child.setAttribute("timestamp", "" + es.getTimestamp());
-				child.setAttribute("raw_bx", "" + raw[0]);
-				child.setAttribute("raw_by", "" + raw[1]);
-				child.setAttribute("raw_bz", "" + raw[2]);
-				child.setAttribute("raw_fx", "" + raw[3]);
-				child.setAttribute("raw_fy", "" + raw[4]);
-				child.setAttribute("raw_fz", "" + raw[5]);
-				child.setAttribute("elbowknee", "" + angles[0]);
-				child.setAttribute("backline", "" + angles[1]);
-				child.setAttribute("foreline", "" + angles[2]);
-				child.setAttribute("sideangle", "" + angles[3]);
-
-				root.appendChild(child);
-
-//			}
-
-//		}
-		return doc;
-
-	}
 
 }

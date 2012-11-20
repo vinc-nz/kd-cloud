@@ -25,6 +25,7 @@ import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
 import com.kdcloud.ext.rehab.paziente.DeleteAllRestlet;
+import com.kdcloud.ext.rehab.paziente.DownloadDataPacketProvaRestlet;
 import com.kdcloud.ext.rehab.paziente.DownloadEsercizioRestlet;
 import com.kdcloud.ext.rehab.paziente.InsertAngoliRestlet;
 import com.kdcloud.ext.rehab.paziente.InsertDataRestlet;
@@ -79,7 +80,8 @@ public class KDApplication extends Application {
 		router.attach(LogoutPazienteRestlet.URI, LogoutPazienteRestlet.class);
 		router.attach(NumeroEserciziRestlet.URI, NumeroEserciziRestlet.class);
 		router.attach(RegistraPazienteRestlet.URI, RegistraPazienteRestlet.class);
-
+		router.attach(DownloadDataPacketProvaRestlet.URI, DownloadDataPacketProvaRestlet.class);
+		
 		return router;
 	}
 

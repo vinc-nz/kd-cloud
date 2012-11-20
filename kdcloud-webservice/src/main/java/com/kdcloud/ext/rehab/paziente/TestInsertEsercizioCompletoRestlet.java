@@ -1,5 +1,6 @@
 package com.kdcloud.ext.rehab.paziente;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -99,11 +100,16 @@ public class TestInsertEsercizioCompletoRestlet extends RehabServerResource {
 			d = result.getDocument();
 			
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("esercizio inserito", "OK");
+			map.put("esercizio_inserito", "OK");
 			d = XMLUtils.createXMLResult("inserteserciziocompletoOutput", map, d);
 
 		} catch (Exception e) {
-			result = XMLUtils.createXMLError("errore insert esercizio completo",
+			try {
+				result = new DomRepresentation(MediaType.TEXT_XML);
+				d = result.getDocument();
+			} catch (IOException e1) {
+			}
+			d = XMLUtils.createXMLError(d, "errore insert esercizio completo",
 					"" + e.getMessage());
 		}
 

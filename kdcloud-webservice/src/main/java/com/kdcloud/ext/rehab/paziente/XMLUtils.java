@@ -90,6 +90,26 @@ public class XMLUtils {
 
 	}
 
+	public static Document createXMLError(Document d, String messaggio,
+			String eccezione) {
+
+		Element r = d.createElement("rehabtutorerror");
+		d.appendChild(r);
+
+		Element eltName = d.createElement("messaggio");
+		eltName.appendChild(d.createTextNode(messaggio));
+		r.appendChild(eltName);
+
+		Element eltName2 = d.createElement("eccezione");
+		eltName2.appendChild(d.createTextNode(eccezione));
+		r.appendChild(eltName2);
+
+		d.normalizeDocument();
+
+		return d;
+
+	}
+
 	public static DomRepresentation createXMLError(String messaggio,
 			String eccezione) {
 
@@ -100,7 +120,7 @@ public class XMLUtils {
 			d = result.getDocument();
 		} catch (IOException e) {
 		}
-		Element r = d.createElement("rehab tutor error");
+		Element r = d.createElement("rehabtutorerror");
 		d.appendChild(r);
 
 		Element eltName = d.createElement("messaggio");

@@ -9,6 +9,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Serialized;
 
 public class EsercizioCompleto {
 
@@ -20,7 +21,9 @@ public class EsercizioCompleto {
 	int elbowknee;
 	Date data;
 	int lenght;
+	@Serialized
 	List<Integer[]> raw;
+	@Serialized
 	List<Integer[]> angoli;
 
 	public String getNome() {
@@ -161,7 +164,7 @@ public class EsercizioCompleto {
 	}
 
 	public Document toXMLDocument(Document d) {
-		Element root = d.createElement("downloadesercizioOutput");
+		Element root = d.createElement("downloadeserciziocompletoOutput");
 		d.appendChild(root);
 		root.setAttribute("nome", "" + nome);
 		root.setAttribute("numero", "" + numero);
@@ -180,6 +183,7 @@ public class EsercizioCompleto {
 			rawdata.setAttribute("fz", "" + raw_sample[5]);
 			root.appendChild(rawdata);
 		}
+		i = 0;
 		for (Integer[] angle_sample : angoli) {
 			Element angle = d.createElement("angles_data");
 			angle.setAttribute("timestamp", "" + i++);

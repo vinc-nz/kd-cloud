@@ -11,12 +11,10 @@ import org.w3c.dom.Element;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Serialized;
 
-public class EsercizioCompleto {
+public class BufferedRaw {
 
 	@Id
 	Long id;
-	String nome;
-	int numero;
 	Key<Paziente> paziente;
 	int elbowknee;
 	Date data;
@@ -25,26 +23,8 @@ public class EsercizioCompleto {
 	List<Integer[]> raw;
 	@Serialized
 	List<Integer[]> angoli;
-	
-	public Long getId() {
-		return id;
-	}
 
-	public String getNome() {
-		return nome;
-	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public int getNumero() {
-		return numero;
-	}
-
-	public void setNumero(int numero) {
-		this.numero = numero;
-	}
 
 	public Key<Paziente> getPaziente() {
 		return paziente;
@@ -94,6 +74,12 @@ public class EsercizioCompleto {
 		this.angoli = angoli;
 	}
 
+
+
+
+
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -101,10 +87,7 @@ public class EsercizioCompleto {
 		result = prime * result + ((angoli == null) ? 0 : angoli.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + elbowknee;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + lenght;
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + numero;
 		result = prime * result
 				+ ((paziente == null) ? 0 : paziente.hashCode());
 		result = prime * result + ((raw == null) ? 0 : raw.hashCode());
@@ -119,7 +102,7 @@ public class EsercizioCompleto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EsercizioCompleto other = (EsercizioCompleto) obj;
+		BufferedRaw other = (BufferedRaw) obj;
 		if (angoli == null) {
 			if (other.angoli != null)
 				return false;
@@ -132,19 +115,7 @@ public class EsercizioCompleto {
 			return false;
 		if (elbowknee != other.elbowknee)
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
 		if (lenght != other.lenght)
-			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		if (numero != other.numero)
 			return false;
 		if (paziente == null) {
 			if (other.paziente != null)
@@ -159,19 +130,9 @@ public class EsercizioCompleto {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "EsercizioCompleto [nome=" + nome + ", numero=" + numero
-				+ ", paziente=" + paziente + ", elbowknee=" + elbowknee
-				+ ", data=" + data + ", lenght=" + lenght + ", raw=" + raw
-				+ ", angoli=" + angoli + "]";
-	}
-
 	public Document toXMLDocument(Document d) {
-		Element root = d.createElement("downloadeserciziocompletoOutput");
+		Element root = d.createElement("downloadbufferedrawOutput");
 		d.appendChild(root);
-		root.setAttribute("nome", "" + nome);
-		root.setAttribute("numero", "" + numero);
 		root.setAttribute("elbowknee", "" + elbowknee);
 		root.setAttribute("data", "" + data.toGMTString());
 		root.setAttribute("lenght", "" + lenght);

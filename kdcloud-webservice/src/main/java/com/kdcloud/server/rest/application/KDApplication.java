@@ -25,6 +25,8 @@ import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
 import com.kdcloud.ext.rehab.paziente.DeleteAllRestlet;
+import com.kdcloud.ext.rehab.paziente.TestCalcolaAngoliOnlyRestlet;
+import com.kdcloud.ext.rehab.paziente.TestCalibrationRestlet;
 import com.kdcloud.ext.rehab.paziente.TestDownloadDataPacketProvaRestlet;
 import com.kdcloud.ext.rehab.paziente.DownloadEsercizioRestlet;
 import com.kdcloud.ext.rehab.paziente.InsertAngoliRestlet;
@@ -35,6 +37,7 @@ import com.kdcloud.ext.rehab.paziente.LoginPazienteRestlet;
 import com.kdcloud.ext.rehab.paziente.NumeroEserciziRestlet;
 import com.kdcloud.ext.rehab.paziente.RegistraPazienteRestlet;
 import com.kdcloud.ext.rehab.paziente.TestDownloadEsercizioCompletoRestlet;
+import com.kdcloud.ext.rehab.paziente.TestInsertBufferedRawRestlet;
 import com.kdcloud.ext.rehab.paziente.TestInsertEsercizioCompletoRestlet;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
@@ -83,6 +86,9 @@ public class KDApplication extends Application {
 		router.attach(TestDownloadDataPacketProvaRestlet.URI, TestDownloadDataPacketProvaRestlet.class);
 		router.attach(TestDownloadEsercizioCompletoRestlet.URI, TestDownloadEsercizioCompletoRestlet.class);
 		router.attach(TestInsertEsercizioCompletoRestlet.URI, TestInsertEsercizioCompletoRestlet.class);
+		router.attach(TestInsertBufferedRawRestlet.URI, TestInsertBufferedRawRestlet.class);
+		router.attach(TestCalcolaAngoliOnlyRestlet.URI, TestCalcolaAngoliOnlyRestlet.class);
+		router.attach(TestCalibrationRestlet.URI, TestCalibrationRestlet.class);
 		
 		return router;
 	}

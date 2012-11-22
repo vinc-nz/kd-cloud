@@ -54,17 +54,21 @@ public class TestDownloadEsercizioCompletoRestlet extends  RehabServerResource{/
 			Objectify ofy = ObjectifyService.begin();
 			Key<Paziente> paz = new Key<Paziente>(Paziente.class, username);
 
-			List<EsercizioCompleto> l = new ArrayList<EsercizioCompleto>();
-			l = ofy.query(EsercizioCompleto.class)
-					.filter("numero", numero).list();
-			EsercizioCompleto esercizio = null;
-
-			for(EsercizioCompleto es: l){
-				if(es.getPaziente().equals(paz) && es.getNome().equals(es.getNome())){
-					esercizio = es;
-					break;
-				}
-			}
+//			List<EsercizioCompleto> l = new ArrayList<EsercizioCompleto>();
+//			l = ofy.query(EsercizioCompleto.class)
+//					.filter("numero", numero).list();
+//			EsercizioCompleto esercizio = null;
+//
+//			for(EsercizioCompleto es: l){
+//				if(es.getPaziente().equals(paz) && nome.equals(es.getNome())){
+//					esercizio = es;
+//					break;
+//				}
+//			}
+			
+			EsercizioCompleto esercizio = ofy.query(EsercizioCompleto.class)
+					.filter("numero", numero).filter("paziente", paz)
+					.filter("nome", nome).get();
 			
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();

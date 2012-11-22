@@ -1,7 +1,9 @@
 package com.kdcloud.ext.rehab.paziente;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.restlet.data.MediaType;
@@ -15,6 +17,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.kdcloud.ext.rehab.db.DualModeSession;
+import com.kdcloud.ext.rehab.db.EsercizioCompleto;
 import com.kdcloud.ext.rehab.db.Paziente;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.resource.KDServerResource;
@@ -35,19 +38,43 @@ public class InsertDualModeSessionRestlet extends RehabServerResource {
 
 			// handle document input
 			Element rootEl = doc.getDocumentElement();
-			int numeroEsercizio = XMLUtils.getIntValue(rootEl, "esercizio");
+			String nome = XMLUtils.getTextValue(rootEl, "nome");
+			int numeroEsercizio = XMLUtils.getIntValue(rootEl, "numero");
 
 			Date data = new Date();
 
 			try {
 				ObjectifyService.register(DualModeSession.class);
+				ObjectifyService.register(EsercizioCompleto.class);
 			} catch (Exception e) {
 			}
 			Objectify ofy = ObjectifyService.begin();
 			DualModeSession dms;
 			Key<Paziente> paz = new Key<Paziente>(Paziente.class, username);
+			
 
-			dms = new DualModeSession(paz, data, numeroEsercizio);
+//			List<EsercizioCompleto> l = new ArrayList<EsercizioCompleto>();
+//			l = ofy.query(EsercizioCompleto.class)
+//					.filter("numero", numeroEsercizio).list();
+//			EsercizioCompleto esercizio = null;
+//
+//			for(EsercizioCompleto es: l){
+//				if(es.getPaziente().equals(paz) && es.getNome().equals(es.getNome())){
+//					esercizio = es;
+//					break;
+//				}
+//			}
+			
+			EsercizioCompleto esercizio = ofy.query(EsercizioCompleto.class)
+					.filter("numero", numeroEsercizio).filter("paziente", paz)
+					.filter("nome", nome).get();
+			
+			Key<EsercizioCompleto> es = new Key<EsercizioCompleto>(EsercizioCompleto.class, esercizio.getId());
+
+			dms = new DualModeSession();
+			dms.setDataInizio(data);
+			dms.setPaziente(paz);
+			dms.setEsercizio(es);
 			ofy.put(dms);
 
 			// output

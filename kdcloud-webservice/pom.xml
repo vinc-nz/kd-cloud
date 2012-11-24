@@ -18,7 +18,7 @@
 <!-- 		<gae.application.id>body-cloud</gae.application.id> -->
 		<gae.application.id>bodycloud-fg</gae.application.id>
 		<gae.application.version>master</gae.application.version>
-		<datanucleus.version>3.0.1</datanucleus.version>
+		<datanucleus.version>3.0.2</datanucleus.version>
 		<jdo.version>3.0</jdo.version>
 		<weka.version>3.7.7-SNAPSHOT</weka.version>
 		<gwt.version>2.4.0</gwt.version>

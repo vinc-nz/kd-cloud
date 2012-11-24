@@ -62,6 +62,7 @@ public class TestInsertEsercizioCompletoRestlet extends RehabServerResource {
 			if (nl != null && nl.getLength() > 0) {
 				for (int i = 0; i < nl.getLength(); i++) {
 					Element el = (Element) nl.item(i);
+					rawData = new Integer[6];
 					rawData[0] = Integer.parseInt(el.getAttribute("bx"));
 					rawData[1] = Integer.parseInt(el.getAttribute("by"));
 					rawData[2] = Integer.parseInt(el.getAttribute("bz"));
@@ -76,6 +77,7 @@ public class TestInsertEsercizioCompletoRestlet extends RehabServerResource {
 			if (nl != null && nl.getLength() > 0) {
 				for (int i = 0; i < nl.getLength(); i++) {
 					Element el = (Element) nl.item(i);
+					anglesData = new Integer[4];
 					anglesData[0] = Integer.parseInt(el
 							.getAttribute("elbowknee"));
 					anglesData[1] = Integer.parseInt(el

@@ -63,7 +63,7 @@ public class LoginRehabUserRestlet extends RehabServerResource {
 				if (n > 0) {
 					List<CompleteExercise> l = new ArrayList<CompleteExercise>();
 					l = ofy.query(CompleteExercise.class)
-							.filter("paziente", us).list();
+							.filter("rehabuser", us).list();
 
 					// for (CompleteExercise es : l) {
 					// map.put("esercizio_" + es.getNumber(),

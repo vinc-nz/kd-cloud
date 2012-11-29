@@ -20,16 +20,14 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.kdcloud.ext.rehab.angles.AngleController;
 import com.kdcloud.ext.rehab.angles.CalibrationController;
-import com.kdcloud.ext.rehab.db.BufferedRaw;
-import com.kdcloud.ext.rehab.db.EsercizioCompleto;
-import com.kdcloud.ext.rehab.db.EsercizioRiferimento;
-import com.kdcloud.ext.rehab.db.Paziente;
+import com.kdcloud.ext.rehab.db.CompleteExercise;
+import com.kdcloud.ext.rehab.db.RehabUser;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class TestInsertBufferedRawRestlet extends RehabServerResource {
+public class InsertCompleteExerciseRestlet extends RehabServerResource {
 
-	public static final String URI = "/rehab/insertbufferedraw";
+	public static final String URI = "/rehab/insertcompleteexercise";
 
 	@Post("xml")
 	public Representation acceptItem(Representation entity) {
@@ -37,24 +35,31 @@ public class TestInsertBufferedRawRestlet extends RehabServerResource {
 		DomRepresentation result = null;
 		Document d = null;
 		try {
-			BufferedRaw bufferedRaw = new BufferedRaw();
-			String username = paziente.getUsername();
+			String username = rehabUser.getUsername();
 			DomRepresentation input = new DomRepresentation(entity);
 			Document doc = input.getDocument();
+
+			CompleteExercise exercise = new CompleteExercise();
+
 			// handle document input
 			Element rootEl = doc.getDocumentElement();
-			bufferedRaw.setElbowknee(Integer.parseInt(rootEl.getAttribute("elbowknee")));			
-			bufferedRaw.setData(new Date());
-			bufferedRaw.setLenght(Integer.parseInt(rootEl.getAttribute("lenght")));
-			
+			exercise.setName(rootEl.getAttribute("name"));
+			exercise
+					.setNumber(Integer.parseInt(rootEl.getAttribute("number")));
+			exercise.setElbowknee(Integer.parseInt(rootEl
+					.getAttribute("elbowknee")));
+			exercise.setInsertDate(new Date());
+			exercise
+					.setLenght(Integer.parseInt(rootEl.getAttribute("lenght")));
+
 			List<Integer[]> rawdataList = new LinkedList<Integer[]>();
 			List<Integer[]> anglesdataList = new LinkedList<Integer[]>();
 			Integer[] rawData = new Integer[6];
 			Integer[] anglesData = new Integer[4];
-			
+
 			NodeList nl = rootEl.getElementsByTagName("raw_data");
 			if (nl != null && nl.getLength() > 0) {
-				for(int i = 0; i < nl.getLength(); i++){
+				for (int i = 0; i < nl.getLength(); i++) {
 					Element el = (Element) nl.item(i);
 					rawData = new Integer[6];
 					rawData[0] = Integer.parseInt(el.getAttribute("bx"));
@@ -65,42 +70,52 @@ public class TestInsertBufferedRawRestlet extends RehabServerResource {
 					rawData[5] = Integer.parseInt(el.getAttribute("fz"));
 					rawdataList.add(rawData);
 				}
-				
+
 			}
 			nl = rootEl.getElementsByTagName("angles_data");
 			if (nl != null && nl.getLength() > 0) {
-				for(int i = 0; i < nl.getLength(); i++){
+				for (int i = 0; i < nl.getLength(); i++) {
 					Element el = (Element) nl.item(i);
 					anglesData = new Integer[4];
-					anglesData[0] = Integer.parseInt(el.getAttribute("elbowknee"));
-					anglesData[1] = Integer.parseInt(el.getAttribute("backline"));
-					anglesData[2] = Integer.parseInt(el.getAttribute("foreline"));
-					anglesData[3] = Integer.parseInt(el.getAttribute("sideangle"));
+					anglesData[0] = Integer.parseInt(el
+							.getAttribute("elbowknee"));
+					anglesData[1] = Integer.parseInt(el
+							.getAttribute("backline"));
+					anglesData[2] = Integer.parseInt(el
+							.getAttribute("foreline"));
+					anglesData[3] = Integer.parseInt(el
+							.getAttribute("sideangle"));
 					anglesdataList.add(anglesData);
 				}
-				
+
 			}
-			
-			bufferedRaw.setRaw(rawdataList);
-			bufferedRaw.setAngoli(anglesdataList);
+
+			exercise.setRaw(rawdataList);
+			exercise.setAngles(anglesdataList);
+
+			rehabUser.setRegisteredExercises(rehabUser
+					.getRegisteredExercises() + 1);
 
 			try {
-				ObjectifyService.register(BufferedRaw.class);
+				ObjectifyService.register(CompleteExercise.class);
+				ObjectifyService.register(RehabUser.class);
 			} catch (Exception e) {
 			}
 			Objectify ofy = ObjectifyService.begin();
-			Key<Paziente> paz = new Key<Paziente>(Paziente.class, username);
-			bufferedRaw.setPaziente(paz);
+			Key<RehabUser> us = new Key<RehabUser>(RehabUser.class, username);
+			exercise.setRehabUser(us);
 
-			ofy.put(bufferedRaw);
+			ofy.put(exercise);
+			ofy.put(rehabUser);
 
 			// output
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();
-			
+
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("buffered_raw_inserito", "OK");
-			d = XMLUtils.createXMLResult("insertbufferedrawOutput", map, d);
+			map.put("exercise_saved", "OK");
+			d = XMLUtils.createXMLResult("insertcompleteexerciseOutput", map,
+					d);
 
 		} catch (Exception e) {
 			try {
@@ -108,14 +123,12 @@ public class TestInsertBufferedRawRestlet extends RehabServerResource {
 				d = result.getDocument();
 			} catch (IOException e1) {
 			}
-			d = XMLUtils.createXMLError(d, "errore insert esercizio completo",
+			d = XMLUtils.createXMLError(d, "insert complete exercise error",
 					"" + e.getMessage());
 		}
 
 		return result;
 
 	}
-
-
 
 }

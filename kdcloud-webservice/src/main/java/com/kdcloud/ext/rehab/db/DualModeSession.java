@@ -10,35 +10,35 @@ public class DualModeSession {
 
 	@Id
 	Long id;
-	Key<Paziente> paziente;
-	Key<EsercizioCompleto> esercizio;
-	Date dataInizio;
+	Key<RehabUser> rehabuser;
+	Key<CompleteExercise> exercise;
+	Date startdate;
 
 	public DualModeSession() {
 	}
 
-	public Key<EsercizioCompleto> getEsercizio() {
-		return esercizio;
+	public Key<CompleteExercise> getExercise() {
+		return exercise;
 	}
 
-	public void setEsercizio(Key<EsercizioCompleto> esercizio) {
-		this.esercizio = esercizio;
+	public void setExercise(Key<CompleteExercise> exercise) {
+		this.exercise = exercise;
 	}
 
-	public void setDataInizio(Date dataInizio) {
-		this.dataInizio = dataInizio;
+	public void setStartDate(Date startDate) {
+		this.startdate = startDate;
 	}
 
-	public Key<Paziente> getPaziente() {
-		return paziente;
+	public Key<RehabUser> getRehabUser() {
+		return rehabuser;
 	}
 
-	public void setPaziente(Key<Paziente> paziente) {
-		this.paziente = paziente;
+	public void setRehabUser(Key<RehabUser> rehabUser) {
+		this.rehabuser = rehabUser;
 	}
 
-	public Date getDataInizio() {
-		return dataInizio;
+	public Date getStartDate() {
+		return startdate;
 	}
 
 	@Override
@@ -46,12 +46,12 @@ public class DualModeSession {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((dataInizio == null) ? 0 : dataInizio.hashCode());
+				+ ((startdate == null) ? 0 : startdate.hashCode());
 		result = prime * result
-				+ ((esercizio == null) ? 0 : esercizio.hashCode());
+				+ ((exercise == null) ? 0 : exercise.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
-				+ ((paziente == null) ? 0 : paziente.hashCode());
+				+ ((rehabuser == null) ? 0 : rehabuser.hashCode());
 		return result;
 	}
 
@@ -64,25 +64,25 @@ public class DualModeSession {
 		if (getClass() != obj.getClass())
 			return false;
 		DualModeSession other = (DualModeSession) obj;
-		if (dataInizio == null) {
-			if (other.dataInizio != null)
+		if (startdate == null) {
+			if (other.startdate != null)
 				return false;
-		} else if (!dataInizio.equals(other.dataInizio))
+		} else if (!startdate.equals(other.startdate))
 			return false;
-		if (esercizio == null) {
-			if (other.esercizio != null)
+		if (exercise == null) {
+			if (other.exercise != null)
 				return false;
-		} else if (!esercizio.equals(other.esercizio))
+		} else if (!exercise.equals(other.exercise))
 			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (paziente == null) {
-			if (other.paziente != null)
+		if (rehabuser == null) {
+			if (other.rehabuser != null)
 				return false;
-		} else if (!paziente.equals(other.paziente))
+		} else if (!rehabuser.equals(other.rehabuser))
 			return false;
 		return true;
 	}

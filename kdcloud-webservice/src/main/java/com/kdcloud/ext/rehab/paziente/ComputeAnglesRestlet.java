@@ -15,14 +15,15 @@ import org.w3c.dom.NodeList;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.kdcloud.ext.rehab.db.Paziente;
-import com.kdcloud.ext.rehab.db.RawDataPacket;
+import com.kdcloud.ext.rehab.angles.AngleController;
+import com.kdcloud.ext.rehab.angles.CalibrationController;
+import com.kdcloud.ext.rehab.db.RehabUser;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class InsertAngoliRestlet extends RehabServerResource {
+public class ComputeAnglesRestlet extends RehabServerResource {
 
-	public static final String URI = "/rehab/insertangoli";
+	public static final String URI = "/rehab/computeangles";
 
 	@Post("xml")
 	public Representation acceptItem(Representation entity) {
@@ -30,15 +31,14 @@ public class InsertAngoliRestlet extends RehabServerResource {
 		DomRepresentation result = null;
 		Document d = null;
 		try {
-			String username = paziente.getUsername();
+			String username = rehabUser.getUsername();
 			DomRepresentation input = new DomRepresentation(entity);
 			Document doc = input.getDocument();
 
-			// handle input document
+			// handle document input
 			Element rootEl = doc.getDocumentElement();
 			int timestamp = XMLUtils.getIntValue(rootEl, "timestamp");
 			int elbowknee = XMLUtils.getIntValue(rootEl, "elbowknee");
-			int storeRawData = XMLUtils.getIntValue(rootEl, "storeraw");
 			int[] rawData = new int[6];
 			NodeList nl = rootEl.getElementsByTagName("raw");
 			if (nl != null && nl.getLength() > 0) {
@@ -51,48 +51,38 @@ public class InsertAngoliRestlet extends RehabServerResource {
 				rawData[4] = XMLUtils.getIntValue(el, "fy");
 				rawData[5] = XMLUtils.getIntValue(el, "fz");
 			}
-			int[] angoli = new int[4];
-			nl = rootEl.getElementsByTagName("angles");
-			if (nl != null && nl.getLength() > 0) {
-				Element el = (Element) nl.item(0);
-				angoli[0] = XMLUtils.getIntValue(el, "elbowkneeangle");
-				angoli[1] = XMLUtils.getIntValue(el, "backline");
-				angoli[2] = XMLUtils.getIntValue(el, "foreline");
-				angoli[3] = XMLUtils.getIntValue(el, "sideangle");
-			}
+			
+			CalibrationController.F_MIN = rehabUser.getF_MIN();
+			CalibrationController.F_MAX = rehabUser.getF_MAX();
+			CalibrationController.F_ZERO = rehabUser.getF_ZERO();
+			CalibrationController.B_MIN = rehabUser.getB_MIN();
+			CalibrationController.B_MAX = rehabUser.getB_MAX();
+			CalibrationController.B_ZERO = rehabUser.getB_ZERO();
 
-			Date data = new Date();
+			// calcolo angoli
+			AngleController controller = new AngleController();
+			int[] angoli = controller.computeAngles(rawData, elbowknee);
 
-			try {
-				ObjectifyService.register(RawDataPacket.class);
-			} catch (Exception e) {
-			}
-			Objectify ofy = ObjectifyService.begin();
-			RawDataPacket r;
-			Key<Paziente> paz = new Key<Paziente>(Paziente.class, username);
-			if (storeRawData == 0)// non salvare i raw data
-				r = new RawDataPacket(timestamp, paz, data, null, angoli,
-						elbowknee);
-			else
-				r = new RawDataPacket(timestamp, paz, data, rawData, angoli,
-						elbowknee);
-			ofy.put(r);
 
 			// output
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();
+
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("timestamp_pubblicato", "" + timestamp);
-			d = XMLUtils.createXMLResult("insertangoliOutput", map, d);
+			map.put("timestamp", "" + timestamp);
+			map.put("elbowknee", "" + angoli[0]);
+			map.put("backline", "" + angoli[1]);
+			map.put("foreline", "" + angoli[2]);
+			map.put("sideangle", "" + angoli[3]);
+			d = XMLUtils.createXMLResult("computeanglesOutput", map, d);
 
 		} catch (Exception e) {
-			// ritorna l'xml di errore col messaggio
-			// result = errore..
-			result = XMLUtils.createXMLError("errore insert angoli", ""
+			result = XMLUtils.createXMLError("compute angles error", ""
 					+ e.getMessage());
 		}
 
 		return result;
+
 	}
 
 }

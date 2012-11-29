@@ -1,4 +1,3 @@
-//fabrix
 package com.kdcloud.ext.rehab.db;
 
 import java.util.Date;
@@ -12,27 +11,47 @@ import org.w3c.dom.Element;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Serialized;
 
-public class BufferedRaw {
+public class CompleteExercise {
 
 	@Id
 	Long id;
-	Key<Paziente> paziente;
+	String name;
+	int number;
+	Key<RehabUser> rehabuser;
 	int elbowknee;
-	Date data;
+	Date insertdate;
 	int lenght;
 	@Serialized
 	List<Integer[]> raw;
 	@Serialized
-	List<Integer[]> angoli;
-
-
-
-	public Key<Paziente> getPaziente() {
-		return paziente;
+	List<Integer[]> angles;
+	
+	public Long getId() {
+		return id;
 	}
 
-	public void setPaziente(Key<Paziente> paziente) {
-		this.paziente = paziente;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public Key<RehabUser> getRehabUser() {
+		return rehabuser;
+	}
+
+	public void setRehabUser(Key<RehabUser> rehabUser) {
+		this.rehabuser = rehabUser;
 	}
 
 	public int getElbowknee() {
@@ -43,12 +62,12 @@ public class BufferedRaw {
 		this.elbowknee = elbowknee;
 	}
 
-	public Date getData() {
-		return data;
+	public Date getInsertDate() {
+		return insertdate;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setInsertDate(Date insertDate) {
+		this.insertdate = insertDate;
 	}
 
 	public int getLenght() {
@@ -67,30 +86,27 @@ public class BufferedRaw {
 		this.raw = raw;
 	}
 
-	public List<Integer[]> getAngoli() {
-		return angoli;
+	public List<Integer[]> getAngles() {
+		return angles;
 	}
 
-	public void setAngoli(List<Integer[]> angoli) {
-		this.angoli = angoli;
+	public void setAngles(List<Integer[]> angles) {
+		this.angles = angles;
 	}
 
-
-
-
-
-	
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((angoli == null) ? 0 : angoli.hashCode());
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((angles == null) ? 0 : angles.hashCode());
+		result = prime * result + ((insertdate == null) ? 0 : insertdate.hashCode());
 		result = prime * result + elbowknee;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + lenght;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + number;
 		result = prime * result
-				+ ((paziente == null) ? 0 : paziente.hashCode());
+				+ ((rehabuser == null) ? 0 : rehabuser.hashCode());
 		result = prime * result + ((raw == null) ? 0 : raw.hashCode());
 		return result;
 	}
@@ -103,25 +119,37 @@ public class BufferedRaw {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BufferedRaw other = (BufferedRaw) obj;
-		if (angoli == null) {
-			if (other.angoli != null)
+		CompleteExercise other = (CompleteExercise) obj;
+		if (angles == null) {
+			if (other.angles != null)
 				return false;
-		} else if (!angoli.equals(other.angoli))
+		} else if (!angles.equals(other.angles))
 			return false;
-		if (data == null) {
-			if (other.data != null)
+		if (insertdate == null) {
+			if (other.insertdate != null)
 				return false;
-		} else if (!data.equals(other.data))
+		} else if (!insertdate.equals(other.insertdate))
 			return false;
 		if (elbowknee != other.elbowknee)
 			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (lenght != other.lenght)
 			return false;
-		if (paziente == null) {
-			if (other.paziente != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!paziente.equals(other.paziente))
+		} else if (!name.equals(other.name))
+			return false;
+		if (number != other.number)
+			return false;
+		if (rehabuser == null) {
+			if (other.rehabuser != null)
+				return false;
+		} else if (!rehabuser.equals(other.rehabuser))
 			return false;
 		if (raw == null) {
 			if (other.raw != null)
@@ -131,11 +159,23 @@ public class BufferedRaw {
 		return true;
 	}
 
+
+
+	@Override
+	public String toString() {
+		return "CompleteExercise [id=" + id + ", name=" + name + ", number="
+				+ number + ", rehabuser=" + rehabuser + ", elbowknee="
+				+ elbowknee + ", insertdate=" + insertdate + ", lenght="
+				+ lenght + ", raw=" + raw + ", angles=" + angles + "]";
+	}
+
 	public Document toXMLDocument(Document d) {
-		Element root = d.createElement("downloadbufferedrawOutput");
+		Element root = d.createElement("downloadcompleteexerciseOutput");
 		d.appendChild(root);
+		root.setAttribute("name", "" + name);
+		root.setAttribute("number", "" + number);
 		root.setAttribute("elbowknee", "" + elbowknee);
-		root.setAttribute("data", "" + data.toGMTString());
+		root.setAttribute("date", "" + insertdate.toGMTString());
 		root.setAttribute("lenght", "" + lenght);
 		int i = 0;
 		for (Integer[] raw_sample : raw) {
@@ -150,7 +190,7 @@ public class BufferedRaw {
 			root.appendChild(rawdata);
 		}
 		i = 0;
-		for (Integer[] angle_sample : angoli) {
+		for (Integer[] angle_sample : angles) {
 			Element angle = d.createElement("angles_data");
 			angle.setAttribute("timestamp", "" + i++);
 			angle.setAttribute("elbowknee", "" + angle_sample[0]);

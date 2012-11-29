@@ -18,17 +18,15 @@ import org.w3c.dom.Element;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.kdcloud.ext.rehab.db.EsercizioCompleto;
-import com.kdcloud.ext.rehab.db.EsercizioRiferimento;
-import com.kdcloud.ext.rehab.db.Paziente;
-import com.kdcloud.ext.rehab.db.RawDataPacket;
+import com.kdcloud.ext.rehab.db.CompleteExercise;
+import com.kdcloud.ext.rehab.db.RehabUser;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class TestDownloadEsercizioCompletoRestlet extends  RehabServerResource{// KDServerResource { //
+public class DownloadCompleteExerciseRestlet extends  RehabServerResource{// KDServerResource { //
 																	
 
-	public static final String URI = "/rehab/downloadeserciziocompleto";
+	public static final String URI = "/rehab/downloadcompleteexercise";
 
 	@Post("xml")
 	public Representation acceptItem(Representation entity) {
@@ -44,15 +42,15 @@ public class TestDownloadEsercizioCompletoRestlet extends  RehabServerResource{/
 			// input
 			Document doc = input.getDocument();
 			Element rootEl = doc.getDocumentElement();
-			int numero = XMLUtils.getIntValue(rootEl, "numero");
-			String nome = XMLUtils.getTextValue(rootEl, "nome");
+			int num = XMLUtils.getIntValue(rootEl, "number");
+			String name = XMLUtils.getTextValue(rootEl, "name");
 
 			try {
-				ObjectifyService.register(EsercizioCompleto.class);
+				ObjectifyService.register(CompleteExercise.class);
 			} catch (Exception e) {
 			}
 			Objectify ofy = ObjectifyService.begin();
-			Key<Paziente> paz = new Key<Paziente>(Paziente.class, username);
+			Key<RehabUser> us = new Key<RehabUser>(RehabUser.class, username);
 
 //			List<EsercizioCompleto> l = new ArrayList<EsercizioCompleto>();
 //			l = ofy.query(EsercizioCompleto.class)
@@ -66,22 +64,22 @@ public class TestDownloadEsercizioCompletoRestlet extends  RehabServerResource{/
 //				}
 //			}
 			
-			EsercizioCompleto esercizio = ofy.query(EsercizioCompleto.class)
-					.filter("numero", numero).filter("paziente", paz)
-					.filter("nome", nome).get();
+			CompleteExercise exercise = ofy.query(CompleteExercise.class)
+					.filter("number", num).filter("rehabuser", us)
+					.filter("name", name).get();
 			
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();
 			
-			if(esercizio != null)
-				d = esercizio.toXMLDocument(d);
+			if(exercise != null)
+				d = exercise.toXMLDocument(d);
 			else
-				result = XMLUtils.createXMLError("errore download esercizio completo", "nessun esercizio trovato");
+				result = XMLUtils.createXMLError("download complete exercise error", "no exercises found");
 			
 
 
 		} catch (Exception e) {
-			result = XMLUtils.createXMLError("errore download esercizio", ""
+			result = XMLUtils.createXMLError("download complete exercise error", ""
 					+ e.getMessage());
 		}
 

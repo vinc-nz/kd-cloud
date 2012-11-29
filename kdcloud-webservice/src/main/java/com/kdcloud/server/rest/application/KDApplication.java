@@ -24,21 +24,14 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
-import com.kdcloud.ext.rehab.paziente.DeleteAllRestlet;
-import com.kdcloud.ext.rehab.paziente.TestCalcolaAngoliOnlyRestlet;
-import com.kdcloud.ext.rehab.paziente.TestCalibrationRestlet;
-import com.kdcloud.ext.rehab.paziente.TestDownloadDataPacketProvaRestlet;
-import com.kdcloud.ext.rehab.paziente.DownloadEsercizioRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertAngoliRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertDataRestlet;
+import com.kdcloud.ext.rehab.paziente.CalibrationRestlet;
+import com.kdcloud.ext.rehab.paziente.ComputeAnglesRestlet;
+import com.kdcloud.ext.rehab.paziente.DownloadCompleteExerciseRestlet;
+import com.kdcloud.ext.rehab.paziente.InsertBufferedDataRestlet;
+import com.kdcloud.ext.rehab.paziente.InsertCompleteExerciseRestlet;
 import com.kdcloud.ext.rehab.paziente.InsertDualModeSessionRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertEsercizioRestlet;
-import com.kdcloud.ext.rehab.paziente.LoginPazienteRestlet;
-import com.kdcloud.ext.rehab.paziente.NumeroEserciziRestlet;
-import com.kdcloud.ext.rehab.paziente.RegistraPazienteRestlet;
-import com.kdcloud.ext.rehab.paziente.TestDownloadEsercizioCompletoRestlet;
-import com.kdcloud.ext.rehab.paziente.TestInsertBufferedRawRestlet;
-import com.kdcloud.ext.rehab.paziente.TestInsertEsercizioCompletoRestlet;
+import com.kdcloud.ext.rehab.paziente.LoginRehabUserRestlet;
+import com.kdcloud.ext.rehab.paziente.RehabUserRegistrationRestlet;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
 public class KDApplication extends Application {
@@ -74,21 +67,29 @@ public class KDApplication extends Application {
 		}
 		
 		//rehab tutor paziente restlet
-		router.attach(InsertDataRestlet.URI, InsertDataRestlet.class);
-		router.attach(InsertAngoliRestlet.URI, InsertAngoliRestlet.class);
-		router.attach(DownloadEsercizioRestlet.URI, DownloadEsercizioRestlet.class);		
-		router.attach(DeleteAllRestlet.URI, DeleteAllRestlet.class);
+		router.attach(LoginRehabUserRestlet.URI, LoginRehabUserRestlet.class);
+		router.attach(DownloadCompleteExerciseRestlet.URI, DownloadCompleteExerciseRestlet.class);
+		router.attach(CalibrationRestlet.URI, CalibrationRestlet.class);
+		router.attach(ComputeAnglesRestlet.URI, ComputeAnglesRestlet.class);
 		router.attach(InsertDualModeSessionRestlet.URI, InsertDualModeSessionRestlet.class);
-		router.attach(InsertEsercizioRestlet.URI, InsertEsercizioRestlet.class);		
-		router.attach(LoginPazienteRestlet.URI, LoginPazienteRestlet.class);
-		router.attach(NumeroEserciziRestlet.URI, NumeroEserciziRestlet.class);
-		router.attach(RegistraPazienteRestlet.URI, RegistraPazienteRestlet.class);
-		router.attach(TestDownloadDataPacketProvaRestlet.URI, TestDownloadDataPacketProvaRestlet.class);
-		router.attach(TestDownloadEsercizioCompletoRestlet.URI, TestDownloadEsercizioCompletoRestlet.class);
-		router.attach(TestInsertEsercizioCompletoRestlet.URI, TestInsertEsercizioCompletoRestlet.class);
-		router.attach(TestInsertBufferedRawRestlet.URI, TestInsertBufferedRawRestlet.class);
-		router.attach(TestCalcolaAngoliOnlyRestlet.URI, TestCalcolaAngoliOnlyRestlet.class);
-		router.attach(TestCalibrationRestlet.URI, TestCalibrationRestlet.class);
+		router.attach(InsertBufferedDataRestlet.URI, InsertBufferedDataRestlet.class);
+		router.attach(InsertCompleteExerciseRestlet.URI, InsertCompleteExerciseRestlet.class);
+		
+		router.attach(RehabUserRegistrationRestlet.URI, RehabUserRegistrationRestlet.class);
+		
+		//OLD
+//		router.attach(InsertDataRestlet.URI, InsertDataRestlet.class);
+//		router.attach(InsertAnglesRestlet.URI, InsertAnglesRestlet.class);
+//		router.attach(DownloadExerciseRestlet.URI, DownloadExerciseRestlet.class);		
+//		router.attach(DeleteAllRestlet.URI, DeleteAllRestlet.class);		
+//		router.attach(InsertExerciseRestlet.URI, InsertExerciseRestlet.class);			
+//		router.attach(NumberOfExercisesRestlet.URI, NumberOfExercisesRestlet.class);
+		
+		
+		
+		
+		
+		
 		
 		return router;
 	}

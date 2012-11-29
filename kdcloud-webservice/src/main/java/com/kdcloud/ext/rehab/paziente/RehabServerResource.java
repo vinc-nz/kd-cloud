@@ -5,14 +5,14 @@ import org.restlet.resource.ResourceException;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.kdcloud.ext.rehab.db.Paziente;
+import com.kdcloud.ext.rehab.db.RehabUser;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
 public abstract class RehabServerResource extends KDServerResource {
 
 	// il paziente in "sessione"
-	Paziente paziente;
+	RehabUser rehabUser;
 
 	@Override
 	public void beforeHandle() {
@@ -20,18 +20,18 @@ public abstract class RehabServerResource extends KDServerResource {
 		// importante
 		// paziente = <cerca paziente>
 		// if (paziente == null)
-		User user = getUser();
-		String username = user.getName();
+		User u = getUser();
+		String username = u.getName();
 		
 		try {
-			ObjectifyService.register(Paziente.class);
+			ObjectifyService.register(RehabUser.class);
 		} catch (Exception e) {
 		}
 
 		Objectify ofy = ObjectifyService.begin();
-		paziente = ofy.query(Paziente.class).filter("username", username)
+		rehabUser = ofy.query(RehabUser.class).filter("username", username)
 				.get();
-		if (paziente == null)
+		if (rehabUser == null)
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 	}
 

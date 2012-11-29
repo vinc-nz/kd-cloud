@@ -15,62 +15,64 @@ import org.w3c.dom.Element;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.kdcloud.ext.rehab.db.Paziente;
+import com.kdcloud.ext.rehab.db.RehabUser;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class RegistraPazienteRestlet extends KDServerResource {
+public class RehabUserRegistrationRestlet extends KDServerResource {
 
-	public static final String URI = "/rehab/registrapaziente";
+	public static final String URI = "/rehab/rehabuserregistration";
 
 	@Post("xml")
 	public Representation acceptItem(Representation entity) {
 
+		DomRepresentation representation = null;
 		try {
 			DomRepresentation input = new DomRepresentation(entity);
 			// input
 			Document doc = input.getDocument();
 			Element rootEl = doc.getDocumentElement();
 			String username = XMLUtils.getTextValue(rootEl, "username");
-			String nome = XMLUtils.getTextValue(rootEl, "nome");
-			String cognome = XMLUtils.getTextValue(rootEl, "cognome");
+			String firstName = XMLUtils.getTextValue(rootEl, "firstname");
+			String lastName = XMLUtils.getTextValue(rootEl, "lastname");
 
 			// output
-			DomRepresentation representation = new DomRepresentation(
+			representation = new DomRepresentation(
 					MediaType.TEXT_XML);
 
 			// Generate a DOM document representing the list of
 			// items.
 
-			String esito = "";
+			String res = "";
 			try {
-				ObjectifyService.register(Paziente.class);
+				ObjectifyService.register(RehabUser.class);
 			} catch (Exception e) {
 			}
 
 			Objectify ofy = ObjectifyService.begin();
-			Paziente paz = ofy.query(Paziente.class)
+			RehabUser us = ofy.query(RehabUser.class)
 					.filter("username", username).get();
-			if (paz != null) {
-				esito = "errore: paziente già registrato";
+			if (us != null) {
+				res = "user already registered";
 			} else {
 
-				Paziente paziente = new Paziente(username, nome, cognome);
+				RehabUser paziente = new RehabUser(username, firstName, lastName);
 				ofy.put(paziente);
-				esito = "paziente inserito correttamente " + paziente.getUsername();
+				res = "OK" + paziente.getUsername();
 			}
 
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("esito", esito);
+			map.put("result", res);
 			Document d = representation.getDocument();
-			d = XMLUtils.createXMLResult("registrapazienteOutput", map, d);
+			d = XMLUtils.createXMLResult("rehabuserregistrationOutput", map, d);
 
-			// Returns the XML representation of this document.
-			return representation;
+			
 		} catch (IOException e) {
-			e.printStackTrace();
+			representation = XMLUtils.createXMLError("login error",
+					"" + e.getMessage());
 		}
 
-		return null;
+		// Returns the XML representation of this document.
+		return representation;
 	}
 
 //	@Get("xml")

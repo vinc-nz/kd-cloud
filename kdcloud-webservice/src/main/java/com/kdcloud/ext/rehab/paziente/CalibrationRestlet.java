@@ -14,9 +14,9 @@ import org.w3c.dom.NodeList;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.kdcloud.ext.rehab.angles.CalibrationController;
-import com.kdcloud.ext.rehab.db.Paziente;
+import com.kdcloud.ext.rehab.db.RehabUser;
 
-public class TestCalibrationRestlet extends RehabServerResource {
+public class CalibrationRestlet extends RehabServerResource {
 
 	public static final String URI = "/rehab/calibration";
 
@@ -26,7 +26,7 @@ public class TestCalibrationRestlet extends RehabServerResource {
 		DomRepresentation result = null;
 		Document d = null;
 		try {
-			String username = paziente.getUsername();
+			String username = rehabUser.getUsername();
 			DomRepresentation input = new DomRepresentation(entity);
 			Document doc = input.getDocument();
 
@@ -97,32 +97,32 @@ public class TestCalibrationRestlet extends RehabServerResource {
 			CalibrationController.B_MAX = B_MAX;
 			CalibrationController.B_ZERO = B_ZERO;
 			
-			paziente.setF_MIN(F_MIN);
-			paziente.setF_MAX(F_MAX);
-			paziente.setF_ZERO(F_ZERO);
-			paziente.setB_MIN(B_MIN);
-			paziente.setB_MAX(B_MAX);
-			paziente.setB_ZERO(B_ZERO);
+			rehabUser.setF_MIN(F_MIN);
+			rehabUser.setF_MAX(F_MAX);
+			rehabUser.setF_ZERO(F_ZERO);
+			rehabUser.setB_MIN(B_MIN);
+			rehabUser.setB_MAX(B_MAX);
+			rehabUser.setB_ZERO(B_ZERO);
 
 			
 			// salvataggio nel DB
 			try {
-				ObjectifyService.register(Paziente.class);
+				ObjectifyService.register(RehabUser.class);
 			} catch (Exception e) {
 			}
 			Objectify ofy = ObjectifyService.begin();
-			ofy.put(paziente);
+			ofy.put(rehabUser);
 
 			// output
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();
 
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("calibrazione", "ok");
-			d = XMLUtils.createXMLResult("calibrazioneOutput", map, d);
+			map.put("calibration", "OK");
+			d = XMLUtils.createXMLResult("calibrationOutput", map, d);
 
 		} catch (Exception e) {
-			result = XMLUtils.createXMLError("errore calibrazione", ""
+			result = XMLUtils.createXMLError("calibration error", ""
 					+ e.getMessage());
 		}
 

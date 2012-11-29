@@ -90,18 +90,18 @@ public class XMLUtils {
 
 	}
 
-	public static Document createXMLError(Document d, String messaggio,
-			String eccezione) {
+	public static Document createXMLError(Document d, String message,
+			String exception) {
 
 		Element r = d.createElement("rehabtutorerror");
 		d.appendChild(r);
 
-		Element eltName = d.createElement("messaggio");
-		eltName.appendChild(d.createTextNode(messaggio));
+		Element eltName = d.createElement("message");
+		eltName.appendChild(d.createTextNode(message));
 		r.appendChild(eltName);
 
-		Element eltName2 = d.createElement("eccezione");
-		eltName2.appendChild(d.createTextNode(eccezione));
+		Element eltName2 = d.createElement("exception");
+		eltName2.appendChild(d.createTextNode(exception));
 		r.appendChild(eltName2);
 
 		d.normalizeDocument();
@@ -110,8 +110,8 @@ public class XMLUtils {
 
 	}
 
-	public static DomRepresentation createXMLError(String messaggio,
-			String eccezione) {
+	public static DomRepresentation createXMLError(String message,
+			String exception) {
 
 		DomRepresentation result = null;
 		Document d = null;
@@ -123,12 +123,12 @@ public class XMLUtils {
 		Element r = d.createElement("rehabtutorerror");
 		d.appendChild(r);
 
-		Element eltName = d.createElement("messaggio");
-		eltName.appendChild(d.createTextNode(messaggio));
+		Element eltName = d.createElement("message");
+		eltName.appendChild(d.createTextNode(message));
 		r.appendChild(eltName);
 
-		Element eltName2 = d.createElement("eccezione");
-		eltName2.appendChild(d.createTextNode(eccezione));
+		Element eltName2 = d.createElement("exception");
+		eltName2.appendChild(d.createTextNode(exception));
 		r.appendChild(eltName2);
 
 		d.normalizeDocument();

@@ -87,19 +87,29 @@ public abstract class KDServerResource extends ServerResource {
 		cr.setChallengeResponse(getChallengeResponse());
 		return cr.get();
 	}
-
+	
+	public void beforeHandle() {
+		user = userProvider.getUser(getRequest(), persistenceContext);
+	}
+	
 	@Override
 	public Representation handle() {
-		user = userProvider.getUser(getRequest(), persistenceContext);
+		try {
+			beforeHandle();
+		} catch (Throwable t) {
+			doCatch(t);
+		}
 		if (getMethod().equals(Method.GET))
 			try {
 				Representation local = fetchLocally();
 				getLogger().info("found locally");
 				getResponse().setEntity(local);
 				return local;
-			} catch (ResourceException e) {}
+			} catch (ResourceException e) {
+			}
 		return super.handle();
 	}
+
 
 	protected Object inject(Class<?> baseClass) {
 		return getApplication().getContext().getAttributes()

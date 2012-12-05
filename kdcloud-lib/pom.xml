@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.kdcloud</groupId>
 	<artifactId>kdcloud-lib</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
-	    <restlet.version>2.2-SNAPSHOT</restlet.version>
+		<restlet.version>2.2-SNAPSHOT</restlet.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -14,39 +15,39 @@
 		</repository>
 	</repositories>
 	<dependencies>
-	    
-	    <dependency>
-	        <groupId>org.restlet.jse</groupId>
-	        <artifactId>org.restlet</artifactId>
-	        <version>${restlet.version}</version>
-	        <scope>provided</scope>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.restlet.jse</groupId>
-	        <artifactId>org.restlet.ext.httpclient</artifactId>
-	        <version>${restlet.version}</version>
-	        <scope>provided</scope>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.restlet.jse</groupId>
-	        <artifactId>org.restlet.ext.xml</artifactId>
-	        <version>${restlet.version}</version>
-	        <scope>provided</scope>
-	    </dependency>
-	    <dependency>
-          <groupId>com.kdcloud</groupId>
-          <artifactId>weka-stripped</artifactId>
-          <version>3.7.7-SNAPSHOT</version>
-      	</dependency>
-      
-	    <!-- Test scope -->
+
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet</artifactId>
+			<version>${restlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.httpclient</artifactId>
+			<version>${restlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.xml</artifactId>
+			<version>${restlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.kdcloud</groupId>
+			<artifactId>weka-stripped</artifactId>
+			<version>3.7.7-SNAPSHOT</version>
+		</dependency>
+
+		<!-- Test scope -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.5</version>
 			<scope>test</scope>
 		</dependency>
-	    
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -70,25 +71,25 @@
 					</execution>
 				</executions>
 			</plugin>
-<!-- 			<plugin> -->
-<!-- 			    <groupId>org.codehaus.mojo</groupId> -->
-<!-- 			    <artifactId>jaxb2-maven-plugin</artifactId> -->
-<!-- 			    <version>1.3.1</version> -->
-<!-- 			    <executions> -->
-<!-- 			        <execution> -->
-<!-- 			            <goals> -->
-<!-- 			                <goal>schemagen</goal> -->
-<!-- 			            </goals> -->
-<!-- 			            <phase>generate-resources</phase> -->
-<!-- 			            <configuration> -->
-<!-- 			                <includes> -->
-<!-- 			                    <include>com/kdcloud/lib/domain/*.java</include> -->
-<!-- 			                </includes> -->
-<!-- 			                <outputDirectory>${project.build.directory}/schemas</outputDirectory> -->
-<!-- 			            </configuration> -->
-<!-- 			        </execution> -->
-<!-- 			    </executions> -->
-<!-- 			</plugin> -->
+			<!-- <plugin> -->
+			<!-- <groupId>org.codehaus.mojo</groupId> -->
+			<!-- <artifactId>jaxb2-maven-plugin</artifactId> -->
+			<!-- <version>1.3.1</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <goals> -->
+			<!-- <goal>schemagen</goal> -->
+			<!-- </goals> -->
+			<!-- <phase>generate-resources</phase> -->
+			<!-- <configuration> -->
+			<!-- <includes> -->
+			<!-- <include>com/kdcloud/lib/domain/*.java</include> -->
+			<!-- </includes> -->
+			<!-- <outputDirectory>${project.build.directory}/schemas</outputDirectory> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
 		</plugins>
 	</build>
 </project>

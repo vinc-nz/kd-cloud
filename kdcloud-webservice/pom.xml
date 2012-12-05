@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.kdcloud</groupId>
 	<artifactId>kdcloud-webservice</artifactId>
-	<version>0.0.1</version>
+	<version>0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>kdcloud-webservice</name>
-  
-  <!-- Specify hard-coded project properties here -->
+
+	<!-- Specify hard-coded project properties here -->
 	<properties>
 		<gae.version>1.7.0</gae.version>
 		<restlet.version>2.2-SNAPSHOT</restlet.version>
@@ -21,7 +22,7 @@
 		<weka.version>3.7.7-SNAPSHOT</weka.version>
 		<gwt.version>2.4.0</gwt.version>
 	</properties>
-  
+
 	<repositories>
 		<repository>
 			<id>maven-restlet</id>
@@ -31,144 +32,144 @@
 	</repositories>
 
 	<dependencies>
-	    
-	    <dependency>
-	        <groupId>com.kdcloud</groupId>
-	        <artifactId>kdcloud-lib</artifactId>
-	        <version>0.0.1-SNAPSHOT</version>
-	    </dependency>
-	    
-	    <dependency>
-	        <groupId>com.kdcloud</groupId>
-	        <artifactId>kdcloud-engine</artifactId>
-	        <version>0.0.1-SNAPSHOT</version>
-	    </dependency>
-	    
-	    <dependency>
-	        <groupId>com.kdcloud</groupId>
-	        <artifactId>weka-stripped</artifactId>
-	        <version>${weka.version}</version>
-	    </dependency>
-	    
-	    
-	    <!-- Google App Engine API -->
-	    <dependency>
-	      <groupId>com.google.appengine</groupId>
-	      <artifactId>appengine-api-1.0-sdk</artifactId>
-	      <version>${gae.version}</version>
-	    </dependency>
-	
-	    <!-- Google App Engine Dependencies -->
-	    <dependency>
-	      <groupId>org.apache.geronimo.specs</groupId>
-	      <artifactId>geronimo-jta_1.1_spec</artifactId>
-	      <version>1.1.1</version>
-	      <scope>runtime</scope>
-	    </dependency>
-	
-	    <dependency>
-	      <groupId>org.apache.geronimo.specs</groupId>
-	      <artifactId>geronimo-jpa_3.0_spec</artifactId>
-	      <version>1.1.1</version>
-	    </dependency>
-	
-	    <dependency>
-	      <groupId>javax.jdo</groupId>
-	      <artifactId>jdo-api</artifactId>
-	      <version>${jdo.version}</version>
-	    </dependency>
-	
-	    <dependency>
-	      <groupId>org.datanucleus</groupId>
-	      <artifactId>datanucleus-core</artifactId>
-	      <version>${datanucleus.version}</version>
-	      <scope>runtime</scope>
-	    </dependency>
-	    
-	    <dependency>
-	      <groupId>org.datanucleus</groupId>
-	      <artifactId>datanucleus-api-jdo</artifactId>
-	      <version>${datanucleus.version}</version>
-	    </dependency>
-	
-	    <dependency>
-	      <groupId>com.google.appengine.orm</groupId>
-	      <artifactId>datanucleus-appengine</artifactId>
-	      <version>2.0.0</version>
-	      <exclusions>
-	          <exclusion>
-	              <groupId>org.datanucleus</groupId>
-	              <artifactId>datanucleus-enhancer</artifactId>
-	          </exclusion>
-	      </exclusions>
-	    </dependency>
-	
+
+		<dependency>
+			<groupId>com.kdcloud</groupId>
+			<artifactId>kdcloud-lib</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.kdcloud</groupId>
+			<artifactId>kdcloud-engine</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.kdcloud</groupId>
+			<artifactId>weka-stripped</artifactId>
+			<version>${weka.version}</version>
+		</dependency>
+
+
+		<!-- Google App Engine API -->
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>${gae.version}</version>
+		</dependency>
+
+		<!-- Google App Engine Dependencies -->
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jta_1.1_spec</artifactId>
+			<version>1.1.1</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jpa_3.0_spec</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.jdo</groupId>
+			<artifactId>jdo-api</artifactId>
+			<version>${jdo.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-core</artifactId>
+			<version>${datanucleus.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-api-jdo</artifactId>
+			<version>${datanucleus.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.appengine.orm</groupId>
+			<artifactId>datanucleus-appengine</artifactId>
+			<version>2.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.datanucleus</groupId>
+					<artifactId>datanucleus-enhancer</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
 			<version>1.1</version>
 		</dependency>
 
-<!-- 			J2EE Servlet API -->
+		<!-- J2EE Servlet API -->
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
 			<artifactId>geronimo-servlet_2.5_spec</artifactId>
 			<version>1.2</version>
 			<scope>provided</scope>
 		</dependency>
-		
-<!-- 		restlet dependencies -->
+
+		<!-- restlet dependencies -->
 		<dependency>
-	      <groupId>org.restlet.gae</groupId>
-	      <artifactId>org.restlet.ext.servlet</artifactId>
-	      <version>${restlet.version}</version>
-	    </dependency>
-	    
-	    <dependency>
-	      <groupId>org.restlet.gae</groupId>
-	      <artifactId>org.restlet.ext.oauth</artifactId>
-	      <version>${restlet.version}</version>
-	    </dependency>
-	    
-	    <dependency>
-	      <groupId>org.restlet.gae</groupId>
-	      <artifactId>org.restlet.ext.net</artifactId>
-	      <version>${restlet.version}</version>
-	    </dependency>
-	    
-	     <dependency>
-	      <groupId>org.restlet.gae</groupId>
-	      <artifactId>org.restlet.ext.jaxb</artifactId>
-	      <version>${restlet.version}</version>
-	    </dependency>
-	    
-	    <dependency>
-	      <groupId>org.restlet.gae</groupId>
-	      <artifactId>org.restlet.ext.gwt</artifactId>
-	      <version>${restlet.version}</version>
-	    </dependency>
-	    
-<!-- 	    other dep -->
-	    <dependency>
+			<groupId>org.restlet.gae</groupId>
+			<artifactId>org.restlet.ext.servlet</artifactId>
+			<version>${restlet.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.restlet.gae</groupId>
+			<artifactId>org.restlet.ext.oauth</artifactId>
+			<version>${restlet.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.restlet.gae</groupId>
+			<artifactId>org.restlet.ext.net</artifactId>
+			<version>${restlet.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.restlet.gae</groupId>
+			<artifactId>org.restlet.ext.jaxb</artifactId>
+			<version>${restlet.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.restlet.gae</groupId>
+			<artifactId>org.restlet.ext.gwt</artifactId>
+			<version>${restlet.version}</version>
+		</dependency>
+
+		<!-- other dep -->
+		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		
-	    <dependency>
-	         <groupId>org.reflections</groupId>
-	         <artifactId>reflections</artifactId>
-	         <version>0.9.8</version>
-     	</dependency>
-     	
-<!-- 	    gmc server by local repo -->
-<!-- 		<dependency> -->
-<!-- 	      <groupId>com.google.android</groupId> -->
-<!-- 	      <artifactId>gcm-server</artifactId> -->
-<!-- 	      <version>1.0-r3</version> -->
-<!-- 	      <type>jar</type> -->
-<!-- 		</dependency> -->
-		
+
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.8</version>
+		</dependency>
+
+		<!-- gmc server by local repo -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.google.android</groupId> -->
+		<!-- <artifactId>gcm-server</artifactId> -->
+		<!-- <version>1.0-r3</version> -->
+		<!-- <type>jar</type> -->
+		<!-- </dependency> -->
+
 		<!-- These dependencies are here just for enabling logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -189,18 +190,15 @@
 			<version>4.5</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet.ext.simple</artifactId>
 			<version>${restlet.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<!--
-			GAE libraries for local testing as described here:
-			http://code.google.com/appengine/docs/java/howto/unittesting.html
-		-->
+
+		<!-- GAE libraries for local testing as described here: http://code.google.com/appengine/docs/java/howto/unittesting.html -->
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-api-labs</artifactId>
@@ -221,16 +219,14 @@
 			<version>${gae.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
-	    
+
 		<plugins>
-			<!--
-				This plug-in "enhances" your domain model objects (i.e. makes them
-				persistent for datanucleus)
-			-->
+			<!-- This plug-in "enhances" your domain model objects (i.e. makes them 
+				persistent for datanucleus) -->
 			<plugin>
 				<groupId>org.datanucleus</groupId>
 				<artifactId>maven-datanucleus-plugin</artifactId>
@@ -242,9 +238,9 @@
 				<executions>
 					<execution>
 						<phase>process-classes</phase>
-							<goals>
-								<goal>enhance</goal>
-							</goals>
+						<goals>
+							<goal>enhance</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -267,22 +263,17 @@
 				</configuration>
 			</plugin>
 
-			<!--
-				The actual maven-gae-plugin. Type "mvn gae:run" to run project, "mvn
-				gae:deploy" to upload to GAE.
-			-->
+			<!-- The actual maven-gae-plugin. Type "mvn gae:run" to run project, "mvn 
+				gae:deploy" to upload to GAE. -->
 			<plugin>
 				<groupId>net.kindleit</groupId>
 				<artifactId>maven-gae-plugin</artifactId>
 				<version>0.9.4</version>
 			</plugin>
-			
-			
 
-			<!--
-				Upload application to the appspot automatically, during
-				release:perform
-			-->
+
+
+			<!-- Upload application to the appspot automatically, during release:perform -->
 			<plugin>
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
@@ -300,25 +291,9 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			
-			<!-- Maven GWT plugin -->
-<!-- 			<plugin> -->
-<!-- 				<groupId>org.codehaus.mojo</groupId> -->
-<!-- 				<artifactId>gwt-maven-plugin</artifactId> -->
-<!-- 				<version>${gwt.version}</version> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<goals> -->
-<!-- 							<goal>compile</goal> -->
-<!-- 							<goal>generateAsync</goal> -->
-<!-- 							<goal>test</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 			</plugin> -->
-			
+
 		</plugins>
-		
+
 	</build>
 
 </project>

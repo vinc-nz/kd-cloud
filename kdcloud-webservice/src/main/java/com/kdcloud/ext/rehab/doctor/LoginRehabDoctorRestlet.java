@@ -62,7 +62,7 @@ public class LoginRehabDoctorRestlet extends RehabDoctorServerResource {
 				root.setAttribute("lastname", rehabDoctor.getLastName());
 
 				List<RehabUser> l = new ArrayList<RehabUser>();
-				l = ofy.query(RehabUser.class).filter("doctor", doctor).order("-date")//data decrescente
+				l = ofy.query(RehabUser.class).filter("doctor", doctor)//.order("-date")//data decrescente
 						.list();
 
 				Element eltName4 = d.createElement("rehab_users_list");

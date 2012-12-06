@@ -1,6 +1,7 @@
 package com.kdcloud.ext.rehab.db;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Id;
 
@@ -23,6 +24,7 @@ public class RehabUser implements Serializable{
 	private int registeredexercises = 0;
 	
 	private Key<RehabDoctor> doctor;
+	private Date registrationDate;
 	
 	public RehabUser() {}
 	
@@ -70,6 +72,17 @@ public class RehabUser implements Serializable{
 	}
 	
 	
+	
+	
+	
+
+	public Date getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
+	}
 
 	public int[] getF_MIN() {
 		return F_MIN;

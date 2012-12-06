@@ -24,14 +24,21 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
-import com.kdcloud.ext.rehab.paziente.CalibrationRestlet;
-import com.kdcloud.ext.rehab.paziente.ComputeAnglesRestlet;
-import com.kdcloud.ext.rehab.paziente.DownloadCompleteExerciseRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertBufferedDataRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertCompleteExerciseRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertDualModeSessionRestlet;
-import com.kdcloud.ext.rehab.paziente.LoginRehabUserRestlet;
-import com.kdcloud.ext.rehab.paziente.RehabUserRegistrationRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserCompleteExerciseRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserDualModeSessionsRestlet;
+import com.kdcloud.ext.rehab.doctor.GetUserExercisesListRestlet;
+import com.kdcloud.ext.rehab.doctor.LoginRehabDoctorRestlet;
+import com.kdcloud.ext.rehab.doctor.RehabDoctorRegistrationRestlet;
+import com.kdcloud.ext.rehab.doctor.RehabTestGetRestlet;
+import com.kdcloud.ext.rehab.doctor.RehabUserRegistrationRestlet;
+import com.kdcloud.ext.rehab.user.CalibrationRestlet;
+import com.kdcloud.ext.rehab.user.ComputeAnglesRestlet;
+import com.kdcloud.ext.rehab.user.DownloadCompleteExerciseRestlet;
+import com.kdcloud.ext.rehab.user.InsertBufferedDataRestlet;
+import com.kdcloud.ext.rehab.user.InsertCompleteExerciseRestlet;
+import com.kdcloud.ext.rehab.user.InsertDualModeSessionRestlet;
+import com.kdcloud.ext.rehab.user.LoginRehabUserRestlet;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
 public class KDApplication extends Application {
@@ -76,16 +83,17 @@ public class KDApplication extends Application {
 		router.attach(InsertCompleteExerciseRestlet.URI, InsertCompleteExerciseRestlet.class);
 		
 		router.attach(RehabUserRegistrationRestlet.URI, RehabUserRegistrationRestlet.class);
-		
-		//OLD
-//		router.attach(InsertDataRestlet.URI, InsertDataRestlet.class);
-//		router.attach(InsertAnglesRestlet.URI, InsertAnglesRestlet.class);
-//		router.attach(DownloadExerciseRestlet.URI, DownloadExerciseRestlet.class);		
-//		router.attach(DeleteAllRestlet.URI, DeleteAllRestlet.class);		
-//		router.attach(InsertExerciseRestlet.URI, InsertExerciseRestlet.class);			
-//		router.attach(NumberOfExercisesRestlet.URI, NumberOfExercisesRestlet.class);
+		router.attach(RehabDoctorRegistrationRestlet.URI, RehabDoctorRegistrationRestlet.class);
+		router.attach(LoginRehabDoctorRestlet.URI, LoginRehabDoctorRestlet.class);
+		router.attach(GetUserExercisesListRestlet.URI, GetUserExercisesListRestlet.class);
+		router.attach(DownloadUserCompleteExerciseRestlet.URI, DownloadUserCompleteExerciseRestlet.class);
+		router.attach(DownloadUserDualModeSessionsRestlet.URI, DownloadUserDualModeSessionsRestlet.class);
+		router.attach(DownloadUserBufferedDataRestlet.URI, DownloadUserBufferedDataRestlet.class);
 		
 		
+		router.attach(RehabTestGetRestlet.URI, RehabTestGetRestlet.class);
+		
+
 		
 		
 		

@@ -1,6 +1,7 @@
-package com.kdcloud.ext.rehab.paziente;
+package com.kdcloud.ext.rehab.doctor;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,14 +14,17 @@ import org.restlet.resource.Put;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.kdcloud.ext.rehab.db.RehabDoctor;
 import com.kdcloud.ext.rehab.db.RehabUser;
+import com.kdcloud.ext.rehab.user.XMLUtils;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class RehabUserRegistrationRestlet extends KDServerResource {
+public class RehabUserRegistrationRestlet extends RehabDoctorServerResource{//KDServerResource {
 
-	public static final String URI = "/rehab/rehabuserregistration";
+	public static final String URI = "/rehabdoctor/rehabuserregistration";
 
 	@Post("xml")
 	public Representation acceptItem(Representation entity) {
@@ -55,9 +59,12 @@ public class RehabUserRegistrationRestlet extends KDServerResource {
 				res = "user already registered";
 			} else {
 
-				RehabUser paziente = new RehabUser(username, firstName, lastName);
-				ofy.put(paziente);
-				res = "OK" + paziente.getUsername();
+				Key<RehabDoctor> doctor = new Key<RehabDoctor>(RehabDoctor.class, rehabDoctor.getUsername());
+				RehabUser rehabUser = new RehabUser(username, firstName, lastName);
+				rehabUser.setDoctor(doctor);
+				rehabUser.setRegistrationDate(new Date());
+				ofy.put(rehabUser);
+				res = "OK" + rehabUser.getUsername();
 			}
 
 			Map<String, String> map = new HashMap<String, String>();
@@ -67,7 +74,7 @@ public class RehabUserRegistrationRestlet extends KDServerResource {
 
 			
 		} catch (IOException e) {
-			representation = XMLUtils.createXMLError("login error",
+			representation = XMLUtils.createXMLError("user registration error",
 					"" + e.getMessage());
 		}
 

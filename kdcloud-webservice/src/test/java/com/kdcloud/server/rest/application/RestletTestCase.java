@@ -16,25 +16,32 @@
  */
 package com.kdcloud.server.rest.application;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.internal.runners.statements.ExpectException;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
-import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Form;
+import org.restlet.data.LocalReference;
 import org.restlet.data.Protocol;
+import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 import org.restlet.routing.Router;
-import org.restlet.security.ChallengeAuthenticator;
-import org.restlet.security.User;
-import org.restlet.security.Verifier;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.kdcloud.server.entity.User;
+import com.kdcloud.server.persistence.PersistenceContext;
 
 public class RestletTestCase {
 
@@ -45,6 +52,15 @@ public class RestletTestCase {
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
 			new LocalDatastoreServiceTestConfig());
 	
+	UserProvider userProvider = new UserProvider() {
+		
+		@Override
+		public User getUser(Request request,
+				PersistenceContext pc) {
+			return new User("test");
+		}
+	};
+	
 	Application testApp = new Application() {
 
 		@Override
@@ -52,6 +68,7 @@ public class RestletTestCase {
 			Router router = new Router(getContext());
 			helper.setUp();
 			Context context = new GAEContext(getLogger());
+			context.getAttributes().put(UserProvider.class.getName(), userProvider);
 			router.attachDefault(new KDApplication(context));
 			helper.tearDown();
 			return router;
@@ -74,20 +91,6 @@ public class RestletTestCase {
 		component.getServers().add(Protocol.HTTP, PORT);
 		component.getClients().add(Protocol.CLAP);
 
-		ChallengeAuthenticator guard = new ChallengeAuthenticator(null,
-				ChallengeScheme.HTTP_BASIC, "testRealm");
-		guard.setVerifier(new Verifier() {
-			
-			@Override
-			public int verify(Request request, Response response) {
-				String id = request.getChallengeResponse().getIdentifier();
-				request.getClientInfo().setUser(new User(id));
-				return Verifier.RESULT_VALID;
-			}
-		});
-		guard.setNext(testApp);
-
-		component.getDefaultHost().attachDefault(guard);
 		try {
 			component.start();
 		} catch (Exception e) {
@@ -108,6 +111,61 @@ public class RestletTestCase {
 	
 	public static String getServerUrl() {
 		return BASE_URI;
+	}
+	
+	public void doTest(String uri, String fileToPut, String fileToPost) {
+		ClientResource cr = new ClientResource(uri);
+		
+		if (fileToPut != null) {
+			LocalReference ref = new LocalReference(fileToPut);
+			ref.setProtocol(Protocol.CLAP);
+			ClientResource local = new ClientResource(ref);
+			try {
+				cr.put(local.get());
+			} catch (ResourceException e) {
+				e.printStackTrace();
+				Assert.fail();
+			}
+		}
+
+		try {
+			cr.get();
+		} catch (ResourceException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+		
+		if (fileToPost != null) {
+			Form form = new Form();
+			InputStream in = getClass().getClassLoader().getResourceAsStream(fileToPost);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			try {
+				String line = reader.readLine();
+				while (line != null) {
+					String[] entry = line.split(":");
+					form.add(entry[0], entry[1]);
+					line = reader.readLine();
+				}
+				cr.post(form.getWebRepresentation());
+			} catch (Exception e) {
+				e.printStackTrace();
+				Assert.fail();
+			}
+		}
+		
+		try {
+			cr.delete();
+		} catch (ResourceException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+		
+		try {
+			cr.get();
+			Assert.fail("resource still exists after delete");
+		} catch (ResourceException e) {
+			
+		}
 	}
 
 }

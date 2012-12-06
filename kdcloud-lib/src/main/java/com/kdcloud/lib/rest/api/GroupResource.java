@@ -22,6 +22,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
 import com.kdcloud.lib.domain.DataSpecification;
+import com.kdcloud.lib.domain.GroupSpecification;
 
 public interface GroupResource {
 	
@@ -31,7 +32,7 @@ public interface GroupResource {
 	public void create(Representation rep);
 	
 	@Get
-	public DataSpecification getInputSpecification();
+	public GroupSpecification getSpecification();
 	
 	@Delete
 	public void deleteGroup();

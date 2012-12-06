@@ -23,6 +23,7 @@ public class StoredPlugin {
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String name;
 	
+	private String description;
 	
 	Blob content;
 
@@ -64,4 +65,14 @@ public class StoredPlugin {
 		return new ByteArrayInputStream(content.getBytes());
 	}
 
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 }

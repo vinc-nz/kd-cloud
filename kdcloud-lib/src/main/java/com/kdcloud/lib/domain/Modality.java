@@ -38,6 +38,9 @@ public class Modality implements Serializable {
 	String name;
 	
 	@XmlElement
+	Metadata metadata;
+	
+	@XmlElement
 	DataSpecification inputSpecification;
 	
 	@XmlElement(name="init-action")

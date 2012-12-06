@@ -24,8 +24,10 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.DataSpecification;
+import com.kdcloud.lib.domain.GroupSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class GroupServerResource extends BasicServerResource<Group> implements
@@ -45,8 +47,12 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 	}
 
 	@Override
-	public DataSpecification getInputSpecification() {
-		return read().getInputSpecification();
+	public GroupSpecification getSpecification() {
+		Group group = read();
+		GroupSpecification spec = new GroupSpecification(group.getMetadata(), group.getInputSpecification());
+		if (group.getOwner().equals(user))
+			spec.setInvitationMessage(group.getInvitationMessage());
+		return spec;
 	}
 
 	@Override
@@ -73,11 +79,16 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public void update(Group group, Representation rep) {
+		User owner = group.getOwner();
+		if (owner != null && !owner.equals(user))
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 		if (rep != null && !rep.isEmpty())
 			try {
-				DataSpecification s = (DataSpecification) ConvertUtils
-						.toObject(DataSpecification.class, rep);
-				group.setInputSpecification(s);
+				group.setOwner(user);
+				GroupSpecification spec = (GroupSpecification) ConvertUtils.toObject(GroupSpecification.class, rep);
+				group.setInputSpecification(spec.getDataSpecification());
+				group.setMetadata(spec.getMetadata());
+				group.setInvitationMessage(spec.getInvitationMessage());
 			} catch (Exception e) {
 				getLogger().log(Level.INFO, "error reading entity", e);
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

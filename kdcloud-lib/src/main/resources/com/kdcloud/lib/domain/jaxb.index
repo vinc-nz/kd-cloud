@@ -2,3 +2,6 @@ ModalityIndex
 UserIndex
 Modality
 DataSpecification
+GroupSpecification
+WorkflowSpecification
+NodeSpecification

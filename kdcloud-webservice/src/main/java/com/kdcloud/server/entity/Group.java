@@ -18,6 +18,7 @@ package com.kdcloud.server.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -25,7 +26,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.datanucleus.annotations.Unowned;
 import com.kdcloud.lib.domain.DataSpecification;
+import com.kdcloud.lib.domain.Metadata;
 
 @PersistenceCapable
 public class Group {
@@ -44,9 +47,25 @@ public class Group {
 	
 	@Persistent(serialized="true")
 	private DataSpecification inputSpecification;
+	
+	@Unowned
+	@Persistent
+	private Collection<User> subscribedUsers = new LinkedList<User>();
+	
+	@Unowned
+	@Persistent
+	private User owner;
+	
+	@Unowned
+	@Persistent
+	private Collection<User> analysts = new LinkedList<User>();
+	
+	@Persistent(serialized="true")
+	Metadata metadata;
+	
+	String invitationMessage;
 
 	public Group() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Group(String name) {
@@ -93,6 +112,49 @@ public class Group {
 	public void setInputSpecification(DataSpecification inputSpecification) {
 		this.inputSpecification = inputSpecification;
 	}
+
+	public Collection<User> getSubscribedUsers() {
+		return subscribedUsers;
+	}
+
+	public void setSubscribedUsers(Collection<User> subscribedUsers) {
+		this.subscribedUsers = subscribedUsers;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	public Collection<User> getAnalysts() {
+		return analysts;
+	}
+
+	public void setAnalysts(Collection<User> analysts) {
+		this.analysts = analysts;
+	}
+
+	public Metadata getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(Metadata metadata) {
+		this.metadata = metadata;
+	}
+
+	public String getInvitationMessage() {
+		return invitationMessage;
+	}
+
+	public void setInvitationMessage(String invitationMessage) {
+		this.invitationMessage = invitationMessage;
+	}
 	
+	public boolean isPublic() {
+		return subscribedUsers.isEmpty();
+	}
 
 }

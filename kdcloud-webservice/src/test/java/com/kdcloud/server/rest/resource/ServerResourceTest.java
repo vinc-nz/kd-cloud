@@ -16,121 +16,15 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.restlet.Application;
-import org.restlet.Context;
-import org.restlet.data.Form;
-import org.restlet.representation.Representation;
 
-import weka.core.DenseInstance;
-import weka.core.Instances;
-import weka.core.converters.CSVLoader;
+import com.kdcloud.server.rest.application.RestletTestCase;
 
-import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.kdcloud.engine.embedded.node.UserDataReader;
-import com.kdcloud.lib.domain.DataSpecification;
-import com.kdcloud.lib.domain.ModalityIndex;
-import com.kdcloud.lib.rest.ext.InstancesRepresentation;
-import com.kdcloud.server.entity.Group;
-
-public class ServerResourceTest {
-
-	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
-			new LocalDatastoreServiceTestConfig()
-	/* .setDefaultHighRepJobPolicyUnappliedJobPercentage(100) */);
-
-	public static final String USER_ID = TestContext.USER_ID;
-	
-	private Context context = new TestContext();
-
-	private Application application = new Application(context);
-	
-	private Group group;
-	
-	@Before
-	public void setUp() throws Exception {
-		helper.setUp();
-		GroupServerResource resource = new GroupServerResource(application, "test");
-		resource.create(null);
-		group = resource.find();
-		assertNotNull(group);
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		helper.tearDown();
-	}
+public class ServerResourceTest extends RestletTestCase {
 
 	@Test
-	public void testDataset() {
-		DatasetServerResource datasetResource = new DatasetServerResource(application, group.getName());
-		double[] cells = { 1, 2 };
-		Instances data = new Instances(DataSpecification.newInstances("test", 2));
-		data.add(new DenseInstance(0, cells));
-		datasetResource.uploadData(new InstancesRepresentation(data));
-		
-		Representation out = datasetResource.getData();
-		try {
-			assertEquals(1, new InstancesRepresentation(out).getInstances().size());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		datasetResource.deleteData();
-		group = datasetResource.findGroup();
-		Assert.assertEquals(0, group.getData().size());
-	}
-
-	@Test
-	public void testModalities() {
-		ModalitiesServerResource modalitiesResource = new ModalitiesServerResource(application);
-		ModalityIndex index = modalitiesResource.listModalities();
-		Assert.assertNotNull(index);
-//
-//		ModEntity modality = list.get(0);
-//		modality.setName("test");
-//		ChoosenModalityServerResource choosenModalityResource = new ChoosenModalityServerResource(application, modality);
-//		choosenModalityResource.editModality(modality);
-//		modality = choosenModalityResource.modalityDao.findById(modality.getId());
-//		assertEquals("test", modality.getName());
-//		
-//		choosenModalityResource.deleteModality();
-//		modality = choosenModalityResource.modalityDao.findById(modality.getId());
-//		assertNull(modality);
-	}
-
-	@Test
-	public void testWorker() throws IOException {
-		CSVLoader loader = new CSVLoader();
-		loader.setSource(getClass().getClassLoader().getResourceAsStream("ecg_small.txt"));
-		Instances instances = loader.getDataSet();
-		DatasetServerResource resource = new DatasetServerResource(application, group.getName());
-		resource.uploadData(new InstancesRepresentation(instances));
-		WorkerServerResource workflowResource = new WorkerServerResource(application, "ecg.xml");
-		Form form = new Form();
-		form.add(UserDataReader.SOURCE_USER_PARAMETER, USER_ID);
-		form.add(UserDataReader.SOURCE_GROUP_PARAMETER, "test");
-		InputStream is = getClass().getClassLoader().getResourceAsStream("ecg.xml");
-		workflowResource.execute(form, is);
-	}
-
-
-	@Test
-	public void testDevices() {
-		DeviceServerResource deviceResource = new DeviceServerResource(application);
-		deviceResource.register("test");
-		deviceResource.unregister("test");
+	public void testGroupResource() {
+		doTest(getServerUrl() + "/group/test", "group.xml" , null, true, true);
 	}
 
 

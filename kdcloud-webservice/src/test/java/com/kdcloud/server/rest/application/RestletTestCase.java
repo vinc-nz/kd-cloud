@@ -24,7 +24,6 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.internal.runners.statements.ExpectException;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Context;
@@ -38,19 +37,18 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Router;
 
-import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.PersistenceContext;
+import com.kdcloud.server.persistence.PersistenceContextFactory;
+import com.kdcloud.server.rest.resource.PCFTest;
 
 public class RestletTestCase {
 
 	static final String HOST = "http://localhost";
 	static final int PORT = 8887;
 	static final String BASE_URI = HOST + ":" + PORT;
-
-	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
-			new LocalDatastoreServiceTestConfig());
+	
+	PCFTest pcf = new PCFTest();
 	
 	UserProvider userProvider = new UserProvider() {
 		
@@ -66,19 +64,16 @@ public class RestletTestCase {
 		@Override
 		public Restlet createInboundRoot() {
 			Router router = new Router(getContext());
-			helper.setUp();
 			Context context = new GAEContext(getLogger());
 			context.getAttributes().put(UserProvider.class.getName(), userProvider);
+			context.getAttributes().put(PersistenceContextFactory.class.getName(), pcf);
 			router.attachDefault(new KDApplication(context));
-			helper.tearDown();
 			return router;
 		}
 
 		@Override
 		public void handle(Request request, Response response) {
-			helper.setUp();
 			super.handle(request, response);
-			helper.tearDown();
 		}
 
 	};
@@ -87,12 +82,16 @@ public class RestletTestCase {
 
 	@Before
 	public void setUp() {
+		
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, PORT);
 		component.getClients().add(Protocol.CLAP);
+		
+		component.getDefaultHost().attach(testApp);
 
 		try {
 			component.start();
+			pcf.setUp();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -102,6 +101,7 @@ public class RestletTestCase {
 	@After
 	public void tearDown() {
 		try {
+			pcf.tearDown();
 			component.stop();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,46 +113,46 @@ public class RestletTestCase {
 		return BASE_URI;
 	}
 	
-	public void doTest(String uri, String fileToPut, String fileToPost) {
-		ClientResource cr = new ClientResource(uri);
-		
-		if (fileToPut != null) {
-			LocalReference ref = new LocalReference(fileToPut);
-			ref.setProtocol(Protocol.CLAP);
-			ClientResource local = new ClientResource(ref);
-			try {
-				cr.put(local.get());
-			} catch (ResourceException e) {
-				e.printStackTrace();
-				Assert.fail();
-			}
+	private void doPut(ClientResource cr, String fileToPut) {
+		LocalReference ref = new LocalReference(fileToPut);
+		ref.setProtocol(Protocol.CLAP);
+		ClientResource local = new ClientResource(ref);
+		try {
+			cr.put(local.get());
+		} catch (ResourceException e) {
+			e.printStackTrace();
+			Assert.fail();
 		}
-
+	}
+	
+	private void doGet(ClientResource cr) {
 		try {
 			cr.get();
 		} catch (ResourceException e) {
 			e.printStackTrace();
 			Assert.fail();
 		}
-		
-		if (fileToPost != null) {
-			Form form = new Form();
-			InputStream in = getClass().getClassLoader().getResourceAsStream(fileToPost);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			try {
-				String line = reader.readLine();
-				while (line != null) {
-					String[] entry = line.split(":");
-					form.add(entry[0], entry[1]);
-					line = reader.readLine();
-				}
-				cr.post(form.getWebRepresentation());
-			} catch (Exception e) {
-				e.printStackTrace();
-				Assert.fail();
+	}
+	
+	private void doPost(ClientResource cr, String fileToPost) {
+		Form form = new Form();
+		InputStream in = getClass().getClassLoader().getResourceAsStream(fileToPost);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		try {
+			String line = reader.readLine();
+			while (line != null) {
+				String[] entry = line.split(":");
+				form.add(entry[0], entry[1]);
+				line = reader.readLine();
 			}
+			cr.post(form.getWebRepresentation());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
 		}
-		
+	}
+	
+	public void doDelete(ClientResource cr) {
 		try {
 			cr.delete();
 		} catch (ResourceException e) {
@@ -166,6 +166,27 @@ public class RestletTestCase {
 		} catch (ResourceException e) {
 			
 		}
+	}
+	
+	public void doTest(String uri, String fileToPut, String fileToPost, boolean get, boolean delete) {
+		ClientResource cr = new ClientResource(uri);
+		
+		if (fileToPut != null) {
+			doPut(cr, fileToPut);
+		}
+
+		if (get) {
+			doGet(cr);
+		}
+		
+		if (fileToPost != null) {
+			doPost(cr, fileToPost);
+		}
+		
+		if (delete) {
+			doDelete(cr);
+		}
+		
 	}
 
 }

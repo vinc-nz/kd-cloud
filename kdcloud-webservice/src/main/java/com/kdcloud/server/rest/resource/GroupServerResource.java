@@ -42,7 +42,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 	}
 
 	@Override
-	public void create(Representation rep) {
+	public void editGroup(Representation rep) {
 		createOrUpdate(rep);
 	}
 

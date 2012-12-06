@@ -16,16 +16,34 @@
  */
 package com.kdcloud.server.rest.resource;
 
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.apphosting.api.ApiProxy;
+import com.google.apphosting.api.ApiProxy.Environment;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
 
 public class PCFTest extends PersistenceContextFactoryImpl {
 	
-	PersistenceContext pc = super.get();
+	Environment testEnvironment;
+
+	LocalServiceTestHelper helper = new LocalServiceTestHelper(
+			new LocalDatastoreServiceTestConfig());
+	
+	public void setUp() {
+		helper.setUp();
+		testEnvironment = ApiProxy.getCurrentEnvironment();
+	}
+	
+	public void tearDown() {
+		helper.tearDown();
+	}
+	
 	
 	@Override
 	public PersistenceContext get() {
-		return pc;
+		ApiProxy.setEnvironmentForCurrentThread(testEnvironment);
+		return super.get();
 	}
 
 }

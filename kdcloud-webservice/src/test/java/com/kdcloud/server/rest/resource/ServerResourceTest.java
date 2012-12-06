@@ -39,6 +39,13 @@ public class ServerResourceTest extends RestletTestCase {
 		doTest(getServerUrl() + "/group/test/data", "ecg_small.csv", null, false, false);
 		doTest(getServerUrl() + "/engine/workflow/ecg.xml", null, "ecg-test.txt", false, false);
 	}
+	
+	@Test
+	public void testUsers() {
+		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
+		doTest(getServerUrl() + "/group/test/users", null, null, true, false);
+	}
+	
 
 	
 }

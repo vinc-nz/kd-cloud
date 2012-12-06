@@ -17,7 +17,7 @@
 package com.kdcloud.lib.domain;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,18 +32,17 @@ public class UserIndex implements Serializable {
 	
 	
 	@XmlElement(name="user")
-	List<String> users;
+	Collection<String> users;
 	
 	public UserIndex() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public UserIndex(List<String> users) {
+	public UserIndex(Collection<String> users) {
 		super();
 		this.users = users;
 	}
 	
-	public List<String> asList() {
+	public Collection<String> asCollection() {
 		return users;
 	}
 

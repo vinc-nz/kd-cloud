@@ -14,17 +14,35 @@
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.kdcloud.lib.rest.api;
+package com.kdcloud.server.rest.resource;
 
-import org.restlet.resource.Get;
+import org.restlet.Application;
+import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.UserIndex;
+import com.kdcloud.lib.rest.api.SubscribersResource;
+import com.kdcloud.server.entity.Group;
 
-public interface UsersResource {
+public class SubscribersServerResource extends KDServerResource implements
+		SubscribersResource {
 	
-	public static final String URI = "/group/{id}/users";
 	
-	@Get
-	public UserIndex getIndex();
+	public SubscribersServerResource() {
+		super();
+	}
+
+	SubscribersServerResource(Application application, String groupName) {
+		super(application, groupName);
+	}
+
+
+	@Override
+	public UserIndex getIndex() {
+		Group group = (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
+		if (group == null)
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+		return new UserIndex(group.getSubscribedUsers());
+	}
 
 }

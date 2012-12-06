@@ -94,6 +94,12 @@ public class PersistenceContextImpl implements PersistenceContext {
 	public InstancesMapper getInstancesMapper() {
 		return new GAEMapper();
 	}
+
+	@Override
+	public Object findByUUID(String uuid) {
+		Key key = KeyFactory.stringToKey(uuid);
+		return pm.getObjectById(key);
+	}
 	
 	
 }

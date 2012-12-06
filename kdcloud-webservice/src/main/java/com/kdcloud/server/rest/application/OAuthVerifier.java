@@ -16,12 +16,9 @@
  */
 package com.kdcloud.server.rest.application;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,49 +38,46 @@ public class OAuthVerifier implements Verifier {
 	
 	private static final String VALIDATION_URI = "https://www.googleapis.com/oauth2/v1/tokeninfo";
 	private static final String JSON_ATTR_EMAIL = "email";
-	private static final String ADMIN_FILE = "admin.passwd";
+	private static final String ADMIN_FILE = "admin.properties";
 	
 	private Logger logger;
 	private boolean allowAdministrators;
+	private Properties administrators;
 	
 	public OAuthVerifier(Logger logger, boolean allowAdministrators) {
 		super();
 		this.logger = logger;
 		this.allowAdministrators = allowAdministrators;
+		try {
+			this.administrators = getAdministratorDetails();
+		} catch (IOException e) {
+			this.allowAdministrators = false;
+		}
 	}
 
 	@Override
 	public int verify(Request request, Response response) {
 		if (request.getChallengeResponse() == null)
 			return Verifier.RESULT_MISSING;
-		//get token
+		// get token
 		String userId = request.getChallengeResponse().getIdentifier();
 		String secret = new String(request.getChallengeResponse().getSecret());
-		if (allowAdministrators)
-			try {
-				String passwd = getAdministratorDetails().get(userId);
-				if (passwd != null && passwd.equals(secret)) {
-					request.getClientInfo().setUser(new User(userId));
-					return Verifier.RESULT_VALID;
-				}
-			} catch (IOException e) {
-				logger.info("error reading administrators file");
+		if (allowAdministrators) {
+			String passwd = (String) administrators.get(userId);
+			if (passwd != null && passwd.equals(secret)) {
+				request.getClientInfo().setUser(new User(userId));
+				return Verifier.RESULT_VALID;
 			}
+
+		}
 		return verifyOauthToken(request, response, secret);
 	}
 	
-	private Map<String, String> getAdministratorDetails() throws IOException {
-		HashMap<String, String> details = new HashMap<String, String>();
+	private Properties getAdministratorDetails() throws IOException {
+		Properties prop = new Properties();
 		InputStream in = getClass().getClassLoader().getResourceAsStream(ADMIN_FILE);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = reader.readLine();
-		while (line != null) {
-			String[] userDetails = line.split(":");
-			if (userDetails.length == 2)
-				details.put(userDetails[0], userDetails[1]);
-			line = reader.readLine();
-		}
-		return details;
+		prop.load(in);
+		return prop;
 	}
 
 	public int verifyOauthToken(Request request, Response response, String token) {

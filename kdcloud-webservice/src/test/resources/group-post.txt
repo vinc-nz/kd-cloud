@@ -1,3 +1,0 @@
-owner:myself
-analyst:myself
-subscriber:myself

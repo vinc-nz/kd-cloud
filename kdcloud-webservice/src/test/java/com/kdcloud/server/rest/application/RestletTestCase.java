@@ -19,6 +19,8 @@ package com.kdcloud.server.rest.application;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import junit.framework.Assert;
 
@@ -142,13 +144,11 @@ public class RestletTestCase {
 	private void doPost(ClientResource cr, String fileToPost) {
 		Form form = new Form();
 		InputStream in = getClass().getClassLoader().getResourceAsStream(fileToPost);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		try {
-			String line = reader.readLine();
-			while (line != null) {
-				String[] entry = line.split(":");
-				form.add(entry[0], entry[1]);
-				line = reader.readLine();
+			Properties prop = new Properties();
+			prop.load(in);
+			for (Entry<Object, Object> entry : prop.entrySet()) {
+				form.add((String) entry.getKey(), (String) entry.getValue());
 			}
 			cr.post(form.getWebRepresentation());
 		} catch (Exception e) {

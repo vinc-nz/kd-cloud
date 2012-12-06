@@ -21,6 +21,7 @@ import java.util.Collection;
 
 public interface PersistenceContext {
 	
+	public Object findByUUID(String uuid);
 	public Object findByName(Class<?> clazz, String name);
 	public Object findChildByName(Object father, Class<?> child, String name);
 	public Collection<Object> getAll(Class<?> clazz);

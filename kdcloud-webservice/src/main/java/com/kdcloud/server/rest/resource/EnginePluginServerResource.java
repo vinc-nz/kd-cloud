@@ -25,7 +25,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.embedded.Node;
-import com.kdcloud.engine.embedded.NodeFactory;
+import com.kdcloud.engine.embedded.NodeDescription;
 import com.kdcloud.lib.rest.api.EnginePluginResource;
 import com.kdcloud.server.entity.StoredPlugin;
 import com.kdcloud.server.rest.application.ConvertUtils;
@@ -44,7 +44,7 @@ public class EnginePluginServerResource extends
 			throws IOException {
 		ClassLoader loader = new StreamClassLoader(stream);
 		try {
-			String className = NodeFactory.NODE_PACKAGE + "." + nodeName;
+			String className = NodeDescription.NODE_PACKAGE + "." + nodeName;
 			loader.loadClass(className).asSubclass(Node.class).newInstance();
 			return true;
 		} catch (Exception e) {

@@ -4,7 +4,7 @@
 		<type>FileDataReader</type>
 		<parameter>
 			<name>filename</name>
-			<value>ecg_small.txt</value>
+			<value>ecg_small.csv</value>
 		</parameter>
 	</node>
 	<node>

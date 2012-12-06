@@ -66,7 +66,7 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	public DataTable find() {
 		mGroup = findGroup();
 		if (mGroup == null)
-			return null;
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		return (DataTable) getPersistenceContext().findChildByName(mGroup, DataTable.class, user.getName());
 	}
 
@@ -79,15 +79,15 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 
 	@Override
 	public void delete(DataTable e) {
-		getPersistenceContext().getInstancesMapper().clear(mTable);
+		getPersistenceContext().getInstancesMapper().clear(e);
 		mGroup.getData().remove(e);
 		getPersistenceContext().save(mGroup);
 	}
 
 	@Override
 	public DataTable create() {
-		if (mGroup == null)
-			mGroup = new Group(getResourceIdentifier());
+		if (!mGroup.isPublic() && !mGroup.getSubscribedUsers().contains(user.getName()))
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 		DataTable table = new DataTable();
 		table.setOwner(user);
 		return table;
@@ -107,6 +107,7 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}
+
 
 	@Override
 	public void uploadData(Representation representation) {

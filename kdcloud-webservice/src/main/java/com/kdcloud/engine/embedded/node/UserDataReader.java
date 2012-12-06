@@ -34,6 +34,7 @@ public class UserDataReader extends NodeAdapter {
 	
 	public static final String SOURCE_USER_PARAMETER = "sourceUser";
 	public static final String SOURCE_GROUP_PARAMETER = "sourceGroup";
+	public static final String ANALYST_ID = "analyst_id";
 	
 	User user;
 	Group group;
@@ -55,22 +56,35 @@ public class UserDataReader extends NodeAdapter {
 		String msg = null;
 		String userId = (String) config.get(SOURCE_USER_PARAMETER);
 		String groupId = (String) config.get(SOURCE_GROUP_PARAMETER);
+		String analystId = (String) config.get(ANALYST_ID);
 		pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
 		if (pc == null)
 			msg = "no persistence context in configuration";
+		
 		if (userId != null)
 			user = (User) pc.findByName(User.class, userId);
+		
 		if (user == null)
 			msg = "not a valid user in configuration";
+		
 		if (groupId != null)
 			group = (Group) pc.findByName(Group.class, groupId);
-		if (group == null)
+		
+		if (group == null) {
 			msg = "not a valid group in configuration";
-		else if (group != null && user != null) {
+		} else {
+			boolean hasPermission = group.getOwner().getName().equals(analystId) || 
+								group.getAnalysts().contains(analystId);
+			if (!hasPermission)
+				msg = "user has no permission for this request";
+		}
+		
+		if (group != null && user != null) {
 			table = (DataTable) pc.findChildByName(group, DataTable.class, user.getName());
 			if (table == null)
 				msg = "user has no data";
 		}
+		
 		if (msg != null)
 			throw new WrongConfigurationException(msg);
 	}

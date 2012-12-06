@@ -16,9 +16,11 @@
  */
 package com.kdcloud.lib.rest.api;
 
+import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
+import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 
 import com.kdcloud.lib.domain.GroupSpecification;
@@ -29,6 +31,9 @@ public interface GroupResource {
 	
 	@Put
 	public void editGroup(Representation rep);
+	
+	@Post
+	public void setProperties(Form form);
 	
 	@Get
 	public GroupSpecification getSpecification();

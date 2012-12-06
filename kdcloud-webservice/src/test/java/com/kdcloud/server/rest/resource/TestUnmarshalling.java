@@ -31,11 +31,6 @@ public class TestUnmarshalling {
 	}
 	
 	@Test
-	public void testWorkflowDescription() {
-		unmarshal("ecg.xml", WorkflowDescription.class);
-	}
-	
-	@Test
 	public void testGroupSpecification() {
 		GroupSpecification spec = (GroupSpecification) unmarshal("group.xml", GroupSpecification.class);
 		assertNotNull(spec.getMetadata());

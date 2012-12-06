@@ -28,10 +28,11 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.datanucleus.annotations.Unowned;
 import com.kdcloud.lib.domain.DataSpecification;
+import com.kdcloud.lib.domain.Describable;
 import com.kdcloud.lib.domain.Metadata;
 
 @PersistenceCapable
-public class Group {
+public class Group implements Describable {
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -48,17 +49,15 @@ public class Group {
 	@Persistent(serialized="true")
 	private DataSpecification inputSpecification;
 	
-	@Unowned
 	@Persistent
-	private Collection<User> subscribedUsers = new LinkedList<User>();
-	
 	@Unowned
-	@Persistent
 	private User owner;
 	
-	@Unowned
-	@Persistent
-	private Collection<User> analysts = new LinkedList<User>();
+	@Persistent(serialized="true")
+	private Collection<String> subscribedUsers = new LinkedList<String>();
+	
+	@Persistent(serialized="true")
+	private Collection<String> analysts = new LinkedList<String>();
 	
 	@Persistent(serialized="true")
 	Metadata metadata;
@@ -113,12 +112,8 @@ public class Group {
 		this.inputSpecification = inputSpecification;
 	}
 
-	public Collection<User> getSubscribedUsers() {
-		return subscribedUsers;
-	}
-
-	public void setSubscribedUsers(Collection<User> subscribedUsers) {
-		this.subscribedUsers = subscribedUsers;
+	public boolean isPublic() {
+		return subscribedUsers.isEmpty();
 	}
 
 	public User getOwner() {
@@ -129,11 +124,19 @@ public class Group {
 		this.owner = owner;
 	}
 
-	public Collection<User> getAnalysts() {
+	public Collection<String> getSubscribedUsers() {
+		return subscribedUsers;
+	}
+
+	public void setSubscribedUsers(Collection<String> subscribedUsers) {
+		this.subscribedUsers = subscribedUsers;
+	}
+
+	public Collection<String> getAnalysts() {
 		return analysts;
 	}
 
-	public void setAnalysts(Collection<User> analysts) {
+	public void setAnalysts(Collection<String> analysts) {
 		this.analysts = analysts;
 	}
 
@@ -153,8 +156,6 @@ public class Group {
 		this.invitationMessage = invitationMessage;
 	}
 	
-	public boolean isPublic() {
-		return subscribedUsers.isEmpty();
-	}
+	
 
 }

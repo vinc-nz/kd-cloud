@@ -83,7 +83,7 @@ public class StubClient extends BaseClient {
 
 	@Override
 	public Instances getData() {
-		double[] values = readData("ecg_small.txt");
+		double[] values = readData("ecg_small.csv");
 		log("data length: " + values.length);
 		Instances data = modality.getInputSpecification().newInstances("test");
 		for (int i = 0; i < values.length; i++) {

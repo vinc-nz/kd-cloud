@@ -37,7 +37,7 @@ public class GAESaverTest {
 	@Test
 	public void test() throws IOException {
 		CSVLoader loader = new CSVLoader();
-		loader.setSource(getClass().getClassLoader().getResourceAsStream("ecg_small.txt"));
+		loader.setSource(getClass().getClassLoader().getResourceAsStream("ecg_small.csv"));
 		Instances input = loader.getDataSet();
 		GAEMapper saver = new GAEMapper();
 		DataTable t = new DataTable();

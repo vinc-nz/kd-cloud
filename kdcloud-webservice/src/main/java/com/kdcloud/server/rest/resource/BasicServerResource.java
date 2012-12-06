@@ -1,9 +1,12 @@
 package com.kdcloud.server.rest.resource;
 
 import org.restlet.Application;
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
+
+import com.kdcloud.lib.domain.Describable;
 
 public abstract class BasicServerResource<T> extends KDServerResource {
 	
@@ -73,6 +76,19 @@ public abstract class BasicServerResource<T> extends KDServerResource {
 			delete(resource);
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
+	}
+	
+	public void editMetadata(Describable entity, Form form) {
+		String owner = form.getFirstValue("owner");
+		String company = form.getFirstValue("company");
+		String description = form.getFirstValue("description");
+		
+		if (owner != null)
+			entity.getMetadata().setOwner(owner);
+		if (company != null)
+			entity.getMetadata().setCompany(company);
+		if (description != null)
+			entity.getMetadata().setDescription(description);
 	}
 
 }

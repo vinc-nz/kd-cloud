@@ -32,7 +32,9 @@ import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.Form;
 import org.restlet.data.LocalReference;
+import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
+import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Router;
@@ -117,8 +119,11 @@ public class RestletTestCase {
 		LocalReference ref = new LocalReference(fileToPut);
 		ref.setProtocol(Protocol.CLAP);
 		ClientResource local = new ClientResource(ref);
+		Representation rep = local.get();
+		if (fileToPut.endsWith(".csv"))
+			rep.setMediaType(MediaType.TEXT_CSV);
 		try {
-			cr.put(local.get());
+			cr.put(rep);
 		} catch (ResourceException e) {
 			e.printStackTrace();
 			Assert.fail();

@@ -16,14 +16,15 @@
  */
 package com.kdcloud.server.rest.resource;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.restlet.Application;
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
-import com.kdcloud.lib.domain.DataSpecification;
 import com.kdcloud.lib.domain.GroupSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
@@ -99,6 +100,20 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 	@Override
 	public void deleteGroup() {
 		super.remove();
+	}
+
+	@Override
+	public void setProperties(Form form) {
+		Group group = read();
+		editMetadata(group, form);
+		
+		String[] subscribedUsers = form.getValues("subscriber").split(",");
+		group.getSubscribedUsers().addAll(Arrays.asList(subscribedUsers));
+		
+		String[] analysts = form.getValues("analyst").split(",");
+		group.getAnalysts().addAll(Arrays.asList(analysts));
+		
+		save(group);
 	}
 
 }

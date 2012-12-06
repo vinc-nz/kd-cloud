@@ -45,7 +45,7 @@ public class EmbeddedEngineTest {
 			new LocalDatastoreServiceTestConfig());
 
 	PersistenceContext pc;
-	String[] descriptions = {"test-workflow.xml", "ecg.xml"};
+	String[] descriptions = {"workflow/test-workflow.xml", "workflow/ecg.xml"};
 	KDEngine engine;
 
 	@Before
@@ -53,8 +53,9 @@ public class EmbeddedEngineTest {
 		helper.setUp();
 		PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
 		pc = pcf.get();
-		pc.save(new User("test"));
-		pc.save(new Group("test"));
+		Group group = new Group("test");
+		group.setOwner(new User("test"));
+		pc.save(group);
 		engine = new EmbeddedEngine();
 	}
 
@@ -70,6 +71,7 @@ public class EmbeddedEngineTest {
 			InputStream is = getClass().getClassLoader().getResourceAsStream(path);
 			Worker worker = engine.getWorker(is);
 			worker.setParameter(PersistenceContext.class.getName(), pc);
+			worker.setParameter(UserDataReader.ANALYST_ID, "test");
 			worker.setParameter(UserDataReader.SOURCE_USER_PARAMETER, "test");
 			worker.setParameter(UserDataReader.SOURCE_GROUP_PARAMETER, "test");
 			worker.setParameter(UserDataWriter.DEST_USER_PARAMETER, "test");

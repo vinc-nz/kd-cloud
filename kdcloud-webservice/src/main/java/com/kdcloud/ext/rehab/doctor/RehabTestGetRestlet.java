@@ -20,7 +20,7 @@ import com.kdcloud.server.rest.resource.KDServerResource;
 
 public class RehabTestGetRestlet extends KDServerResource {
 
-	public static final String URI = "/testgwt/provaget";
+	public static final String URI = "/rehabdoctor/provaget";
 
 //	@Get
 //	public String acceptItem() {
@@ -45,7 +45,7 @@ public class RehabTestGetRestlet extends KDServerResource {
 			representation = new DomRepresentation(
 					MediaType.TEXT_XML);
 
-			String res = "OK-"+username;
+			String res = "OK "+username;
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("result", res);

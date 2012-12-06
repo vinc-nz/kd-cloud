@@ -60,7 +60,7 @@ public class RehabDoctorRegistrationRestlet extends KDServerResource {
 				
 				RehabDoctor doctor = new RehabDoctor(username, firstName, lastName);
 				ofy.put(doctor);
-				res = "OK" + doctor.getUsername();
+				res = "OK " + doctor.getUsername();
 			}
 
 			Map<String, String> map = new HashMap<String, String>();

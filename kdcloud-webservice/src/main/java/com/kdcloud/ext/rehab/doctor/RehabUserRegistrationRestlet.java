@@ -64,7 +64,7 @@ public class RehabUserRegistrationRestlet extends RehabDoctorServerResource{//KD
 				rehabUser.setDoctor(doctor);
 				rehabUser.setRegistrationDate(new Date());
 				ofy.put(rehabUser);
-				res = "OK" + rehabUser.getUsername();
+				res = "OK " + rehabUser.getUsername();
 			}
 
 			Map<String, String> map = new HashMap<String, String>();

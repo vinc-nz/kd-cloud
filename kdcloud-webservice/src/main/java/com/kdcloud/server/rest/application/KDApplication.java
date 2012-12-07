@@ -62,6 +62,9 @@ public class KDApplication extends Application {
 		
 		//manually map indexes
 		router.attach("/workflow", IndexServerResource.class);
+		router.attach("/modality", IndexServerResource.class);
+		router.attach("/engine/plugin", IndexServerResource.class);
+		router.attach("/view", IndexServerResource.class);
 
 		return router;
 	}

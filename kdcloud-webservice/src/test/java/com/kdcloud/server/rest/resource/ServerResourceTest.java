@@ -19,7 +19,6 @@ package com.kdcloud.server.rest.resource;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.rest.application.RestletTestCase;
@@ -28,32 +27,31 @@ public class ServerResourceTest extends RestletTestCase {
 
 	@Test
 	public void testGroupResource() {
-		doTest(getServerUrl() + "/group/test", "group.xml" , "group-post.properties", true, true);
+		doFullTest("/group/test", "group.xml" , "group-post.properties", true, true);
 	}
 	
 	@Test
 	public void testDatasetResource() {
-		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
-		doTest(getServerUrl() + "/group/test/data", "ecg_small.csv", null, true, true);
+		doPut("/group/test", "group.xml");
+		doFullTest("/group/test/data", "ecg_small.csv", null, true, true);
 	}
 	
 	@Test
 	public void testAnalysis() {
-		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
-		doTest(getServerUrl() + "/group/test/data", "ecg_small.csv", null, false, false);
-		doTest(getServerUrl() + "/engine/workflow/ecg.xml", null, "ecg-test.properties", false, false);
+		doPut("/group/test", "group.xml");
+		doPut("/group/test/data", "ecg_small.csv");
+		doPost("/engine/workflow/ecg.xml", "ecg-test.properties");
 	}
 	
-//	@Test
+	@Test
 	public void testUsers() {
-		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
-		doTest(getServerUrl() + "/group/test/users", null, null, true, false);
+		doPut("/group/test", "group.xml");
+		doGet("/group/test/users");
 	}
 	
 	@Test
 	public void testIndex() throws ResourceException, IOException {
-		ClientResource cr = new ClientResource(getServerUrl() + "/workflow");
-		cr.get().write(System.out);
+		doGet("/workflow");
 	}
 	
 	

@@ -44,7 +44,7 @@ import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.DataMapperFactory;
 import com.kdcloud.server.persistence.gae.JunitMapperFactory;
 
-public class RestletTestCase {
+public abstract class RestletTestCase {
 
 	static final String HOST = "http://localhost";
 	static final int PORT = 8887;
@@ -115,7 +115,8 @@ public class RestletTestCase {
 		return BASE_URI;
 	}
 	
-	private void doPut(ClientResource cr, String fileToPut) {
+	public void doPut(String path, String fileToPut) {
+		ClientResource cr = new ClientResource(BASE_URI + path);
 		LocalReference ref = new LocalReference(fileToPut);
 		ref.setProtocol(Protocol.CLAP);
 		ClientResource local = new ClientResource(ref);
@@ -130,7 +131,8 @@ public class RestletTestCase {
 		}
 	}
 	
-	private void doGet(ClientResource cr) {
+	public void doGet(String path) {
+		ClientResource cr = new ClientResource(BASE_URI + path);
 		try {
 			cr.get();
 		} catch (ResourceException e) {
@@ -139,7 +141,8 @@ public class RestletTestCase {
 		}
 	}
 	
-	private void doPost(ClientResource cr, String fileToPost) {
+	public void doPost(String path, String fileToPost) {
+		ClientResource cr = new ClientResource(BASE_URI + path);
 		Form form = new Form();
 		InputStream in = getClass().getClassLoader().getResourceAsStream(fileToPost);
 		try {
@@ -155,7 +158,8 @@ public class RestletTestCase {
 		}
 	}
 	
-	public void doDelete(ClientResource cr) {
+	public void doDelete(String path) {
+		ClientResource cr = new ClientResource(BASE_URI + path);
 		try {
 			cr.delete();
 		} catch (ResourceException e) {
@@ -171,23 +175,22 @@ public class RestletTestCase {
 		}
 	}
 	
-	public void doTest(String uri, String fileToPut, String fileToPost, boolean get, boolean delete) {
-		ClientResource cr = new ClientResource(uri);
+	public void doFullTest(String path, String fileToPut, String fileToPost, boolean get, boolean delete) {
 		
 		if (fileToPut != null) {
-			doPut(cr, fileToPut);
+			doPut(path, fileToPut);
 		}
 
 		if (get) {
-			doGet(cr);
+			doGet(path);
 		}
 		
 		if (fileToPost != null) {
-			doPost(cr, fileToPost);
+			doPost(path, fileToPost);
 		}
 		
 		if (delete) {
-			doDelete(cr);
+			doDelete(path);
 		}
 		
 	}

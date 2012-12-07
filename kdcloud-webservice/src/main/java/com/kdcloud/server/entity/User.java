@@ -25,12 +25,12 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
-public class User {
+public class User implements com.kdcloud.server.persistence.Entity {
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String encodedKey;
+    private String uuid;
 	
 	@Persistent
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
@@ -47,12 +47,12 @@ public class User {
 		this.name = userId;
 	}
 
-	public String getEncodedKey() {
-		return encodedKey;
+	public String getUUID() {
+		return uuid;
 	}
 
-	public void setEncodedKey(String encodedKey) {
-		this.encodedKey = encodedKey;
+	public void setUUID(String uuid) {
+		this.uuid = uuid;
 	}
 
 //	public Long getId() {

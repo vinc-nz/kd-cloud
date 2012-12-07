@@ -16,9 +16,7 @@
  */
 package com.kdcloud.server.rest.application;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Map.Entry;
 import java.util.Properties;
 

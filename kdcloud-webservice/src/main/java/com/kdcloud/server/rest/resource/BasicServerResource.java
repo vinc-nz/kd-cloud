@@ -6,7 +6,8 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
-import com.kdcloud.lib.domain.Describable;
+import com.kdcloud.server.persistence.Describable;
+
 
 public abstract class BasicServerResource<T> extends KDServerResource {
 	

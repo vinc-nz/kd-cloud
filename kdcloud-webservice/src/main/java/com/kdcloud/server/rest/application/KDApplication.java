@@ -24,6 +24,7 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
+import com.kdcloud.server.rest.resource.IndexServerResource;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
 public class KDApplication extends Application {
@@ -41,6 +42,7 @@ public class KDApplication extends Application {
 
 		Router router = new Router(getContext());
 		
+		//automatically map resources with uri
 		Reflections reflections = new Reflections(
 				"com.kdcloud.server.rest.resource");
 
@@ -49,14 +51,17 @@ public class KDApplication extends Application {
 
 		for (Class<? extends KDServerResource> clazz : allClasses) {
 			try {
-				getLogger().info("found resource " + clazz.getSimpleName());
+				getLogger().fine("found resource " + clazz.getSimpleName());
 				String uri = clazz.getField("URI").get(null).toString();
 				router.attach(uri, clazz);
-				getLogger().info("mapped uri " + uri);
+				getLogger().fine("mapped uri " + uri);
 			} catch (Exception e) {
-				getLogger().info("could not map any uri to the class");
+				getLogger().fine("could not map any uri to the class");
 			}
 		}
+		
+		//manually map indexes
+		router.attach("/workflow", IndexServerResource.class);
 
 		return router;
 	}

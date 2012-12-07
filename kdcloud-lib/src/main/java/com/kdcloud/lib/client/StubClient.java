@@ -31,7 +31,7 @@ import org.w3c.dom.Document;
 import weka.core.DenseInstance;
 import weka.core.Instances;
 
-import com.kdcloud.lib.domain.Modality;
+import com.kdcloud.lib.domain.ModalitySpecification;
 
 public class StubClient extends BaseClient {
 	
@@ -42,7 +42,7 @@ public class StubClient extends BaseClient {
 		// TODO Auto-generated constructor stub
 	}
 
-	public StubClient(String url, Modality modality)
+	public StubClient(String url, ModalitySpecification modality)
 			throws ParserConfigurationException {
 		super(url, modality);
 		// TODO Auto-generated constructor stub
@@ -108,14 +108,14 @@ public class StubClient extends BaseClient {
 		BaseClient kdcloud = new StubClient(url);
 		kdcloud.setRepeatAllowed(false);
 		kdcloud.setAuthentication("admin", "admin");
-		List<Modality> modalities = kdcloud.getModalities();
-		Modality dataFeed = modalities.get(0);
+		List<ModalitySpecification> modalities = kdcloud.getModalities();
+		ModalitySpecification dataFeed = modalities.get(0);
 		kdcloud.setModality(dataFeed);
 		kdcloud.executeModality();
-		Modality single = modalities.get(1);
+		ModalitySpecification single = modalities.get(1);
 		kdcloud.setModality(single);
 		kdcloud.executeModality();
-		Modality global = modalities.get(2);
+		ModalitySpecification global = modalities.get(2);
 		kdcloud.setModality(global);
 		kdcloud.executeModality();
 	}

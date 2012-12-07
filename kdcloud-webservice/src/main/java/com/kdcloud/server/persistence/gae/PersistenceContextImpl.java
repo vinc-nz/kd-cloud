@@ -21,6 +21,7 @@ import javax.jdo.PersistenceManager;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.kdcloud.server.persistence.Entity;
 import com.kdcloud.server.persistence.InstancesMapper;
 import com.kdcloud.server.persistence.PersistenceContext;
 
@@ -35,10 +36,10 @@ public class PersistenceContextImpl implements PersistenceContext {
 	}
 
 	@Override
-	public Object findByName(Class<?> clazz, String name) {
+	public Entity findByName(Class<?> clazz, String name) {
 		Key k = KeyFactory.createKey(clazz.getSimpleName(), name);
 		try {
-			return pm.getObjectById(clazz, k);
+			return (Entity) pm.getObjectById(clazz, k);
 		} catch (Exception e) {
 			return null;
 		}
@@ -46,24 +47,24 @@ public class PersistenceContextImpl implements PersistenceContext {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Object> getAll(Class<?> clazz) {
-		return (Collection<Object>) pm.newQuery(clazz).execute();
+	public Collection<Entity> getAll(Class<?> clazz) {
+		return (Collection<Entity>) pm.newQuery(clazz).execute();
 	}
 
 	@Override
-	public void save(Object e) {
+	public void save(Entity e) {
 		pm.makePersistent(e);
 	}
 
 	@Override
-	public void delete(Object e) {
+	public void delete(Entity e) {
 		pm.deletePersistent(e);
 	}
 
 	@Override
-	public void save(Object e, String name) {
+	public void save(Entity e, String name) {
 		try {
-			e.getClass().getMethod("setName", String.class).invoke(e, name);
+			e.setName(name);
 			pm.makePersistent(e);
 		} catch (Exception thrown) {
 			thrown.printStackTrace();
@@ -71,15 +72,13 @@ public class PersistenceContextImpl implements PersistenceContext {
 	}
 
 	@Override
-	public Object findChildByName(Object father, Class<?> child,
+	public Entity findChildByName(Entity father, Class<?> child,
 			String childName) {
 		try {
-			String fatherName = (String) father.getClass().getMethod("getName")
-					.invoke(father);
 			Key key = new KeyFactory.Builder(father.getClass().getSimpleName(),
-					fatherName).addChild(child.getSimpleName(), childName)
+					father.getName()).addChild(child.getSimpleName(), childName)
 					.getKey();
-			return pm.getObjectById(child, key);
+			return (Entity) pm.getObjectById(child, key);
 		} catch (Exception tr) {
 			return null;
 		}
@@ -96,9 +95,9 @@ public class PersistenceContextImpl implements PersistenceContext {
 	}
 
 	@Override
-	public Object findByUUID(String uuid) {
+	public Entity findByUUID(String uuid) {
 		Key key = KeyFactory.stringToKey(uuid);
-		return pm.getObjectById(key);
+		return (Entity) pm.getObjectById(key);
 	}
 	
 	

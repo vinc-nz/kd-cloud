@@ -47,7 +47,7 @@ import org.w3c.dom.NodeList;
 import weka.core.Instances;
 
 import com.kdcloud.lib.domain.DataSpecification;
-import com.kdcloud.lib.domain.Modality;
+import com.kdcloud.lib.domain.ModalitySpecification;
 import com.kdcloud.lib.domain.ServerAction;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.domain.ServerParameter.ReferenceType;
@@ -60,7 +60,7 @@ public abstract class BaseClient implements Runnable {
 	String baseUri;
 
 	// the executing modality
-	Modality modality;
+	ModalitySpecification modality;
 
 	// used for restlet requests
 	ClientResource resource;
@@ -134,7 +134,7 @@ public abstract class BaseClient implements Runnable {
 		this(url, null);
 	}
 
-	public BaseClient(String url, Modality modality)
+	public BaseClient(String url, ModalitySpecification modality)
 			throws ParserConfigurationException {
 		super();
 		this.baseUri = url;
@@ -168,7 +168,7 @@ public abstract class BaseClient implements Runnable {
 		return canRun;
 	}
 
-	public synchronized Modality getModality() {
+	public synchronized ModalitySpecification getModality() {
 		return modality;
 	}
 
@@ -177,7 +177,7 @@ public abstract class BaseClient implements Runnable {
 	 * 
 	 * @param modality
 	 */
-	public synchronized void setModality(Modality modality) {
+	public synchronized void setModality(ModalitySpecification modality) {
 		this.canRun = false;
 		this.modality = modality;
 	}
@@ -191,11 +191,11 @@ public abstract class BaseClient implements Runnable {
 		resource.setChallengeResponse(ChallengeScheme.HTTP_BASIC, userId, password);
 	}
 
-	public static List<Modality> getModalities(String url) {
+	public static List<ModalitySpecification> getModalities(String url) {
 		return getModalities(url, null);
 	}
 
-	public static List<Modality> getModalities(String url, String accessToken) {
+	public static List<ModalitySpecification> getModalities(String url, String accessToken) {
 		ClientResource cr = new ClientResource(url + ModalitiesResource.URI);
 		if (accessToken != null)
 			cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login",
@@ -203,7 +203,7 @@ public abstract class BaseClient implements Runnable {
 		return cr.wrap(ModalitiesResource.class).listModalities().asList();
 	}
 	
-	public List<Modality> getModalities() {
+	public List<ModalitySpecification> getModalities() {
 		setResourceReference(ModalitiesResource.URI);
 		return resource.wrap(ModalitiesResource.class).listModalities().asList();
 	}

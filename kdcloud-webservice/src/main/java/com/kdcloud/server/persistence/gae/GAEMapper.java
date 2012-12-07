@@ -25,7 +25,7 @@ public class GAEMapper implements InstancesMapper {
 	@Override
 	public void save(Instances instances, DataTable table) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Key tableKey = KeyFactory.stringToKey(table.getEncodedKey());
+		Key tableKey = KeyFactory.stringToKey(table.getUUID());
 		List<Entity> entities = new ArrayList<Entity>(instances.size());
 		for (Instance inst : instances) {
 			Entity e = new Entity(instances.relationName(), tableKey);
@@ -39,7 +39,7 @@ public class GAEMapper implements InstancesMapper {
 	
 	public Iterator<Entity> query(DataTable table) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Key tableKey = KeyFactory.stringToKey(table.getEncodedKey());
+		Key tableKey = KeyFactory.stringToKey(table.getUUID());
 		PreparedQuery q = datastore.prepare(new Query(tableKey));
 		Iterator<Entity> it = q.asIterator();
 		it.next(); // table

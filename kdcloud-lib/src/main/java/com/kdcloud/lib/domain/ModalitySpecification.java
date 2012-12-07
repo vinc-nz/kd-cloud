@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="modality")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Modality implements Serializable {
+public class ModalitySpecification implements Serializable {
 	
 	/**
 	 * 
@@ -36,9 +36,6 @@ public class Modality implements Serializable {
 	
 	@XmlElement
 	String name;
-	
-	@XmlElement
-	Metadata metadata;
 	
 	@XmlElement
 	DataSpecification inputSpecification;

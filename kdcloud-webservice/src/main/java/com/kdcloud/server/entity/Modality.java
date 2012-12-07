@@ -6,29 +6,42 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.kdcloud.lib.domain.Modality;
+import com.kdcloud.lib.domain.Metadata;
+import com.kdcloud.lib.domain.ModalitySpecification;
+import com.kdcloud.server.persistence.Describable;
 
 @PersistenceCapable
-public class StoredModality {
+public class Modality implements Describable {
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String encodedKey;
+    private String uuid;
 	
 	@Persistent
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String name;
 	
 	@Persistent(serialized="true")
-	Modality modality;
+	ModalitySpecification modality;
+	
+	@Persistent(serialized="true")
+	Metadata metadata;
 
-	public String getEncodedKey() {
-		return encodedKey;
+	public Metadata getMetadata() {
+		return metadata;
 	}
 
-	public void setEncodedKey(String encodedKey) {
-		this.encodedKey = encodedKey;
+	public void setMetadata(Metadata metadata) {
+		this.metadata = metadata;
+	}
+
+	public String getUUID() {
+		return uuid;
+	}
+
+	public void setUUID(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public String getName() {
@@ -39,11 +52,11 @@ public class StoredModality {
 		this.name = name;
 	}
 
-	public Modality getModality() {
+	public ModalitySpecification getModality() {
 		return modality;
 	}
 
-	public void setModality(Modality modality) {
+	public void setModality(ModalitySpecification modality) {
 		this.modality = modality;
 	}
 	

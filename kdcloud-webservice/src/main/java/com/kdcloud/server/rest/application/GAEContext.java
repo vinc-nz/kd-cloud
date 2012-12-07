@@ -27,7 +27,7 @@ import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeLoader;
-import com.kdcloud.server.entity.StoredPlugin;
+import com.kdcloud.server.entity.EnginePlugin;
 import com.kdcloud.server.persistence.PersistenceContext;
 import com.kdcloud.server.persistence.PersistenceContextFactory;
 import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
@@ -55,7 +55,7 @@ public class GAEContext extends Context {
 				} catch (ClassNotFoundException e1) {
 					String jarName = className.replaceAll(".*\\.", "");
 					PersistenceContext pc = pcf.get();
-					StoredPlugin stored = (StoredPlugin) pc.findByName(StoredPlugin.class, jarName);
+					EnginePlugin stored = (EnginePlugin) pc.findByName(EnginePlugin.class, jarName);
 					if (stored == null)
 						throw new ClassNotFoundException();
 					InputStream stream = stored.readPlugin();

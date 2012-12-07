@@ -22,15 +22,15 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class NodeFactory {
+public class NodeDescription {
 	
 	public static final String NODE_PACKAGE = "com.kdcloud.engine.embedded.node";
 
-	public NodeFactory() {
+	public NodeDescription() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public NodeFactory(Class<? extends Node> type) {
+	public NodeDescription(Class<? extends Node> type) {
 		super();
 		this.type = type.getSimpleName();
 	}
@@ -39,7 +39,7 @@ public class NodeFactory {
 	String type;
 
 	@XmlElement(name = "parameter")
-	List<InitParam> parameters = new LinkedList<NodeFactory.InitParam>();
+	List<InitParam> parameters = new LinkedList<NodeDescription.InitParam>();
 
 	static class InitParam {
 

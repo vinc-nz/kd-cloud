@@ -16,35 +16,46 @@
  */
 package com.kdcloud.server.rest.resource;
 
+import java.io.IOException;
+
 import org.junit.Test;
+import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.rest.application.RestletTestCase;
 
 public class ServerResourceTest extends RestletTestCase {
 
-	@Test
+//	@Test
 	public void testGroupResource() {
 		doTest(getServerUrl() + "/group/test", "group.xml" , "group-post.properties", true, true);
 	}
 	
-	@Test
+//	@Test
 	public void testDatasetResource() {
 		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
 		doTest(getServerUrl() + "/group/test/data", "ecg_small.csv", null, true, true);
 	}
 	
-	@Test
+//	@Test
 	public void testAnalysis() {
 		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
 		doTest(getServerUrl() + "/group/test/data", "ecg_small.csv", null, false, false);
 		doTest(getServerUrl() + "/engine/workflow/ecg.xml", null, "ecg-test.properties", false, false);
 	}
 	
-	@Test
+//	@Test
 	public void testUsers() {
 		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
 		doTest(getServerUrl() + "/group/test/users", null, null, true, false);
 	}
+	
+	@Test
+	public void testIndex() throws ResourceException, IOException {
+		ClientResource cr = new ClientResource(getServerUrl() + "/workflow");
+		cr.get().write(System.out);
+	}
+	
 	
 
 	

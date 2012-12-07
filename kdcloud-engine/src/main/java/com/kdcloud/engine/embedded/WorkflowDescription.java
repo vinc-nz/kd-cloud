@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class WorkflowDescription {
 	
 	@XmlElement(name="node")
-	List<NodeFactory> nodes = new LinkedList<NodeFactory>();
+	List<NodeDescription> nodes = new LinkedList<NodeDescription>();
 	
 	public Node[] getInstance(NodeLoader nodeLoader) throws IOException {
 		Node[] workflow = new Node[nodes.size()];
 		int i = 0;
-		for (NodeFactory factory : nodes) {
+		for (NodeDescription factory : nodes) {
 			workflow[i] = factory.create(nodeLoader);
 			i++;
 		}

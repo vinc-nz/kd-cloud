@@ -10,31 +10,34 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Blob;
+import com.kdcloud.lib.domain.Metadata;
+import com.kdcloud.server.persistence.Describable;
 
 @PersistenceCapable
-public class StoredPlugin {
+public class Workflow implements Describable {
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String encodedKey;
+    private String uuid;
 	
 	@Persistent
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String name;
 	
-	private String description;
 	
 	Blob content;
 
+	@Persistent(serialized="true")
+	Metadata metadata;
 
-	public String getEncodedKey() {
-		return encodedKey;
+	public String getUUID() {
+		return uuid;
 	}
 
 
-	public void setEncodedKey(String encodedKey) {
-		this.encodedKey = encodedKey;
+	public void setUUID(String uuid) {
+		this.uuid = uuid;
 	}
 
 
@@ -61,18 +64,18 @@ public class StoredPlugin {
 		this.content = new Blob(content);
 	}
 	
-	public InputStream readPlugin() {
+	public InputStream readWorkflow() {
 		return new ByteArrayInputStream(content.getBytes());
 	}
 
 
-	public String getDescription() {
-		return description;
+	public Metadata getMetadata() {
+		return metadata;
 	}
 
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setMetadata(Metadata metadata) {
+		this.metadata = metadata;
 	}
-	
+
 }

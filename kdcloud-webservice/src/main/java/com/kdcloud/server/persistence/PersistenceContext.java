@@ -21,13 +21,13 @@ import java.util.Collection;
 
 public interface PersistenceContext {
 	
-	public Object findByUUID(String uuid);
-	public Object findByName(Class<?> clazz, String name);
-	public Object findChildByName(Object father, Class<?> child, String name);
-	public Collection<Object> getAll(Class<?> clazz);
-	public void save(Object e);
-	public void save(Object e, String name);
-	public void delete(Object e);
+	public Entity findByUUID(String uuid);
+	public Entity findByName(Class<?> clazz, String name);
+	public Entity findChildByName(Entity father, Class<?> child, String name);
+	public Collection<Entity> getAll(Class<?> clazz);
+	public void save(Entity e);
+	public void save(Entity e, String name);
+	public void delete(Entity e);
 	public void close();
 	public InstancesMapper getInstancesMapper();
 	

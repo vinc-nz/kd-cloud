@@ -27,12 +27,12 @@ import org.restlet.resource.ResourceException;
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeDescription;
 import com.kdcloud.lib.rest.api.EnginePluginResource;
-import com.kdcloud.server.entity.StoredPlugin;
+import com.kdcloud.server.entity.EnginePlugin;
 import com.kdcloud.server.rest.application.ConvertUtils;
 import com.kdcloud.server.rest.application.StreamClassLoader;
 
 public class EnginePluginServerResource extends
-		BasicServerResource<StoredPlugin> implements EnginePluginResource {
+		BasicServerResource<EnginePlugin> implements EnginePluginResource {
 
 
 	@Override
@@ -54,30 +54,30 @@ public class EnginePluginServerResource extends
 	}
 
 	@Override
-	public StoredPlugin find() {
-		return (StoredPlugin) getPersistenceContext().findByName(
-				StoredPlugin.class, getResourceIdentifier());
+	public EnginePlugin find() {
+		return (EnginePlugin) getPersistenceContext().findByName(
+				EnginePlugin.class, getResourceIdentifier());
 	}
 
 	@Override
-	public StoredPlugin create() {
-		StoredPlugin stored = new StoredPlugin();
+	public EnginePlugin create() {
+		EnginePlugin stored = new EnginePlugin();
 		stored.setName(getResourceIdentifier());
 		return stored;
 	}
 
 	@Override
-	public void save(StoredPlugin e) {
+	public void save(EnginePlugin e) {
 		getPersistenceContext().save(e);
 	}
 
 	@Override
-	public void delete(StoredPlugin e) {
+	public void delete(EnginePlugin e) {
 		getPersistenceContext().delete(e);
 	}
 
 	@Override
-	public void update(StoredPlugin entity, Representation representation) {
+	public void update(EnginePlugin entity, Representation representation) {
 		try {
 			entity.setContent(ConvertUtils.toByteArray(representation));
 			if (!validPlugin(entity.readPlugin(), getResourceIdentifier()))

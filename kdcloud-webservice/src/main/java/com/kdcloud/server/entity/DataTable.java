@@ -25,12 +25,12 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.datanucleus.annotations.Unowned;
 
 @PersistenceCapable
-public class DataTable {
+public class DataTable implements com.kdcloud.server.persistence.Entity {
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
-	private String encodedKey;
+	private String uuid;
 
 	@Persistent
 	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
@@ -48,12 +48,12 @@ public class DataTable {
 		this.name = name;
 	}
 
-	public String getEncodedKey() {
-		return encodedKey;
+	public String getUUID() {
+		return uuid;
 	}
 
-	public void setEncodedKey(String encodedKey) {
-		this.encodedKey = encodedKey;
+	public void setUUID(String uuid) {
+		this.uuid = uuid;
 	}
 
 	@Override

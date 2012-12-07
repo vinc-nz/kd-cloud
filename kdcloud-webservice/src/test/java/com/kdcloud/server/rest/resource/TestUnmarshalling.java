@@ -13,6 +13,7 @@ import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.embedded.WorkflowDescription;
 import com.kdcloud.lib.domain.GroupSpecification;
+import com.kdcloud.lib.domain.Index;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class TestUnmarshalling {
@@ -36,6 +37,12 @@ public class TestUnmarshalling {
 		assertNotNull(spec.getMetadata());
 		assertNotNull(spec.getDataSpecification());
 		assertNotNull(spec.getInvitationMessage());
+	}
+	
+	@Test
+	public void testIndex() {
+		Index index = (Index) unmarshal("workflow/index.xml", Index.class);
+		assertEquals(1, index.size());
 	}
 
 }

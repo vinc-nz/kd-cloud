@@ -23,12 +23,12 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
-import com.kdcloud.lib.domain.Modality;
+import com.kdcloud.lib.domain.ModalitySpecification;
 import com.kdcloud.lib.rest.api.UserModalityResource;
-import com.kdcloud.server.entity.StoredModality;
+import com.kdcloud.server.entity.Modality;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
-public class UserModalityServerResource extends BasicServerResource<StoredModality> implements
+public class UserModalityServerResource extends BasicServerResource<Modality> implements
 		UserModalityResource {
 	
 
@@ -41,7 +41,7 @@ public class UserModalityServerResource extends BasicServerResource<StoredModali
 	}
 	
 	@Override
-	public Modality getModality() {
+	public ModalitySpecification getModality() {
 		return read().getModality();
 	}
 
@@ -51,32 +51,32 @@ public class UserModalityServerResource extends BasicServerResource<StoredModali
 	}
 
 	@Override
-	public StoredModality find() {
-		return (StoredModality) getPersistenceContext().findByName(
-				StoredModality.class, getResourceIdentifier());
+	public Modality find() {
+		return (Modality) getPersistenceContext().findByName(
+				Modality.class, getResourceIdentifier());
 	}
 
 	@Override
-	public void save(StoredModality e) {
+	public void save(Modality e) {
 		getPersistenceContext().save(e);
 	}
 
 	@Override
-	public void delete(StoredModality e) {
+	public void delete(Modality e) {
 		getPersistenceContext().delete(e);
 	}
 
 	@Override
-	public StoredModality create() {
-		StoredModality stored = new StoredModality();
+	public Modality create() {
+		Modality stored = new Modality();
 		stored.setName(getResourceIdentifier());
 		return stored;
 	}
 
 	@Override
-	public void update(StoredModality entity, Representation representation) {
+	public void update(Modality entity, Representation representation) {
 		try {
-			Modality m = (Modality) ConvertUtils.toObject(Modality.class, representation);
+			ModalitySpecification m = (ModalitySpecification) ConvertUtils.toObject(ModalitySpecification.class, representation);
 			entity.setModality(m);
 		} catch (Exception e) {
 			getLogger().log(Level.INFO, "error reading entity", e);

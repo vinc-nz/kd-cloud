@@ -32,10 +32,10 @@ import org.restlet.resource.ResourceException;
 import org.w3c.dom.Document;
 
 import com.kdcloud.engine.KDEngine;
-import com.kdcloud.server.entity.StoredWorkflow;
+import com.kdcloud.server.entity.Workflow;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
-public class WorkflowServerResource extends BasicServerResource<StoredWorkflow>  {
+public class WorkflowServerResource extends BasicServerResource<Workflow>  {
 	
 	public static final String URI = "/workflow/{id}";
 	
@@ -79,30 +79,30 @@ public class WorkflowServerResource extends BasicServerResource<StoredWorkflow> 
 
 
 	@Override
-	public StoredWorkflow find() {
-		return (StoredWorkflow) getPersistenceContext().findByName(
-				StoredWorkflow.class, getResourceIdentifier());
+	public Workflow find() {
+		return (Workflow) getPersistenceContext().findByName(
+				Workflow.class, getResourceIdentifier());
 	}
 
 	@Override
-	public void save(StoredWorkflow e) {
+	public void save(Workflow e) {
 		getPersistenceContext().save(e);
 	}
 
 	@Override
-	public void delete(StoredWorkflow e) {
+	public void delete(Workflow e) {
 		getPersistenceContext().delete(e);
 	}
 
 	@Override
-	public StoredWorkflow create() {
-		StoredWorkflow stored = new StoredWorkflow();
+	public Workflow create() {
+		Workflow stored = new Workflow();
 		stored.setName(getResourceIdentifier());
 		return stored;
 	}
 
 	@Override
-	public void update(StoredWorkflow entity, Representation representation) {
+	public void update(Workflow entity, Representation representation) {
 		try {
 			byte[] workflow = ConvertUtils.toByteArray(representation);
 			entity.setContent(workflow);

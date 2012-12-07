@@ -21,14 +21,14 @@ import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
-import com.kdcloud.lib.domain.Modality;
+import com.kdcloud.lib.domain.ModalitySpecification;
 
 public interface UserModalityResource {
 	
 	public static final String URI = "/modality/{id}";
 	
 	@Get
-	public Modality getModality();
+	public ModalitySpecification getModality();
 	
 	@Put
 	public void saveModality(Representation rep); 

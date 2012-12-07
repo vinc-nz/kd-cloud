@@ -44,7 +44,7 @@
 				<name>rr</name>
 				<type>DOUBLE</type>
 			</column>
-			<view>/view/view.xml</view>
+			<view>/view/tachogram.xml</view>
 		</outputSpecification>
 	</modality>
 	<modality>
@@ -71,7 +71,7 @@
 				<name>rr</name>
 				<type>DOUBLE</type>
 			</column>
-			<view>/view/view.xml</view>
+			<view>/view/tachogram.xml</view>
 		</outputSpecification>
 	</modality>
 </modalities>

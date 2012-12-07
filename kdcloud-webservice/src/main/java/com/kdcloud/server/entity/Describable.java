@@ -17,7 +17,7 @@ public abstract class Describable extends Entity {
 	private User owner;
 	
 	@Persistent(serialized="true")
-	private Metadata metadata;
+	private Metadata metadata = new Metadata();
 
 	public Describable() {
 		super();

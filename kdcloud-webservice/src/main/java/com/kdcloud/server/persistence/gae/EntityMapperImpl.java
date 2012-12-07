@@ -91,7 +91,14 @@ public class EntityMapperImpl implements EntityMapper {
 	@Override
 	public Entity findByUUID(String uuid) {
 		Key key = KeyFactory.stringToKey(uuid);
-		return (Entity) pm.getObjectById(key);
+		String entityKind = Entity.class.getSimpleName();
+		String className = Entity.class.getName().replace(entityKind, key.getKind());
+		try {
+			return (Entity) pm.getObjectById(Class.forName(className), key);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	

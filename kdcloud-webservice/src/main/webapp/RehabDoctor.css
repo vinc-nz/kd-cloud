@@ -32,3 +32,10 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+.gwt-Label-Login {
+	color: Navy;
+	font-size: 14px;
+	font-style: normal;
+	font-family: Arial;
+	font-weight: bold;
+}

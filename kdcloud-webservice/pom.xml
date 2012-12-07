@@ -123,6 +123,7 @@
 			<groupId>org.restlet.gae</groupId>
 			<artifactId>org.restlet.ext.servlet</artifactId>
 			<version>${restlet.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -131,22 +132,19 @@
 			<version>${restlet.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.restlet.gae</groupId>
-			<artifactId>org.restlet.ext.net</artifactId>
-			<version>${restlet.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.restlet.gae</groupId>
 			<artifactId>org.restlet.ext.jaxb</artifactId>
 			<version>${restlet.version}</version>
+			<scope>runtime</scope>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.restlet.gae</groupId>
-			<artifactId>org.restlet.ext.gwt</artifactId>
+			<artifactId>org.restlet.ext.net</artifactId>
 			<version>${restlet.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- other dep -->
@@ -194,6 +192,13 @@
 		<dependency>
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet.ext.simple</artifactId>
+			<version>${restlet.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.httpclient</artifactId>
 			<version>${restlet.version}</version>
 			<scope>test</scope>
 		</dependency>

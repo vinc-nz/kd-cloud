@@ -19,6 +19,7 @@ package com.kdcloud.server.rest.resource;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.rest.application.RestletTestCase;
@@ -54,7 +55,5 @@ public class ServerResourceTest extends RestletTestCase {
 		doGet("/workflow");
 	}
 	
-	
-
 	
 }

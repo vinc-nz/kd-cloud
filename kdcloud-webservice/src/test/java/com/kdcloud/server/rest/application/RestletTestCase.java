@@ -17,6 +17,8 @@
 package com.kdcloud.server.rest.application;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -25,6 +27,7 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.restlet.Application;
+import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -34,14 +37,16 @@ import org.restlet.data.Form;
 import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
+import org.restlet.ext.httpclient.HttpClientHelper;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Router;
 
+import com.google.appengine.api.appidentity.AppIdentityServicePb.SigningService.Method;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.gae.JunitMapperFactory;
 
 public abstract class RestletTestCase {
@@ -51,6 +56,21 @@ public abstract class RestletTestCase {
 	static final String BASE_URI = HOST + ":" + PORT;
 	
 	JunitMapperFactory factory = new JunitMapperFactory();
+	
+	Context httpContext;
+	
+	Restlet clientDistpatcher = new Restlet() {
+		public void handle(Request request, Response response) {
+			if (request.getProtocol().equals(Protocol.CLAP)) {
+				new Client(Protocol.CLAP).handle(request, response);
+			} else  {
+				List<Protocol> protocols = Arrays.asList(Protocol.HTTP);
+				String helperClass = HttpClientHelper.class.getName();
+				Client client = new Client(null, protocols, helperClass);
+				client.handle(request, response);
+			}
+		};
+	};
 	
 	UserProvider userProvider = new UserProvider() {
 		
@@ -73,22 +93,19 @@ public abstract class RestletTestCase {
 			return router;
 		}
 
-		@Override
-		public void handle(Request request, Response response) {
-			super.handle(request, response);
-		}
-
 	};
 
 	Component component;
 
 	@Before
 	public void setUp() {
+		httpContext = new Context();
+		
+		httpContext.setClientDispatcher(clientDistpatcher);
 		
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, PORT);
-		component.getClients().add(Protocol.CLAP);
-		
+//		component.getClients().add(Protocol.CLAP);
 		component.getDefaultHost().attach(testApp);
 
 		try {
@@ -116,7 +133,7 @@ public abstract class RestletTestCase {
 	}
 	
 	public void doPut(String path, String fileToPut) {
-		ClientResource cr = new ClientResource(BASE_URI + path);
+		ClientResource cr = new ClientResource(httpContext, BASE_URI + path);
 		LocalReference ref = new LocalReference(fileToPut);
 		ref.setProtocol(Protocol.CLAP);
 		ClientResource local = new ClientResource(ref);
@@ -132,7 +149,7 @@ public abstract class RestletTestCase {
 	}
 	
 	public void doGet(String path) {
-		ClientResource cr = new ClientResource(BASE_URI + path);
+		ClientResource cr = new ClientResource(httpContext, BASE_URI + path);
 		try {
 			cr.get();
 		} catch (ResourceException e) {
@@ -142,7 +159,7 @@ public abstract class RestletTestCase {
 	}
 	
 	public void doPost(String path, String fileToPost) {
-		ClientResource cr = new ClientResource(BASE_URI + path);
+		ClientResource cr = new ClientResource(httpContext, BASE_URI + path);
 		Form form = new Form();
 		InputStream in = getClass().getClassLoader().getResourceAsStream(fileToPost);
 		try {
@@ -159,7 +176,7 @@ public abstract class RestletTestCase {
 	}
 	
 	public void doDelete(String path) {
-		ClientResource cr = new ClientResource(BASE_URI + path);
+		ClientResource cr = new ClientResource(httpContext, BASE_URI + path);
 		try {
 			cr.delete();
 		} catch (ResourceException e) {

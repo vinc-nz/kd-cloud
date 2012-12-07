@@ -18,8 +18,10 @@ package com.kdcloud.server.persistence;
 
 import java.util.Collection;
 
+import com.kdcloud.server.entity.Entity;
 
-public interface PersistenceContext {
+
+public interface EntityMapper {
 	
 	public Entity findByUUID(String uuid);
 	public Entity findByName(Class<?> clazz, String name);
@@ -29,6 +31,5 @@ public interface PersistenceContext {
 	public void save(Entity e, String name);
 	public void delete(Entity e);
 	public void close();
-	public InstancesMapper getInstancesMapper();
 	
 }

@@ -16,65 +16,17 @@
  */
 package com.kdcloud.server.entity;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.datanucleus.annotations.Unowned;
 
 @PersistenceCapable
-public class DataTable implements com.kdcloud.server.persistence.Entity {
+public class DataTable extends Entity {
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
-	private String uuid;
-
-	@Persistent
-	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-	private String name;
-	
-	@Persistent
-	@Unowned
-	User owner;
-	
-	public String getName() {
-		return name;
+	public DataTable() {
+		super();
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getUUID() {
-		return uuid;
-	}
-
-	public void setUUID(String uuid) {
-		this.uuid = uuid;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof DataTable)
-			return ((DataTable) obj).name.equals(this.name);
-		return false;
-	}
-	
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
-
-	public void setOwner(User user) {
-		this.owner = user;
-		this.name = user.getName();
-	}
-
-	public User getOwner() {
-		return owner;
+	public DataTable(User owner) {
+		super(owner.getName());
 	}
 
 }

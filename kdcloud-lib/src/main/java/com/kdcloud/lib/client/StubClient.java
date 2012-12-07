@@ -103,22 +103,22 @@ public class StubClient extends BaseClient {
 		System.out.println("this is a report");
 	}
 	
-	public static void main(String[] args) throws Exception {
-		String url = "http://localhost:8888";
-		BaseClient kdcloud = new StubClient(url);
-		kdcloud.setRepeatAllowed(false);
-		kdcloud.setAuthentication("admin", "admin");
-		List<ModalitySpecification> modalities = kdcloud.getModalities();
-		ModalitySpecification dataFeed = modalities.get(0);
-		kdcloud.setModality(dataFeed);
-		kdcloud.executeModality();
-		ModalitySpecification single = modalities.get(1);
-		kdcloud.setModality(single);
-		kdcloud.executeModality();
-		ModalitySpecification global = modalities.get(2);
-		kdcloud.setModality(global);
-		kdcloud.executeModality();
-	}
+//	public static void main(String[] args) throws Exception {
+//		String url = "http://localhost:8888";
+//		BaseClient kdcloud = new StubClient(url);
+//		kdcloud.setRepeatAllowed(false);
+//		kdcloud.setAuthentication("admin", "admin");
+//		List<ModalitySpecification> modalities = kdcloud.getModalities();
+//		ModalitySpecification dataFeed = modalities.get(0);
+//		kdcloud.setModality(dataFeed);
+//		kdcloud.executeModality();
+//		ModalitySpecification single = modalities.get(1);
+//		kdcloud.setModality(single);
+//		kdcloud.executeModality();
+//		ModalitySpecification global = modalities.get(2);
+//		kdcloud.setModality(global);
+//		kdcloud.executeModality();
+//	}
 
 	@Override
 	public void log(String message) {

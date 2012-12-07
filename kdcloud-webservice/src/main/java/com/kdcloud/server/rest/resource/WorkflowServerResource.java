@@ -80,18 +80,18 @@ public class WorkflowServerResource extends BasicServerResource<Workflow>  {
 
 	@Override
 	public Workflow find() {
-		return (Workflow) getPersistenceContext().findByName(
+		return (Workflow) getEntityMapper().findByName(
 				Workflow.class, getResourceIdentifier());
 	}
 
 	@Override
 	public void save(Workflow e) {
-		getPersistenceContext().save(e);
+		getEntityMapper().save(e);
 	}
 
 	@Override
 	public void delete(Workflow e) {
-		getPersistenceContext().delete(e);
+		getEntityMapper().delete(e);
 	}
 
 	@Override

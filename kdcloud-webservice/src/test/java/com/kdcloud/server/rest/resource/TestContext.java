@@ -24,8 +24,9 @@ import org.restlet.Request;
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.gae.JunitMapperFactory;
 import com.kdcloud.server.rest.application.UserProvider;
 
 public class TestContext extends Context {
@@ -35,8 +36,8 @@ public class TestContext extends Context {
 	public TestContext() {
 		HashMap<String, Object> attrs = new HashMap<String, Object>();
 
-		attrs.put(PersistenceContextFactory.class.getName(),
-				new PCFTest());
+		attrs.put(DataMapperFactory.class.getName(),
+				new JunitMapperFactory());
 
 		
 
@@ -45,7 +46,7 @@ public class TestContext extends Context {
 		attrs.put(UserProvider.class.getName(), new UserProvider() {
 
 			@Override
-			public User getUser(Request request, PersistenceContext pc) {
+			public User getUser(Request request, EntityMapper entityMapper) {
 				return new User(USER_ID);
 			}
 		});

@@ -55,7 +55,7 @@ public class EnginePluginServerResource extends
 
 	@Override
 	public EnginePlugin find() {
-		return (EnginePlugin) getPersistenceContext().findByName(
+		return (EnginePlugin) getEntityMapper().findByName(
 				EnginePlugin.class, getResourceIdentifier());
 	}
 
@@ -68,12 +68,12 @@ public class EnginePluginServerResource extends
 
 	@Override
 	public void save(EnginePlugin e) {
-		getPersistenceContext().save(e);
+		getEntityMapper().save(e);
 	}
 
 	@Override
 	public void delete(EnginePlugin e) {
-		getPersistenceContext().delete(e);
+		getEntityMapper().delete(e);
 	}
 
 	@Override

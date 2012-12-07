@@ -19,7 +19,7 @@ import com.google.appengine.api.datastore.Query;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.persistence.InstancesMapper;
 
-public class GAEMapper implements InstancesMapper {
+public class InstancesMapperImpl implements InstancesMapper {
 	
 	
 	@Override

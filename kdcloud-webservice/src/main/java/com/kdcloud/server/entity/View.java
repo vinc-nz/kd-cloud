@@ -23,10 +23,9 @@ import org.xml.sax.SAXException;
 
 import com.google.appengine.api.datastore.Blob;
 import com.kdcloud.lib.domain.Metadata;
-import com.kdcloud.server.persistence.Describable;
 
 @PersistenceCapable
-public class View implements Describable {
+public class View extends Describable {
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

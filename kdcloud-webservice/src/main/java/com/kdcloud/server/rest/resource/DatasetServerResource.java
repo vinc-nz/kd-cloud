@@ -52,7 +52,7 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	@Override
 	public Representation getData() {
 		DataTable entity = read();
-		Instances instances = getPersistenceContext().getInstancesMapper().load(entity);
+		Instances instances = getInstancesMapper().load(entity);
 		return new InstancesRepresentation(MediaType.TEXT_CSV, instances);
 	}
 
@@ -67,29 +67,28 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 		mGroup = findGroup();
 		if (mGroup == null)
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-		return (DataTable) getPersistenceContext().findChildByName(mGroup, DataTable.class, user.getName());
+		return (DataTable) getEntityMapper().findChildByName(mGroup, DataTable.class, user.getName());
 	}
 
 	@Override
 	public void save(DataTable e) {
 		mGroup.getData().add(e);
-		getPersistenceContext().save(mGroup);
-		getPersistenceContext().getInstancesMapper().save(mData, mTable);
+		getEntityMapper().save(mGroup);
+		getInstancesMapper().save(mData, mTable);
 	}
 
 	@Override
 	public void delete(DataTable e) {
-		getPersistenceContext().getInstancesMapper().clear(e);
+		getInstancesMapper().clear(e);
 		mGroup.getData().remove(e);
-		getPersistenceContext().save(mGroup);
+		getEntityMapper().save(mGroup);
 	}
 
 	@Override
 	public DataTable create() {
 		if (!mGroup.isPublic() && !mGroup.getSubscribedUsers().contains(user.getName()))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
-		DataTable table = new DataTable();
-		table.setOwner(user);
+		DataTable table = new DataTable(user);
 		return table;
 	}
 
@@ -115,7 +114,7 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	}
 
 	public Group findGroup() {
-		return (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
+		return (Group) getEntityMapper().findByName(Group.class, getResourceIdentifier());
 	}
 
 }

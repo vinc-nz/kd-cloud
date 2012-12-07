@@ -14,10 +14,28 @@
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.kdcloud.server.persistence;
+package com.kdcloud.server.persistence.gae;
 
-public interface PersistenceContextFactory {
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManagerFactory;
+
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.InstancesMapper;
+
+public class DataMapperFactoryImpl implements DataMapperFactory {
 	
-	public PersistenceContext get();
+	private static final PersistenceManagerFactory pmfInstance =
+	        JDOHelper.getPersistenceManagerFactory("transactions-optional");
+
+	@Override
+	public EntityMapper getEntityMapper() {
+		return new EntityMapperImpl(pmfInstance.getPersistenceManager());
+	}
+
+	@Override
+	public InstancesMapper getInstancesMapper() {
+		return new InstancesMapperImpl();
+	}
 
 }

@@ -40,9 +40,9 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Router;
 
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.rest.resource.PCFTest;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.gae.JunitMapperFactory;
 
 public class RestletTestCase {
 
@@ -50,13 +50,13 @@ public class RestletTestCase {
 	static final int PORT = 8887;
 	static final String BASE_URI = HOST + ":" + PORT;
 	
-	PCFTest pcf = new PCFTest();
+	JunitMapperFactory factory = new JunitMapperFactory();
 	
 	UserProvider userProvider = new UserProvider() {
 		
 		@Override
 		public User getUser(Request request,
-				PersistenceContext pc) {
+				EntityMapper entityMapper) {
 			return new User("test");
 		}
 	};
@@ -68,7 +68,7 @@ public class RestletTestCase {
 			Router router = new Router(getContext());
 			Context context = new GAEContext(getLogger());
 			context.getAttributes().put(UserProvider.class.getName(), userProvider);
-			context.getAttributes().put(PersistenceContextFactory.class.getName(), pcf);
+			context.getAttributes().put(DataMapperFactory.class.getName(), factory);
 			router.attachDefault(new KDApplication(context));
 			return router;
 		}
@@ -93,7 +93,7 @@ public class RestletTestCase {
 
 		try {
 			component.start();
-			pcf.setUp();
+			factory.setUp();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -103,7 +103,7 @@ public class RestletTestCase {
 	@After
 	public void tearDown() {
 		try {
-			pcf.tearDown();
+			factory.tearDown();
 			component.stop();
 		} catch (Exception e) {
 			e.printStackTrace();

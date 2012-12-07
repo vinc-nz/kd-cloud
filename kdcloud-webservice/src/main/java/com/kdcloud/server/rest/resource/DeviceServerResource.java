@@ -36,14 +36,14 @@ public class DeviceServerResource extends KDServerResource implements DeviceReso
 	@Put
 	public void register(String regId) {
 		user.getDevices().add(regId);
-		getPersistenceContext().save(user);
+		getEntityMapper().save(user);
 	}
 
 	@Override
 	@Post
 	public void unregister(String regId) {
 		user.getDevices().remove(regId);
-		getPersistenceContext().save(user);
+		getEntityMapper().save(user);
 	}
 
 }

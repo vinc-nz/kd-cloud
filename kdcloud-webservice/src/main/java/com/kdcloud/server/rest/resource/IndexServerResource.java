@@ -11,8 +11,8 @@ import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.Index;
 import com.kdcloud.lib.rest.api.MetadataResource;
+import com.kdcloud.server.entity.Entity;
 import com.kdcloud.server.entity.Group;
-import com.kdcloud.server.persistence.Entity;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class IndexServerResource extends KDServerResource {
@@ -62,7 +62,7 @@ public class IndexServerResource extends KDServerResource {
 		
 		Index builtin = loadIndex();
 		getLogger().info("builtin index has " + builtin.size() + " references");
-		Collection<Entity> entities = getPersistenceContext().getAll(clazz);
+		Collection<Entity> entities = getEntityMapper().getAll(clazz);
 		Index stored = buildIndex(entities);
 		builtin.addAll(stored);
 		return builtin;

@@ -39,7 +39,7 @@ public class AnalystsServerResource extends KDServerResource implements
 
 	@Override
 	public UserIndex getIndex() {
-		Group group = (Group) getPersistenceContext().findByName(Group.class, getResourceIdentifier());
+		Group group = (Group) getEntityMapper().findByName(Group.class, getResourceIdentifier());
 		if (group == null)
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		return new UserIndex(group.getAnalysts());

@@ -58,19 +58,19 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public Group find() {
-		return (Group) getPersistenceContext().findByName(Group.class,
+		return (Group) getEntityMapper().findByName(Group.class,
 				getResourceIdentifier());
 	}
 
 	@Override
 	public void save(Group e) {
-		getPersistenceContext().save(e);
+		getEntityMapper().save(e);
 	}
 
 	@Override
 	public void delete(Group e) {
 		e.getData().clear();
-		getPersistenceContext().delete(e);
+		getEntityMapper().delete(e);
 	}
 
 	@Override

@@ -29,7 +29,8 @@ import weka.core.Instances;
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.Worker;
 import com.kdcloud.engine.embedded.node.UserDataReader;
-import com.kdcloud.server.persistence.PersistenceContext;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.InstancesMapper;
 
 public class WorkerServerResource extends KDServerResource {
 
@@ -53,7 +54,8 @@ public class WorkerServerResource extends KDServerResource {
 
 	public Instances execute(Form form, InputStream input) throws IOException {
 		Worker worker = engine.getWorker(input);
-		worker.setParameter(PersistenceContext.class.getName(), getPersistenceContext());
+		worker.setParameter(EntityMapper.class.getName(), getEntityMapper());
+		worker.setParameter(InstancesMapper.class.getName(), getInstancesMapper());
 		worker.setParameter(UserDataReader.ANALYST_ID, user.getName());
 		for (String param : worker.getParameters()) {
 			String value = form.getFirstValue(param);

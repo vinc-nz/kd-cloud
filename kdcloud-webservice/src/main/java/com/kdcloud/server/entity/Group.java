@@ -20,38 +20,24 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.datanucleus.annotations.Unowned;
 import com.kdcloud.lib.domain.DataSpecification;
-import com.kdcloud.lib.domain.Metadata;
-import com.kdcloud.server.persistence.Describable;
 
 @PersistenceCapable
-public class Group implements Describable {
+public class Group extends Describable {
 	
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String uuid;
-	
-	@Persistent
-	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-	private String name;
-	
+	public Group(String name) {
+		super(name);
+	}
+
 	@Persistent
 	private Collection<DataTable> data = new HashSet<DataTable>();
 	
 	@Persistent(serialized="true")
 	private DataSpecification inputSpecification;
 	
-	@Persistent
-	@Unowned
-	private User owner;
 	
 	@Persistent(serialized="true")
 	private Collection<String> subscribedUsers = new LinkedList<String>();
@@ -59,34 +45,11 @@ public class Group implements Describable {
 	@Persistent(serialized="true")
 	private Collection<String> analysts = new LinkedList<String>();
 	
-	@Persistent(serialized="true")
-	Metadata metadata;
-	
 	String invitationMessage;
 
 	public Group() {
 	}
 	
-	public Group(String name) {
-		this.name = name;
-	}
-
-	public String getUUID() {
-		return uuid;
-	}
-
-	public void setUUID(String uuid) {
-		this.uuid = uuid;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public Collection<DataTable> getData() {
 		return data;
 	}
@@ -95,14 +58,6 @@ public class Group implements Describable {
 		this.data = data;
 	}
 	
-//	public DataTable addEntry(User user, Instances instances) {
-//		DataTable table = new DataTable();
-//		table.setOwner(user);
-//		table.setName(user.getName());
-//		table.setInstances(instances);
-//		data.add(table);
-//		return table;
-//	}
 
 	public DataSpecification getInputSpecification() {
 		return inputSpecification;
@@ -115,15 +70,7 @@ public class Group implements Describable {
 	public boolean isPublic() {
 		return subscribedUsers.isEmpty();
 	}
-
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
+	
 	public Collection<String> getSubscribedUsers() {
 		return subscribedUsers;
 	}
@@ -140,13 +87,6 @@ public class Group implements Describable {
 		this.analysts = analysts;
 	}
 
-	public Metadata getMetadata() {
-		return metadata;
-	}
-
-	public void setMetadata(Metadata metadata) {
-		this.metadata = metadata;
-	}
 
 	public String getInvitationMessage() {
 		return invitationMessage;
@@ -155,7 +95,6 @@ public class Group implements Describable {
 	public void setInvitationMessage(String invitationMessage) {
 		this.invitationMessage = invitationMessage;
 	}
-	
-	
+
 
 }

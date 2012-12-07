@@ -43,18 +43,18 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 	
 	@Override
 	public View find() {
-		return (View) getPersistenceContext().findByName(View.class, getResourceIdentifier());
+		return (View) getEntityMapper().findByName(View.class, getResourceIdentifier());
 	}
 
 	
 	@Override
 	public void save(View e) {
-		getPersistenceContext().save(e);
+		getEntityMapper().save(e);
 	}
 
 	@Override
 	public void delete(View e) {
-		getPersistenceContext().delete(e);
+		getEntityMapper().delete(e);
 	}
 
 	@Override

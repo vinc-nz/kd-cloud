@@ -14,16 +14,16 @@
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.kdcloud.server.rest.resource;
+package com.kdcloud.server.persistence.gae;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.apphosting.api.ApiProxy;
 import com.google.apphosting.api.ApiProxy.Environment;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.gae.DataMapperFactoryImpl;
 
-public class PCFTest extends PersistenceContextFactoryImpl {
+public class JunitMapperFactory extends DataMapperFactoryImpl {
 	
 	Environment testEnvironment;
 
@@ -41,9 +41,9 @@ public class PCFTest extends PersistenceContextFactoryImpl {
 	
 	
 	@Override
-	public PersistenceContext get() {
+	public EntityMapper getEntityMapper() {
 		ApiProxy.setEnvironmentForCurrentThread(testEnvironment);
-		return super.get();
+		return super.getEntityMapper();
 	}
 
 }

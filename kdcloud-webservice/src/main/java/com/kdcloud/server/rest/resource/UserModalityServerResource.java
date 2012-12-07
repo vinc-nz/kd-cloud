@@ -42,7 +42,7 @@ public class UserModalityServerResource extends BasicServerResource<Modality> im
 	
 	@Override
 	public ModalitySpecification getModality() {
-		return read().getModality();
+		return read().getSpecification();
 	}
 
 	@Override
@@ -52,18 +52,18 @@ public class UserModalityServerResource extends BasicServerResource<Modality> im
 
 	@Override
 	public Modality find() {
-		return (Modality) getPersistenceContext().findByName(
+		return (Modality) getEntityMapper().findByName(
 				Modality.class, getResourceIdentifier());
 	}
 
 	@Override
 	public void save(Modality e) {
-		getPersistenceContext().save(e);
+		getEntityMapper().save(e);
 	}
 
 	@Override
 	public void delete(Modality e) {
-		getPersistenceContext().delete(e);
+		getEntityMapper().delete(e);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class UserModalityServerResource extends BasicServerResource<Modality> im
 	public void update(Modality entity, Representation representation) {
 		try {
 			ModalitySpecification m = (ModalitySpecification) ConvertUtils.toObject(ModalitySpecification.class, representation);
-			entity.setModality(m);
+			entity.setSpecification(m);
 		} catch (Exception e) {
 			getLogger().log(Level.INFO, "error reading entity", e);
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

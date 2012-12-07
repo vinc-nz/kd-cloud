@@ -27,13 +27,15 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.InstancesMapper;
 import com.kdcloud.server.rest.application.UserProvider;
 
 public abstract class KDServerResource extends ServerResource {
 
-	private PersistenceContext persistenceContext;
+	private EntityMapper entityMapper;
+	private InstancesMapper instancesMapper;
 	private UserProvider userProvider;
 	private String resourceIdentifier;
 
@@ -50,7 +52,7 @@ public abstract class KDServerResource extends ServerResource {
 		setRequest(req);
 		doInit();
 		this.resourceIdentifier = resourceIdentifier;
-		this.user = userProvider.getUser(null, persistenceContext);
+		this.user = userProvider.getUser(null, entityMapper);
 	}
 
 	@Override
@@ -58,8 +60,9 @@ public abstract class KDServerResource extends ServerResource {
 		super.doInit();
 		userProvider = (UserProvider) inject(UserProvider.class);
 
-		PersistenceContextFactory pcf = (PersistenceContextFactory) inject(PersistenceContextFactory.class);
-		persistenceContext = pcf.get();
+		DataMapperFactory factory = (DataMapperFactory) inject(DataMapperFactory.class);
+		entityMapper = factory.getEntityMapper();
+		instancesMapper = factory.getInstancesMapper();
 	}
 
 	protected String getResourceIdentifier() {
@@ -89,7 +92,7 @@ public abstract class KDServerResource extends ServerResource {
 	}
 	
 	public void beforeHandle() {
-		user = userProvider.getUser(getRequest(), persistenceContext);
+		user = userProvider.getUser(getRequest(), entityMapper);
 	}
 	
 	@Override
@@ -116,8 +119,12 @@ public abstract class KDServerResource extends ServerResource {
 				.get(baseClass.getName());
 	}
 
-	public PersistenceContext getPersistenceContext() {
-		return persistenceContext;
+	public EntityMapper getEntityMapper() {
+		return entityMapper;
+	}
+	
+	public InstancesMapper getInstancesMapper() {
+		return instancesMapper;
 	}
 
 	public User getUser() {

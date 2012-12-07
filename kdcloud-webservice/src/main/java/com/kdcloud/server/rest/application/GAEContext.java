@@ -28,9 +28,9 @@ import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeLoader;
 import com.kdcloud.server.entity.EnginePlugin;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.gae.DataMapperFactoryImpl;
 
 public class GAEContext extends Context {
 	
@@ -41,9 +41,9 @@ public class GAEContext extends Context {
 		
 		HashMap<String, Object> attrs = new HashMap<String, Object>();
 		
-		final PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
+		final DataMapperFactory factory = new DataMapperFactoryImpl();
 		
-		attrs.put(PersistenceContextFactory.class.getName(), pcf);
+		attrs.put(DataMapperFactory.class.getName(), factory);
 		
 		NodeLoader loader = new NodeLoader() {
 			
@@ -54,12 +54,12 @@ public class GAEContext extends Context {
 					return Class.forName(className).asSubclass(Node.class);
 				} catch (ClassNotFoundException e1) {
 					String jarName = className.replaceAll(".*\\.", "");
-					PersistenceContext pc = pcf.get();
-					EnginePlugin stored = (EnginePlugin) pc.findByName(EnginePlugin.class, jarName);
+					EntityMapper entityMapper = factory.getEntityMapper();
+					EnginePlugin stored = (EnginePlugin) entityMapper.findByName(EnginePlugin.class, jarName);
 					if (stored == null)
 						throw new ClassNotFoundException();
 					InputStream stream = stored.readPlugin();
-					pc.close();
+					entityMapper.close();
 					try {
 						return new StreamClassLoader(stream).loadClass(className).asSubclass(Node.class);
 					} catch (IOException e2) {

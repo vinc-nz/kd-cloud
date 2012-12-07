@@ -35,27 +35,30 @@ import com.kdcloud.engine.embedded.node.UserDataReader;
 import com.kdcloud.engine.embedded.node.UserDataWriter;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.InstancesMapper;
+import com.kdcloud.server.persistence.gae.DataMapperFactoryImpl;
 
 public class EmbeddedEngineTest {
 
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
 			new LocalDatastoreServiceTestConfig());
 
-	PersistenceContext pc;
+	EntityMapper entityMapper;
+	InstancesMapper instancesMapper;
 	String[] descriptions = {"workflow/test-workflow.xml", "workflow/ecg.xml"};
 	KDEngine engine;
 
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
-		PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
-		pc = pcf.get();
+		DataMapperFactory factory = new DataMapperFactoryImpl();
+		entityMapper = factory.getEntityMapper();
+		instancesMapper = factory.getInstancesMapper();
 		Group group = new Group("test");
 		group.setOwner(new User("test"));
-		pc.save(group);
+		entityMapper.save(group);
 		engine = new EmbeddedEngine();
 	}
 
@@ -70,7 +73,8 @@ public class EmbeddedEngineTest {
 			String path = desc;
 			InputStream is = getClass().getClassLoader().getResourceAsStream(path);
 			Worker worker = engine.getWorker(is);
-			worker.setParameter(PersistenceContext.class.getName(), pc);
+			worker.setParameter(EntityMapper.class.getName(), entityMapper);
+			worker.setParameter(InstancesMapper.class.getName(), instancesMapper);
 			worker.setParameter(UserDataReader.ANALYST_ID, "test");
 			worker.setParameter(UserDataReader.SOURCE_USER_PARAMETER, "test");
 			worker.setParameter(UserDataReader.SOURCE_GROUP_PARAMETER, "test");

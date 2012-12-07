@@ -28,7 +28,8 @@ import com.kdcloud.engine.embedded.WrongConfigurationException;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.InstancesMapper;
 
 public class UserDataReader extends NodeAdapter {
 	
@@ -39,7 +40,8 @@ public class UserDataReader extends NodeAdapter {
 	User user;
 	Group group;
 	DataTable table;
-	PersistenceContext pc;
+	EntityMapper entityMapper;
+	InstancesMapper instancesMapper;
 	
 	public UserDataReader() {
 		// TODO Auto-generated constructor stub
@@ -57,18 +59,19 @@ public class UserDataReader extends NodeAdapter {
 		String userId = (String) config.get(SOURCE_USER_PARAMETER);
 		String groupId = (String) config.get(SOURCE_GROUP_PARAMETER);
 		String analystId = (String) config.get(ANALYST_ID);
-		pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
-		if (pc == null)
+		entityMapper = (EntityMapper) config.get(EntityMapper.class.getName());
+		instancesMapper = (InstancesMapper) config.get(InstancesMapper.class.getName());
+		if (entityMapper == null)
 			msg = "no persistence context in configuration";
 		
 		if (userId != null)
-			user = (User) pc.findByName(User.class, userId);
+			user = (User) entityMapper.findByName(User.class, userId);
 		
 		if (user == null)
 			msg = "not a valid user in configuration";
 		
 		if (groupId != null)
-			group = (Group) pc.findByName(Group.class, groupId);
+			group = (Group) entityMapper.findByName(Group.class, groupId);
 		
 		if (group == null) {
 			msg = "not a valid group in configuration";
@@ -80,7 +83,7 @@ public class UserDataReader extends NodeAdapter {
 		}
 		
 		if (group != null && user != null) {
-			table = (DataTable) pc.findChildByName(group, DataTable.class, user.getName());
+			table = (DataTable) entityMapper.findChildByName(group, DataTable.class, user.getName());
 			if (table == null)
 				msg = "user has no data";
 		}
@@ -101,7 +104,7 @@ public class UserDataReader extends NodeAdapter {
 
 	@Override
 	public BufferedInstances getOutput() {
-		Instances instances = pc.getInstancesMapper().load(table);
+		Instances instances = instancesMapper.load(table);
 		return new BufferedInstances(instances);
 	}
 

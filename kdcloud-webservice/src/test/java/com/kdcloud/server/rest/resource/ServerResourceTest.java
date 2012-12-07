@@ -26,18 +26,18 @@ import com.kdcloud.server.rest.application.RestletTestCase;
 
 public class ServerResourceTest extends RestletTestCase {
 
-//	@Test
+	@Test
 	public void testGroupResource() {
 		doTest(getServerUrl() + "/group/test", "group.xml" , "group-post.properties", true, true);
 	}
 	
-//	@Test
+	@Test
 	public void testDatasetResource() {
 		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
 		doTest(getServerUrl() + "/group/test/data", "ecg_small.csv", null, true, true);
 	}
 	
-//	@Test
+	@Test
 	public void testAnalysis() {
 		doTest(getServerUrl() + "/group/test", "group.xml", null, false, false);
 		doTest(getServerUrl() + "/group/test/data", "ecg_small.csv", null, false, false);

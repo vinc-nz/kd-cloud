@@ -51,7 +51,6 @@ import com.kdcloud.lib.domain.ModalitySpecification;
 import com.kdcloud.lib.domain.ServerAction;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.domain.ServerParameter.ReferenceType;
-import com.kdcloud.lib.rest.api.ModalitiesResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
 public abstract class BaseClient implements Runnable {
@@ -191,22 +190,22 @@ public abstract class BaseClient implements Runnable {
 		resource.setChallengeResponse(ChallengeScheme.HTTP_BASIC, userId, password);
 	}
 
-	public static List<ModalitySpecification> getModalities(String url) {
-		return getModalities(url, null);
-	}
-
-	public static List<ModalitySpecification> getModalities(String url, String accessToken) {
-		ClientResource cr = new ClientResource(url + ModalitiesResource.URI);
-		if (accessToken != null)
-			cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login",
-					accessToken);
-		return cr.wrap(ModalitiesResource.class).listModalities().asList();
-	}
-	
-	public List<ModalitySpecification> getModalities() {
-		setResourceReference(ModalitiesResource.URI);
-		return resource.wrap(ModalitiesResource.class).listModalities().asList();
-	}
+//	public static List<ModalitySpecification> getModalities(String url) {
+//		return getModalities(url, null);
+//	}
+//
+//	public static List<ModalitySpecification> getModalities(String url, String accessToken) {
+//		ClientResource cr = new ClientResource(url + ModalitiesResource.URI);
+//		if (accessToken != null)
+//			cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login",
+//					accessToken);
+//		return cr.wrap(ModalitiesResource.class).listModalities().asList();
+//	}
+//	
+//	public List<ModalitySpecification> getModalities() {
+//		setResourceReference(ModalitiesResource.URI);
+//		return resource.wrap(ModalitiesResource.class).listModalities().asList();
+//	}
 
 	@Override
 	public void run() {

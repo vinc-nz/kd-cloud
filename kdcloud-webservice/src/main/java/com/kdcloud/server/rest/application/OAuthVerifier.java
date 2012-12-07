@@ -27,8 +27,6 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Reference;
 import org.restlet.ext.json.JsonRepresentation;
-import org.restlet.ext.oauth.OAuthServerResource;
-import org.restlet.ext.oauth.OAuthUser;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.security.User;
@@ -37,6 +35,7 @@ import org.restlet.security.Verifier;
 public class OAuthVerifier implements Verifier {
 	
 	private static final String VALIDATION_URI = "https://www.googleapis.com/oauth2/v1/tokeninfo";
+	private static final String ACCESS_TOKEN_QUERY = "access_token";
 	private static final String JSON_ATTR_EMAIL = "email";
 	private static final String ADMIN_FILE = "admin.properties";
 	
@@ -83,7 +82,7 @@ public class OAuthVerifier implements Verifier {
 	public int verifyOauthToken(Request request, Response response, String token) {
 		//validate token
 		Reference reference = new Reference(VALIDATION_URI);
-	    reference.addQueryParameter(OAuthServerResource.ACCESS_TOKEN, token);
+	    reference.addQueryParameter(ACCESS_TOKEN_QUERY, token);
 	    ClientResource clientResource = new ClientResource(reference);
 	    try {
 	    	Representation representation = clientResource.get();
@@ -93,7 +92,7 @@ public class OAuthVerifier implements Verifier {
 			if (user != null) {
 				//valid token
 				//add user to client info
-				request.getClientInfo().setUser(new OAuthUser(user, token));
+				request.getClientInfo().setUser(new User(user, token));
 				return Verifier.RESULT_VALID;
 			}
 	    } catch (Exception e) {

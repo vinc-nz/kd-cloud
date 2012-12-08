@@ -16,8 +16,6 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import org.restlet.Application;
-import org.restlet.Request;
 import org.restlet.data.LocalReference;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
@@ -27,8 +25,8 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.InstancesMapper;
 import com.kdcloud.server.rest.application.UserProvider;
 
@@ -40,20 +38,6 @@ public abstract class KDServerResource extends ServerResource {
 	private String resourceIdentifier;
 
 	User user;
-
-	public KDServerResource() {
-	}
-
-	KDServerResource(Application application, String resourceIdentifier) {
-		setApplication(application);
-		Request req = new Request();
-		req.setResourceRef(new LocalReference(resourceIdentifier));
-		req.setProtocol(Protocol.CLAP);
-		setRequest(req);
-		doInit();
-		this.resourceIdentifier = resourceIdentifier;
-		this.user = userProvider.getUser(null, entityMapper);
-	}
 
 	@Override
 	protected void doInit() throws ResourceException {

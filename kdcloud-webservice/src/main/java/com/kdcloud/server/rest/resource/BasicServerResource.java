@@ -1,6 +1,5 @@
 package com.kdcloud.server.rest.resource;
 
-import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -10,15 +9,6 @@ import com.kdcloud.server.entity.Describable;
 
 
 public abstract class BasicServerResource<T> extends KDServerResource {
-	
-	
-	public BasicServerResource() {
-		super();
-	}
-
-	BasicServerResource(Application application, String resourceIdentifier) {
-		super(application, resourceIdentifier);
-	}
 	
 	
 	/**

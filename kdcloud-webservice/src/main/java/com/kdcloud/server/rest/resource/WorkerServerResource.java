@@ -19,7 +19,6 @@ package com.kdcloud.server.rest.resource;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -35,16 +34,6 @@ import com.kdcloud.server.persistence.InstancesMapper;
 public class WorkerServerResource extends KDServerResource {
 
 	KDEngine engine;
-
-	public WorkerServerResource() {
-		super();
-	}
-
-
-	WorkerServerResource(Application application, String resourceIdentifier) {
-		super(application, resourceIdentifier);
-	}
-
 
 	@Override
 	protected void doInit() throws ResourceException {

@@ -31,6 +31,10 @@ public class Group extends Describable {
 	public Group(String name) {
 		super(name);
 	}
+	
+	public Group(String name, User owner) {
+		super(name, owner);
+	}
 
 	@Persistent
 	private Collection<DataTable> data = new HashSet<DataTable>();

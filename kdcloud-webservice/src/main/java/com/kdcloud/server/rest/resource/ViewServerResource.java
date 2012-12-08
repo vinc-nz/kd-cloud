@@ -19,7 +19,6 @@ package com.kdcloud.server.rest.resource;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
@@ -33,13 +32,6 @@ import com.kdcloud.server.entity.View;
 
 public class ViewServerResource extends BasicServerResource<View> implements ViewResource {
 	
-	public ViewServerResource() {
-		super();
-	}
-
-	ViewServerResource(Application application, String viewId) {
-		super(application, viewId);
-	}
 	
 	@Override
 	public View find() {

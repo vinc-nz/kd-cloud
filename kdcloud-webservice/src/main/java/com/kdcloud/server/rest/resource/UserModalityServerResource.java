@@ -16,7 +16,6 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import org.restlet.Application;
 import org.restlet.representation.Representation;
 
 import com.kdcloud.lib.domain.ModalitySpecification;
@@ -26,16 +25,7 @@ import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class UserModalityServerResource extends BasicServerResource<Modality> implements
 		UserModalityResource {
-	
 
-	public UserModalityServerResource() {
-		super();
-	}
-
-	UserModalityServerResource(Application application, String modalityId) {
-		super(application, modalityId);
-	}
-	
 	@Override
 	public ModalitySpecification getModality() {
 		return read().getSpecification();

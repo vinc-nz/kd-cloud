@@ -19,7 +19,6 @@ package com.kdcloud.server.rest.resource;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
@@ -30,14 +29,6 @@ import com.kdcloud.server.entity.User;
 
 public class UserIndexServerResource extends KDServerResource {
 	
-	
-	public UserIndexServerResource() {
-		super();
-	}
-
-	UserIndexServerResource(Application application, String groupName) {
-		super(application, groupName);
-	}
 
 
 	@SuppressWarnings("unchecked")

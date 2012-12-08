@@ -3,8 +3,6 @@ package com.kdcloud.server.rest.resource;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Post;
-import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.Metadata;

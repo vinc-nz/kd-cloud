@@ -27,6 +27,11 @@ public abstract class Describable extends Entity {
 		super(name);
 	}
 	
+	public Describable(String name, User owner) {
+		super(name);
+		this.owner = owner;
+	}
+
 	public User getOwner() {
 		return owner;
 	}

@@ -19,7 +19,6 @@ package com.kdcloud.server.rest.resource;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import org.restlet.Application;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -39,16 +38,6 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	private DataTable mTable;
 	private Instances mData;
 
-	public DatasetServerResource() {
-		super();
-	}
-
-	DatasetServerResource(Application application, String groupName) {
-		super(application, groupName);
-		this.mGroup = new Group(groupName);
-	}
-	
-	
 	@Override
 	public Representation getData() {
 		DataTable entity = read();

@@ -18,7 +18,6 @@ package com.kdcloud.server.rest.resource;
 
 import java.util.Arrays;
 
-import org.restlet.Application;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -31,14 +30,6 @@ import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class GroupServerResource extends BasicServerResource<Group> implements
 		GroupResource {
-
-	public GroupServerResource() {
-		super();
-	}
-
-	GroupServerResource(Application application, String groupName) {
-		super(application, groupName);
-	}
 
 	@Override
 	public void editGroup(Representation rep) {
@@ -73,7 +64,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public Group create() {
-		return new Group(getResourceIdentifier());
+		return new Group(getResourceIdentifier(), user);
 	}
 
 	@Override

@@ -22,7 +22,6 @@ import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
@@ -41,13 +40,6 @@ public class WorkflowServerResource extends BasicServerResource<Workflow>  {
 	
 	KDEngine engine;
 
-	public WorkflowServerResource() {
-	}
-
-	WorkflowServerResource(Application application, String workflowId) {
-		super(application, workflowId);
-	}
-	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();

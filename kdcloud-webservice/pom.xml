@@ -5,7 +5,7 @@
 
 	<groupId>com.kdcloud</groupId>
 	<artifactId>kdcloud-webservice</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>kdcloud-webservice</name>
@@ -36,13 +36,13 @@
 		<dependency>
 			<groupId>com.kdcloud</groupId>
 			<artifactId>kdcloud-lib</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.kdcloud</groupId>
 			<artifactId>kdcloud-engine</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

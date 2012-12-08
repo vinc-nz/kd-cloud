@@ -40,16 +40,19 @@ public class EnginePluginServerResource extends
 		createOrUpdate(rep);
 	}
 
-	private boolean validPlugin(InputStream stream, String nodeName)
-			throws IOException {
-		ClassLoader loader = new StreamClassLoader(stream);
+	private void checkPlugin(InputStream stream, String nodeName) {
 		try {
+			ClassLoader loader = new StreamClassLoader(stream);
 			String className = NodeDescription.NODE_PACKAGE + "." + nodeName;
 			loader.loadClass(className).asSubclass(Node.class).newInstance();
-			return true;
-		} catch (Exception e) {
-			getLogger().log(Level.INFO, "supplied plugin is not valid", e);
-			return false;
+			
+		} catch (IOException e1) {
+			getLogger().log(Level.INFO, "could not understand stream", e1);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			
+		} catch (Exception e2) {
+			getLogger().log(Level.INFO, "supplied plugin is not valid", e2);
+			throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 		}
 	}
 
@@ -78,14 +81,8 @@ public class EnginePluginServerResource extends
 
 	@Override
 	public void update(EnginePlugin entity, Representation representation) {
-		try {
-			entity.setContent(ConvertUtils.toByteArray(representation));
-			if (!validPlugin(entity.readPlugin(), getResourceIdentifier()))
-				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-		} catch (IOException e) {
-			getLogger().log(Level.INFO, "error reading content", e);
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
+		entity.setContent(ConvertUtils.toByteArray(representation));
+		checkPlugin(entity.readPlugin(), getResourceIdentifier());
 	}
 
 }

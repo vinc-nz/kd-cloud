@@ -17,7 +17,6 @@
 package com.kdcloud.server.rest.resource;
 
 import java.util.Arrays;
-import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.data.Form;
@@ -28,7 +27,6 @@ import org.restlet.resource.ResourceException;
 import com.kdcloud.lib.domain.GroupSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
-import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class GroupServerResource extends BasicServerResource<Group> implements
@@ -80,20 +78,16 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public void update(Group group, Representation rep) {
-		User owner = group.getOwner();
-		if (owner != null && !owner.equals(user))
+		if (!group.isOwner(user))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
-		if (rep != null && !rep.isEmpty())
-			try {
-				group.setOwner(user);
-				GroupSpecification spec = (GroupSpecification) ConvertUtils.toObject(GroupSpecification.class, rep);
-				group.setInputSpecification(spec.getDataSpecification());
-				group.setMetadata(spec.getMetadata());
-				group.setInvitationMessage(spec.getInvitationMessage());
-			} catch (Exception e) {
-				getLogger().log(Level.INFO, "error reading entity", e);
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			}
+		if (rep != null && !rep.isEmpty()) {
+			group.setOwner(user);
+			GroupSpecification spec = (GroupSpecification) ConvertUtils
+					.toObject(GroupSpecification.class, rep);
+			group.setInputSpecification(spec.getDataSpecification());
+			group.getMetadata().update(spec.getMetadata());
+			group.setInvitationMessage(spec.getInvitationMessage());
+		}
 
 	}
 
@@ -105,17 +99,16 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 	@Override
 	public void setProperties(Form form) {
 		Group group = read();
-		if (group.isOwner(user)) {
-			editMetadata(group, form);
-			
-			String[] subscribedUsers = form.getValues("subscriber").split(",");
-			group.getEnrolled(user).addAll(Arrays.asList(subscribedUsers));
-			
-			String[] analysts = form.getValues("analyst").split(",");
-			group.getMembers(user).addAll(Arrays.asList(analysts));
-			
-			save(group);
-		}
+		if (!group.isOwner(user))
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
+
+		String[] enrolled = form.getValues("enrolled").split(",");
+		group.getEnrolled(user).addAll(Arrays.asList(enrolled));
+
+		String[] members = form.getValues("member").split(",");
+		group.getMembers(user).addAll(Arrays.asList(members));
+
+		save(group);
 	}
 
 }

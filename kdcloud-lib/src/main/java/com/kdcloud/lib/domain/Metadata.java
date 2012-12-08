@@ -15,15 +15,25 @@ public class Metadata implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Metadata() {
-	}
 	
 	String name;
 	String owner;
 	String company;
 	String description;
-
 	
+	
+	public Metadata() {
+	}
+	
+	public Metadata(String name, String owner, String company,
+			String description) {
+		super();
+		this.name = name;
+		this.owner = owner;
+		this.company = company;
+		this.description = description;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -47,6 +57,20 @@ public class Metadata implements Serializable {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void update(Metadata newMetadata) {
+		if (newMetadata.name != null)
+			this.name = newMetadata.name;
+		
+		if (newMetadata.owner != null)
+			this.owner = newMetadata.owner;
+		
+		if (newMetadata.company != null)
+			this.company = newMetadata.company;
+		
+		if (newMetadata.description != null)
+			this.description = newMetadata.description;
 	}
 
 }

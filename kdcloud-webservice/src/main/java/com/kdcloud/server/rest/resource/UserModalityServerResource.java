@@ -16,12 +16,8 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import java.util.logging.Level;
-
 import org.restlet.Application;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.ModalitySpecification;
 import com.kdcloud.lib.rest.api.UserModalityResource;
@@ -75,13 +71,9 @@ public class UserModalityServerResource extends BasicServerResource<Modality> im
 
 	@Override
 	public void update(Modality entity, Representation representation) {
-		try {
-			ModalitySpecification m = (ModalitySpecification) ConvertUtils.toObject(ModalitySpecification.class, representation);
-			entity.setSpecification(m);
-		} catch (Exception e) {
-			getLogger().log(Level.INFO, "error reading entity", e);
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
+		ModalitySpecification m = (ModalitySpecification) ConvertUtils
+				.toObject(ModalitySpecification.class, representation);
+		entity.setSpecification(m);
 	}
 
 	@Override

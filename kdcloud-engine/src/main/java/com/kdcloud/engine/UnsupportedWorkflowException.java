@@ -18,4 +18,9 @@ package com.kdcloud.engine;
 
 public class UnsupportedWorkflowException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 }

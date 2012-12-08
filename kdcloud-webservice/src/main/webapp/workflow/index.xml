@@ -1,5 +1,5 @@
 <index>
 	<item>
-		<reference href="/workflow/ecg.xml"/>
+		<reference href="ecg.xml"/>
 	</item>
 </index>

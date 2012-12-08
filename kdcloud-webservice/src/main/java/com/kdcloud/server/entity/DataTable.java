@@ -29,4 +29,12 @@ public class DataTable extends Entity {
 		super(owner.getName());
 	}
 
+	public boolean isOwner(User applicant) {
+		return getName().equals(applicant.getName());
+	}
+
+	public String getOwnerName() {
+		return getName();
+	}
+
 }

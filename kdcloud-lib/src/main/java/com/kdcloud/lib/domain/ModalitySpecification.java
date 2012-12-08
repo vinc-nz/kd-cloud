@@ -31,11 +31,6 @@ public class ModalitySpecification implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	int id;
-	
-	@XmlElement
-	String name;
 	
 	@XmlElement
 	DataSpecification inputSpecification;
@@ -49,18 +44,6 @@ public class ModalitySpecification implements Serializable {
 	@XmlElement
 	DataSpecification outputSpecification;
 	
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
 
 	public DataSpecification getInputSpecification() {
 		return inputSpecification;
@@ -93,11 +76,5 @@ public class ModalitySpecification implements Serializable {
 	public void setOutputSpecification(DataSpecification outputSpecification) {
 		this.outputSpecification = outputSpecification;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
 
 }

@@ -16,33 +16,45 @@
  */
 package com.kdcloud.server.rest.resource;
 
+import java.lang.reflect.Method;
+import java.util.Collection;
+
 import org.restlet.Application;
 import org.restlet.data.Status;
+import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.UserIndex;
-import com.kdcloud.lib.rest.api.AnalystsResource;
 import com.kdcloud.server.entity.Group;
+import com.kdcloud.server.entity.User;
 
-public class AnalystsServerResource extends KDServerResource implements
-		AnalystsResource {
+public class UserIndexServerResource extends KDServerResource {
 	
 	
-	public AnalystsServerResource() {
+	public UserIndexServerResource() {
 		super();
 	}
 
-	AnalystsServerResource(Application application, String groupName) {
+	UserIndexServerResource(Application application, String groupName) {
 		super(application, groupName);
 	}
 
 
-	@Override
+	@SuppressWarnings("unchecked")
+	@Get
 	public UserIndex getIndex() {
 		Group group = (Group) getEntityMapper().findByName(Group.class, getResourceIdentifier());
 		if (group == null)
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-		return new UserIndex(group.getAnalysts());
+		String itemName = getResourceUri().replaceAll(".*/", "");
+		String methodName = "get" + itemName.substring(0, 1).toUpperCase() + itemName.substring(1);
+		try {
+			Method m = Group.class.getMethod(methodName, User.class);
+			Collection<String> names = (Collection<String>) m.invoke(group, user);
+			return new UserIndex(names);
+		} catch (Exception e) {
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+		}
 	}
 
 }

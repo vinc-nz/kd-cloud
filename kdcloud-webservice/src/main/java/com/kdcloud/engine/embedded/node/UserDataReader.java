@@ -35,7 +35,7 @@ public class UserDataReader extends NodeAdapter {
 	
 	public static final String SOURCE_USER_PARAMETER = "sourceUser";
 	public static final String SOURCE_GROUP_PARAMETER = "sourceGroup";
-	public static final String ANALYST_ID = "analyst_id";
+	public static final String APPLICANT = "analyst_id";
 	
 	User user;
 	Group group;
@@ -58,7 +58,7 @@ public class UserDataReader extends NodeAdapter {
 		String msg = null;
 		String userId = (String) config.get(SOURCE_USER_PARAMETER);
 		String groupId = (String) config.get(SOURCE_GROUP_PARAMETER);
-		String analystId = (String) config.get(ANALYST_ID);
+		User applicant = (User) config.get(APPLICANT);
 		entityMapper = (EntityMapper) config.get(EntityMapper.class.getName());
 		instancesMapper = (InstancesMapper) config.get(InstancesMapper.class.getName());
 		if (entityMapper == null)
@@ -75,14 +75,11 @@ public class UserDataReader extends NodeAdapter {
 		
 		if (group == null) {
 			msg = "not a valid group in configuration";
-		} else {
-			boolean hasPermission = group.getOwner().getName().equals(analystId) || 
-								group.getAnalysts().contains(analystId);
-			if (!hasPermission)
+			
+		} else if (!group.analysisAllowed(applicant)) {
 				msg = "user has no permission for this request";
-		}
-		
-		if (group != null && user != null) {
+				
+		} else if (group != null && user != null) {
 			table = (DataTable) entityMapper.findChildByName(group, DataTable.class, user.getName());
 			if (table == null)
 				msg = "user has no data";

@@ -19,7 +19,6 @@ package com.kdcloud.server.rest.resource;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.server.rest.application.RestletTestCase;
@@ -47,7 +46,7 @@ public class ServerResourceTest extends RestletTestCase {
 	@Test
 	public void testUsers() {
 		doPut("/group/test", "group.xml");
-		doGet("/group/test/users");
+		doGet("/group/test/contributors");
 	}
 	
 	@Test

@@ -40,10 +40,10 @@ public class Group extends Describable {
 	
 	
 	@Persistent(serialized="true")
-	private Collection<String> subscribedUsers = new LinkedList<String>();
+	private Collection<String> enrolled = new LinkedList<String>();
 	
 	@Persistent(serialized="true")
-	private Collection<String> analysts = new LinkedList<String>();
+	private Collection<String> members = new LinkedList<String>();
 	
 	String invitationMessage;
 
@@ -57,7 +57,6 @@ public class Group extends Describable {
 	public void setData(Collection<DataTable> data) {
 		this.data = data;
 	}
-	
 
 	public DataSpecification getInputSpecification() {
 		return inputSpecification;
@@ -67,26 +66,25 @@ public class Group extends Describable {
 		this.inputSpecification = inputSpecification;
 	}
 
-	public boolean isPublic() {
-		return subscribedUsers.isEmpty();
-	}
-	
-	public Collection<String> getSubscribedUsers() {
-		return subscribedUsers;
+	public Collection<String> getEnrolled(User applicant) {
+		if (analysisAllowed(applicant))
+			return enrolled;
+		return null;
 	}
 
-	public void setSubscribedUsers(Collection<String> subscribedUsers) {
-		this.subscribedUsers = subscribedUsers;
+	public void setEnrolled(Collection<String> enrolled) {
+		this.enrolled = enrolled;
 	}
 
-	public Collection<String> getAnalysts() {
-		return analysts;
+	public Collection<String> getMembers(User applicant) {
+		if (analysisAllowed(applicant))
+			return members;
+		return null;
 	}
 
-	public void setAnalysts(Collection<String> analysts) {
-		this.analysts = analysts;
+	public void setMembers(Collection<String> members) {
+		this.members = members;
 	}
-
 
 	public String getInvitationMessage() {
 		return invitationMessage;
@@ -95,6 +93,23 @@ public class Group extends Describable {
 	public void setInvitationMessage(String invitationMessage) {
 		this.invitationMessage = invitationMessage;
 	}
-
+	
+	public boolean insertAllowed(User committer) {
+		return enrolled.isEmpty() || enrolled.contains(committer.getName());
+	}
+	
+	public boolean analysisAllowed(User applicant) {
+		return isOwner(applicant) || members.contains(applicant.getName());
+	}
+	
+	public Collection<String> getContributors(User applicant) {
+		Collection<String> names = new LinkedList<String>();
+		for (DataTable t : data) {
+			if (analysisAllowed(applicant) || t.isOwner(applicant))
+				names.add(t.getOwnerName());
+		}
+		return names;
+	}
+	
 
 }

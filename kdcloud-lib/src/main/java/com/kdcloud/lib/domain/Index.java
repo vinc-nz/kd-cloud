@@ -51,5 +51,30 @@ public class Index {
 	public int size() {
 		return items.size();
 	}
+	
+	private String addBaseUrl(String baseUrl, String href) {
+		if (href.charAt(0) == '/')
+			return baseUrl + href;
+		return baseUrl + "/" + href;
+	}
+
+	public void setReferencesBaseUrl(String baseUrl) {
+		for (Item i : items) {
+			if (i.reference != null)
+				i.reference.href = addBaseUrl(baseUrl, i.reference.href);
+		}
+	}
+
+	public void setMetadataBaseUrl(String baseUrl) {
+		for (Item i : items) {
+			if (i.metadata != null)
+				i.metadata.href = addBaseUrl(baseUrl, i.metadata.href);
+		}
+	}
+	
+	public void setBaseUrl(String baseUrl) {
+		setReferencesBaseUrl(baseUrl);
+		setMetadataBaseUrl(baseUrl);
+	}
 
 }

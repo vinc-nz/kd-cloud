@@ -47,8 +47,9 @@ public class EmbeddedEngineTest {
 
 	EntityMapper entityMapper;
 	InstancesMapper instancesMapper;
-	String[] descriptions = {"workflow/test-workflow.xml", "workflow/ecg.xml"};
 	KDEngine engine;
+	String[] descriptions = {"workflow/test-workflow.xml", "workflow/ecg.xml"};
+	User user = new User("test");
 
 	@Before
 	public void setUp() throws Exception {
@@ -57,7 +58,7 @@ public class EmbeddedEngineTest {
 		entityMapper = factory.getEntityMapper();
 		instancesMapper = factory.getInstancesMapper();
 		Group group = new Group("test");
-		group.setOwner(new User("test"));
+		group.setOwner(user);
 		entityMapper.save(group);
 		engine = new EmbeddedEngine();
 	}
@@ -75,7 +76,7 @@ public class EmbeddedEngineTest {
 			Worker worker = engine.getWorker(is);
 			worker.setParameter(EntityMapper.class.getName(), entityMapper);
 			worker.setParameter(InstancesMapper.class.getName(), instancesMapper);
-			worker.setParameter(UserDataReader.ANALYST_ID, "test");
+			worker.setParameter(UserDataReader.APPLICANT, user);
 			worker.setParameter(UserDataReader.SOURCE_USER_PARAMETER, "test");
 			worker.setParameter(UserDataReader.SOURCE_GROUP_PARAMETER, "test");
 			worker.setParameter(UserDataWriter.DEST_USER_PARAMETER, "test");

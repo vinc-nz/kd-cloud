@@ -14,6 +14,7 @@ import com.kdcloud.lib.rest.api.MetadataResource;
 import com.kdcloud.server.entity.Entity;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.rest.application.ConvertUtils;
+import com.kdcloud.server.rest.application.Redirects;
 
 public class IndexServerResource extends KDServerResource {
 
@@ -32,8 +33,9 @@ public class IndexServerResource extends KDServerResource {
 	public Index buildIndex(Collection<Entity> entities) {
 		Index index = new Index();
 		for (Entity entity : entities) {
-			index.add(getReference() + "/" + entity.getName(),
-					MetadataResource.URI.replace("{id}", entity.getUUID()));
+			String referenceUrl = "/" + entity.getName();
+			String metadataUrl = MetadataResource.URI.replace("{id}", entity.getUUID());
+			index.add(referenceUrl, metadataUrl);
 		}
 		return index;
 	}
@@ -60,12 +62,17 @@ public class IndexServerResource extends KDServerResource {
 			throw new ResourceException(e);
 		}
 		
-		Index builtin = loadIndex();
-		getLogger().info("builtin index has " + builtin.size() + " references");
+		Index index = loadIndex();
+		getLogger().info("builtin index has " + index.size() + " references");
+		
 		Collection<Entity> entities = getEntityMapper().getAll(clazz);
-		Index stored = buildIndex(entities);
-		builtin.addAll(stored);
-		return builtin;
+		index.addAll(buildIndex(entities));
+		
+		String baseUrl = Redirects.getSourceUrl(getReference().toString());
+		index.setReferencesBaseUrl(baseUrl);
+		index.setMetadataBaseUrl(getHostRef().toString());
+		
+		return index;
 	}
 	
 }

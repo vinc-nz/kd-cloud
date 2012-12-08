@@ -105,15 +105,17 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 	@Override
 	public void setProperties(Form form) {
 		Group group = read();
-		editMetadata(group, form);
-		
-		String[] subscribedUsers = form.getValues("subscriber").split(",");
-		group.getSubscribedUsers().addAll(Arrays.asList(subscribedUsers));
-		
-		String[] analysts = form.getValues("analyst").split(",");
-		group.getAnalysts().addAll(Arrays.asList(analysts));
-		
-		save(group);
+		if (group.isOwner(user)) {
+			editMetadata(group, form);
+			
+			String[] subscribedUsers = form.getValues("subscriber").split(",");
+			group.getEnrolled(user).addAll(Arrays.asList(subscribedUsers));
+			
+			String[] analysts = form.getValues("analyst").split(",");
+			group.getMembers(user).addAll(Arrays.asList(analysts));
+			
+			save(group);
+		}
 	}
 
 }

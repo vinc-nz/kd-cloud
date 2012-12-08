@@ -230,7 +230,6 @@ public abstract class BaseClient implements Runnable {
 				"execution");
 		this.executionLog.appendChild(rootElement);
 		
-		log("executing " + modality.getName());
 		queue = new LinkedList<ServerAction>();
 		queue.add(new ServerAction(modality.getInitAction()));
 		queue.add(new ServerAction(modality.getAction()));

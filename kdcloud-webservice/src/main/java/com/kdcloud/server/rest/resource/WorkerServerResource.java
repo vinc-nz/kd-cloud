@@ -56,7 +56,7 @@ public class WorkerServerResource extends KDServerResource {
 		Worker worker = engine.getWorker(input);
 		worker.setParameter(EntityMapper.class.getName(), getEntityMapper());
 		worker.setParameter(InstancesMapper.class.getName(), getInstancesMapper());
-		worker.setParameter(UserDataReader.ANALYST_ID, user.getName());
+		worker.setParameter(UserDataReader.APPLICANT, user);
 		for (String param : worker.getParameters()) {
 			String value = form.getFirstValue(param);
 			getLogger().info(

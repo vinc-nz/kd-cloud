@@ -16,16 +16,22 @@
  */
 package com.kdcloud.server.rest.application;
 
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
+import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.rest.resource.IndexServerResource;
 import com.kdcloud.server.rest.resource.KDServerResource;
+import com.kdcloud.server.rest.resource.UserIndexServerResource;
 
 public class KDApplication extends Application {
 	
@@ -65,6 +71,21 @@ public class KDApplication extends Application {
 		router.attach("/modality", IndexServerResource.class);
 		router.attach("/engine/plugin", IndexServerResource.class);
 		router.attach("/view", IndexServerResource.class);
+		
+		router.attach(GroupResource.URI + "/members", UserIndexServerResource.class);
+		router.attach(GroupResource.URI + "/enrolled", UserIndexServerResource.class);
+		router.attach(GroupResource.URI + "/contributors", UserIndexServerResource.class);
+		
+		//redirects
+		for (final Entry<String, String> e : Redirects.getRedirects().entrySet()) {
+			router.attach(e.getKey(), new Restlet() {
+				@Override
+				public void handle(Request request, Response response) {
+					response.redirectPermanent(e.getValue());
+					response.commit();
+				}
+			});
+		}
 
 		return router;
 	}

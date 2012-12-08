@@ -86,7 +86,7 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 
 	@Override
 	public DataTable create() {
-		if (!mGroup.isPublic() && !mGroup.getSubscribedUsers().contains(user.getName()))
+		if (!mGroup.insertAllowed(user))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 		DataTable table = new DataTable(user);
 		return table;

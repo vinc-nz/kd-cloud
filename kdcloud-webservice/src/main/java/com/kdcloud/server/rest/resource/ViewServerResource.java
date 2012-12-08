@@ -70,6 +70,7 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 	public View create() {
 		View v = new View();
 		v.setName(getResourceIdentifier());
+		v.setOwner(user);
 		return v;
 	}
 

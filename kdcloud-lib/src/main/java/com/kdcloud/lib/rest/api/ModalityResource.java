@@ -23,7 +23,7 @@ import org.restlet.resource.Put;
 
 import com.kdcloud.lib.domain.ModalitySpecification;
 
-public interface UserModalityResource {
+public interface ModalityResource {
 	
 	public static final String URI = "/modality/{id}";
 	

@@ -66,6 +66,7 @@ public class EnginePluginServerResource extends
 	public EnginePlugin create() {
 		EnginePlugin stored = new EnginePlugin();
 		stored.setName(getResourceIdentifier());
+		stored.setOwner(user);
 		return stored;
 	}
 

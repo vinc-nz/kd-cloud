@@ -90,6 +90,7 @@ public class WorkflowServerResource extends BasicServerResource<Workflow>  {
 	public Workflow create() {
 		Workflow stored = new Workflow();
 		stored.setName(getResourceIdentifier());
+		stored.setOwner(user);
 		return stored;
 	}
 

@@ -19,12 +19,12 @@ package com.kdcloud.server.rest.resource;
 import org.restlet.representation.Representation;
 
 import com.kdcloud.lib.domain.ModalitySpecification;
-import com.kdcloud.lib.rest.api.UserModalityResource;
+import com.kdcloud.lib.rest.api.ModalityResource;
 import com.kdcloud.server.entity.Modality;
 import com.kdcloud.server.rest.application.ConvertUtils;
 
-public class UserModalityServerResource extends BasicServerResource<Modality> implements
-		UserModalityResource {
+public class ModalityServerResource extends BasicServerResource<Modality> implements
+		ModalityResource {
 
 	@Override
 	public ModalitySpecification getModality() {
@@ -56,6 +56,7 @@ public class UserModalityServerResource extends BasicServerResource<Modality> im
 	public Modality create() {
 		Modality stored = new Modality();
 		stored.setName(getResourceIdentifier());
+		stored.setOwner(user);
 		return stored;
 	}
 

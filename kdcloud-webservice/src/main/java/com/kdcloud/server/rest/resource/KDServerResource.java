@@ -92,8 +92,7 @@ public abstract class KDServerResource extends ServerResource {
 				getLogger().info("found locally");
 				getResponse().setEntity(local);
 				return local;
-			} catch (ResourceException e) {
-			}
+			} catch (ResourceException e) {}
 		return super.handle();
 	}
 

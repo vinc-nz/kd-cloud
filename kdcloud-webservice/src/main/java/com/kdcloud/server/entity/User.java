@@ -43,7 +43,10 @@ public class User extends Entity {
 	public void setDevices(LinkedList<String> devices) {
 		this.devices = devices;
 	}
-
+	
+	public boolean isOwner(Describable entity) {
+		return equals(entity.getOwner());
+	}
 	
 	@Override
 	public boolean equals(Object obj) {

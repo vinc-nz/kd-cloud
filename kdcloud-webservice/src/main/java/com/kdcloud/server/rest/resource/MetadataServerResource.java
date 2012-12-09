@@ -29,7 +29,7 @@ public class MetadataServerResource extends KDServerResource implements Metadata
 
 	@Override
 	public void editMetadata(Representation representation) {
-		if (!entity.isOwner(user))
+		if (!user.isOwner(entity))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 		Metadata newMetadata = (Metadata) ConvertUtils.toObject(Metadata.class, representation);
 		entity.getMetadata().update(newMetadata);
@@ -39,7 +39,7 @@ public class MetadataServerResource extends KDServerResource implements Metadata
 
 	@Override
 	public void editMetadata(Form form) {
-		if (!entity.isOwner(user))
+		if (!user.isOwner(entity))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 		Metadata newMetadata = new Metadata(
 				form.getFirstValue("name"),

@@ -69,7 +69,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public void update(Group group, Representation rep) {
-		if (!group.isOwner(user))
+		if (!user.isOwner(group))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 		if (rep != null && !rep.isEmpty()) {
 			group.setOwner(user);
@@ -90,7 +90,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 	@Override
 	public void setProperties(Form form) {
 		Group group = read();
-		if (!group.isOwner(user))
+		if (!user.isOwner(group))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 
 		String[] enrolled = form.getValues("enrolled").split(",");

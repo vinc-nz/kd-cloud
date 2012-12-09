@@ -103,7 +103,7 @@ public class Group extends Describable {
 	}
 	
 	public boolean analysisAllowed(User applicant) {
-		return isOwner(applicant) || members.contains(applicant.getName());
+		return applicant.isOwner(this) || members.contains(applicant.getName());
 	}
 	
 	public Collection<String> getContributors(User applicant) {

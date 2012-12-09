@@ -53,7 +53,7 @@ public class IndexServerResource extends KDServerResource {
 		Index index = new Index();
 		for (Entity entity : entities) {
 			Describable describable = (Describable) entity;
-			if (!filter || describable.isOwner(user)) {
+			if (!filter || user.isOwner(describable)) {
 				String referenceUrl = "/" + describable.getName();
 				String metadataUrl = MetadataResource.URI.replace("{id}",
 						describable.getUUID());

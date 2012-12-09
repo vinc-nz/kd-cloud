@@ -40,10 +40,6 @@ public abstract class Describable extends Entity {
 		this.owner = owner;
 	}
 	
-	public boolean isOwner(User user) {
-		return getOwner().equals(user);
-	}
-
 	public Metadata getMetadata() {
 		return metadata;
 	}

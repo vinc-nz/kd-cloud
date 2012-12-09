@@ -3,8 +3,8 @@ package com.kdcloud.server.persistence.gae;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.kdcloud.server.entity.Entity;
 import com.kdcloud.server.entity.Group;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.EntityMapper;
 
 public class PersistenceTest {
@@ -15,11 +15,13 @@ public class PersistenceTest {
 		factory.setUp();
 		
 		EntityMapper entityMapper = factory.getEntityMapper();
-		Group g = new Group("test");
+		User u = new User("test");
+		Group g = new Group("test", u);
 		entityMapper.save(g);
 		
-		Entity result = entityMapper.findByUUID(g.getUUID());
+		Group result = (Group) entityMapper.findByUUID(g.getUUID());
 		Assert.assertNotNull(result);
+		Assert.assertTrue(u.isOwner(result));
 		
 		factory.tearDown();
 	}

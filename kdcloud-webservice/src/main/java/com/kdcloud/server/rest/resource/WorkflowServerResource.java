@@ -32,7 +32,7 @@ import org.w3c.dom.Document;
 
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.server.entity.Workflow;
-import com.kdcloud.server.rest.application.ConvertUtils;
+import com.kdcloud.server.rest.application.ConvertHelper;
 
 public class WorkflowServerResource extends BasicServerResource<Workflow>  {
 	
@@ -43,7 +43,7 @@ public class WorkflowServerResource extends BasicServerResource<Workflow>  {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		engine = (KDEngine) inject(KDEngine.class);
+		engine = inject(KDEngine.class);
 	}
 
 	@Put
@@ -72,8 +72,7 @@ public class WorkflowServerResource extends BasicServerResource<Workflow>  {
 
 	@Override
 	public Workflow find() {
-		return (Workflow) getEntityMapper().findByName(
-				Workflow.class, getResourceIdentifier());
+		return getEntityMapper().findByName(Workflow.class, getResourceIdentifier());
 	}
 
 	@Override
@@ -96,7 +95,7 @@ public class WorkflowServerResource extends BasicServerResource<Workflow>  {
 
 	@Override
 	public void update(Workflow entity, Representation representation) {
-		byte[] workflow = ConvertUtils.toByteArray(representation);
+		byte[] workflow = ConvertHelper.toByteArray(representation);
 		entity.setContent(workflow);
 		try {
 			engine.getWorker(entity.readWorkflow()); // validate workflow

@@ -8,7 +8,6 @@ import org.restlet.resource.ResourceException;
 import com.kdcloud.lib.domain.Metadata;
 import com.kdcloud.lib.rest.api.MetadataResource;
 import com.kdcloud.server.entity.Describable;
-import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class MetadataServerResource extends KDServerResource implements MetadataResource {
 	
@@ -31,7 +30,7 @@ public class MetadataServerResource extends KDServerResource implements Metadata
 	public void editMetadata(Representation representation) {
 		if (!user.isOwner(entity))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
-		Metadata newMetadata = (Metadata) ConvertUtils.toObject(Metadata.class, representation);
+		Metadata newMetadata = unmarshal(Metadata.class, representation);
 		entity.getMetadata().update(newMetadata);
 		getEntityMapper().save(entity);
 	}

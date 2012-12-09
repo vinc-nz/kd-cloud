@@ -21,7 +21,6 @@ import org.restlet.representation.Representation;
 import com.kdcloud.lib.domain.ModalitySpecification;
 import com.kdcloud.lib.rest.api.ModalityResource;
 import com.kdcloud.server.entity.Modality;
-import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class ModalityServerResource extends BasicServerResource<Modality> implements
 		ModalityResource {
@@ -38,8 +37,7 @@ public class ModalityServerResource extends BasicServerResource<Modality> implem
 
 	@Override
 	public Modality find() {
-		return (Modality) getEntityMapper().findByName(
-				Modality.class, getResourceIdentifier());
+		return getEntityMapper().findByName( Modality.class, getResourceIdentifier());
 	}
 
 	@Override
@@ -62,8 +60,7 @@ public class ModalityServerResource extends BasicServerResource<Modality> implem
 
 	@Override
 	public void update(Modality entity, Representation representation) {
-		ModalitySpecification m = (ModalitySpecification) ConvertUtils
-				.toObject(ModalitySpecification.class, representation);
+		ModalitySpecification m = unmarshal(ModalitySpecification.class, representation);
 		entity.setSpecification(m);
 	}
 

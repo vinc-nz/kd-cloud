@@ -1,29 +1,41 @@
 package com.kdcloud.server.rest.resource;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
-import java.io.IOException;
+import java.io.File;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.junit.Test;
 import org.restlet.data.LocalReference;
 import org.restlet.data.Protocol;
-import org.restlet.data.Reference;
+import org.restlet.ext.xml.XmlRepresentation;
 import org.restlet.resource.ClientResource;
-import org.restlet.resource.ResourceException;
 
-import com.kdcloud.engine.embedded.WorkflowDescription;
 import com.kdcloud.lib.domain.GroupSpecification;
 import com.kdcloud.lib.domain.Index;
-import com.kdcloud.server.rest.application.ConvertUtils;
+import com.kdcloud.server.rest.application.ConvertHelper;
 
 public class TestUnmarshalling {
 
 	public Object unmarshal(String resource, Class<?> clazz) {
-		LocalReference ref = new LocalReference(resource);
-		ref.setProtocol(Protocol.CLAP);
-		ClientResource cr = new ClientResource(ref);
 		try {
-			return ConvertUtils.toObject(clazz, cr.get());
+			//File schemaFile = new File("src/main/webapp/api/kdcloud.xsd");
+			LocalReference local = new LocalReference("src/main/webapp/api/kdcloud.xsd");
+			local.setProtocol(Protocol.FILE);
+			ClientResource localCr = new ClientResource(local);
+			SAXSource schemaFile = XmlRepresentation.getSaxSource(localCr.get());
+			Schema schema = SchemaFactory.newInstance(
+					XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(schemaFile);
+			LocalReference ref = new LocalReference(resource);
+			ref.setProtocol(Protocol.CLAP);
+			ClientResource cr = new ClientResource(ref);
+			return ConvertHelper.toObject(clazz, cr.get(), schema);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();

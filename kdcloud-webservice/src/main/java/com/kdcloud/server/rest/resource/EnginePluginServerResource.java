@@ -28,12 +28,11 @@ import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeDescription;
 import com.kdcloud.lib.rest.api.EnginePluginResource;
 import com.kdcloud.server.entity.EnginePlugin;
-import com.kdcloud.server.rest.application.ConvertUtils;
+import com.kdcloud.server.rest.application.ConvertHelper;
 import com.kdcloud.server.rest.application.StreamClassLoader;
 
 public class EnginePluginServerResource extends
 		BasicServerResource<EnginePlugin> implements EnginePluginResource {
-
 
 	@Override
 	public void addPlugin(Representation rep) {
@@ -45,21 +44,21 @@ public class EnginePluginServerResource extends
 			ClassLoader loader = new StreamClassLoader(stream);
 			String className = NodeDescription.NODE_PACKAGE + "." + nodeName;
 			loader.loadClass(className).asSubclass(Node.class).newInstance();
-			
+
 		} catch (IOException e1) {
 			getLogger().log(Level.INFO, "could not understand stream", e1);
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			
+
 		} catch (Exception e2) {
 			getLogger().log(Level.INFO, "supplied plugin is not valid", e2);
-			throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
+			throw new ResourceException(
+					Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 		}
 	}
 
 	@Override
 	public EnginePlugin find() {
-		return (EnginePlugin) getEntityMapper().findByName(
-				EnginePlugin.class, getResourceIdentifier());
+		return getEntityMapper().findByName(EnginePlugin.class, getResourceIdentifier());
 	}
 
 	@Override
@@ -82,7 +81,7 @@ public class EnginePluginServerResource extends
 
 	@Override
 	public void update(EnginePlugin entity, Representation representation) {
-		entity.setContent(ConvertUtils.toByteArray(representation));
+		entity.setContent(ConvertHelper.toByteArray(representation));
 		checkPlugin(entity.readPlugin(), getResourceIdentifier());
 	}
 

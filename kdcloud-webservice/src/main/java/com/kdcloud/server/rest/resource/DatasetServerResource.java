@@ -56,7 +56,7 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 		mGroup = findGroup();
 		if (mGroup == null)
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-		return (DataTable) getEntityMapper().findChildByName(mGroup, DataTable.class, user.getName());
+		return getEntityMapper().findChildByName(mGroup, DataTable.class, user.getName());
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	}
 
 	public Group findGroup() {
-		return (Group) getEntityMapper().findByName(Group.class, getResourceIdentifier());
+		return getEntityMapper().findByName(Group.class, getResourceIdentifier());
 	}
 
 }

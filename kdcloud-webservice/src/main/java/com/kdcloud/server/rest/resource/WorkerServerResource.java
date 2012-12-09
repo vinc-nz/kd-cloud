@@ -38,7 +38,7 @@ public class WorkerServerResource extends KDServerResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		engine = (KDEngine) inject(KDEngine.class);
+		engine =  inject(KDEngine.class);
 	}
 
 	public Instances execute(Form form, InputStream input) throws IOException {

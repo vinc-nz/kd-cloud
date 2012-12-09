@@ -43,7 +43,6 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Router;
 
-import com.google.appengine.api.appidentity.AppIdentityServicePb.SigningService.Method;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataMapperFactory;
 import com.kdcloud.server.persistence.EntityMapper;
@@ -61,13 +60,13 @@ public abstract class RestletTestCase {
 	
 	Restlet clientDistpatcher = new Restlet() {
 		public void handle(Request request, Response response) {
-			if (request.getProtocol().equals(Protocol.CLAP)) {
-				new Client(Protocol.CLAP).handle(request, response);
-			} else  {
+			if (request.getProtocol().equals(Protocol.HTTP)) {
 				List<Protocol> protocols = Arrays.asList(Protocol.HTTP);
 				String helperClass = HttpClientHelper.class.getName();
 				Client client = new Client(null, protocols, helperClass);
 				client.handle(request, response);
+			} else  {
+				new Client(request.getProtocol()).handle(request, response);
 			}
 		};
 	};
@@ -81,6 +80,22 @@ public abstract class RestletTestCase {
 		}
 	};
 	
+	ResourcesFinder resourcesFinder = new ResourcesFinder() {
+		
+		@Override
+		public Representation find(String path) {
+			LocalReference ref = new LocalReference(path);
+			ref.setProtocol(Protocol.CLAP);
+			try {
+				return new ClientResource(ref).get();
+			} catch (ResourceException e) {
+				ref = new LocalReference("src/main/webapp/" + path);
+				ref.setProtocol(Protocol.FILE);
+				return new ClientResource(ref).get();
+			}
+		}
+	};
+	
 	Application testApp = new Application() {
 
 		@Override
@@ -89,6 +104,7 @@ public abstract class RestletTestCase {
 			Context context = new GAEContext(getLogger());
 			context.getAttributes().put(UserProvider.class.getName(), userProvider);
 			context.getAttributes().put(DataMapperFactory.class.getName(), factory);
+			context.getAttributes().put(ResourcesFinder.class.getName(), resourcesFinder);
 			router.attachDefault(new KDApplication(context));
 			return router;
 		}
@@ -105,7 +121,8 @@ public abstract class RestletTestCase {
 		
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, PORT);
-//		component.getClients().add(Protocol.CLAP);
+		component.getClients().add(Protocol.CLAP);
+		component.getClients().add(Protocol.FILE);
 		component.getDefaultHost().attach(testApp);
 
 		try {

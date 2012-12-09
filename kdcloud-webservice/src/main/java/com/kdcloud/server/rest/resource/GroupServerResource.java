@@ -26,7 +26,6 @@ import org.restlet.resource.ResourceException;
 import com.kdcloud.lib.domain.GroupSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
-import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class GroupServerResource extends BasicServerResource<Group> implements
 		GroupResource {
@@ -47,8 +46,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 
 	@Override
 	public Group find() {
-		return (Group) getEntityMapper().findByName(Group.class,
-				getResourceIdentifier());
+		return getEntityMapper().findByName(Group.class, getResourceIdentifier());
 	}
 
 	@Override
@@ -73,8 +71,7 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 		if (rep != null && !rep.isEmpty()) {
 			group.setOwner(user);
-			GroupSpecification spec = (GroupSpecification) ConvertUtils
-					.toObject(GroupSpecification.class, rep);
+			GroupSpecification spec = unmarshal(GroupSpecification.class, rep);
 			group.setInputSpecification(spec.getDataSpecification());
 			group.getMetadata().update(spec.getMetadata());
 			group.setInvitationMessage(spec.getInvitationMessage());

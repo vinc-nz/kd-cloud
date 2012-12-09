@@ -34,7 +34,7 @@ public class UserIndexServerResource extends KDServerResource {
 	@SuppressWarnings("unchecked")
 	@Get
 	public UserIndex getIndex() {
-		Group group = (Group) getEntityMapper().findByName(Group.class, getResourceIdentifier());
+		Group group = getEntityMapper().findByName(Group.class, getResourceIdentifier());
 		if (group == null)
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		String itemName = getResourceUri().replaceAll(".*/", "");

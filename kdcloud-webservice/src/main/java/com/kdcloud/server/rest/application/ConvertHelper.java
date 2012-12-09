@@ -5,24 +5,27 @@ import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
-public class ConvertUtils {
+public class ConvertHelper {
 
-	public static Object toObject(Class<?> clazz, Representation rep) {
+	@SuppressWarnings("unchecked")
+	public static <T> T toObject(Class<T> clazz, Representation rep, Schema schema) throws ResourceException {
 		try {
 			JAXBContext context = JAXBContext.newInstance(clazz);
 			Unmarshaller u = context.createUnmarshaller();
-			return u.unmarshal(rep.getStream());
+			u.setSchema(schema);
+			return (T) u.unmarshal(rep.getStream());
 		} catch (Exception e) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}
 
-	public static byte[] toByteArray(Representation rep) {
+	public static byte[] toByteArray(Representation rep) throws ResourceException {
 		try {
 			InputStream in = rep.getStream();
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();

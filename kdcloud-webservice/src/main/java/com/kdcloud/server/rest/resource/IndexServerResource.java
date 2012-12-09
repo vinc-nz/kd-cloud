@@ -14,9 +14,7 @@ import org.restlet.resource.ResourceException;
 import com.kdcloud.lib.domain.Index;
 import com.kdcloud.lib.rest.api.MetadataResource;
 import com.kdcloud.server.entity.Describable;
-import com.kdcloud.server.entity.Entity;
 import com.kdcloud.server.entity.Group;
-import com.kdcloud.server.rest.application.ConvertUtils;
 import com.kdcloud.server.rest.application.Redirects;
 
 public class IndexServerResource extends KDServerResource {
@@ -42,21 +40,20 @@ public class IndexServerResource extends KDServerResource {
 		getLogger().info("fetching " + uri);
 		ClientResource cr = new ClientResource(uri);
 		try {
-			return (Index) ConvertUtils.toObject(Index.class, cr.get());
+			return unmarshal(Index.class, cr.get());
 		} catch (Exception e) {
 			getLogger().log(Level.SEVERE, "could not read index", e);
 			return new Index();
 		}
 	}
 
-	public Index buildIndex(Collection<Entity> entities) {
+	public Index buildIndex(Collection<? extends Describable> entities) {
 		Index index = new Index();
-		for (Entity entity : entities) {
-			Describable describable = (Describable) entity;
-			if (!filter || user.isOwner(describable)) {
-				String referenceUrl = "/" + describable.getName();
+		for (Describable entity : entities) {
+			if (!filter || user.isOwner(entity)) {
+				String referenceUrl = "/" + entity.getName();
 				String metadataUrl = MetadataResource.URI.replace("{id}",
-						describable.getUUID());
+						entity.getUUID());
 				index.add(referenceUrl, metadataUrl);
 			}
 		}
@@ -95,7 +92,7 @@ public class IndexServerResource extends KDServerResource {
 		if (!filter)
 			index.addAll(loadBuiltinIndex());
 		
-		Collection<Entity> entities = getEntityMapper().getAll(clazz);
+		Collection<? extends Describable> entities = getEntityMapper().getAll(clazz);
 		index.addAll(buildIndex(entities));
 		
 		String baseUrl = Redirects.getSourceUrl(getResourceReference());

@@ -16,18 +16,28 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import org.restlet.data.LocalReference;
+import java.io.IOException;
+import java.util.logging.Level;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
 import org.restlet.data.Method;
-import org.restlet.data.Protocol;
+import org.restlet.ext.xml.XmlRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+import org.xml.sax.SAXException;
 
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataMapperFactory;
 import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.InstancesMapper;
+import com.kdcloud.server.rest.application.ConvertHelper;
+import com.kdcloud.server.rest.application.ResourcesFinder;
 import com.kdcloud.server.rest.application.UserProvider;
 
 public abstract class KDServerResource extends ServerResource {
@@ -35,15 +45,17 @@ public abstract class KDServerResource extends ServerResource {
 	private EntityMapper entityMapper;
 	private InstancesMapper instancesMapper;
 	private UserProvider userProvider;
+	private ResourcesFinder resourcesFinder;
 
 	User user;
 
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		userProvider = (UserProvider) inject(UserProvider.class);
+		userProvider = inject(UserProvider.class);
+		resourcesFinder = inject(ResourcesFinder.class);
 
-		DataMapperFactory factory = (DataMapperFactory) inject(DataMapperFactory.class);
+		DataMapperFactory factory = inject(DataMapperFactory.class);
 		entityMapper = factory.getEntityMapper();
 		instancesMapper = factory.getInstancesMapper();
 	}
@@ -60,16 +72,6 @@ public abstract class KDServerResource extends ServerResource {
 		return getReference().toString().replaceAll("\\?.*", "");
 	}
 	
-	protected Representation fetchLocally() {
-		return fetchLocalResource(getResourceUri().substring(1));
-	}
-
-	public Representation fetchLocalResource(String path) {
-		LocalReference ref = new LocalReference(path);
-		ref.setProtocol(Protocol.CLAP);
-		return new ClientResource(ref).get();
-	}
-
 	public Representation doGet() {
 		ClientResource cr = new ClientResource(getRequest().getResourceRef());
 		cr.setChallengeResponse(getChallengeResponse());
@@ -87,20 +89,38 @@ public abstract class KDServerResource extends ServerResource {
 		} catch (Throwable t) {
 			doCatch(t);
 		}
-		if (getMethod().equals(Method.GET))
+		if (resourcesFinder != null && getMethod().equals(Method.GET))
 			try {
-				Representation local = fetchLocally();
-				getLogger().info("found locally");
-				getResponse().setEntity(local);
-				return local;
+				return resourcesFinder.find(getResourceUri());
 			} catch (ResourceException e) {}
 		return super.handle();
 	}
 
 
-	protected Object inject(Class<?> baseClass) {
-		return getApplication().getContext().getAttributes()
+	@SuppressWarnings("unchecked")
+	protected <T> T inject(Class<T> baseClass) {
+		return (T) getApplication().getContext().getAttributes()
 				.get(baseClass.getName());
+	}
+	
+	public <T> T unmarshal(Class<T> clazz, Representation rep) {
+		Representation schemaRep;
+		if (resourcesFinder != null) {
+			schemaRep = resourcesFinder.find(ResourcesFinder.XML_SCHEMA_PATH);
+		} else {
+			String url = getHostRef() + ResourcesFinder.XML_SCHEMA_PATH;
+			schemaRep = new ClientResource(url).get();
+		}
+		try {
+			SAXSource source = XmlRepresentation.getSaxSource(schemaRep);
+			Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(source);
+			return ConvertHelper.toObject(clazz, rep, schema);
+		} catch (SAXException e) {
+			getLogger().log(Level.SEVERE, "error during schema generation", e);
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, "error during schema generation", e);
+		}
+		throw new ResourceException(500);
 	}
 
 	public EntityMapper getEntityMapper() {

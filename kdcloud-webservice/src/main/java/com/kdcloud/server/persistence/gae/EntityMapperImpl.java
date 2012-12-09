@@ -35,22 +35,6 @@ public class EntityMapperImpl implements EntityMapper {
 	}
 
 	@Override
-	public Entity findByName(Class<?> clazz, String name) {
-		Key k = KeyFactory.createKey(clazz.getSimpleName(), name);
-		try {
-			return (Entity) pm.getObjectById(clazz, k);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Collection<Entity> getAll(Class<?> clazz) {
-		return (Collection<Entity>) pm.newQuery(clazz).execute();
-	}
-
-	@Override
 	public void save(Entity e) {
 		pm.makePersistent(e);
 	}
@@ -71,19 +55,6 @@ public class EntityMapperImpl implements EntityMapper {
 	}
 
 	@Override
-	public Entity findChildByName(Entity father, Class<?> child,
-			String childName) {
-		try {
-			Key key = new KeyFactory.Builder(father.getClass().getSimpleName(),
-					father.getName()).addChild(child.getSimpleName(), childName)
-					.getKey();
-			return (Entity) pm.getObjectById(child, key);
-		} catch (Exception tr) {
-			return null;
-		}
-	}
-
-	@Override
 	public void close() {
 		pm.close();
 	}
@@ -99,6 +70,34 @@ public class EntityMapperImpl implements EntityMapper {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public <T> T findByName(Class<T> clazz, String name) {
+		Key k = KeyFactory.createKey(clazz.getSimpleName(), name);
+		try {
+			return pm.getObjectById(clazz, k);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public <T> T findChildByName(Entity father, Class<T> child, String childName) {
+		try {
+			Key key = new KeyFactory.Builder(father.getClass().getSimpleName(),
+					father.getName()).addChild(child.getSimpleName(), childName)
+					.getKey();
+			return pm.getObjectById(child, key);
+		} catch (Exception tr) {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> Collection<T> getAll(Class<T> clazz) {
+		return (Collection<T>) pm.newQuery(clazz).execute();
 	}
 	
 	

@@ -35,7 +35,7 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 	
 	@Override
 	public View find() {
-		return (View) getEntityMapper().findByName(View.class, getResourceIdentifier());
+		return getEntityMapper().findByName(View.class, getResourceIdentifier());
 	}
 
 	

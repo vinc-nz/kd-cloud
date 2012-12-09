@@ -80,7 +80,11 @@ public class KDApplication extends Application {
 			router.attach(e.getKey(), new Restlet() {
 				@Override
 				public void handle(Request request, Response response) {
-					response.redirectPermanent(e.getValue());
+					String target = e.getValue();
+					String query = request.getResourceRef().getQuery();
+					if (query != null)
+						target = target + "?" + query;
+					response.redirectPermanent(target);
 					response.commit();
 				}
 			});

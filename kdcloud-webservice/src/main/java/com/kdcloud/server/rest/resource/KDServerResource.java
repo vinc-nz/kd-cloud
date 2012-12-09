@@ -35,7 +35,6 @@ public abstract class KDServerResource extends ServerResource {
 	private EntityMapper entityMapper;
 	private InstancesMapper instancesMapper;
 	private UserProvider userProvider;
-	private String resourceIdentifier;
 
 	User user;
 
@@ -50,13 +49,15 @@ public abstract class KDServerResource extends ServerResource {
 	}
 
 	protected String getResourceIdentifier() {
-		if (resourceIdentifier != null)
-			return resourceIdentifier;
 		return (String) getRequestAttributes().get("id");
 	}
 	
 	protected String getResourceUri() {
-		return getReference().toString().replace(getHostRef().toString(), "");
+		return getResourceReference().replace(getHostRef().toString(), "");
+	}
+	
+	protected String getResourceReference() {
+		return getReference().toString().replaceAll("\\?.*", "");
 	}
 	
 	protected Representation fetchLocally() {

@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.Get;
@@ -26,15 +27,18 @@ public class IndexServerResource extends KDServerResource {
 	boolean filter = false;
 	
 	@Override
-	protected Representation doHandle() throws ResourceException {
+	public Representation handle()  {
 		String query = getQueryValue(QUERY_FILTER);
-		if (query != null && query.equals(QUERY_FILTER_OWNED))
+		getLogger().info("query: " + query);
+		if (query != null && query.equals(QUERY_FILTER_OWNED)) {
+			getLogger().info("filter on");
 			filter = true;
-		return super.doHandle();
+		}
+		return super.handle();
 	}
 
 	public Index loadBuiltinIndex() {
-		String uri = getReference().toString() + "/index.xml";
+		String uri = getResourceReference() + "/index.xml";
 		getLogger().info("fetching " + uri);
 		ClientResource cr = new ClientResource(uri);
 		try {
@@ -74,11 +78,16 @@ public class IndexServerResource extends KDServerResource {
 	public Index buildIndex() {
 		String className = inferClassName(getResourceUri());
 		
-		Class<?> clazz;
+		Class<? extends Describable> clazz;
 		try {
-			clazz = Class.forName(className);
+			clazz = Class.forName(className).asSubclass(Describable.class);
+			
 		} catch (ClassNotFoundException e) {
+			getLogger().log(Level.SEVERE, e.getMessage(), e);
 			throw new ResourceException(e);
+			
+		} catch (ClassCastException e) {
+			throw new ResourceException(Status.CLIENT_ERROR_FAILED_DEPENDENCY);
 		}
 		
 		Index index = new Index();
@@ -89,7 +98,7 @@ public class IndexServerResource extends KDServerResource {
 		Collection<Entity> entities = getEntityMapper().getAll(clazz);
 		index.addAll(buildIndex(entities));
 		
-		String baseUrl = Redirects.getSourceUrl(getReference().toString());
+		String baseUrl = Redirects.getSourceUrl(getResourceReference());
 		index.setReferencesBaseUrl(baseUrl);
 		index.setMetadataBaseUrl(getHostRef().toString());
 		

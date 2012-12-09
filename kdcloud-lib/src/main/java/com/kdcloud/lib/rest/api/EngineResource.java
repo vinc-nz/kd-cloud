@@ -32,7 +32,7 @@ public interface EngineResource {
 	public Representation execute(Form form);
 	
 	@Put
-	public void putWorkflow(Representation representation);
+	public Representation putWorkflow(Representation representation);
 	
 	@Get
 	public Document getWorkflow();

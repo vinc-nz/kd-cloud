@@ -55,10 +55,11 @@ public class EngineServerResource extends WorkerServerResource implements
 	}
 
 	@Override
-	public void putWorkflow(Representation representation) {
+	public Representation putWorkflow(Representation representation) {
 		ClientResource cr = wrapWorkflowServerResource();
-		cr.put(representation);
+		Representation wrappedRep = cr.put(representation);
 		setStatus(cr.getStatus());
+		return wrappedRep;
 	}
 
 	@Override

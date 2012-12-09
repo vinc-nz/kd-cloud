@@ -3,14 +3,17 @@ package com.kdcloud.server.rest.resource;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 
+import com.kdcloud.lib.rest.api.MetadataResource;
 import com.kdcloud.server.entity.Describable;
+import com.kdcloud.server.entity.Entity;
 
 
-public abstract class BasicServerResource<T> extends KDServerResource {
+public abstract class BasicServerResource<T extends Entity> extends KDServerResource {
 	
-	
+
 	/**
 	 * returns the stored resource identified, or null if it does not exist
 	 */
@@ -48,6 +51,10 @@ public abstract class BasicServerResource<T> extends KDServerResource {
 		}
 		update(resource, representation);
 		save(resource);
+		if (getStatus().equals(Status.SUCCESS_CREATED) && resource instanceof Describable) {
+			String metadataUrl = getHostRef() + MetadataResource.URI.replace("{id}", resource.getUUID());
+			getResponse().setEntity(new StringRepresentation(metadataUrl));
+		}
 	}
 	
 	public T read() {

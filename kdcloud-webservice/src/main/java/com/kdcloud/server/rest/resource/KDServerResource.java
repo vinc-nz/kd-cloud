@@ -91,7 +91,9 @@ public abstract class KDServerResource extends ServerResource {
 		}
 		if (resourcesFinder != null && getMethod().equals(Method.GET))
 			try {
-				return resourcesFinder.find(getResourceUri());
+				Representation local = resourcesFinder.find(getResourceUri());
+				getResponse().setEntity(local);
+				return local;
 			} catch (ResourceException e) {}
 		return super.handle();
 	}
@@ -106,9 +108,9 @@ public abstract class KDServerResource extends ServerResource {
 	public <T> T unmarshal(Class<T> clazz, Representation rep) {
 		Representation schemaRep;
 		if (resourcesFinder != null) {
-			schemaRep = resourcesFinder.find(ResourcesFinder.XML_SCHEMA_PATH);
+			schemaRep = resourcesFinder.find(ResourcesFinder.XML_SCHEMA_URI);
 		} else {
-			String url = getHostRef() + ResourcesFinder.XML_SCHEMA_PATH;
+			String url = getHostRef() + ResourcesFinder.XML_SCHEMA_URI;
 			schemaRep = new ClientResource(url).get();
 		}
 		try {
@@ -134,5 +136,5 @@ public abstract class KDServerResource extends ServerResource {
 	public User getUser() {
 		return user;
 	}
-
+	
 }

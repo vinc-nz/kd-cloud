@@ -16,6 +16,7 @@
  */
 package com.kdcloud.server.rest.application;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +39,7 @@ import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.ext.httpclient.HttpClientHelper;
+import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
@@ -48,7 +50,7 @@ import com.kdcloud.server.persistence.DataMapperFactory;
 import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.gae.JunitMapperFactory;
 
-public abstract class RestletTestCase {
+public class RestletTestCase {
 
 	static final String HOST = "http://localhost";
 	static final int PORT = 8887;
@@ -56,7 +58,7 @@ public abstract class RestletTestCase {
 	
 	JunitMapperFactory factory = new JunitMapperFactory();
 	
-	Context httpContext;
+	Context testContext;
 	
 	Restlet clientDistpatcher = new Restlet() {
 		public void handle(Request request, Response response) {
@@ -84,14 +86,15 @@ public abstract class RestletTestCase {
 		
 		@Override
 		public Representation find(String path) {
-			LocalReference ref = new LocalReference(path);
-			ref.setProtocol(Protocol.CLAP);
+			System.out.println("finder: " + path);
+			LocalReference ref = LocalReference.createClapReference(path);
 			try {
 				return new ClientResource(ref).get();
 			} catch (ResourceException e) {
-				ref = new LocalReference("src/main/webapp/" + path);
-				ref.setProtocol(Protocol.FILE);
-				return new ClientResource(ref).get();
+				File file = new File("src/main/webapp" + path);
+				if (file.exists() && !file.isDirectory())
+					return new FileRepresentation(file, MediaType.TEXT_PLAIN);
+				throw new ResourceException(404);
 			}
 		}
 	};
@@ -115,9 +118,9 @@ public abstract class RestletTestCase {
 
 	@Before
 	public void setUp() {
-		httpContext = new Context();
+		testContext = new Context();
 		
-		httpContext.setClientDispatcher(clientDistpatcher);
+		testContext.setClientDispatcher(clientDistpatcher);
 		
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, PORT);
@@ -150,7 +153,7 @@ public abstract class RestletTestCase {
 	}
 	
 	public void doPut(String path, String fileToPut) {
-		ClientResource cr = new ClientResource(httpContext, BASE_URI + path);
+		ClientResource cr = new ClientResource(testContext, BASE_URI + path);
 		LocalReference ref = new LocalReference(fileToPut);
 		ref.setProtocol(Protocol.CLAP);
 		ClientResource local = new ClientResource(ref);
@@ -166,7 +169,7 @@ public abstract class RestletTestCase {
 	}
 	
 	public void doGet(String path) {
-		ClientResource cr = new ClientResource(httpContext, BASE_URI + path);
+		ClientResource cr = new ClientResource(testContext, BASE_URI + path);
 		try {
 			cr.get();
 		} catch (ResourceException e) {
@@ -176,7 +179,7 @@ public abstract class RestletTestCase {
 	}
 	
 	public void doPost(String path, String fileToPost) {
-		ClientResource cr = new ClientResource(httpContext, BASE_URI + path);
+		ClientResource cr = new ClientResource(testContext, BASE_URI + path);
 		Form form = new Form();
 		InputStream in = getClass().getClassLoader().getResourceAsStream(fileToPost);
 		try {
@@ -193,7 +196,7 @@ public abstract class RestletTestCase {
 	}
 	
 	public void doDelete(String path) {
-		ClientResource cr = new ClientResource(httpContext, BASE_URI + path);
+		ClientResource cr = new ClientResource(testContext, BASE_URI + path);
 		try {
 			cr.delete();
 		} catch (ResourceException e) {

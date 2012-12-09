@@ -7,14 +7,12 @@ import static org.junit.Assert.fail;
 import java.io.File;
 
 import javax.xml.XMLConstants;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.junit.Test;
 import org.restlet.data.LocalReference;
 import org.restlet.data.Protocol;
-import org.restlet.ext.xml.XmlRepresentation;
 import org.restlet.resource.ClientResource;
 
 import com.kdcloud.lib.domain.GroupSpecification;
@@ -25,11 +23,7 @@ public class TestUnmarshalling {
 
 	public Object unmarshal(String resource, Class<?> clazz) {
 		try {
-			//File schemaFile = new File("src/main/webapp/api/kdcloud.xsd");
-			LocalReference local = new LocalReference("src/main/webapp/api/kdcloud.xsd");
-			local.setProtocol(Protocol.FILE);
-			ClientResource localCr = new ClientResource(local);
-			SAXSource schemaFile = XmlRepresentation.getSaxSource(localCr.get());
+			File schemaFile = new File("src/main/webapp/api/kdcloud.xsd");
 			Schema schema = SchemaFactory.newInstance(
 					XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(schemaFile);
 			LocalReference ref = new LocalReference(resource);

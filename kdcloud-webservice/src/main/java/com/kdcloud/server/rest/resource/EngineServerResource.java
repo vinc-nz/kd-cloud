@@ -25,6 +25,7 @@ public class EngineServerResource extends WorkerServerResource implements
 	public Representation execute(Form form) {
 		try {
 			InputStream workflow = wrapWorkflowServerResource().get().getStream();
+			System.out.println(workflow);
 			Instances data = execute(form, workflow);
 			if (data == null) {
 				getLogger().info("no output");

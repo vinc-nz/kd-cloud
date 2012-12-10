@@ -49,8 +49,7 @@ public class InsertCompleteExerciseRestlet extends RehabServerResource {
 			exercise.setElbowknee(Integer.parseInt(rootEl
 					.getAttribute("elbowknee")));
 			exercise.setInsertDate(new Date());
-			exercise
-					.setLenght(Integer.parseInt(rootEl.getAttribute("lenght")));
+			exercise.setLength(Integer.parseInt(rootEl.getAttribute("length")));
 
 			List<Integer[]> rawdataList = new LinkedList<Integer[]>();
 			List<Integer[]> anglesdataList = new LinkedList<Integer[]>();

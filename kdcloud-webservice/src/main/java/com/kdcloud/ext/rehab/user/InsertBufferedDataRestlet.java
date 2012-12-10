@@ -44,7 +44,7 @@ public class InsertBufferedDataRestlet extends RehabServerResource {
 			Element rootEl = doc.getDocumentElement();
 			bufferedData.setElbowknee(Integer.parseInt(rootEl.getAttribute("elbowknee")));			
 			bufferedData.setInsertDate(new Date());
-			bufferedData.setLenght(Integer.parseInt(rootEl.getAttribute("lenght")));
+			bufferedData.setLength(Integer.parseInt(rootEl.getAttribute("length")));
 			
 			List<Integer[]> rawdataList = new LinkedList<Integer[]>();
 			List<Integer[]> anglesdataList = new LinkedList<Integer[]>();

@@ -20,7 +20,7 @@ public class CompleteExercise {
 	Key<RehabUser> rehabuser;
 	int elbowknee;
 	Date insertdate;
-	int lenght;
+	int length;
 	@Serialized
 	List<Integer[]> raw;
 	@Serialized
@@ -70,12 +70,12 @@ public class CompleteExercise {
 		this.insertdate = insertDate;
 	}
 
-	public int getLenght() {
-		return lenght;
+	public int getLength() {
+		return length;
 	}
 
-	public void setLenght(int lenght) {
-		this.lenght = lenght;
+	public void setLength(int length) {
+		this.length = length;
 	}
 
 	public List<Integer[]> getRaw() {
@@ -102,7 +102,7 @@ public class CompleteExercise {
 		result = prime * result + ((insertdate == null) ? 0 : insertdate.hashCode());
 		result = prime * result + elbowknee;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + lenght;
+		result = prime * result + length;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + number;
 		result = prime * result
@@ -137,7 +137,7 @@ public class CompleteExercise {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (lenght != other.lenght)
+		if (length != other.length)
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -165,8 +165,8 @@ public class CompleteExercise {
 	public String toString() {
 		return "CompleteExercise [id=" + id + ", name=" + name + ", number="
 				+ number + ", rehabuser=" + rehabuser + ", elbowknee="
-				+ elbowknee + ", insertdate=" + insertdate + ", lenght="
-				+ lenght + ", raw=" + raw + ", angles=" + angles + "]";
+				+ elbowknee + ", insertdate=" + insertdate + ", length="
+				+ length + ", raw=" + raw + ", angles=" + angles + "]";
 	}
 
 	public Document toXMLDocument(Document d) {
@@ -176,7 +176,7 @@ public class CompleteExercise {
 		root.setAttribute("number", "" + number);
 		root.setAttribute("elbowknee", "" + elbowknee);
 		root.setAttribute("date", "" + insertdate.toGMTString());
-		root.setAttribute("lenght", "" + lenght);
+		root.setAttribute("length", "" + length);
 		int i = 0;
 		for (Integer[] raw_sample : raw) {
 			Element rawdata = d.createElement("raw_data");

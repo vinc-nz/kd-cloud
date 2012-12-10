@@ -47,7 +47,7 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 			Element rootEl = doc.getDocumentElement();
 			String username = XMLUtils.getTextValue(rootEl, "username");
 			String str_date = XMLUtils.getTextValue(rootEl, "date");
-			int lenght = XMLUtils.getIntValue(rootEl, "lenght");
+			int length = XMLUtils.getIntValue(rootEl, "length");
 			DateFormat formatter;
 			Date da;
 			formatter = new SimpleDateFormat("dow mon dd hh:mm:ss zzz yyyy");
@@ -62,7 +62,7 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 
 			List<BufferedData> dataList = ofy.query(BufferedData.class)
 					.filter("rehabuser", us).filter("insertdate  >", da)
-					.order("insertdate").limit(lenght / 10).list();
+					.order("insertdate").limit(length / 10).list();
 
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();
@@ -76,7 +76,7 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 					
 					datalistEl.setAttribute("elbowknee", "" + b.getElbowknee());
 					datalistEl.setAttribute("date", "" + b.getInsertDate().toGMTString());
-					datalistEl.setAttribute("lenght", "" + b.getLenght());
+					datalistEl.setAttribute("length", "" + b.getLength());
 					int i = 0;
 					for (Integer[] raw_sample : b.getRaw()) {
 						Element rawdata = d.createElement("raw_data");

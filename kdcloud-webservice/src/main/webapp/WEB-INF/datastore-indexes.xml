@@ -5,4 +5,10 @@
         <property name="rehabuser" direction="asc" />
         <property name="number" direction="asc" />
     </datastore-index>
+    
+     <datastore-index kind="BufferedData" ancestor="false" source="manual">
+        <property name="rehabuser" direction="asc" />
+        <property name="insertdate" direction="asc" />
+    </datastore-index>
+    
 </datastore-indexes>

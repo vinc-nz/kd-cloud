@@ -50,7 +50,9 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 			int length = XMLUtils.getIntValue(rootEl, "length");
 			DateFormat formatter;
 			Date da;
-			formatter = new SimpleDateFormat("dow mon dd hh:mm:ss zzz yyyy");
+			//formatter = new SimpleDateFormat("dow mon dd hh:mm:ss zzz yyyy");
+			//29 Nov 2012 16:13:18 GMT
+			formatter = new SimpleDateFormat("d MMM yyyy HH:mm:ss z");
 			da = (Date) formatter.parse(str_date);
 
 			try {
@@ -61,8 +63,10 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 			Key<RehabUser> us = new Key<RehabUser>(RehabUser.class, username);
 
 			List<BufferedData> dataList = ofy.query(BufferedData.class)
-					.filter("rehabuser", us).filter("insertdate  >", da)
+					.filter("rehabuser", us)//.filter("insertdate  >", da)
 					.order("insertdate").limit(length / 10).list();
+			
+			
 
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();
@@ -72,6 +76,9 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 				Element root = d.createElement("downloaduserbuffereddataOutput");
 				d.appendChild(root);
 				for (BufferedData b : dataList) {
+					if(b.getInsertDate().before(da))
+						continue;
+					
 					Element datalistEl = d.createElement("buffered_data");
 					
 					datalistEl.setAttribute("elbowknee", "" + b.getElbowknee());
@@ -105,12 +112,12 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 
 			} else
 				result = XMLUtils.createXMLError(
-						"download user complete exercise error",
+						"download buffered data error",
 						"no exercises found");
 
 		} catch (Exception e) {
 			result = XMLUtils.createXMLError(
-					"download complete exercise error", "" + e.getMessage());
+					"download buffered data error", "" + e.getMessage());
 		}
 
 		return result;

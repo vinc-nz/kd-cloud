@@ -27,35 +27,8 @@ import com.kdcloud.lib.domain.Metadata;
 @PersistenceCapable
 public class View extends Describable {
 	
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String uuid;
-	
-	@Persistent
-	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-	private String name;
-	
 	Blob content;
 
-	@Persistent(serialized="true")
-	Metadata metadata;
-
-	public String getUUID() {
-		return uuid;
-	}
-
-	public void setUUID(String uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public void setContent(Blob content) {
 		this.content = content;
@@ -73,14 +46,6 @@ public class View extends Describable {
 		ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
 		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(is);
-	}
-
-	public Metadata getMetadata() {
-		return metadata;
-	}
-
-	public void setMetadata(Metadata metadata) {
-		this.metadata = metadata;
 	}
 
 }

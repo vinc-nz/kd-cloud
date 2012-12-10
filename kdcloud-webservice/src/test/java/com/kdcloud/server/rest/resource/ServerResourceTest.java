@@ -51,7 +51,10 @@ public class ServerResourceTest extends RestletTestCase {
 	
 	@Test
 	public void testIndex() throws ResourceException, IOException {
-		doGet("/workflow");
+		doGet("/engine/workflow");
+		doGet("/modality");
+		doGet("/view");
+		doGet("/engine/plugin");
 	}
 	
 	

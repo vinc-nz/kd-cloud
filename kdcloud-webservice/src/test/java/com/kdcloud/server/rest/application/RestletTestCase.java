@@ -86,7 +86,6 @@ public class RestletTestCase {
 		
 		@Override
 		public Representation find(String path) {
-			System.out.println("finder: " + path);
 			LocalReference ref = LocalReference.createClapReference(path);
 			try {
 				return new ClientResource(ref).get();

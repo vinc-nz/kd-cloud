@@ -21,6 +21,7 @@ public class ConvertHelper {
 			u.setSchema(schema);
 			return (T) u.unmarshal(rep.getStream());
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}

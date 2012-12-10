@@ -19,10 +19,7 @@ package com.kdcloud.engine;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URI;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,8 +32,8 @@ import com.kdcloud.engine.embedded.node.UserDataReader;
 import com.kdcloud.engine.embedded.node.UserDataWriter;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.InstancesMapper;
 import com.kdcloud.server.persistence.gae.DataMapperFactoryImpl;
 

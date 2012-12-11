@@ -64,7 +64,7 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 
 			List<BufferedData> dataList = ofy.query(BufferedData.class)
 					.filter("rehabuser", us)//.filter("insertdate  >", da)
-					.order("insertdate").limit(length / 10).list();
+					.order("insertdate").limit(length).list();
 			
 			
 
@@ -83,7 +83,7 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 					
 					datalistEl.setAttribute("elbowknee", "" + b.getElbowknee());
 					datalistEl.setAttribute("date", "" + b.getInsertDate().toGMTString());
-					datalistEl.setAttribute("length", "" + b.getLength());
+					datalistEl.setAttribute("length", "" + b.getAngles().size());
 					int i = 0;
 					for (Integer[] raw_sample : b.getRaw()) {
 						Element rawdata = d.createElement("raw_data");

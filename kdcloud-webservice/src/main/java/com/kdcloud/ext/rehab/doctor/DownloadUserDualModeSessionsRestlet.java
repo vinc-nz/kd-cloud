@@ -45,6 +45,7 @@ public class DownloadUserDualModeSessionsRestlet extends  RehabDoctorServerResou
 
 			try {
 				ObjectifyService.register(DualModeSession.class);
+				ObjectifyService.register(CompleteExercise.class);
 			} catch (Exception e) {
 			}
 			Objectify ofy = ObjectifyService.begin();
@@ -66,7 +67,7 @@ public class DownloadUserDualModeSessionsRestlet extends  RehabDoctorServerResou
 				Element eltName4 = d.createElement("sessions_list");
 				for (DualModeSession session : sessions) {
 					Element ses = d.createElement("session");
-					ses.setAttribute("startdate", "" + session.getStartDate().toString());
+					ses.setAttribute("startdate", "" + session.getStartDate().toGMTString());
 					CompleteExercise ex = ofy.get(session.getExercise());
 					ses.setAttribute("name", "" + ex.getName());
 					ses.setAttribute("number", "" + ex.getNumber());

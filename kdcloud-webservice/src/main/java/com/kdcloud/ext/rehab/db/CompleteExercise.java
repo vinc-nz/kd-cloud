@@ -176,7 +176,7 @@ public class CompleteExercise {
 		root.setAttribute("number", "" + number);
 		root.setAttribute("elbowknee", "" + elbowknee);
 		root.setAttribute("date", "" + insertdate.toGMTString());
-		root.setAttribute("length", "" + length);
+		root.setAttribute("length", "" + raw.size());
 		int i = 0;
 		for (Integer[] raw_sample : raw) {
 			Element rawdata = d.createElement("raw_data");

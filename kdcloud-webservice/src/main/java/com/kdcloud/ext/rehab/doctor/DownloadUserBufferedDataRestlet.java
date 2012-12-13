@@ -50,8 +50,8 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 			int length = XMLUtils.getIntValue(rootEl, "length");
 			DateFormat formatter;
 			Date da;
-			//formatter = new SimpleDateFormat("dow mon dd hh:mm:ss zzz yyyy");
-			//29 Nov 2012 16:13:18 GMT
+			// formatter = new SimpleDateFormat("dow mon dd hh:mm:ss zzz yyyy");
+			// 29 Nov 2012 16:13:18 GMT
 			formatter = new SimpleDateFormat("d MMM yyyy HH:mm:ss z");
 			da = (Date) formatter.parse(str_date);
 
@@ -63,10 +63,8 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 			Key<RehabUser> us = new Key<RehabUser>(RehabUser.class, username);
 
 			List<BufferedData> dataList = ofy.query(BufferedData.class)
-					.filter("rehabuser", us)//.filter("insertdate  >", da)
-					.order("insertdate").limit(length).list();
-			
-			
+					.filter("rehabuser", us)// .filter("insertdate  >", da)
+					.order("insertdate").list();
 
 			result = new DomRepresentation(MediaType.TEXT_XML);
 			d = result.getDocument();
@@ -75,49 +73,56 @@ public class DownloadUserBufferedDataRestlet extends RehabDoctorServerResource {
 
 				Element root = d.createElement("downloaduserbuffereddataOutput");
 				d.appendChild(root);
+				int count = 0;
 				for (BufferedData b : dataList) {
-					if(b.getInsertDate().before(da))
-						continue;
-					
-					Element datalistEl = d.createElement("buffered_data");
-					
-					datalistEl.setAttribute("elbowknee", "" + b.getElbowknee());
-					datalistEl.setAttribute("date", "" + b.getInsertDate().toGMTString());
-					datalistEl.setAttribute("length", "" + b.getAngles().size());
-					int i = 0;
-					for (Integer[] raw_sample : b.getRaw()) {
-						Element rawdata = d.createElement("raw_data");
-						rawdata.setAttribute("timestamp", "" + i++);
-						rawdata.setAttribute("bx", "" + raw_sample[0]);
-						rawdata.setAttribute("by", "" + raw_sample[1]);
-						rawdata.setAttribute("bz", "" + raw_sample[2]);
-						rawdata.setAttribute("fx", "" + raw_sample[3]);
-						rawdata.setAttribute("fy", "" + raw_sample[4]);
-						rawdata.setAttribute("fz", "" + raw_sample[5]);
-						datalistEl.appendChild(rawdata);
+					if (b.getInsertDate().after(da) && count < length) {
+						count++;						
+
+						Element datalistEl = d.createElement("buffered_data");
+
+						datalistEl.setAttribute("elbowknee",
+								"" + b.getElbowknee());
+						datalistEl.setAttribute("date", ""
+								+ b.getInsertDate().toGMTString());
+						datalistEl.setAttribute("length", ""
+								+ b.getAngles().size());
+						int i = 0;
+						for (Integer[] raw_sample : b.getRaw()) {
+							Element rawdata = d.createElement("raw_data");
+							rawdata.setAttribute("timestamp", "" + i++);
+							rawdata.setAttribute("bx", "" + raw_sample[0]);
+							rawdata.setAttribute("by", "" + raw_sample[1]);
+							rawdata.setAttribute("bz", "" + raw_sample[2]);
+							rawdata.setAttribute("fx", "" + raw_sample[3]);
+							rawdata.setAttribute("fy", "" + raw_sample[4]);
+							rawdata.setAttribute("fz", "" + raw_sample[5]);
+							datalistEl.appendChild(rawdata);
+						}
+						i = 0;
+						for (Integer[] angle_sample : b.getAngles()) {
+							Element angle = d.createElement("angles_data");
+							angle.setAttribute("timestamp", "" + i++);
+							angle.setAttribute("elbowknee", ""
+									+ angle_sample[0]);
+							angle.setAttribute("backline", "" + angle_sample[1]);
+							angle.setAttribute("foreline", "" + angle_sample[2]);
+							angle.setAttribute("sideangle", ""
+									+ angle_sample[3]);
+							datalistEl.appendChild(angle);
+						}
+						root.appendChild(datalistEl);
 					}
-					i = 0;
-					for (Integer[] angle_sample : b.getAngles()) {
-						Element angle = d.createElement("angles_data");
-						angle.setAttribute("timestamp", "" + i++);
-						angle.setAttribute("elbowknee", "" + angle_sample[0]);
-						angle.setAttribute("backline", "" + angle_sample[1]);
-						angle.setAttribute("foreline", "" + angle_sample[2]);
-						angle.setAttribute("sideangle", "" + angle_sample[3]);
-						datalistEl.appendChild(angle);
-					}
-					root.appendChild(datalistEl);
+					d.normalizeDocument();
 				}
-				d.normalizeDocument();
+				
 
 			} else
 				result = XMLUtils.createXMLError(
-						"download buffered data error",
-						"no exercises found");
+						"download buffered data error", "no exercises found");
 
 		} catch (Exception e) {
-			result = XMLUtils.createXMLError(
-					"download buffered data error", "" + e.getMessage());
+			result = XMLUtils.createXMLError("download buffered data error", ""
+					+ e.getMessage());
 		}
 
 		return result;

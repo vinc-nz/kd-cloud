@@ -29,11 +29,11 @@ import com.kdcloud.ext.rehab.user.XMLUtils;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class DownloadUserSingleDayBufferedDataRestlet extends RehabDoctorServerResource {// KDServerResource
+public class DownloadUserBufferedDataByIntervalRestlet extends RehabDoctorServerResource {// KDServerResource
 																				// {
 																				// //
 
-	public static final String URI = "/rehabdoctor/downloadusersingledaybuffereddata";
+	public static final String URI = "/rehabdoctor/downloaduserbuffereddatabyinterval";
 
 	@Post("xml")
 	public Representation acceptItem(Representation entity) {
@@ -47,13 +47,16 @@ public class DownloadUserSingleDayBufferedDataRestlet extends RehabDoctorServerR
 			Document doc = input.getDocument();
 			Element rootEl = doc.getDocumentElement();
 			String username = XMLUtils.getTextValue(rootEl, "username");
-			String str_date = XMLUtils.getTextValue(rootEl, "date");
+			String str_start_date = XMLUtils.getTextValue(rootEl, "start_date");
+			String str_end_date = XMLUtils.getTextValue(rootEl, "end_date");
 			DateFormat formatter;
-			Date da;
+			Date startDate;
+			Date endDate;
 			// formatter = new SimpleDateFormat("dow mon dd hh:mm:ss zzz yyyy");
 			// 29 Nov 2012 16:13:18 GMT
 			formatter = new SimpleDateFormat("d MMM yyyy HH:mm:ss z");
-			da = (Date) formatter.parse(str_date);
+			startDate = (Date) formatter.parse(str_start_date);
+			endDate = (Date) formatter.parse(str_end_date);
 
 			try {
 				ObjectifyService.register(BufferedData.class);
@@ -71,13 +74,11 @@ public class DownloadUserSingleDayBufferedDataRestlet extends RehabDoctorServerR
 
 			if (dataList != null) {
 
-				Element root = d.createElement("downloadsingledayuserbuffereddata");
+				Element root = d.createElement("downloaduserbuffereddataOutput");
 				d.appendChild(root);
 				int count = 0;
 				for (BufferedData b : dataList) {
-					if (b.getInsertDate().getYear() == da.getYear() && 
-							b.getInsertDate().getMonth() == da.getMonth() && 
-							b.getInsertDate().getDate() == da.getDate()) {
+					if (b.getInsertDate().after(startDate) && b.getInsertDate().before(endDate)) {
 						count++;						
 
 						Element datalistEl = d.createElement("buffered_data");

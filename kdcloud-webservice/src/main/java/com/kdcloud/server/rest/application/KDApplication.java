@@ -24,7 +24,7 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
-import com.kdcloud.ext.rehab.doctor.DownloadUserSingleDayBufferedDataRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataByIntervalRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserCompleteExerciseRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserDualModeSessionsRestlet;
@@ -91,7 +91,7 @@ public class KDApplication extends Application {
 		router.attach(DownloadUserCompleteExerciseRestlet.URI, DownloadUserCompleteExerciseRestlet.class);
 		router.attach(DownloadUserDualModeSessionsRestlet.URI, DownloadUserDualModeSessionsRestlet.class);
 		router.attach(DownloadUserBufferedDataRestlet.URI, DownloadUserBufferedDataRestlet.class);
-		router.attach(DownloadUserSingleDayBufferedDataRestlet.URI, DownloadUserSingleDayBufferedDataRestlet.class);
+		router.attach(DownloadUserBufferedDataByIntervalRestlet.URI, DownloadUserBufferedDataByIntervalRestlet.class);
 		router.attach(DownloadUserRehabDaysRestlet.URI, DownloadUserRehabDaysRestlet.class);
 		
 		

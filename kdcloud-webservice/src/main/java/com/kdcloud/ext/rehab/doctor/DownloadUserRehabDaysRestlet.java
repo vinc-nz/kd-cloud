@@ -67,7 +67,7 @@ public class DownloadUserRehabDaysRestlet extends RehabDoctorServerResource {// 
 			Set<Date> days = new TreeSet<Date>();
 			if (dataList != null) {
 
-				Element root = d.createElement("downloaduserrehabdays");
+				Element root = d.createElement("downloaduserrehabdaysOutput");
 				d.appendChild(root);
 				int count = 0;
 				for (BufferedData b : dataList) {

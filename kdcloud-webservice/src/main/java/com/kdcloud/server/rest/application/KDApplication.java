@@ -28,6 +28,7 @@ import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataByIntervalRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserCompleteExerciseRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserDualModeSessionsRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserDailyStatisticsRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserRehabDaysRestlet;
 import com.kdcloud.ext.rehab.doctor.GetUserExercisesListRestlet;
 import com.kdcloud.ext.rehab.doctor.LoginRehabDoctorRestlet;
@@ -93,6 +94,7 @@ public class KDApplication extends Application {
 		router.attach(DownloadUserBufferedDataRestlet.URI, DownloadUserBufferedDataRestlet.class);
 		router.attach(DownloadUserBufferedDataByIntervalRestlet.URI, DownloadUserBufferedDataByIntervalRestlet.class);
 		router.attach(DownloadUserRehabDaysRestlet.URI, DownloadUserRehabDaysRestlet.class);
+		router.attach(DownloadUserDailyStatisticsRestlet.URI, DownloadUserDailyStatisticsRestlet.class);
 		
 		
 		router.attach(RehabTestGetRestlet.URI, RehabTestGetRestlet.class);

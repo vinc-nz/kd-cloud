@@ -24,6 +24,7 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
+import com.kdcloud.ext.rehab.doctor.AddUserSchedulingRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataByIntervalRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserCompleteExerciseRestlet;
@@ -31,6 +32,7 @@ import com.kdcloud.ext.rehab.doctor.DownloadUserDualModeSessionsRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserDailyStatisticsRestlet;
 import com.kdcloud.ext.rehab.doctor.DownloadUserRehabDaysRestlet;
 import com.kdcloud.ext.rehab.doctor.GetUserExercisesListRestlet;
+import com.kdcloud.ext.rehab.doctor.GetUserSchedulingRestlet;
 import com.kdcloud.ext.rehab.doctor.LoginRehabDoctorRestlet;
 import com.kdcloud.ext.rehab.doctor.RehabDoctorRegistrationRestlet;
 import com.kdcloud.ext.rehab.doctor.RehabTestGetRestlet;
@@ -38,6 +40,7 @@ import com.kdcloud.ext.rehab.doctor.RehabUserRegistrationRestlet;
 import com.kdcloud.ext.rehab.user.CalibrationRestlet;
 import com.kdcloud.ext.rehab.user.ComputeAnglesRestlet;
 import com.kdcloud.ext.rehab.user.DownloadCompleteExerciseRestlet;
+import com.kdcloud.ext.rehab.user.GetSchedulingRestlet;
 import com.kdcloud.ext.rehab.user.InsertBufferedDataRestlet;
 import com.kdcloud.ext.rehab.user.InsertCompleteExerciseRestlet;
 import com.kdcloud.ext.rehab.user.InsertDualModeSessionRestlet;
@@ -76,7 +79,7 @@ public class KDApplication extends Application {
 			}
 		}
 		
-		//rehab tutor paziente restlet
+		//rehab tutor user restlet
 		router.attach(LoginRehabUserRestlet.URI, LoginRehabUserRestlet.class);
 		router.attach(DownloadCompleteExerciseRestlet.URI, DownloadCompleteExerciseRestlet.class);
 		router.attach(CalibrationRestlet.URI, CalibrationRestlet.class);
@@ -84,7 +87,11 @@ public class KDApplication extends Application {
 		router.attach(InsertDualModeSessionRestlet.URI, InsertDualModeSessionRestlet.class);
 		router.attach(InsertBufferedDataRestlet.URI, InsertBufferedDataRestlet.class);
 		router.attach(InsertCompleteExerciseRestlet.URI, InsertCompleteExerciseRestlet.class);
+		router.attach(GetSchedulingRestlet.URI, GetSchedulingRestlet.class);
 		
+		
+		
+		//rehab tutor doctor restlet
 		router.attach(RehabUserRegistrationRestlet.URI, RehabUserRegistrationRestlet.class);
 		router.attach(RehabDoctorRegistrationRestlet.URI, RehabDoctorRegistrationRestlet.class);
 		router.attach(LoginRehabDoctorRestlet.URI, LoginRehabDoctorRestlet.class);
@@ -95,6 +102,8 @@ public class KDApplication extends Application {
 		router.attach(DownloadUserBufferedDataByIntervalRestlet.URI, DownloadUserBufferedDataByIntervalRestlet.class);
 		router.attach(DownloadUserRehabDaysRestlet.URI, DownloadUserRehabDaysRestlet.class);
 		router.attach(DownloadUserDailyStatisticsRestlet.URI, DownloadUserDailyStatisticsRestlet.class);
+		router.attach(GetUserSchedulingRestlet.URI, GetUserSchedulingRestlet.class);
+		router.attach(AddUserSchedulingRestlet.URI, AddUserSchedulingRestlet.class);
 		
 		
 		router.attach(RehabTestGetRestlet.URI, RehabTestGetRestlet.class);

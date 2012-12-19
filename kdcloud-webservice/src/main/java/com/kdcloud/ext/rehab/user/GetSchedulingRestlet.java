@@ -46,7 +46,7 @@ public class GetSchedulingRestlet extends RehabServerResource {
 			Objectify ofy = ObjectifyService.begin();
 			Key<RehabUser> us = new Key<RehabUser>(RehabUser.class, u);
 
-			List<UserScheduling> schedulingList = ofy.query(UserScheduling.class).filter("username", u).order("startDate")
+			List<UserScheduling> schedulingList = ofy.query(UserScheduling.class).filter("user", u).order("startDate")
 					.list();
 			
 			
@@ -64,8 +64,8 @@ public class GetSchedulingRestlet extends RehabServerResource {
 					taskEl.setAttribute("enddate", s.getEndDate().toGMTString());
 					taskEl.setAttribute("user", u);
 					CompleteExercise ex = ofy.get(s.getExercise());
-					taskEl.setAttribute("exercise_name", u);
-					taskEl.setAttribute("exercise_number", u);
+					taskEl.setAttribute("exercise_name", ex.getName());
+					taskEl.setAttribute("exercise_number", "" + ex.getNumber());
 					root.appendChild(taskEl);
 				}
 

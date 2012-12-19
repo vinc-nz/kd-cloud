@@ -13,7 +13,10 @@
     
       <datastore-index kind="UserScheduling" ancestor="false" source="manual">
         <property name="user" direction="asc" />
-        <property name="startdate" direction="asc" />
+        <property name="startDate" direction="asc" />
     </datastore-index>
+    
+
+
     
 </datastore-indexes>

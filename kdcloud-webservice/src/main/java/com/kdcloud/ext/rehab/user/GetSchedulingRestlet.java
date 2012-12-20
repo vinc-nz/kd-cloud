@@ -1,6 +1,5 @@
 package com.kdcloud.ext.rehab.user;
 
-import java.util.Date;
 import java.util.List;
 
 import org.restlet.data.MediaType;
@@ -16,7 +15,6 @@ import com.googlecode.objectify.ObjectifyService;
 import com.kdcloud.ext.rehab.db.CompleteExercise;
 import com.kdcloud.ext.rehab.db.RehabUser;
 import com.kdcloud.ext.rehab.db.UserScheduling;
-import com.kdcloud.ext.rehab.user.XMLUtils;
 
 public class GetSchedulingRestlet extends RehabServerResource {
 
@@ -40,44 +38,53 @@ public class GetSchedulingRestlet extends RehabServerResource {
 
 			try {
 				ObjectifyService.register(CompleteExercise.class);
-				ObjectifyService.register(UserScheduling.class);
 			} catch (Exception e) {
 			}
 			Objectify ofy = ObjectifyService.begin();
 			Key<RehabUser> us = new Key<RehabUser>(RehabUser.class, u);
 
-			List<UserScheduling> schedulingList = ofy.query(UserScheduling.class).filter("user", u).order("startDate")
-					.list();
-			
-			
-			
-			if (schedulingList != null && schedulingList.size() > 0) {
-
-
-				Element root = d.createElement("getuserschedulingOutput");
-				d.appendChild(root);
+			try {
+				ObjectifyService.register(UserScheduling.class);
 				
-				
-				for (UserScheduling s : schedulingList) {
-					Element taskEl = d.createElement("task");
-					taskEl.setAttribute("startdate", s.getStartDate().toGMTString());
-					taskEl.setAttribute("enddate", s.getEndDate().toGMTString());
-					taskEl.setAttribute("user", u);
-					CompleteExercise ex = ofy.get(s.getExercise());
-					taskEl.setAttribute("exercise_name", ex.getName());
-					taskEl.setAttribute("exercise_number", "" + ex.getNumber());
-					root.appendChild(taskEl);
+			} catch (Exception e) {
+			}
+			ofy = ObjectifyService.begin();
+			List<UserScheduling> schedulingList = ofy
+					.query(UserScheduling.class).filter("user", us)
+					.order("startDate").list();
+
+			if (schedulingList != null) {
+
+				if (schedulingList.size() > 0) {
+					Element root = d.createElement("getuserschedulingOutput");
+					d.appendChild(root);
+
+					for (UserScheduling s : schedulingList) {
+						Element taskEl = d.createElement("task");
+						taskEl.setAttribute("startdate", s.getStartDate()
+								.toGMTString());
+						taskEl.setAttribute("enddate", s.getEndDate()
+								.toGMTString());
+						taskEl.setAttribute("user", u);
+						CompleteExercise ex = ofy.get(s.getExercise());
+						taskEl.setAttribute("exercise_name", ex.getName());
+						taskEl.setAttribute("exercise_number", "" + ex.getNumber());
+						root.appendChild(taskEl);
+					}
+
+					d.normalizeDocument();
+				}else{
+					result = XMLUtils
+							.createXMLError("get user scheduling", "list size = 0");
 				}
-
-				d.normalizeDocument();
-			}else{
+			} else {
 				result = XMLUtils
-						.createXMLError("get user scheduling", "error");
+						.createXMLError("get user scheduling", "list = null");
 			}
 
 		} catch (Exception e) {
-			result = XMLUtils
-					.createXMLError("get user scheduling", "" + e.getMessage());
+			result = XMLUtils.createXMLError("get user scheduling",
+					"" + e.getMessage());
 		}
 
 		return result;

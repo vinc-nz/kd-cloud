@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.restlet.Context;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.embedded.EmbeddedEngine;
@@ -72,6 +75,16 @@ public class GAEContext extends Context {
 		attrs.put(KDEngine.class.getName(), new EmbeddedEngine(logger, loader));
 		
 		attrs.put(UserProvider.class.getName(), new UserProviderImpl());
+		
+		attrs.put(ResourcesFinder.class.getName(), new ResourcesFinder() {
+			
+			@Override
+			public Representation find(String path) throws ResourceException {
+				if (!UrlHelper.hasExtension(path))
+					path = path + ".xml";
+				return new ClientResource(path).get();
+			}
+		});
 		
 		this.setAttributes(attrs);
 		

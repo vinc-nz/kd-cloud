@@ -76,5 +76,23 @@ public class Index {
 		setReferencesBaseUrl(baseUrl);
 		setMetadataBaseUrl(baseUrl);
 	}
+	
+	public List<String> getAllReferences() {
+		LinkedList<String> list = new LinkedList<String>();
+		for (Item i : items) {
+			if (i.reference != null)
+				list.add(i.reference.href);
+		}
+		return list;
+	}
+	
+	public List<String> getAllMetadataUrl() {
+		LinkedList<String> list = new LinkedList<String>();
+		for (Item i : items) {
+			if (i.metadata != null)
+				list.add(i.metadata.href);
+		}
+		return list;
+	}
 
 }

@@ -25,10 +25,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import weka.core.Attribute;
 import weka.core.Instances;
-
+@XmlType(name="")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement
 public class DataSpecification implements Serializable {

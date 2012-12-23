@@ -26,6 +26,7 @@ import javax.xml.bind.Unmarshaller;
 
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.Worker;
+import com.kdcloud.engine.embedded.model.WorkflowDescription;
 
 public class EmbeddedEngine implements KDEngine {
 

@@ -28,6 +28,10 @@ import com.kdcloud.lib.domain.DataSpecification;
 @PersistenceCapable
 public class Group extends Describable {
 	
+	public static final String PROPERTY_ENROLLED = "enrolled"; 
+	public static final String PROPERTY_CONTRIBUTORS = "contributors"; 
+	public static final String PROPERTY_MEMBERS = "members"; 
+	
 	public Group(String name) {
 		super(name);
 	}
@@ -99,11 +103,11 @@ public class Group extends Describable {
 	}
 	
 	public boolean insertAllowed(User committer) {
-		return enrolled.isEmpty() || enrolled.contains(committer.getName());
+		return enrolled == null || enrolled.isEmpty() || enrolled.contains(committer.getName());
 	}
 	
 	public boolean analysisAllowed(User applicant) {
-		return applicant.isOwner(this) || members.contains(applicant.getName());
+		return getOwner() == null || applicant.isOwner(this) || members.contains(applicant.getName());
 	}
 	
 	public Collection<String> getContributors(User applicant) {
@@ -113,6 +117,16 @@ public class Group extends Describable {
 				names.add(t.getOwnerName());
 		}
 		return names;
+	}
+	
+	public Collection<String> getProperty(String property, User applicant) {
+		if (property.equals(PROPERTY_CONTRIBUTORS))
+			return getContributors(applicant);
+		if (property.equals(PROPERTY_ENROLLED))
+			return getEnrolled(applicant);
+		if (property.equals(PROPERTY_MEMBERS))
+			return getMembers(applicant);
+		return null;
 	}
 	
 

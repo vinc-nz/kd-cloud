@@ -22,7 +22,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
+@XmlType(name="")
 @XmlRootElement(name="modality")
 @XmlAccessorType(XmlAccessType.NONE)
 public class ModalitySpecification implements Serializable {
@@ -32,16 +34,16 @@ public class ModalitySpecification implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@XmlElement
+	@XmlElement(required=false)
 	DataSpecification inputSpecification;
 	
-	@XmlElement(name="init-action")
+	@XmlElement(name="init-action", required=false)
 	ServerAction initAction;
 
 	@XmlElement(name="action")
 	ServerAction action;
 	
-	@XmlElement
+	@XmlElement(required=false)
 	DataSpecification outputSpecification;
 	
 

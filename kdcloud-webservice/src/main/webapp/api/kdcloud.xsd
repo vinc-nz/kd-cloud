@@ -48,10 +48,10 @@
 
   <xs:complexType name="serverAction">
     <xs:sequence>
-      <xs:element name="uri" type="xs:string"/>
-      <xs:element name="method" type="serverMethod"/>
+      <xs:element name="uri" type="xs:string" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="method" type="serverMethod" maxOccurs="1" minOccurs="1"/>
       <xs:element name="parameter" type="serverParameter" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="repeat" type="xs:boolean"/>
+      <xs:element name="repeat" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
       <xs:element name="trigger" type="trigger" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
@@ -106,7 +106,7 @@
       <xs:element name="invitationMessage" type="xs:string" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
-
+  
   <xs:simpleType name="serverMethod">
     <xs:restriction base="xs:string">
       <xs:enumeration value="GET"/>
@@ -137,5 +137,6 @@
       <xs:enumeration value="MAP"/>
     </xs:restriction>
   </xs:simpleType>
+
 </xs:schema>
 

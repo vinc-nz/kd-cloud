@@ -8,16 +8,17 @@ import java.util.regex.Pattern;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
-import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.domain.Index;
+import com.kdcloud.lib.rest.api.IndexResource;
 import com.kdcloud.lib.rest.api.MetadataResource;
 import com.kdcloud.server.entity.Describable;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.rest.application.Redirects;
+import com.kdcloud.server.rest.application.UrlHelper;
 
-public class IndexServerResource extends KDServerResource {
+public class IndexServerResource extends KDServerResource implements IndexResource {
 	
 	public static final String QUERY_FILTER = "filter";
 	public static final String QUERY_FILTER_OWNED = "owned";
@@ -27,7 +28,6 @@ public class IndexServerResource extends KDServerResource {
 	@Override
 	public Representation handle()  {
 		String query = getQueryValue(QUERY_FILTER);
-		getLogger().info("query: " + query);
 		if (query != null && query.equals(QUERY_FILTER_OWNED)) {
 			getLogger().info("filter on");
 			filter = true;
@@ -52,8 +52,7 @@ public class IndexServerResource extends KDServerResource {
 		for (Describable entity : entities) {
 			if (!filter || user.isOwner(entity)) {
 				String referenceUrl = "/" + entity.getName();
-				String metadataUrl = MetadataResource.URI.replace("{id}",
-						entity.getUUID());
+				String metadataUrl = UrlHelper.replaceId(MetadataResource.URI, entity.getUUID());
 				index.add(referenceUrl, metadataUrl);
 			}
 		}
@@ -71,7 +70,7 @@ public class IndexServerResource extends KDServerResource {
 		return basePackage + "." + buffer.toString();
 	}
 
-	@Get
+	@Override
 	public Index buildIndex() {
 		String className = inferClassName(getResourceUri());
 		

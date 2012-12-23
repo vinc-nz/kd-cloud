@@ -80,6 +80,10 @@ public abstract class KDServerResource extends ServerResource {
 	
 	public void beforeHandle() {
 		user = userProvider.getUser(getRequest(), entityMapper);
+		if (user == null || user.getName() == null) {
+			getLogger().severe("invalid user");
+			throw new ResourceException(500);
+		}
 	}
 	
 	@Override

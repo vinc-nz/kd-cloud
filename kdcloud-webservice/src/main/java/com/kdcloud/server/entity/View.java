@@ -4,11 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -22,7 +18,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.google.appengine.api.datastore.Blob;
-import com.kdcloud.lib.domain.Metadata;
 
 @PersistenceCapable
 public class View extends Describable {

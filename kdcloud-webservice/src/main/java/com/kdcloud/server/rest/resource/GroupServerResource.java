@@ -90,11 +90,17 @@ public class GroupServerResource extends BasicServerResource<Group> implements
 		if (!user.isOwner(group))
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 
-		String[] enrolled = form.getValues("enrolled").split(",");
-		group.getEnrolled(user).addAll(Arrays.asList(enrolled));
+		String values = form.getValues(Group.PROPERTY_ENROLLED);
+		if (values != null) {
+			String[] enrolled = values.split(",");
+			group.getEnrolled(user).addAll(Arrays.asList(enrolled));
+		}
 
-		String[] members = form.getValues("member").split(",");
-		group.getMembers(user).addAll(Arrays.asList(members));
+		values = form.getValues(Group.PROPERTY_MEMBERS);
+		if (values != null) {
+			String[] members = values.split(",");
+			group.getMembers(user).addAll(Arrays.asList(members));
+		}
 
 		save(group);
 	}

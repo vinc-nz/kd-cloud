@@ -9,6 +9,7 @@ import org.restlet.resource.ResourceException;
 import com.kdcloud.lib.rest.api.MetadataResource;
 import com.kdcloud.server.entity.Describable;
 import com.kdcloud.server.entity.Entity;
+import com.kdcloud.server.rest.application.UrlHelper;
 
 
 public abstract class BasicServerResource<T extends Entity> extends KDServerResource {
@@ -52,7 +53,7 @@ public abstract class BasicServerResource<T extends Entity> extends KDServerReso
 		update(resource, representation);
 		save(resource);
 		if (getStatus().equals(Status.SUCCESS_CREATED) && resource instanceof Describable) {
-			String metadataUrl = getHostRef() + MetadataResource.URI.replace("{id}", resource.getUUID());
+			String metadataUrl = getHostRef() + UrlHelper.replaceId(MetadataResource.URI, resource.getUUID());
 			getResponse().setEntity(new StringRepresentation(metadataUrl));
 		}
 	}

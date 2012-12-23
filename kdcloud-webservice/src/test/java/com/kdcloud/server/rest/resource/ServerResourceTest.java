@@ -32,14 +32,12 @@ public class ServerResourceTest extends RestletTestCase {
 	
 	@Test
 	public void testDatasetResource() {
-		doPut("/group/test", "group.xml");
-		doFullTest("/group/test/data", "ecg_small.csv", null, true, true);
+		doFullTest("/group/london-marathon/data", "ecg_small.csv", null, true, true);
 	}
 	
 	@Test
 	public void testAnalysis() {
-		doPut("/group/test", "group.xml");
-		doPut("/group/test/data", "ecg_small.csv");
+		doPut("/group/london-marathon/data", "ecg_small.csv");
 		doPost("/engine/workflow/ecg.xml", "ecg-test.properties");
 	}
 	

@@ -14,16 +14,22 @@
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.kdcloud.engine.embedded;
+package com.kdcloud.engine.embedded.model;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.kdcloud.engine.embedded.Node;
+import com.kdcloud.engine.embedded.NodeLoader;
+
 @XmlRootElement(name="workflow")
+@XmlAccessorType(XmlAccessType.NONE)
 public class WorkflowDescription {
 	
 	@XmlElement(name="node")

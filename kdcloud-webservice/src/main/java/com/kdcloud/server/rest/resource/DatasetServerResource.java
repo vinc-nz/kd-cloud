@@ -22,11 +22,13 @@ import java.util.logging.Level;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import weka.core.Instances;
 
 import com.kdcloud.lib.domain.DataSpecification;
+import com.kdcloud.lib.domain.GroupSpecification;
 import com.kdcloud.lib.rest.api.DatasetResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.server.entity.DataTable;
@@ -35,7 +37,7 @@ import com.kdcloud.server.entity.Group;
 public class DatasetServerResource extends BasicServerResource<DataTable> implements DatasetResource  {
 	
 	private Group mGroup;
-	private DataTable mTable;
+//	private DataTable mTable;
 	private Instances mData;
 
 	@Override
@@ -50,12 +52,20 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 		remove();
 	}
 	
+	public void createGroupEntity() {
+		String uri = getResourceReference().replace("/data", "");
+		GroupSpecification spec = new ClientResource(uri).get(GroupSpecification.class);
+		mGroup = new Group(getResourceIdentifier());
+		mGroup.setInputSpecification(spec.getDataSpecification());
+		mGroup.setMetadata(spec.getMetadata());
+		mGroup.setInvitationMessage(spec.getInvitationMessage());
+	}
 
 	@Override
 	public DataTable find() {
 		mGroup = findGroup();
 		if (mGroup == null)
-			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+			createGroupEntity();
 		return getEntityMapper().findChildByName(mGroup, DataTable.class, user.getName());
 	}
 
@@ -63,13 +73,17 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	public void save(DataTable e) {
 		mGroup.getData().add(e);
 		getEntityMapper().save(mGroup);
-		getInstancesMapper().save(mData, mTable);
+//		getInstancesMapper().save(mData, mTable);
+		getInstancesMapper().save(mData, e);
 	}
 
 	@Override
 	public void delete(DataTable e) {
+		getLogger().info("deleting instances");
 		getInstancesMapper().clear(e);
+		getLogger().info("done. deleting table");
 		mGroup.getData().remove(e);
+		getLogger().info("done. committing transaction");
 		getEntityMapper().save(mGroup);
 	}
 
@@ -86,8 +100,8 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 		InstancesRepresentation instancesRepresentation = new InstancesRepresentation(representation);
 		try {
 			mData = instancesRepresentation.getInstances();
-			mTable = entity;
-			DataSpecification inputSpec = (mGroup != null ? mGroup.getInputSpecification() : null);
+//			mTable = entity;
+			DataSpecification inputSpec = mGroup.getInputSpecification();
 			if (inputSpec != null && !inputSpec.matchingSpecification(mData))
 				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 		} catch (IOException e) {

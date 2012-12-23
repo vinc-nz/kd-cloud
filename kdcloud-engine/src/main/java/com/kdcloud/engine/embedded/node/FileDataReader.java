@@ -37,7 +37,6 @@ public class FileDataReader extends NodeAdapter {
 	@Override
 	public void configure(WorkerConfiguration config) throws WrongConfigurationException {
 		try {
-			System.out.println(this.filename);
 			InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
 			loader.setSource(in);
 			output.setInstances(loader.getStructure());

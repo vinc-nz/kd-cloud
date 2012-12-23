@@ -25,7 +25,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.embedded.Node;
-import com.kdcloud.engine.embedded.NodeDescription;
+import com.kdcloud.engine.embedded.model.NodeDescription;
 import com.kdcloud.lib.rest.api.EnginePluginResource;
 import com.kdcloud.server.entity.EnginePlugin;
 import com.kdcloud.server.rest.application.ConvertHelper;

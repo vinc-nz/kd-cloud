@@ -45,6 +45,7 @@ public class GAESaverTest {
 		factory.getEntityMapper().save(t);
 		saver.save(input, t);
 		assertEquals(input.size(), saver.load(t).size());
+		saver.clear(t);
 	}
 
 }

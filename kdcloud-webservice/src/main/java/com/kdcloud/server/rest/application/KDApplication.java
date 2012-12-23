@@ -28,6 +28,7 @@ import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
 import com.kdcloud.lib.rest.api.GroupResource;
+import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.rest.resource.IndexServerResource;
 import com.kdcloud.server.rest.resource.KDServerResource;
 import com.kdcloud.server.rest.resource.UserIndexServerResource;
@@ -36,7 +37,6 @@ public class KDApplication extends Application {
 	
 	public KDApplication(Context context) {
 		super(context);
-		getLogger().info("init database");
 	}
 
 	/**
@@ -71,9 +71,9 @@ public class KDApplication extends Application {
 		router.attach("/engine/plugin", IndexServerResource.class);
 		router.attach("/view", IndexServerResource.class);
 		
-		router.attach(GroupResource.URI + "/members", UserIndexServerResource.class);
-		router.attach(GroupResource.URI + "/enrolled", UserIndexServerResource.class);
-		router.attach(GroupResource.URI + "/contributors", UserIndexServerResource.class);
+		router.attach(GroupResource.URI + "/" + Group.PROPERTY_CONTRIBUTORS, UserIndexServerResource.class);
+		router.attach(GroupResource.URI + "/" + Group.PROPERTY_ENROLLED, UserIndexServerResource.class);
+		router.attach(GroupResource.URI + "/" + Group.PROPERTY_MEMBERS, UserIndexServerResource.class);
 		
 		//redirects
 		for (final Entry<String, String> e : Redirects.getRedirects().entrySet()) {

@@ -20,16 +20,19 @@ public abstract class Describable extends Entity {
 	private Metadata metadata = new Metadata();
 
 	public Describable() {
-		super();
+		this(null, null);
 	}
 
 	public Describable(String name) {
-		super(name);
+		this(name, null);
 	}
 	
 	public Describable(String name, User owner) {
 		super(name);
 		this.owner = owner;
+		this.metadata.setName(name);
+		if (owner != null)
+			this.metadata.setOwner(owner.getName());
 	}
 
 	public User getOwner() {

@@ -78,7 +78,12 @@ public class RestletTestCase {
 		@Override
 		public User getUser(Request request,
 				EntityMapper entityMapper) {
-			return new User("test");
+			User u = entityMapper.findByName(User.class, "test");
+			if (u == null) {
+				u = new User("test");
+				entityMapper.save(u);
+			}
+			return u;
 		}
 	};
 	
@@ -86,6 +91,8 @@ public class RestletTestCase {
 		
 		@Override
 		public Representation find(String path) {
+			if (!UrlHelper.hasExtension(path))
+				path = path + ".xml";
 			LocalReference ref = LocalReference.createClapReference(path);
 			try {
 				return new ClientResource(ref).get();

@@ -29,7 +29,7 @@ public interface EngineResource {
 	public static final String URI = "/engine/workflow/{id}";
 	
 	@Post
-	public Representation execute(Form form);
+	public Representation handleTask(Form form);
 	
 	@Put
 	public Representation putWorkflow(Representation representation);

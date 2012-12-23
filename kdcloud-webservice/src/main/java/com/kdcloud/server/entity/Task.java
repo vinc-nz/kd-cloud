@@ -1,7 +1,5 @@
 package com.kdcloud.server.entity;
 
-import java.util.Map;
-
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
@@ -13,9 +11,6 @@ public class Task extends Entity {
 	
 	@Persistent
 	DataTable result;
-	
-	@Persistent(serialized="true")
-	Map<String, String> parameters;
 	
 	boolean completed = false;
 	
@@ -52,14 +47,5 @@ public class Task extends Entity {
 		this.completed = completed;
 	}
 
-
-	public Map<String, String> getParameters() {
-		return parameters;
-	}
-
-
-	public void setParameters(Map<String, String> parameters) {
-		this.parameters = parameters;
-	}
 
 }

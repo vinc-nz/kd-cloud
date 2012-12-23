@@ -35,6 +35,7 @@ import com.kdcloud.server.rest.resource.UserIndexServerResource;
 
 public class KDApplication extends Application {
 	
+	
 	public KDApplication(Context context) {
 		super(context);
 	}

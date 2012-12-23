@@ -31,6 +31,7 @@ import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeLoader;
 import com.kdcloud.server.entity.EnginePlugin;
+import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.DataMapperFactory;
 import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.gae.DataMapperFactoryImpl;
@@ -39,7 +40,7 @@ public class GAEContext extends Context {
 	
 	
 	
-	public GAEContext(Logger logger) {
+	public GAEContext(final Logger logger) {
 		super(logger);
 		
 		HashMap<String, Object> attrs = new HashMap<String, Object>();
@@ -83,6 +84,17 @@ public class GAEContext extends Context {
 				if (!UrlHelper.hasExtension(path))
 					path = path + ".xml";
 				return new ClientResource(path).get();
+			}
+		});
+		
+		attrs.put(TaskQueue.class.getName(), new TaskQueueImpl());
+		
+		attrs.put(UserNotifier.class.getName(), new UserNotifier() {
+			
+			@Override
+			public void notify(User user) {
+				//TODO implement notifications
+				logger.info("STUB: notify user " + user.getName());
 			}
 		});
 		

@@ -70,6 +70,7 @@ public class KDApplication extends Application {
 		router.attach("/modality", IndexServerResource.class);
 		router.attach("/engine/plugin", IndexServerResource.class);
 		router.attach("/view", IndexServerResource.class);
+		router.attach("/group", IndexServerResource.class);
 		
 		router.attach(GroupResource.URI + "/" + Group.PROPERTY_CONTRIBUTORS, UserIndexServerResource.class);
 		router.attach(GroupResource.URI + "/" + Group.PROPERTY_ENROLLED, UserIndexServerResource.class);

@@ -91,6 +91,7 @@ public class RestletTestCase {
 		
 		@Override
 		public Representation find(String path) {
+			path = path.replace(getServerUrl(), "");
 			if (!UrlHelper.hasExtension(path))
 				path = path + ".xml";
 			LocalReference ref = LocalReference.createClapReference(path);

@@ -112,7 +112,7 @@ public abstract class KDServerResource extends ServerResource {
 	public <T> T unmarshal(Class<T> clazz, Representation rep) {
 		Representation schemaRep;
 		if (resourcesFinder != null) {
-			schemaRep = resourcesFinder.find(ResourcesFinder.XML_SCHEMA_URI);
+			schemaRep = resourcesFinder.find(getHostRef() + ResourcesFinder.XML_SCHEMA_URI);
 		} else {
 			String url = getHostRef() + ResourcesFinder.XML_SCHEMA_URI;
 			schemaRep = new ClientResource(url).get();

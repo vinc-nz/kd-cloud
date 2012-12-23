@@ -17,6 +17,7 @@
 package com.kdcloud.server.entity;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -35,6 +36,9 @@ public class User extends Entity {
 
 	@Persistent(serialized = "true")
 	private LinkedList<String> devices = new LinkedList<String>();
+	
+	@Persistent(mappedBy="applicant")
+	private List<Task> submittedTasks = new LinkedList<Task>();
 	
 	public LinkedList<String> getDevices() {
 		return devices;
@@ -57,5 +61,13 @@ public class User extends Entity {
 		return false;
 	}
 
+	public List<Task> getSubmittedTasks() {
+		return submittedTasks;
+	}
+
+	public void setSubmittedTasks(List<Task> submittedTasks) {
+		this.submittedTasks = submittedTasks;
+	}
+	
 
 }

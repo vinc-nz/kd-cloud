@@ -1,12 +1,11 @@
 package com.kdcloud.server.rest.resource;
 
-import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.lib.rest.api.MetadataResource;
+import com.kdcloud.lib.rest.ext.LinkRepresentation;
 import com.kdcloud.server.entity.Describable;
 import com.kdcloud.server.entity.Entity;
 import com.kdcloud.server.rest.application.UrlHelper;
@@ -54,7 +53,7 @@ public abstract class BasicServerResource<T extends Entity> extends KDServerReso
 		save(resource);
 		if (getStatus().equals(Status.SUCCESS_CREATED) && resource instanceof Describable) {
 			String metadataUrl = getHostRef() + UrlHelper.replaceId(MetadataResource.URI, resource.getUUID());
-			getResponse().setEntity(new StringRepresentation(metadataUrl));
+			getResponse().setEntity(new LinkRepresentation("metadata", metadataUrl));
 		}
 	}
 	
@@ -75,19 +74,6 @@ public abstract class BasicServerResource<T extends Entity> extends KDServerReso
 			delete(resource);
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
-	}
-	
-	public void editMetadata(Describable entity, Form form) {
-		String owner = form.getFirstValue("owner");
-		String company = form.getFirstValue("company");
-		String description = form.getFirstValue("description");
-		
-		if (owner != null)
-			entity.getMetadata().setOwner(owner);
-		if (company != null)
-			entity.getMetadata().setCompany(company);
-		if (description != null)
-			entity.getMetadata().setDescription(description);
 	}
 
 }

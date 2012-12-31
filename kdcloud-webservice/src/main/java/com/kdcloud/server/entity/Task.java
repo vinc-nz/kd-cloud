@@ -21,6 +21,7 @@ public class Task extends Entity {
 	public Task(User applicant) {
 		super();
 		this.applicant = applicant;
+		this.result = new DataTable(applicant);
 	}
 
 	public User getApplicant() {

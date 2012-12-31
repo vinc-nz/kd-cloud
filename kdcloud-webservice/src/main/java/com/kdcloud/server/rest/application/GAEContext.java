@@ -83,6 +83,7 @@ public class GAEContext extends Context {
 			public Representation find(String path) throws ResourceException {
 				if (!UrlHelper.hasExtension(path))
 					path = path + ".xml";
+				logger.info("fetching " + path);
 				return new ClientResource(path).get();
 			}
 		});

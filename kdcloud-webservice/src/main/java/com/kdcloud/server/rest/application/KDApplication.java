@@ -25,6 +25,8 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
+import org.restlet.data.ChallengeResponse;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Router;
 
 import com.kdcloud.lib.rest.api.GroupResource;
@@ -34,6 +36,9 @@ import com.kdcloud.server.rest.resource.KDServerResource;
 import com.kdcloud.server.rest.resource.UserIndexServerResource;
 
 public class KDApplication extends Application {
+	
+	public static final ChallengeResponse defaultChallenge = 
+			new ChallengeResponse(ChallengeScheme.HTTP_BASIC, "admin", "admin");
 	
 	
 	public KDApplication(Context context) {

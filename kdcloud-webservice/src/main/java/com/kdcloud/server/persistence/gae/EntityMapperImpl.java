@@ -15,6 +15,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.kdcloud.server.persistence.gae;
+
 import java.util.Collection;
 
 import javax.jdo.PersistenceManager;
@@ -25,10 +26,9 @@ import com.kdcloud.server.entity.Entity;
 import com.kdcloud.server.persistence.EntityMapper;
 
 public class EntityMapperImpl implements EntityMapper {
-    
 
-    private PersistenceManager pm;
-    
+	private PersistenceManager pm;
+
 	public EntityMapperImpl(PersistenceManager pm) {
 		super();
 		this.pm = pm;
@@ -61,12 +61,13 @@ public class EntityMapperImpl implements EntityMapper {
 
 	@Override
 	public Entity findByUUID(String uuid) {
-		Key key = KeyFactory.stringToKey(uuid);
-		String entityKind = Entity.class.getSimpleName();
-		String className = Entity.class.getName().replace(entityKind, key.getKind());
 		try {
+			Key key = KeyFactory.stringToKey(uuid);
+			String entityKind = Entity.class.getSimpleName();
+			String className = Entity.class.getName().replace(entityKind,
+					key.getKind());
 			return (Entity) pm.getObjectById(Class.forName(className), key);
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -86,8 +87,8 @@ public class EntityMapperImpl implements EntityMapper {
 	public <T> T findChildByName(Entity father, Class<T> child, String childName) {
 		try {
 			Key key = new KeyFactory.Builder(father.getClass().getSimpleName(),
-					father.getName()).addChild(child.getSimpleName(), childName)
-					.getKey();
+					father.getName())
+					.addChild(child.getSimpleName(), childName).getKey();
 			return pm.getObjectById(child, key);
 		} catch (Exception tr) {
 			return null;
@@ -99,6 +100,5 @@ public class EntityMapperImpl implements EntityMapper {
 	public <T> Collection<T> getAll(Class<T> clazz) {
 		return (Collection<T>) pm.newQuery(clazz).execute();
 	}
-	
-	
+
 }

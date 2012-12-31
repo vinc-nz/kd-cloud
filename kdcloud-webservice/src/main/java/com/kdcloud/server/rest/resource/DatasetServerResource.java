@@ -53,8 +53,10 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 	}
 	
 	public void createGroupEntity() {
-		String uri = getResourceReference().replace("/data", "");
-		GroupSpecification spec = new ClientResource(uri).get(GroupSpecification.class);
+		ClientResource cr = new ClientResource(getResourceReference().replace("/data", ""));
+		cr.setChallengeResponse(getChallengeResponse());
+		Representation rep = cr.get();
+		GroupSpecification spec = unmarshal(GroupSpecification.class, rep);
 		mGroup = new Group(getResourceIdentifier());
 		mGroup.setInputSpecification(spec.getDataSpecification());
 		mGroup.setMetadata(spec.getMetadata());

@@ -36,6 +36,8 @@ public class MainApplication extends Application {
 		getLogger().setLevel(Level.INFO);
 		
 		Context applicationContext = new GAEContext(getLogger());
+		
+		setContext(applicationContext);
 
 		Router router = new Router(getContext());
 		

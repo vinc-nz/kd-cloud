@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.restlet.data.Status;
-import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
@@ -26,13 +25,13 @@ public class IndexServerResource extends KDServerResource implements IndexResour
 	boolean filter = false;
 	
 	@Override
-	public Representation handle()  {
+	public void beforeHandle() {
+		super.beforeHandle();
 		String query = getQueryValue(QUERY_FILTER);
 		if (query != null && query.equals(QUERY_FILTER_OWNED)) {
 			getLogger().info("filter on");
 			filter = true;
 		}
-		return super.handle();
 	}
 
 	public Index loadBuiltinIndex() {
@@ -42,7 +41,7 @@ public class IndexServerResource extends KDServerResource implements IndexResour
 		try {
 			return unmarshal(Index.class, cr.get());
 		} catch (Exception e) {
-			getLogger().log(Level.SEVERE, "could not read index", e);
+			getLogger().log(Level.SEVERE, "could not read index");
 			return new Index();
 		}
 	}

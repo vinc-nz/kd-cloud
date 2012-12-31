@@ -55,5 +55,4 @@ public class ServerResourceTest extends RestletTestCase {
 		doGet("/engine/plugin");
 	}
 	
-	
 }

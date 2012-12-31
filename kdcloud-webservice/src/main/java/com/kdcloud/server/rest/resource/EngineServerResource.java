@@ -2,7 +2,7 @@ package com.kdcloud.server.rest.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
+import java.util.Date;
 import java.util.logging.Level;
 
 import org.restlet.Request;
@@ -10,7 +10,6 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -27,11 +26,11 @@ import com.kdcloud.lib.rest.api.EngineResource;
 import com.kdcloud.lib.rest.api.TaskResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.lib.rest.ext.LinkRepresentation;
-import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
 import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.InstancesMapper;
+import com.kdcloud.server.rest.application.KDApplication;
 import com.kdcloud.server.rest.application.MainApplication;
 import com.kdcloud.server.rest.application.TaskQueue;
 import com.kdcloud.server.rest.application.UrlHelper;
@@ -41,7 +40,7 @@ public class EngineServerResource extends KDServerResource implements
 		EngineResource {
 	
 	private static final String QUERY_QUEUE = "queue";
-	private static final String QUERY_TASK = "task";
+	private static final String PARAMETER_TASK = "task";
 	
 	TaskQueue taskQueue;
 	KDEngine engine;
@@ -55,13 +54,13 @@ public class EngineServerResource extends KDServerResource implements
 		notifier = inject(UserNotifier.class);
 	}
 
-	public Instances execute(InputStream input, Map<String, String> parameters, User applicant) throws IOException {
+	public Instances execute(InputStream input, Form parameters, User applicant) throws IOException {
 		Worker worker = engine.getWorker(input);
 		worker.setParameter(EntityMapper.class.getName(), getEntityMapper());
 		worker.setParameter(InstancesMapper.class.getName(), getInstancesMapper());
 		worker.setParameter(UserDataReader.APPLICANT, applicant);
 		for (String param : worker.getParameters()) {
-			String value = parameters.get(param);
+			String value = parameters.getFirstValue(param);
 			getLogger().info(
 					"setting parameter: " + param + "=" + value);
 			worker.setParameter(param, value);
@@ -78,7 +77,7 @@ public class EngineServerResource extends KDServerResource implements
 	public Instances execute(Form form, User applicant) {
 		try {
 			InputStream workflow = wrapWorkflowServerResource().get().getStream();
-			return execute(workflow, form.getValuesMap(), applicant);
+			return execute(workflow, form, applicant);
 		} catch (IOException e) {
 			getLogger().log(Level.SEVERE, e.getMessage(), e);
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
@@ -88,10 +87,13 @@ public class EngineServerResource extends KDServerResource implements
 	public ClientResource wrapWorkflowServerResource() {
 		if (!getProtocol().equals(Protocol.HTTP) && !getProtocol().equals(Protocol.HTTPS))
 			throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
-		String uri = getRequest().getResourceRef().getIdentifier().replace("/engine", "");
+		String uri = getHostRef() + UrlHelper.replaceId(WorkflowServerResource.URI, getResourceIdentifier());
 		getLogger().info("forwarding request to " + uri);
 		ClientResource cr = new ClientResource(uri);
-		cr.setChallengeResponse(getChallengeResponse());
+		if (getChallengeResponse() != null)
+			cr.setChallengeResponse(getChallengeResponse());
+		else
+			cr.setChallengeResponse(KDApplication.defaultChallenge);
 		return cr;
 	}
 
@@ -119,25 +121,26 @@ public class EngineServerResource extends KDServerResource implements
 	}
 	
 	public Representation createTask(Form form) {
+		if (wrapWorkflowServerResource().get().isEmpty())
+			throw new ResourceException(404);
 		Task t = new Task(user);
+		t.setName(Long.toString(new Date().getTime()));
 		getEntityMapper().save(t);
 		String url = UrlHelper.replaceId(MainApplication.WORKER_URI, getResourceIdentifier());
-		Reference ref = new Reference(url);
-		ref.addQueryParameter(QUERY_TASK, t.getUUID());
-		Request req = new Request(Method.POST, ref);
+		Request req = new Request(Method.POST, url);
+		form.add(PARAMETER_TASK, t.getUUID());
 		req.setEntity(form.getWebRepresentation());
 		taskQueue.push(req);
 		setStatus(Status.SUCCESS_ACCEPTED);
-		return new LinkRepresentation(QUERY_TASK, UrlHelper.replaceId(TaskResource.URI, t.getUUID()));
+		return new LinkRepresentation(PARAMETER_TASK, UrlHelper.replaceId(TaskResource.URI, t.getUUID()));
 	}
 	
-	public void consumeTask(String uuid, Form form) {
+	public void consumeTask(Form form) {
+		String uuid = form.getFirstValue(PARAMETER_TASK);
 		Task t = (Task) getEntityMapper().findByUUID(uuid);
 		Instances output = execute(form, t.getApplicant());
 		if (output != null && !output.isEmpty()) {
-			DataTable table = new DataTable();
-			getInstancesMapper().save(output, table);
-			t.setResult(table);
+			getInstancesMapper().save(output, t.getResult());
 		}
 		t.setCompleted(true);
 		getEntityMapper().save(t);
@@ -157,12 +160,11 @@ public class EngineServerResource extends KDServerResource implements
 	@Post
 	public Representation handleTask(Form form) {
 		String queue = getQueryValue(QUERY_QUEUE);
-		String task = getQueryValue(QUERY_TASK);
 		if (queue != null && queue.equals("yes")) {
 			return createTask(form);
 			
-		} else if (task != null) {
-			consumeTask(task, form);
+		} else if (user == null) {
+			consumeTask(form);
 			return null;
 			
 		} else {

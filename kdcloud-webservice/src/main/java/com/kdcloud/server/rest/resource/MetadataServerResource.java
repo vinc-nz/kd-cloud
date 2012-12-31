@@ -13,12 +13,13 @@ public class MetadataServerResource extends KDServerResource implements Metadata
 	
 	Describable entity;
 	
+	
 	@Override
-	protected Representation doHandle() throws ResourceException {
+	public void beforeHandle() {
+		super.beforeHandle();
 		entity = (Describable) getEntityMapper().findByUUID(getResourceIdentifier());
 		if (entity == null)
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-		return super.doHandle();
 	}
 
 	@Override

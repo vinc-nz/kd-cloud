@@ -10,7 +10,7 @@ public class TaskQueueImpl implements TaskQueue {
 
 	@Override
 	public void push(Request request) {
-		String url = request.getResourceRef().toString().replaceAll("\\?.*", "");
+		String url = request.getResourceRef().toString();
 		TaskOptions opt = TaskOptions.Builder.withUrl(url);
 		Form form = new Form(request.getEntity());
 		for (String name : form.getNames())

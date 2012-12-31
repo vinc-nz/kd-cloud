@@ -56,8 +56,10 @@ public abstract class KDServerResource extends ServerResource {
 		resourcesFinder = inject(ResourcesFinder.class);
 
 		DataMapperFactory factory = inject(DataMapperFactory.class);
-		entityMapper = factory.getEntityMapper();
-		instancesMapper = factory.getInstancesMapper();
+		if (factory != null) {
+			entityMapper = factory.getEntityMapper();
+			instancesMapper = factory.getInstancesMapper();
+		}
 	}
 
 	protected String getResourceIdentifier() {
@@ -86,16 +88,24 @@ public abstract class KDServerResource extends ServerResource {
 	public Representation handle() {
 		try {
 			beforeHandle();
+			Representation local = fetchLocaly();
+			if (local != null)
+				return local;
+			return super.handle();
 		} catch (Throwable t) {
 			doCatch(t);
 		}
+		return null;
+	}
+	
+	public Representation fetchLocaly() {
 		if (resourcesFinder != null && getMethod().equals(Method.GET))
 			try {
-				Representation local = resourcesFinder.find(getResourceUri());
+				Representation local = resourcesFinder.find(getResourceReference());
 				getResponse().setEntity(local);
 				return local;
 			} catch (ResourceException e) {}
-		return super.handle();
+		return null;
 	}
 
 

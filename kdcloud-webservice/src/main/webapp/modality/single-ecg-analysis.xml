@@ -5,7 +5,7 @@
 		<method>GET</method>
 	</init-action>
 	<action>
-		<uri>/engine/workflow/ecg.xml</uri>
+		<uri>/engine/workflow/ecg</uri>
 		<method>POST</method>
 		<parameter>
 			<name>sourceUser</name>

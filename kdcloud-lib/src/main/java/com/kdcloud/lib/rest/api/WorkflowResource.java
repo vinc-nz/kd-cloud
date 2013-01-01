@@ -24,7 +24,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 import org.w3c.dom.Document;
 
-public interface EngineResource {
+public interface WorkflowResource {
 	
 	public static final String URI = "/engine/workflow/{id}";
 	
@@ -32,7 +32,7 @@ public interface EngineResource {
 	public Representation handleTask(Form form);
 	
 	@Put
-	public Representation putWorkflow(Representation representation);
+	public void putWorkflow(Representation representation);
 	
 	@Get
 	public Document getWorkflow();

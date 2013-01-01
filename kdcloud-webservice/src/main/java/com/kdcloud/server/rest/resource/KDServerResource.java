@@ -37,6 +37,7 @@ import com.kdcloud.server.persistence.DataMapperFactory;
 import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.InstancesMapper;
 import com.kdcloud.server.rest.application.ConvertHelper;
+import com.kdcloud.server.rest.application.KDApplication;
 import com.kdcloud.server.rest.application.ResourcesFinder;
 import com.kdcloud.server.rest.application.UserProvider;
 
@@ -76,7 +77,10 @@ public abstract class KDServerResource extends ServerResource {
 	
 	public Representation doGet() {
 		ClientResource cr = new ClientResource(getRequest().getResourceRef());
-		cr.setChallengeResponse(getChallengeResponse());
+		if (getChallengeResponse() != null)
+			cr.setChallengeResponse(getChallengeResponse());
+		else
+			cr.setChallengeResponse(KDApplication.defaultChallenge);
 		return cr.get();
 	}
 	

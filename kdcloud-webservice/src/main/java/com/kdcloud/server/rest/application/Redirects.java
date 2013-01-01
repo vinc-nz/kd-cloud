@@ -10,8 +10,7 @@ public class Redirects {
 	
 	private static final String[][] redirects = {
 		
-		//0 is redirected to 1
-		{"/engine/workflow", "/workflow"}
+		
 		
 	};
 	

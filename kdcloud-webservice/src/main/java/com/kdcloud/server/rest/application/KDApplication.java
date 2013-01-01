@@ -16,14 +16,11 @@
  */
 package com.kdcloud.server.rest.application;
 
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Context;
-import org.restlet.Request;
-import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
@@ -72,7 +69,7 @@ public class KDApplication extends Application {
 		}
 		
 		//manually map indexes
-		router.attach("/workflow", IndexServerResource.class);
+		router.attach("/engine/workflow", IndexServerResource.class);
 		router.attach("/modality", IndexServerResource.class);
 		router.attach("/engine/plugin", IndexServerResource.class);
 		router.attach("/view", IndexServerResource.class);
@@ -83,19 +80,19 @@ public class KDApplication extends Application {
 		router.attach(GroupResource.URI + "/" + Group.PROPERTY_MEMBERS, UserIndexServerResource.class);
 		
 		//redirects
-		for (final Entry<String, String> e : Redirects.getRedirects().entrySet()) {
-			router.attach(e.getKey(), new Restlet() {
-				@Override
-				public void handle(Request request, Response response) {
-					String target = e.getValue();
-					String query = request.getResourceRef().getQuery();
-					if (query != null)
-						target = target + "?" + query;
-					response.redirectPermanent(target);
-					response.commit();
-				}
-			});
-		}
+//		for (final Entry<String, String> e : Redirects.getRedirects().entrySet()) {
+//			router.attach(e.getKey(), new Restlet() {
+//				@Override
+//				public void handle(Request request, Response response) {
+//					String target = e.getValue();
+//					String query = request.getResourceRef().getQuery();
+//					if (query != null)
+//						target = target + "?" + query;
+//					response.redirectPermanent(target);
+//					response.commit();
+//				}
+//			});
+//		}
 
 		return router;
 	}

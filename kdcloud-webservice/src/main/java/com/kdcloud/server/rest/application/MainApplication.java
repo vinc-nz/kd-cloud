@@ -30,7 +30,7 @@ import org.restlet.routing.Redirector;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 
-import com.kdcloud.server.rest.resource.EngineServerResource;
+import com.kdcloud.server.rest.resource.WorkflowServerResource;
 
 public class MainApplication extends Application {
 	
@@ -46,7 +46,7 @@ public class MainApplication extends Application {
 
 		Router router = new Router(getContext());
 		
-		router.attach(WORKER_URI, EngineServerResource.class);
+		router.attach(WORKER_URI, WorkflowServerResource.class);
 		
 		Application kdApplication = new KDApplication(applicationContext);
 		

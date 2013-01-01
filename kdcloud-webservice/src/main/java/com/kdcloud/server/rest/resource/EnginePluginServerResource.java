@@ -26,13 +26,13 @@ import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.model.NodeDescription;
-import com.kdcloud.lib.rest.api.EnginePluginResource;
+import com.kdcloud.lib.rest.api.WorkflowNodeResource;
 import com.kdcloud.server.entity.EnginePlugin;
 import com.kdcloud.server.rest.application.ConvertHelper;
 import com.kdcloud.server.rest.application.StreamClassLoader;
 
 public class EnginePluginServerResource extends
-		BasicServerResource<EnginePlugin> implements EnginePluginResource {
+		BasicServerResource<EnginePlugin> implements WorkflowNodeResource {
 
 	@Override
 	public void addPlugin(Representation rep) {

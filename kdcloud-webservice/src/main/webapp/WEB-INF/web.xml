@@ -28,7 +28,7 @@
 
 <!-- 	<security-constraint> -->
 <!-- 		<web-resource-collection> -->
-<!-- 			<url-pattern>/*</url-pattern> -->
+<!-- 			<url-pattern>/api/*</url-pattern> -->
 <!-- 		</web-resource-collection> -->
 <!-- 		<user-data-constraint> -->
 <!-- 			<transport-guarantee>CONFIDENTIAL</transport-guarantee> -->

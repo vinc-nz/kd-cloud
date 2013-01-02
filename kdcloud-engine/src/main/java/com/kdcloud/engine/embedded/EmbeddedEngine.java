@@ -20,12 +20,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
+import org.xml.sax.InputSource;
 
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.Worker;
+import com.kdcloud.engine.embedded.model.WorkflowDescription;
 
 public class EmbeddedEngine implements KDEngine {
 
@@ -59,14 +65,16 @@ public class EmbeddedEngine implements KDEngine {
 	@Override
 	public Worker getWorker(InputStream input) throws IOException {
 		try {
+			InputStream is = getClass().getClassLoader().getResourceAsStream("schema.xsd");
+			SAXSource source = new SAXSource(new InputSource(is));
+			Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(source);
 			JAXBContext context = JAXBContext.newInstance(WorkflowDescription.class);
 			Unmarshaller u = context.createUnmarshaller();
+			u.setSchema(schema);
 			WorkflowDescription d = (WorkflowDescription) u.unmarshal(input);
 			return getWorker(d);
-		} catch (JAXBException e) {
-			throw new IOException("error reading workflow");
-		} catch (IOException e) {
-			throw e;
+		} catch (Exception e) {
+			throw new IOException(e);
 		}
 	}
 	

@@ -17,52 +17,29 @@
 package com.kdcloud.server.entity;
 
 import java.util.LinkedList;
+import java.util.List;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
-public class User {
+public class User extends Entity {
+	
+	
+	public User() {
+		super();
+	}
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String encodedKey;
-	
-	@Persistent
-	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-	private String name;
-	
+	public User(String name) {
+		super(name);
+	}
+
 	@Persistent(serialized = "true")
 	private LinkedList<String> devices = new LinkedList<String>();
 	
-	public User() {
-	}
+	@Persistent(mappedBy="applicant")
+	private List<Task> submittedTasks = new LinkedList<Task>();
 	
-	public User(String userId) {
-		super();
-		this.name = userId;
-	}
-
-	public String getEncodedKey() {
-		return encodedKey;
-	}
-
-	public void setEncodedKey(String encodedKey) {
-		this.encodedKey = encodedKey;
-	}
-
-//	public Long getId() {
-//		return id;
-//	}
-//
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
-
 	public LinkedList<String> getDevices() {
 		return devices;
 	}
@@ -70,21 +47,27 @@ public class User {
 	public void setDevices(LinkedList<String> devices) {
 		this.devices = devices;
 	}
-
+	
+	public boolean isOwner(Describable entity) {
+		return equals(entity.getOwner());
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof User)
-			return ((User) obj).name.equals(this.name);
+		if (obj == null)
+			return false;
+		else if (obj instanceof User)
+			return ((User) obj).getName().equals(this.getName());
 		return false;
 	}
 
-	public String getName() {
-		return name;
+	public List<Task> getSubmittedTasks() {
+		return submittedTasks;
 	}
 
-	public void setName(String username) {
-		this.name = username;
+	public void setSubmittedTasks(List<Task> submittedTasks) {
+		this.submittedTasks = submittedTasks;
 	}
+	
 
 }

@@ -149,11 +149,7 @@ public class XmlReport {
 		return textVal;
 	}
 
-//	private static String getTextValueAsInt(Element ele, String tagName) {
-//		String val = getTextValue(ele, tagName);
-//		
-//		return val.replace(".0", "");
-//	}
+
 	/**
 	 * Calls getTextValue and returns a int value
 	 */

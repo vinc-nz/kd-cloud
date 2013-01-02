@@ -22,6 +22,8 @@ import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.Restlet;
+import org.restlet.data.ChallengeResponse;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Router;
 
 import com.kdcloud.ext.rehab.paziente.CalibrationRestlet;
@@ -32,13 +34,20 @@ import com.kdcloud.ext.rehab.paziente.InsertCompleteExerciseRestlet;
 import com.kdcloud.ext.rehab.paziente.InsertDualModeSessionRestlet;
 import com.kdcloud.ext.rehab.paziente.LoginRehabUserRestlet;
 import com.kdcloud.ext.rehab.paziente.RehabUserRegistrationRestlet;
+import com.kdcloud.lib.rest.api.GroupResource;
+import com.kdcloud.server.entity.Group;
+import com.kdcloud.server.rest.resource.IndexServerResource;
 import com.kdcloud.server.rest.resource.KDServerResource;
+import com.kdcloud.server.rest.resource.UserIndexServerResource;
 
 public class KDApplication extends Application {
 	
+	public static final ChallengeResponse defaultChallenge = 
+			new ChallengeResponse(ChallengeScheme.HTTP_BASIC, "admin", "admin");
+	
+	
 	public KDApplication(Context context) {
 		super(context);
-		getLogger().info("init database");
 	}
 
 	/**
@@ -49,6 +58,7 @@ public class KDApplication extends Application {
 
 		Router router = new Router(getContext());
 		
+		//automatically map resources with uri
 		Reflections reflections = new Reflections(
 				"com.kdcloud.server.rest.resource");
 
@@ -57,15 +67,41 @@ public class KDApplication extends Application {
 
 		for (Class<? extends KDServerResource> clazz : allClasses) {
 			try {
-				getLogger().info("found resource " + clazz.getSimpleName());
+				getLogger().fine("found resource " + clazz.getSimpleName());
 				String uri = clazz.getField("URI").get(null).toString();
 				router.attach(uri, clazz);
-				getLogger().info("mapped uri " + uri);
+				getLogger().fine("mapped uri " + uri);
 			} catch (Exception e) {
-				getLogger().info("could not map any uri to the class");
+				getLogger().fine("could not map any uri to the class");
 			}
 		}
 		
+		//manually map indexes
+		router.attach("/engine/workflow", IndexServerResource.class);
+		router.attach("/modality", IndexServerResource.class);
+		router.attach("/engine/plugin", IndexServerResource.class);
+		router.attach("/view", IndexServerResource.class);
+		router.attach("/group", IndexServerResource.class);
+		
+		router.attach(GroupResource.URI + "/" + Group.PROPERTY_CONTRIBUTORS, UserIndexServerResource.class);
+		router.attach(GroupResource.URI + "/" + Group.PROPERTY_ENROLLED, UserIndexServerResource.class);
+		router.attach(GroupResource.URI + "/" + Group.PROPERTY_MEMBERS, UserIndexServerResource.class);
+		
+		//redirects
+//		for (final Entry<String, String> e : Redirects.getRedirects().entrySet()) {
+//			router.attach(e.getKey(), new Restlet() {
+//				@Override
+//				public void handle(Request request, Response response) {
+//					String target = e.getValue();
+//					String query = request.getResourceRef().getQuery();
+//					if (query != null)
+//						target = target + "?" + query;
+//					response.redirectPermanent(target);
+//					response.commit();
+//				}
+//			});
+//		}
+
 		//rehab tutor paziente restlet
 		router.attach(LoginRehabUserRestlet.URI, LoginRehabUserRestlet.class);
 		router.attach(DownloadCompleteExerciseRestlet.URI, DownloadCompleteExerciseRestlet.class);
@@ -76,19 +112,6 @@ public class KDApplication extends Application {
 		router.attach(InsertCompleteExerciseRestlet.URI, InsertCompleteExerciseRestlet.class);
 		
 		router.attach(RehabUserRegistrationRestlet.URI, RehabUserRegistrationRestlet.class);
-		
-		//OLD
-//		router.attach(InsertDataRestlet.URI, InsertDataRestlet.class);
-//		router.attach(InsertAnglesRestlet.URI, InsertAnglesRestlet.class);
-//		router.attach(DownloadExerciseRestlet.URI, DownloadExerciseRestlet.class);		
-//		router.attach(DeleteAllRestlet.URI, DeleteAllRestlet.class);		
-//		router.attach(InsertExerciseRestlet.URI, InsertExerciseRestlet.class);			
-//		router.attach(NumberOfExercisesRestlet.URI, NumberOfExercisesRestlet.class);
-		
-		
-		
-		
-		
 		
 		
 		return router;

@@ -19,10 +19,10 @@ package com.kdcloud.server.rest.application;
 import org.restlet.Request;
 
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
+import com.kdcloud.server.persistence.EntityMapper;
 
 public interface UserProvider {
 	
-	public User getUser(Request request, PersistenceContext pc);
+	public User getUser(Request request, EntityMapper entityMapper);
 
 }

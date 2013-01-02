@@ -14,7 +14,7 @@ import weka.core.converters.CSVLoader;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.kdcloud.server.entity.DataTable;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
+import com.kdcloud.server.persistence.DataMapperFactory;
 
 public class GAESaverTest {
 	
@@ -22,7 +22,7 @@ public class GAESaverTest {
 			new LocalDatastoreServiceTestConfig()
 	/* .setDefaultHighRepJobPolicyUnappliedJobPercentage(100) */);
 	
-	PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
+	DataMapperFactory factory = new DataMapperFactoryImpl();
 
 	@Before
 	public void setUp() throws Exception {
@@ -37,14 +37,15 @@ public class GAESaverTest {
 	@Test
 	public void test() throws IOException {
 		CSVLoader loader = new CSVLoader();
-		loader.setSource(getClass().getClassLoader().getResourceAsStream("ecg_small.txt"));
+		loader.setSource(getClass().getClassLoader().getResourceAsStream("ecg_small.csv"));
 		Instances input = loader.getDataSet();
-		GAEMapper saver = new GAEMapper();
+		InstancesMapperImpl saver = new InstancesMapperImpl();
 		DataTable t = new DataTable();
 		t.setName("test");
-		pcf.get().save(t);
+		factory.getEntityMapper().save(t);
 		saver.save(input, t);
 		assertEquals(input.size(), saver.load(t).size());
+		saver.clear(t);
 	}
 
 }

@@ -19,7 +19,6 @@ package com.kdcloud.server.rest.resource;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import org.restlet.Application;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
@@ -33,28 +32,21 @@ import com.kdcloud.server.entity.View;
 
 public class ViewServerResource extends BasicServerResource<View> implements ViewResource {
 	
-	public ViewServerResource() {
-		super();
-	}
-
-	ViewServerResource(Application application, String viewId) {
-		super(application, viewId);
-	}
 	
 	@Override
 	public View find() {
-		return (View) getPersistenceContext().findByName(View.class, getResourceIdentifier());
+		return getEntityMapper().findByName(View.class, getResourceIdentifier());
 	}
 
 	
 	@Override
 	public void save(View e) {
-		getPersistenceContext().save(e);
+		getEntityMapper().save(e);
 	}
 
 	@Override
 	public void delete(View e) {
-		getPersistenceContext().delete(e);
+		getEntityMapper().delete(e);
 	}
 
 	@Override
@@ -78,6 +70,7 @@ public class ViewServerResource extends BasicServerResource<View> implements Vie
 	public View create() {
 		View v = new View();
 		v.setName(getResourceIdentifier());
+		v.setOwner(user);
 		return v;
 	}
 

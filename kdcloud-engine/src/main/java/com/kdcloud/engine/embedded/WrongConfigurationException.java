@@ -18,6 +18,11 @@ package com.kdcloud.engine.embedded;
 
 public class WrongConfigurationException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public WrongConfigurationException() {
 		super();
 		// TODO Auto-generated constructor stub

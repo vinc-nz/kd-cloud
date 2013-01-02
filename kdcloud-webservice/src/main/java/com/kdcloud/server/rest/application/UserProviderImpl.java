@@ -19,7 +19,7 @@ package com.kdcloud.server.rest.application;
 import org.restlet.Request;
 
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
+import com.kdcloud.server.persistence.EntityMapper;
 
 public class UserProviderImpl implements UserProvider {
 
@@ -30,13 +30,13 @@ public class UserProviderImpl implements UserProvider {
 	}
 
 	@Override
-	public User getUser(Request request, PersistenceContext pc) {
+	public User getUser(Request request, EntityMapper entityMapper) {
 		String id = getUserId(request);
 		if (id != null) {
-			User user = (User) pc.findByName(User.class, id);
+			User user = (User) entityMapper.findByName(User.class, id);
 			if (user == null) {
 				user = new User(id);
-				pc.save(user);
+				entityMapper.save(user);
 			}
 			return user;
 		}

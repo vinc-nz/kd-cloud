@@ -16,78 +16,93 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import java.util.logging.Level;
+import java.util.Arrays;
 
-import org.restlet.Application;
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
-import com.kdcloud.lib.domain.DataSpecification;
+import com.kdcloud.lib.domain.GroupSpecification;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
-import com.kdcloud.server.rest.application.ConvertUtils;
 
 public class GroupServerResource extends BasicServerResource<Group> implements
 		GroupResource {
 
-	public GroupServerResource() {
-		super();
-	}
-
-	GroupServerResource(Application application, String groupName) {
-		super(application, groupName);
-	}
-
 	@Override
-	public void create(Representation rep) {
+	public void editGroup(Representation rep) {
 		createOrUpdate(rep);
 	}
 
 	@Override
-	public DataSpecification getInputSpecification() {
-		return read().getInputSpecification();
+	public GroupSpecification getSpecification() {
+		Group group = read();
+		GroupSpecification spec = new GroupSpecification(group.getMetadata(), group.getInputSpecification());
+		if (group.getOwner().equals(user))
+			spec.setInvitationMessage(group.getInvitationMessage());
+		return spec;
 	}
 
 	@Override
 	public Group find() {
-		return (Group) getPersistenceContext().findByName(Group.class,
-				getResourceIdentifier());
+		return getEntityMapper().findByName(Group.class, getResourceIdentifier());
 	}
 
 	@Override
 	public void save(Group e) {
-		getPersistenceContext().save(e);
+		getEntityMapper().save(e);
 	}
 
 	@Override
 	public void delete(Group e) {
 		e.getData().clear();
-		getPersistenceContext().delete(e);
+		getEntityMapper().delete(e);
 	}
 
 	@Override
 	public Group create() {
-		return new Group(getResourceIdentifier());
+		return new Group(getResourceIdentifier(), user);
 	}
 
 	@Override
 	public void update(Group group, Representation rep) {
-		if (rep != null && !rep.isEmpty())
-			try {
-				DataSpecification s = (DataSpecification) ConvertUtils
-						.toObject(DataSpecification.class, rep);
-				group.setInputSpecification(s);
-			} catch (Exception e) {
-				getLogger().log(Level.INFO, "error reading entity", e);
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			}
+		if (!user.isOwner(group))
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
+		if (rep != null && !rep.isEmpty()) {
+			group.setOwner(user);
+			GroupSpecification spec = unmarshal(GroupSpecification.class, rep);
+			group.setInputSpecification(spec.getDataSpecification());
+			group.getMetadata().update(spec.getMetadata());
+			group.setInvitationMessage(spec.getInvitationMessage());
+		}
 
 	}
 
 	@Override
 	public void deleteGroup() {
 		super.remove();
+	}
+
+	@Override
+	public void setProperties(Form form) {
+		Group group = read();
+		if (!user.isOwner(group))
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
+
+		String values = form.getValues(Group.PROPERTY_ENROLLED);
+		if (values != null) {
+			String[] enrolled = values.split(",");
+			group.getEnrolled(user).addAll(Arrays.asList(enrolled));
+		}
+
+		values = form.getValues(Group.PROPERTY_MEMBERS);
+		if (values != null) {
+			String[] members = values.split(",");
+			group.getMembers(user).addAll(Arrays.asList(members));
+		}
+
+		save(group);
 	}
 
 }

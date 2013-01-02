@@ -23,13 +23,13 @@ import org.restlet.data.Form;
 import com.kdcloud.lib.domain.ServerAction;
 import com.kdcloud.lib.domain.ServerMethod;
 import com.kdcloud.lib.domain.ServerParameter;
-import com.kdcloud.lib.rest.api.EngineResource;
+import com.kdcloud.lib.rest.api.WorkflowResource;
 
 public class ServerActionTest {
 
 	@Test
 	public void test() {
-		ServerAction action = new ServerAction(EngineResource.URI,
+		ServerAction action = new ServerAction(WorkflowResource.URI,
 				ServerMethod.GET, false, 0);
 		action.setResourceIdentifier("1");
 		Assert.assertEquals("/engine/workflow/1", action.uri);

@@ -27,7 +27,8 @@ import com.kdcloud.engine.embedded.WrongInputException;
 import com.kdcloud.server.entity.DataTable;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.InstancesMapper;
 
 public class UserDataWriter extends NodeAdapter {
 	
@@ -37,7 +38,8 @@ public class UserDataWriter extends NodeAdapter {
 	BufferedInstances mState;
 	Group group;
 	User user;
-	PersistenceContext pc;
+	EntityMapper entityMapper;
+	InstancesMapper instancesMapper;
 	
 	public UserDataWriter() {
 		// TODO Auto-generated constructor stub
@@ -54,15 +56,16 @@ public class UserDataWriter extends NodeAdapter {
 		String msg = null;
 		String userId = (String) config.get(DEST_USER_PARAMETER);
 		String groupId = (String) config.get(DEST_GROUP_PARAMETER);
-		pc = (PersistenceContext) config.get(PersistenceContext.class.getName());
-		if (pc == null)
+		entityMapper = (EntityMapper) config.get(EntityMapper.class.getName());
+		instancesMapper = (InstancesMapper) config.get(InstancesMapper.class.getName());
+		if (entityMapper == null)
 			msg = "no persistence context in configuration";
 		if (userId != null)
-			user = (User) pc.findByName(User.class, userId);
+			user = (User) entityMapper.findByName(User.class, userId);
 		if (user == null)
 			msg = "not a valid user in configuration";
 		if (groupId != null)
-			group = (Group) pc.findByName(Group.class, groupId);
+			group = (Group) entityMapper.findByName(Group.class, groupId);
 		if (group == null)
 			msg = "not a valid group in configuration";
 		if (msg != null)
@@ -90,11 +93,10 @@ public class UserDataWriter extends NodeAdapter {
 
 	@Override
 	public void run() {
-		DataTable t = new DataTable();
-		t.setOwner(user);
+		DataTable t = new DataTable(user);
 		group.getData().add(t);
-		pc.save(group);
-		pc.getInstancesMapper().save(mState.getInstances(), t);
+		entityMapper.save(group);
+		instancesMapper.save(mState.getInstances(), t);
 	}
 
 }

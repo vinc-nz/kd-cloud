@@ -22,28 +22,32 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.restlet.Context;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.embedded.EmbeddedEngine;
 import com.kdcloud.engine.embedded.Node;
 import com.kdcloud.engine.embedded.NodeLoader;
-import com.kdcloud.server.entity.StoredPlugin;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
+import com.kdcloud.server.entity.EnginePlugin;
+import com.kdcloud.server.entity.User;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.gae.DataMapperFactoryImpl;
 
 public class GAEContext extends Context {
 	
 	
 	
-	public GAEContext(Logger logger) {
+	public GAEContext(final Logger logger) {
 		super(logger);
 		
 		HashMap<String, Object> attrs = new HashMap<String, Object>();
 		
-		final PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
+		final DataMapperFactory factory = new DataMapperFactoryImpl();
 		
-		attrs.put(PersistenceContextFactory.class.getName(), pcf);
+		attrs.put(DataMapperFactory.class.getName(), factory);
 		
 		NodeLoader loader = new NodeLoader() {
 			
@@ -54,12 +58,12 @@ public class GAEContext extends Context {
 					return Class.forName(className).asSubclass(Node.class);
 				} catch (ClassNotFoundException e1) {
 					String jarName = className.replaceAll(".*\\.", "");
-					PersistenceContext pc = pcf.get();
-					StoredPlugin stored = (StoredPlugin) pc.findByName(StoredPlugin.class, jarName);
+					EntityMapper entityMapper = factory.getEntityMapper();
+					EnginePlugin stored = (EnginePlugin) entityMapper.findByName(EnginePlugin.class, jarName);
 					if (stored == null)
 						throw new ClassNotFoundException();
 					InputStream stream = stored.readPlugin();
-					pc.close();
+					entityMapper.close();
 					try {
 						return new StreamClassLoader(stream).loadClass(className).asSubclass(Node.class);
 					} catch (IOException e2) {
@@ -72,6 +76,28 @@ public class GAEContext extends Context {
 		attrs.put(KDEngine.class.getName(), new EmbeddedEngine(logger, loader));
 		
 		attrs.put(UserProvider.class.getName(), new UserProviderImpl());
+		
+		attrs.put(ResourcesFinder.class.getName(), new ResourcesFinder() {
+			
+			@Override
+			public Representation find(String path) throws ResourceException {
+				if (!UrlHelper.hasExtension(path))
+					path = path + ".xml";
+				logger.info("fetching " + path);
+				return new ClientResource(path).get();
+			}
+		});
+		
+		attrs.put(TaskQueue.class.getName(), new TaskQueueImpl());
+		
+		attrs.put(UserNotifier.class.getName(), new UserNotifier() {
+			
+			@Override
+			public void notify(User user) {
+				//TODO implement notifications
+				logger.info("STUB: notify user " + user.getName());
+			}
+		});
 		
 		this.setAttributes(attrs);
 		

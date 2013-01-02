@@ -20,28 +20,57 @@ import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Protocol;
+import org.restlet.routing.Filter;
+import org.restlet.routing.Redirector;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 
+import com.kdcloud.server.rest.resource.WorkflowServerResource;
+
 public class MainApplication extends Application {
+	
+	public static final String WORKER_URI = "/_exec/{id}";
 	
 	@Override
 	public Restlet createInboundRoot() {
 		getLogger().setLevel(Level.INFO);
 		
 		Context applicationContext = new GAEContext(getLogger());
+		
+		setContext(applicationContext);
 
 		Router router = new Router(getContext());
 		
-//		router.attach("/api", new Directory(getContext(), "war:///"));
+		router.attach(WORKER_URI, WorkflowServerResource.class);
 		
-
+		Application kdApplication = new KDApplication(applicationContext);
+		
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null, ChallengeScheme.HTTP_BASIC, "testRealm");
 		guard.setVerifier(new OAuthVerifier(getLogger(), true));
-		guard.setNext(new KDApplication(applicationContext));
-		router.attachDefault(guard);
+		
+		Filter core = new Filter() {
+			@Override
+			protected int beforeHandle(Request request, Response response) {
+				if (!request.getProtocol().equals(Protocol.HTTPS)) {
+					String target = "https://" + request.getHostRef().getHostDomain() + request.getResourceRef().getPath();
+	                Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_CLIENT_SEE_OTHER);
+	                redirector.handle(request, response);
+	                return STOP;
+				}
+				return CONTINUE;
+			}
+		};
+
+		
+		core.setNext(guard);
+		guard.setNext(kdApplication);
+		
+		router.attachDefault(core);
 
 		return router;
 

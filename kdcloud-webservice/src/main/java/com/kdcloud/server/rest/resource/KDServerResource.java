@@ -16,26 +16,37 @@
  */
 package com.kdcloud.server.rest.resource;
 
-import org.restlet.Application;
-import org.restlet.Request;
-import org.restlet.data.LocalReference;
+import java.io.IOException;
+import java.util.logging.Level;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
 import org.restlet.data.Method;
-import org.restlet.data.Protocol;
+import org.restlet.ext.xml.XmlRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+import org.xml.sax.SAXException;
 
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.InstancesMapper;
+import com.kdcloud.server.rest.application.ConvertHelper;
+import com.kdcloud.server.rest.application.KDApplication;
+import com.kdcloud.server.rest.application.ResourcesFinder;
 import com.kdcloud.server.rest.application.UserProvider;
 
 public abstract class KDServerResource extends ServerResource {
 
-	private PersistenceContext persistenceContext;
+	private EntityMapper entityMapper;
+	private InstancesMapper instancesMapper;
 	private UserProvider userProvider;
-	private String resourceIdentifier;
+	private ResourcesFinder resourcesFinder;
 
 	User user;
 
@@ -44,86 +55,104 @@ public abstract class KDServerResource extends ServerResource {
 	}
 	
 
-	KDServerResource(Application application, String resourceIdentifier) {
-		setApplication(application);
-		Request req = new Request();
-		req.setResourceRef(new LocalReference(resourceIdentifier));
-		req.setProtocol(Protocol.CLAP);
-		setRequest(req);
-		doInit();
-		this.resourceIdentifier = resourceIdentifier;
-		this.user = userProvider.getUser(null, persistenceContext);
-	}
-
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		userProvider = (UserProvider) inject(UserProvider.class);
+		userProvider = inject(UserProvider.class);
+		resourcesFinder = inject(ResourcesFinder.class);
 
-		PersistenceContextFactory pcf = (PersistenceContextFactory) inject(PersistenceContextFactory.class);
-		persistenceContext = pcf.get();
+		DataMapperFactory factory = inject(DataMapperFactory.class);
+		if (factory != null) {
+			entityMapper = factory.getEntityMapper();
+			instancesMapper = factory.getInstancesMapper();
+		}
 	}
 
 	protected String getResourceIdentifier() {
-		if (resourceIdentifier != null)
-			return resourceIdentifier;
 		return (String) getRequestAttributes().get("id");
 	}
 	
 	protected String getResourceUri() {
-		return getReference().toString().replace(getHostRef().toString(), "");
+		return getResourceReference().replace(getHostRef().toString(), "");
 	}
 	
-	protected Representation fetchLocally() {
-		return fetchLocalResource(getResourceUri().substring(1));
+	protected String getResourceReference() {
+		return getReference().toString().replaceAll("\\?.*", "");
 	}
-
-	public Representation fetchLocalResource(String path) {
-		LocalReference ref = new LocalReference(path);
-		ref.setProtocol(Protocol.CLAP);
-		return new ClientResource(ref).get();
-	}
-
+	
 	public Representation doGet() {
 		ClientResource cr = new ClientResource(getRequest().getResourceRef());
-		cr.setChallengeResponse(getChallengeResponse());
+		if (getChallengeResponse() != null)
+			cr.setChallengeResponse(getChallengeResponse());
+		else
+			cr.setChallengeResponse(KDApplication.defaultChallenge);
 		return cr.get();
 	}
 	
 	public void beforeHandle() {
-		user = userProvider.getUser(getRequest(), persistenceContext);
-		getLogger().info("logged");
+		user = userProvider.getUser(getRequest(), entityMapper);
 	}
 	
 	@Override
 	public Representation handle() {
 		try {
 			beforeHandle();
+			Representation local = fetchLocaly();
+			if (local != null)
+				return local;
+			return super.handle();
 		} catch (Throwable t) {
 			doCatch(t);
 		}
-		if (getMethod().equals(Method.GET))
+		return null;
+	}
+	
+	public Representation fetchLocaly() {
+		if (resourcesFinder != null && getMethod().equals(Method.GET))
 			try {
-				Representation local = fetchLocally();
-				getLogger().info("found locally");
+				Representation local = resourcesFinder.find(getResourceReference());
 				getResponse().setEntity(local);
 				return local;
 			} catch (ResourceException e) {}
-		return super.handle();
+		return null;
 	}
 
 
-	protected Object inject(Class<?> baseClass) {
-		return getApplication().getContext().getAttributes()
-				.get(baseClass.getName());
+	@SuppressWarnings("unchecked")
+	protected <T> T inject(Class<T> baseClass) {
+		return (T) getApplication().getContext().getAttributes();
+	}
+	
+	public <T> T unmarshal(Class<T> clazz, Representation rep) {
+		Representation schemaRep;
+		if (resourcesFinder != null) {
+			schemaRep = resourcesFinder.find(getHostRef() + ResourcesFinder.XML_SCHEMA_URI);
+		} else {
+			String url = getHostRef() + ResourcesFinder.XML_SCHEMA_URI;
+			schemaRep = new ClientResource(url).get();
+		}
+		try {
+			SAXSource source = XmlRepresentation.getSaxSource(schemaRep);
+			Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(source);
+			return ConvertHelper.toObject(clazz, rep, schema);
+		} catch (SAXException e) {
+			getLogger().log(Level.SEVERE, "error during schema generation", e);
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, "error during schema generation", e);
+		}
+		throw new ResourceException(500);
 	}
 
-	public PersistenceContext getPersistenceContext() {
-		return persistenceContext;
+	public EntityMapper getEntityMapper() {
+		return entityMapper;
+	}
+	
+	public InstancesMapper getInstancesMapper() {
+		return instancesMapper;
 	}
 
 	public User getUser() {
 		return user;
 	}
-
+	
 }

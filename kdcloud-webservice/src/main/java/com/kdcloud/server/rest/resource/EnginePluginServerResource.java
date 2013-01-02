@@ -25,67 +25,64 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import com.kdcloud.engine.embedded.Node;
-import com.kdcloud.engine.embedded.NodeFactory;
-import com.kdcloud.lib.rest.api.EnginePluginResource;
-import com.kdcloud.server.entity.StoredPlugin;
-import com.kdcloud.server.rest.application.ConvertUtils;
+import com.kdcloud.engine.embedded.model.NodeDescription;
+import com.kdcloud.lib.rest.api.WorkflowNodeResource;
+import com.kdcloud.server.entity.EnginePlugin;
+import com.kdcloud.server.rest.application.ConvertHelper;
 import com.kdcloud.server.rest.application.StreamClassLoader;
 
 public class EnginePluginServerResource extends
-		BasicServerResource<StoredPlugin> implements EnginePluginResource {
-
+		BasicServerResource<EnginePlugin> implements WorkflowNodeResource {
 
 	@Override
 	public void addPlugin(Representation rep) {
 		createOrUpdate(rep);
 	}
 
-	private boolean validPlugin(InputStream stream, String nodeName)
-			throws IOException {
-		ClassLoader loader = new StreamClassLoader(stream);
+	private void checkPlugin(InputStream stream, String nodeName) {
 		try {
-			String className = NodeFactory.NODE_PACKAGE + "." + nodeName;
+			ClassLoader loader = new StreamClassLoader(stream);
+			String className = NodeDescription.NODE_PACKAGE + "." + nodeName;
 			loader.loadClass(className).asSubclass(Node.class).newInstance();
-			return true;
-		} catch (Exception e) {
-			getLogger().log(Level.INFO, "supplied plugin is not valid", e);
-			return false;
+
+		} catch (IOException e1) {
+			getLogger().log(Level.INFO, "could not understand stream", e1);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+
+		} catch (Exception e2) {
+			getLogger().log(Level.INFO, "supplied plugin is not valid", e2);
+			throw new ResourceException(
+					Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
 		}
 	}
 
 	@Override
-	public StoredPlugin find() {
-		return (StoredPlugin) getPersistenceContext().findByName(
-				StoredPlugin.class, getResourceIdentifier());
+	public EnginePlugin find() {
+		return getEntityMapper().findByName(EnginePlugin.class, getResourceIdentifier());
 	}
 
 	@Override
-	public StoredPlugin create() {
-		StoredPlugin stored = new StoredPlugin();
+	public EnginePlugin create() {
+		EnginePlugin stored = new EnginePlugin();
 		stored.setName(getResourceIdentifier());
+		stored.setOwner(user);
 		return stored;
 	}
 
 	@Override
-	public void save(StoredPlugin e) {
-		getPersistenceContext().save(e);
+	public void save(EnginePlugin e) {
+		getEntityMapper().save(e);
 	}
 
 	@Override
-	public void delete(StoredPlugin e) {
-		getPersistenceContext().delete(e);
+	public void delete(EnginePlugin e) {
+		getEntityMapper().delete(e);
 	}
 
 	@Override
-	public void update(StoredPlugin entity, Representation representation) {
-		try {
-			entity.setContent(ConvertUtils.toByteArray(representation));
-			if (!validPlugin(entity.readPlugin(), getResourceIdentifier()))
-				throw new ResourceException(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-		} catch (IOException e) {
-			getLogger().log(Level.INFO, "error reading content", e);
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
+	public void update(EnginePlugin entity, Representation representation) {
+		entity.setContent(ConvertHelper.toByteArray(representation));
+		checkPlugin(entity.readPlugin(), getResourceIdentifier());
 	}
 
 }

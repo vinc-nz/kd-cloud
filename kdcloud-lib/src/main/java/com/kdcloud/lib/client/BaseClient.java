@@ -16,8 +16,6 @@
  */
 package com.kdcloud.lib.client;
 
-
-
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,11 +45,12 @@ import org.w3c.dom.NodeList;
 import weka.core.Instances;
 
 import com.kdcloud.lib.domain.DataSpecification;
-import com.kdcloud.lib.domain.Modality;
+import com.kdcloud.lib.domain.Index;
+import com.kdcloud.lib.domain.ModalitySpecification;
 import com.kdcloud.lib.domain.ServerAction;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.domain.ServerParameter.ReferenceType;
-import com.kdcloud.lib.rest.api.ModalitiesResource;
+import com.kdcloud.lib.rest.api.IndexResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
 public abstract class BaseClient implements Runnable {
@@ -60,7 +59,7 @@ public abstract class BaseClient implements Runnable {
 	String baseUri;
 
 	// the executing modality
-	Modality modality;
+	ModalitySpecification modality;
 
 	// used for restlet requests
 	ClientResource resource;
@@ -83,8 +82,8 @@ public abstract class BaseClient implements Runnable {
 
 	// the current executing action
 	private ServerAction currentAction;
-	
-	//the modality output
+
+	// the modality output
 	private Instances output;
 
 	public abstract void log(String message, Throwable thrown);
@@ -134,7 +133,7 @@ public abstract class BaseClient implements Runnable {
 		this(url, null);
 	}
 
-	public BaseClient(String url, Modality modality)
+	public BaseClient(String url, ModalitySpecification modality)
 			throws ParserConfigurationException {
 		super();
 		this.baseUri = url;
@@ -143,7 +142,7 @@ public abstract class BaseClient implements Runnable {
 		// initialize xml stuff
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		this.documentBuilder = dbf.newDocumentBuilder();
-		
+
 		XPathFactory xPathfactory = XPathFactory.newInstance();
 		this.xpath = xPathfactory.newXPath();
 
@@ -168,7 +167,7 @@ public abstract class BaseClient implements Runnable {
 		return canRun;
 	}
 
-	public synchronized Modality getModality() {
+	public synchronized ModalitySpecification getModality() {
 		return modality;
 	}
 
@@ -177,7 +176,7 @@ public abstract class BaseClient implements Runnable {
 	 * 
 	 * @param modality
 	 */
-	public synchronized void setModality(Modality modality) {
+	public synchronized void setModality(ModalitySpecification modality) {
 		this.canRun = false;
 		this.modality = modality;
 	}
@@ -186,26 +185,35 @@ public abstract class BaseClient implements Runnable {
 		log("setting access token");
 		setAuthentication("oauth", token);
 	}
-	
+
 	public void setAuthentication(String userId, String password) {
-		resource.setChallengeResponse(ChallengeScheme.HTTP_BASIC, userId, password);
+		resource.setChallengeResponse(ChallengeScheme.HTTP_BASIC, userId,
+				password);
 	}
 
-	public static List<Modality> getModalities(String url) {
-		return getModalities(url, null);
+	public List<ModalitySpecification> getModalities() {
+		setResourceReference("/modality");
+		return getModalities(resource);
 	}
 
-	public static List<Modality> getModalities(String url, String accessToken) {
-		ClientResource cr = new ClientResource(url + ModalitiesResource.URI);
-		if (accessToken != null)
-			cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "login",
-					accessToken);
-		return cr.wrap(ModalitiesResource.class).listModalities().asList();
+	public static List<ModalitySpecification> getModalities(String url,
+			String accessToken) {
+		ClientResource cr = new ClientResource(url + "/modality");
+		cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "oauth",
+				accessToken);
+		return getModalities(cr);
 	}
-	
-	public List<Modality> getModalities() {
-		setResourceReference(ModalitiesResource.URI);
-		return resource.wrap(ModalitiesResource.class).listModalities().asList();
+
+	private static List<ModalitySpecification> getModalities(ClientResource cr) {
+		LinkedList<ModalitySpecification> list = new LinkedList<ModalitySpecification>();
+		Index modalityIndex = cr.wrap(IndexResource.class).buildIndex();
+		for (String uri : modalityIndex.getAllReferences()) {
+			cr.setReference(uri);
+			System.out.println(uri);
+			ModalitySpecification spec = cr.get(ModalitySpecification.class);
+			list.add(spec);
+		}
+		return list;
 	}
 
 	@Override
@@ -225,13 +233,12 @@ public abstract class BaseClient implements Runnable {
 	 */
 	public void executeModality() throws IOException, InterruptedException {
 		startModalityExecution();
-		
+
 		this.executionLog = this.documentBuilder.newDocument();
 		Element rootElement = this.executionLog.createElementNS("dummy",
 				"execution");
 		this.executionLog.appendChild(rootElement);
-		
-		log("executing " + modality.getName());
+
 		queue = new LinkedList<ServerAction>();
 		queue.add(new ServerAction(modality.getInitAction()));
 		queue.add(new ServerAction(modality.getAction()));
@@ -264,8 +271,10 @@ public abstract class BaseClient implements Runnable {
 	protected void setActionParameter() throws IOException {
 		ServerParameter parameter = currentAction.getParams().get(0);
 		try {
-			log("executing xpath expression: " + parameter.getReferenceExpression());
-			XPathExpression expr = xpath.compile(parameter.getReferenceExpression());
+			log("executing xpath expression: "
+					+ parameter.getReferenceExpression());
+			XPathExpression expr = xpath.compile(parameter
+					.getReferenceExpression());
 			NodeList result = (NodeList) expr.evaluate(executionLog,
 					XPathConstants.NODESET);
 			log("expression result length: " + result.getLength());
@@ -279,7 +288,8 @@ public abstract class BaseClient implements Runnable {
 		}
 	}
 
-	private void handleParameter(ServerParameter parameter, String[] values) throws IOException {
+	private void handleParameter(ServerParameter parameter, String[] values)
+			throws IOException {
 		if (parameter.getReferenceType() == ReferenceType.CHOICE) {
 			if (values.length == 0)
 				throw new IOException("missing parameter");
@@ -290,7 +300,8 @@ public abstract class BaseClient implements Runnable {
 			Queue<ServerAction> newQueue = new LinkedList<ServerAction>();
 			for (int i = 0; i < values.length; i++) {
 				ServerAction copy = new ServerAction(currentAction);
-				log("setting parameter " + parameter.getName() + ":" + values[i]);
+				log("setting parameter " + parameter.getName() + ":"
+						+ values[i]);
 				copy.setParameter(parameter, values[i]);
 				newQueue.add(copy);
 			}
@@ -299,8 +310,6 @@ public abstract class BaseClient implements Runnable {
 			currentAction = queue.poll();
 		}
 	}
-
-	
 
 	protected void setResourceReference(String uri) {
 		String reference = baseUri + uri;
@@ -311,7 +320,8 @@ public abstract class BaseClient implements Runnable {
 	/**
 	 * retries the execution of the last server action
 	 * 
-	 * @throws IOException if the requests fails
+	 * @throws IOException
+	 *             if the requests fails
 	 */
 	public void retryRequest() throws IOException {
 		try {
@@ -324,8 +334,10 @@ public abstract class BaseClient implements Runnable {
 	/**
 	 * executes the current action
 	 * 
-	 * @throws IOException if the client fails to read the response
-	 * @throws ResourceException if there has been an error during the request
+	 * @throws IOException
+	 *             if the client fails to read the response
+	 * @throws ResourceException
+	 *             if there has been an error during the request
 	 */
 	public void executeAction() throws IOException, ResourceException {
 		setResourceReference(currentAction.getUri());
@@ -371,18 +383,21 @@ public abstract class BaseClient implements Runnable {
 	/**
 	 * handles each response
 	 * 
-	 * @param entity the response entity
-	 * @throws IOException if the client fails to read the entity
+	 * @param entity
+	 *            the response entity
+	 * @throws IOException
+	 *             if the client fails to read the entity
 	 */
 	protected void handleEntity(Representation entity) throws IOException {
 		log("handling entity");
 		MediaType t = entity.getMediaType();
 		if (t.equals(MediaType.APPLICATION_XML) || t.equals(MediaType.TEXT_XML)) {
 			Document lastOutput = new DomRepresentation(entity).getDocument();
-//			DOMImplementation domImpl = lastOutput.getImplementation();
-//			DOMImplementationLS domImplLS = (DOMImplementationLS)domImpl.getFeature("LS", "3.0");
-//			LSSerializer serializer = domImplLS.createLSSerializer();
-//			System.out.println(serializer.writeToString(lastOutput));
+			// DOMImplementation domImpl = lastOutput.getImplementation();
+			// DOMImplementationLS domImplLS =
+			// (DOMImplementationLS)domImpl.getFeature("LS", "3.0");
+			// LSSerializer serializer = domImplLS.createLSSerializer();
+			// System.out.println(serializer.writeToString(lastOutput));
 			log("storing last output");
 			Node child = executionLog
 					.adoptNode(lastOutput.getDocumentElement());
@@ -391,7 +406,8 @@ public abstract class BaseClient implements Runnable {
 			output = new InstancesRepresentation(entity).getInstances();
 			DataSpecification outSpec = modality.getOutputSpecification();
 			if (outSpec != null && !outSpec.matchingSpecification(output))
-				throw new IOException("output does not match the specifications");
+				throw new IOException(
+						"output does not match the specifications");
 			String view = modality.getOutputSpecification().getView();
 			if (view != null)
 				report(view);
@@ -401,12 +417,12 @@ public abstract class BaseClient implements Runnable {
 	private void report(String viewResource) throws IOException {
 		log("generating report");
 		setResourceReference(viewResource);
-//		Document view = resource.wrap(ViewResource.class).getView();
+		// Document view = resource.wrap(ViewResource.class).getView();
 		Representation rep = resource.get();
 		DomRepresentation domRep = new DomRepresentation(rep);
 		Document view = domRep.getDocument();
 		XmlReport.mergeWithData(view, output);
 		report(view);
 	}
-	
+
 }

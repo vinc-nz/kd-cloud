@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<group>
+	<metadata>
+		<owner>owner</owner>
+		<company>company</company>
+		<description>description</description>
+	</metadata>
+	<dataSpecification>
+		<column>
+			<name>heartbeat</name>
+			<type>DOUBLE</type>
+			<source>HEARTBEAT</source>
+		</column>
+	</dataSpecification>
+	<invitationMessage>message</invitationMessage>
+</group>

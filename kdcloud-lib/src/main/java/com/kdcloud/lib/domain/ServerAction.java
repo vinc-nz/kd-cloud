@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
@@ -36,6 +37,7 @@ import weka.core.Instances;
 
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
+@XmlType(name="")
 @XmlAccessorType(XmlAccessType.NONE)
 public class ServerAction implements Serializable {
 

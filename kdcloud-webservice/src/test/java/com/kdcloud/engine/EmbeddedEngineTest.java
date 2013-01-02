@@ -19,10 +19,7 @@ package com.kdcloud.engine;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URI;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,26 +32,31 @@ import com.kdcloud.engine.embedded.node.UserDataReader;
 import com.kdcloud.engine.embedded.node.UserDataWriter;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.persistence.PersistenceContext;
-import com.kdcloud.server.persistence.PersistenceContextFactory;
-import com.kdcloud.server.persistence.gae.PersistenceContextFactoryImpl;
+import com.kdcloud.server.persistence.DataMapperFactory;
+import com.kdcloud.server.persistence.EntityMapper;
+import com.kdcloud.server.persistence.InstancesMapper;
+import com.kdcloud.server.persistence.gae.DataMapperFactoryImpl;
 
 public class EmbeddedEngineTest {
 
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
 			new LocalDatastoreServiceTestConfig());
 
-	PersistenceContext pc;
-	String[] descriptions = {"test-workflow.xml", "ecg.xml"};
+	EntityMapper entityMapper;
+	InstancesMapper instancesMapper;
 	KDEngine engine;
+	String[] descriptions = {"workflow/test-workflow.xml", "workflow/ecg.xml"};
+	User user = new User("test");
 
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
-		PersistenceContextFactory pcf = new PersistenceContextFactoryImpl();
-		pc = pcf.get();
-		pc.save(new User("test"));
-		pc.save(new Group("test"));
+		DataMapperFactory factory = new DataMapperFactoryImpl();
+		entityMapper = factory.getEntityMapper();
+		instancesMapper = factory.getInstancesMapper();
+		Group group = new Group("test");
+		group.setOwner(user);
+		entityMapper.save(group);
 		engine = new EmbeddedEngine();
 	}
 
@@ -69,7 +71,9 @@ public class EmbeddedEngineTest {
 			String path = desc;
 			InputStream is = getClass().getClassLoader().getResourceAsStream(path);
 			Worker worker = engine.getWorker(is);
-			worker.setParameter(PersistenceContext.class.getName(), pc);
+			worker.setParameter(EntityMapper.class.getName(), entityMapper);
+			worker.setParameter(InstancesMapper.class.getName(), instancesMapper);
+			worker.setParameter(UserDataReader.APPLICANT, user);
 			worker.setParameter(UserDataReader.SOURCE_USER_PARAMETER, "test");
 			worker.setParameter(UserDataReader.SOURCE_GROUP_PARAMETER, "test");
 			worker.setParameter(UserDataWriter.DEST_USER_PARAMETER, "test");

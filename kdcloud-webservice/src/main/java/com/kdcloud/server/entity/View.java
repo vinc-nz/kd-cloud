@@ -4,11 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -24,34 +20,10 @@ import org.xml.sax.SAXException;
 import com.google.appengine.api.datastore.Blob;
 
 @PersistenceCapable
-public class View {
-	
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String encodedKey;
-	
-	@Persistent
-	@Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-	private String name;
+public class View extends Describable {
 	
 	Blob content;
 
-	public String getEncodedKey() {
-		return encodedKey;
-	}
-
-	public void setEncodedKey(String encodedKey) {
-		this.encodedKey = encodedKey;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public void setContent(Blob content) {
 		this.content = content;

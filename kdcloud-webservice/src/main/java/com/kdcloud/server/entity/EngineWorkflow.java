@@ -8,7 +8,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import com.google.appengine.api.datastore.Blob;
 
 @PersistenceCapable
-public class Workflow extends Describable {
+public class EngineWorkflow extends Describable {
 	
 	Blob content;
 

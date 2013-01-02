@@ -120,7 +120,7 @@ public abstract class KDServerResource extends ServerResource {
 
 	@SuppressWarnings("unchecked")
 	protected <T> T inject(Class<T> baseClass) {
-		return (T) getApplication().getContext().getAttributes();
+		return (T) getApplication().getContext().getAttributes().get(baseClass.getName());
 	}
 	
 	public <T> T unmarshal(Class<T> clazz, Representation rep) {

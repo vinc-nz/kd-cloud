@@ -38,13 +38,13 @@ import weka.core.Instances;
 import com.kdcloud.engine.KDEngine;
 import com.kdcloud.engine.Worker;
 import com.kdcloud.engine.embedded.node.UserDataReader;
-import com.kdcloud.lib.rest.api.WorkflowResource;
 import com.kdcloud.lib.rest.api.TaskResource;
+import com.kdcloud.lib.rest.api.WorkflowResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 import com.kdcloud.lib.rest.ext.LinkRepresentation;
 import com.kdcloud.server.entity.Task;
 import com.kdcloud.server.entity.User;
-import com.kdcloud.server.entity.Workflow;
+import com.kdcloud.server.entity.EngineWorkflow;
 import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.InstancesMapper;
 import com.kdcloud.server.rest.application.ConvertHelper;
@@ -53,7 +53,7 @@ import com.kdcloud.server.rest.application.TaskQueue;
 import com.kdcloud.server.rest.application.UrlHelper;
 import com.kdcloud.server.rest.application.UserNotifier;
 
-public class WorkflowServerResource extends BasicServerResource<Workflow> implements WorkflowResource  {
+public class WorkflowServerResource extends BasicServerResource<EngineWorkflow> implements WorkflowResource  {
 	
 	private static final String QUERY_QUEUE = "queue";
 	private static final String PARAMETER_TASK = "task";
@@ -93,30 +93,30 @@ public class WorkflowServerResource extends BasicServerResource<Workflow> implem
 
 
 	@Override
-	public Workflow find() {
-		return getEntityMapper().findByName(Workflow.class, getResourceIdentifier());
+	public EngineWorkflow find() {
+		return getEntityMapper().findByName(EngineWorkflow.class, getResourceIdentifier());
 	}
 
 	@Override
-	public void save(Workflow e) {
+	public void save(EngineWorkflow e) {
 		getEntityMapper().save(e);
 	}
 
 	@Override
-	public void delete(Workflow e) {
+	public void delete(EngineWorkflow e) {
 		getEntityMapper().delete(e);
 	}
 
 	@Override
-	public Workflow create() {
-		Workflow stored = new Workflow();
+	public EngineWorkflow create() {
+		EngineWorkflow stored = new EngineWorkflow();
 		stored.setName(getResourceIdentifier());
 		stored.setOwner(user);
 		return stored;
 	}
 
 	@Override
-	public void update(Workflow entity, Representation representation) {
+	public void update(EngineWorkflow entity, Representation representation) {
 		byte[] workflow = ConvertHelper.toByteArray(representation);
 		entity.setContent(workflow);
 		try {

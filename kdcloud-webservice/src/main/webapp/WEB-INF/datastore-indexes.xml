@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes
+  autoGenerate="true">
+    <datastore-index kind="CompleteExercise" ancestor="false" source="manual">
+        <property name="rehabuser" direction="asc" />
+        <property name="number" direction="asc" />
+    </datastore-index>
+    
+     <datastore-index kind="BufferedData" ancestor="false" source="manual">
+        <property name="rehabuser" direction="asc" />
+        <property name="insertdate" direction="asc" />
+    </datastore-index>
+    
+      <datastore-index kind="UserScheduling" ancestor="false" source="manual">
+        <property name="user" direction="asc" />
+        <property name="startDate" direction="asc" />
+    </datastore-index>
+    
+
+
+    
+</datastore-indexes>

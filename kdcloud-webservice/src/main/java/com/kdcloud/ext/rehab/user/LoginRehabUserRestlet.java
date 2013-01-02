@@ -1,4 +1,4 @@
-package com.kdcloud.ext.rehab.paziente;
+package com.kdcloud.ext.rehab.user;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

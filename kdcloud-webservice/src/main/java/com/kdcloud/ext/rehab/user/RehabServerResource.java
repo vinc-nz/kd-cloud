@@ -1,4 +1,4 @@
-package com.kdcloud.ext.rehab.paziente;
+package com.kdcloud.ext.rehab.user;
 
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;

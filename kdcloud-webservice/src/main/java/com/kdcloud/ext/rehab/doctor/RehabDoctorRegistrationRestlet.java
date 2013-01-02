@@ -1,4 +1,4 @@
-package com.kdcloud.ext.rehab.paziente;
+package com.kdcloud.ext.rehab.doctor;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,12 +15,14 @@ import org.w3c.dom.Element;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.kdcloud.ext.rehab.db.RehabDoctor;
 import com.kdcloud.ext.rehab.db.RehabUser;
+import com.kdcloud.ext.rehab.user.XMLUtils;
 import com.kdcloud.server.rest.resource.KDServerResource;
 
-public class RehabUserRegistrationRestlet extends KDServerResource {
+public class RehabDoctorRegistrationRestlet extends KDServerResource {
 
-	public static final String URI = "/rehab/rehabuserregistration";
+	public static final String URI = "/rehabdoctor/rehabdoctorregistration";
 
 	@Post("xml")
 	public Representation acceptItem(Representation entity) {
@@ -34,6 +36,7 @@ public class RehabUserRegistrationRestlet extends KDServerResource {
 			String username = XMLUtils.getTextValue(rootEl, "username");
 			String firstName = XMLUtils.getTextValue(rootEl, "firstname");
 			String lastName = XMLUtils.getTextValue(rootEl, "lastname");
+			String registrationKey = XMLUtils.getTextValue(rootEl, "registrationkey");
 
 			// output
 			representation = new DomRepresentation(
@@ -44,30 +47,30 @@ public class RehabUserRegistrationRestlet extends KDServerResource {
 
 			String res = "";
 			try {
-				ObjectifyService.register(RehabUser.class);
+				ObjectifyService.register(RehabDoctor.class);
 			} catch (Exception e) {
 			}
 
 			Objectify ofy = ObjectifyService.begin();
-			RehabUser us = ofy.query(RehabUser.class)
+			RehabDoctor us = ofy.query(RehabDoctor.class)
 					.filter("username", username).get();
 			if (us != null) {
-				res = "user already registered";
+				res = "doctor already registered";
 			} else {
-
-				RehabUser paziente = new RehabUser(username, firstName, lastName);
-				ofy.put(paziente);
-				res = "OK" + paziente.getUsername();
+				
+				RehabDoctor doctor = new RehabDoctor(username, firstName, lastName);
+				ofy.put(doctor);
+				res = "OK " + doctor.getUsername();
 			}
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("result", res);
 			Document d = representation.getDocument();
-			d = XMLUtils.createXMLResult("rehabuserregistrationOutput", map, d);
+			d = XMLUtils.createXMLResult("rehabdoctorregistrationOutput", map, d);
 
 			
 		} catch (IOException e) {
-			representation = XMLUtils.createXMLError("login error",
+			representation = XMLUtils.createXMLError("doctor registration error",
 					"" + e.getMessage());
 		}
 
@@ -75,33 +78,7 @@ public class RehabUserRegistrationRestlet extends KDServerResource {
 		return representation;
 	}
 
-//	@Get("xml")
-//	public Representation provaGet() {
-//		// Generate the right representation according to its media type.
-//		try {
-//			DomRepresentation representation = new DomRepresentation(
-//					MediaType.TEXT_XML);
-//
-//			// Generate a DOM document representing the list of
-//			// items.
-//			Document d = representation.getDocument();
-//			Element r = d.createElement("items");
-//			d.appendChild(r);
-//
-//			Element eltName = d.createElement("name");
-//			eltName.appendChild(d.createTextNode("Fabrix"));
-//			r.appendChild(eltName);
-//
-//			d.normalizeDocument();
-//
-//			// Returns the XML representation of this document.
-//			return representation;
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		return null;
-//	}
+
 
 
 

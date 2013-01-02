@@ -19,7 +19,7 @@ public class BufferedData {
 	Key<RehabUser> rehabuser;
 	int elbowknee;
 	Date insertdate;
-	int lenght;
+	int length;
 	@Serialized
 	List<Integer[]> raw;
 	@Serialized
@@ -51,12 +51,12 @@ public class BufferedData {
 		this.insertdate = insertDate;
 	}
 
-	public int getLenght() {
-		return lenght;
+	public int getLength() {
+		return length;
 	}
 
-	public void setLenght(int lenght) {
-		this.lenght = lenght;
+	public void setLength(int length) {
+		this.length = length;
 	}
 
 	public List<Integer[]> getRaw() {
@@ -88,7 +88,7 @@ public class BufferedData {
 		result = prime * result + ((angles == null) ? 0 : angles.hashCode());
 		result = prime * result + ((insertdate == null) ? 0 : insertdate.hashCode());
 		result = prime * result + elbowknee;
-		result = prime * result + lenght;
+		result = prime * result + length;
 		result = prime * result
 				+ ((rehabuser == null) ? 0 : rehabuser.hashCode());
 		result = prime * result + ((raw == null) ? 0 : raw.hashCode());
@@ -116,7 +116,7 @@ public class BufferedData {
 			return false;
 		if (elbowknee != other.elbowknee)
 			return false;
-		if (lenght != other.lenght)
+		if (length != other.length)
 			return false;
 		if (rehabuser == null) {
 			if (other.rehabuser != null)
@@ -136,7 +136,7 @@ public class BufferedData {
 		d.appendChild(root);
 		root.setAttribute("elbowknee", "" + elbowknee);
 		root.setAttribute("date", "" + insertdate.toGMTString());
-		root.setAttribute("lenght", "" + lenght);
+		root.setAttribute("length", "" + length);
 		int i = 0;
 		for (Integer[] raw_sample : raw) {
 			Element rawdata = d.createElement("raw_data");

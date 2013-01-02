@@ -26,14 +26,27 @@ import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Router;
 
-import com.kdcloud.ext.rehab.paziente.CalibrationRestlet;
-import com.kdcloud.ext.rehab.paziente.ComputeAnglesRestlet;
-import com.kdcloud.ext.rehab.paziente.DownloadCompleteExerciseRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertBufferedDataRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertCompleteExerciseRestlet;
-import com.kdcloud.ext.rehab.paziente.InsertDualModeSessionRestlet;
-import com.kdcloud.ext.rehab.paziente.LoginRehabUserRestlet;
-import com.kdcloud.ext.rehab.paziente.RehabUserRegistrationRestlet;
+import com.kdcloud.ext.rehab.doctor.AddUserSchedulingRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataByIntervalRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserBufferedDataRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserCompleteExerciseRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserDailyStatisticsRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserDualModeSessionsRestlet;
+import com.kdcloud.ext.rehab.doctor.DownloadUserRehabDaysRestlet;
+import com.kdcloud.ext.rehab.doctor.GetUserExercisesListRestlet;
+import com.kdcloud.ext.rehab.doctor.GetUserSchedulingRestlet;
+import com.kdcloud.ext.rehab.doctor.LoginRehabDoctorRestlet;
+import com.kdcloud.ext.rehab.doctor.RehabDoctorRegistrationRestlet;
+import com.kdcloud.ext.rehab.doctor.RehabTestGetRestlet;
+import com.kdcloud.ext.rehab.doctor.RehabUserRegistrationRestlet;
+import com.kdcloud.ext.rehab.user.CalibrationRestlet;
+import com.kdcloud.ext.rehab.user.ComputeAnglesRestlet;
+import com.kdcloud.ext.rehab.user.DownloadCompleteExerciseRestlet;
+import com.kdcloud.ext.rehab.user.GetSchedulingRestlet;
+import com.kdcloud.ext.rehab.user.InsertBufferedDataRestlet;
+import com.kdcloud.ext.rehab.user.InsertCompleteExerciseRestlet;
+import com.kdcloud.ext.rehab.user.InsertDualModeSessionRestlet;
+import com.kdcloud.ext.rehab.user.LoginRehabUserRestlet;
 import com.kdcloud.lib.rest.api.GroupResource;
 import com.kdcloud.server.entity.Group;
 import com.kdcloud.server.rest.resource.IndexServerResource;
@@ -102,7 +115,7 @@ public class KDApplication extends Application {
 //			});
 //		}
 
-		//rehab tutor paziente restlet
+		//rehab tutor user restlet
 		router.attach(LoginRehabUserRestlet.URI, LoginRehabUserRestlet.class);
 		router.attach(DownloadCompleteExerciseRestlet.URI, DownloadCompleteExerciseRestlet.class);
 		router.attach(CalibrationRestlet.URI, CalibrationRestlet.class);
@@ -110,9 +123,25 @@ public class KDApplication extends Application {
 		router.attach(InsertDualModeSessionRestlet.URI, InsertDualModeSessionRestlet.class);
 		router.attach(InsertBufferedDataRestlet.URI, InsertBufferedDataRestlet.class);
 		router.attach(InsertCompleteExerciseRestlet.URI, InsertCompleteExerciseRestlet.class);
+		router.attach(GetSchedulingRestlet.URI, GetSchedulingRestlet.class);
 		
+		
+		
+		//rehab tutor doctor restlet
 		router.attach(RehabUserRegistrationRestlet.URI, RehabUserRegistrationRestlet.class);
+		router.attach(RehabDoctorRegistrationRestlet.URI, RehabDoctorRegistrationRestlet.class);
+		router.attach(LoginRehabDoctorRestlet.URI, LoginRehabDoctorRestlet.class);
+		router.attach(GetUserExercisesListRestlet.URI, GetUserExercisesListRestlet.class);
+		router.attach(DownloadUserCompleteExerciseRestlet.URI, DownloadUserCompleteExerciseRestlet.class);
+		router.attach(DownloadUserDualModeSessionsRestlet.URI, DownloadUserDualModeSessionsRestlet.class);
+		router.attach(DownloadUserBufferedDataRestlet.URI, DownloadUserBufferedDataRestlet.class);
+		router.attach(DownloadUserBufferedDataByIntervalRestlet.URI, DownloadUserBufferedDataByIntervalRestlet.class);
+		router.attach(DownloadUserRehabDaysRestlet.URI, DownloadUserRehabDaysRestlet.class);
+		router.attach(DownloadUserDailyStatisticsRestlet.URI, DownloadUserDailyStatisticsRestlet.class);
+		router.attach(GetUserSchedulingRestlet.URI, GetUserSchedulingRestlet.class);
+		router.attach(AddUserSchedulingRestlet.URI, AddUserSchedulingRestlet.class);
 		
+		router.attach(RehabTestGetRestlet.URI, RehabTestGetRestlet.class);
 		
 		return router;
 	}

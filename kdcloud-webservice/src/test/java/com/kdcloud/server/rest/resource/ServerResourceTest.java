@@ -41,11 +41,11 @@ public class ServerResourceTest extends RestletTestCase {
 		doPost("/engine/workflow/ecg.xml", "ecg-test.properties");
 	}
 	
-	@Test
-	public void testUsers() {
-		doPut("/group/test", "group.xml");
-		doGet("/group/test/contributors");
-	}
+//	@Test
+//	public void testUsers() {
+//		doPut("/group/test", "group.xml");
+//		doGet("/group/test/contributors");
+//	}
 	
 	@Test
 	public void testIndex() throws ResourceException, IOException {

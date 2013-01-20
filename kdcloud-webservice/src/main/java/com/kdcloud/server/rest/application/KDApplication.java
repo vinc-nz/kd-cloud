@@ -58,9 +58,12 @@ public class KDApplication extends Application {
 	public static final ChallengeResponse defaultChallenge = 
 			new ChallengeResponse(ChallengeScheme.HTTP_BASIC, "admin", "admin");
 	
+	private Restlet outboundRoot;
 	
-	public KDApplication(Context context) {
+	
+	public KDApplication(Context context, Restlet outboundRoot) {
 		super(context);
+		this.outboundRoot = outboundRoot;
 	}
 
 	/**
@@ -144,6 +147,11 @@ public class KDApplication extends Application {
 		router.attach(RehabTestGetRestlet.URI, RehabTestGetRestlet.class);
 		
 		return router;
+	}
+	
+	@Override
+	public Restlet createOutboundRoot() {
+		return outboundRoot;
 	}
 
 }

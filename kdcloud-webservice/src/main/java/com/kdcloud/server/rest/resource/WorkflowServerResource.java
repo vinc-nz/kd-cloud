@@ -195,7 +195,7 @@ public class WorkflowServerResource extends BasicServerResource<EngineWorkflow> 
 	@Override
 	@Post
 	public Representation handleTask(Form form) {
-		String queue = getQueryValue(QUERY_QUEUE);
+		String queue = getQuery().getFirstValue(QUERY_QUEUE);
 		if (queue != null && queue.equals("yes")) {
 			return createTask(form);
 			

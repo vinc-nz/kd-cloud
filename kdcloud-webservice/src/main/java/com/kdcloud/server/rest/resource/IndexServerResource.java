@@ -27,7 +27,7 @@ public class IndexServerResource extends KDServerResource implements IndexResour
 	@Override
 	public void beforeHandle() {
 		super.beforeHandle();
-		String query = getQueryValue(QUERY_FILTER);
+		String query = getQuery().getFirstValue(QUERY_FILTER);
 		if (query != null && query.equals(QUERY_FILTER_OWNED)) {
 			getLogger().info("filter on");
 			filter = true;

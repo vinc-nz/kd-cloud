@@ -19,6 +19,7 @@ package com.kdcloud.server.rest.application;
 import java.util.logging.Level;
 
 import org.restlet.Application;
+import org.restlet.Client;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -48,7 +49,7 @@ public class MainApplication extends Application {
 		
 		router.attach(WORKER_URI, WorkflowServerResource.class);
 		
-		Application kdApplication = new KDApplication(applicationContext);
+		Application kdApplication = new KDApplication(applicationContext, createOutboundRoot());
 		
 		ChallengeAuthenticator guard = new ChallengeAuthenticator(null, ChallengeScheme.HTTP_BASIC, "testRealm");
 		guard.setVerifier(new OAuthVerifier(getLogger(), true));
@@ -74,6 +75,16 @@ public class MainApplication extends Application {
 
 		return router;
 
+	}
+	
+	@Override
+	public Restlet createOutboundRoot() {
+		return new Restlet() {
+			@Override
+			public void handle(Request request, Response response) {
+				new Client(request.getProtocol()).handle(request, response);
+			}
+		};
 	}
 
 }

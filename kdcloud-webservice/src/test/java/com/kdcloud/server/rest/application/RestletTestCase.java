@@ -51,8 +51,8 @@ import com.kdcloud.server.persistence.EntityMapper;
 import com.kdcloud.server.persistence.gae.JunitMapperFactory;
 
 public class RestletTestCase {
-
 	static final String HOST = "http://localhost";
+	
 	static final int PORT = 8887;
 	static final String BASE_URI = HOST + ":" + PORT;
 	
@@ -115,7 +115,7 @@ public class RestletTestCase {
 			context.getAttributes().put(UserProvider.class.getName(), userProvider);
 			context.getAttributes().put(DataMapperFactory.class.getName(), factory);
 			context.getAttributes().put(ResourcesFinder.class.getName(), resourcesFinder);
-			router.attachDefault(new KDApplication(context));
+			router.attachDefault(new KDApplication(context, clientDistpatcher));
 			return router;
 		}
 
@@ -126,8 +126,6 @@ public class RestletTestCase {
 	@Before
 	public void setUp() {
 		testContext = new Context();
-		
-		testContext.setClientDispatcher(clientDistpatcher);
 		
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, PORT);

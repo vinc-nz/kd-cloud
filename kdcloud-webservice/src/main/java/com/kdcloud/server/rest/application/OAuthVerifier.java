@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Reference;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
@@ -38,6 +39,9 @@ public class OAuthVerifier implements Verifier {
 	private static final String ACCESS_TOKEN_QUERY = "access_token";
 	private static final String JSON_ATTR_EMAIL = "email";
 	private static final String ADMIN_FILE = "admin.properties";
+	
+	public static final ChallengeScheme HTTP_BEARER_SCHEME = new ChallengeScheme("HTTP_BEARER", "Bearer");
+	public static final ChallengeScheme HTTP_BASIC_SCHEME = ChallengeScheme.HTTP_BASIC;
 	
 	private Logger logger;
 	private boolean allowAdministrators;
@@ -58,18 +62,29 @@ public class OAuthVerifier implements Verifier {
 	public int verify(Request request, Response response) {
 		if (request.getChallengeResponse() == null)
 			return Verifier.RESULT_MISSING;
-		// get token
+		ChallengeScheme scheme = request.getChallengeResponse().getScheme();
+		if (scheme.equals(HTTP_BASIC_SCHEME) && allowAdministrators) {
+			//administrators can login with their credentials
+			return verifyCredentials(request);
+
+		} else if (scheme.equals(HTTP_BEARER_SCHEME)) {
+			//use oauth authentication
+			return verifyOauthToken(request);
+			
+		} else {
+			return Verifier.RESULT_INVALID;
+		}
+	}
+	
+	private int verifyCredentials(Request request) {
 		String userId = request.getChallengeResponse().getIdentifier();
 		String secret = new String(request.getChallengeResponse().getSecret());
-		if (allowAdministrators) {
-			String passwd = (String) administrators.get(userId);
-			if (passwd != null && passwd.equals(secret)) {
-				request.getClientInfo().setUser(new User(userId));
-				return Verifier.RESULT_VALID;
-			}
-
+		String passwd = (String) administrators.get(userId);
+		if (passwd != null && passwd.equals(secret)) {
+			request.getClientInfo().setUser(new User(userId));
+			return Verifier.RESULT_VALID;
 		}
-		return verifyOauthToken(request, response, secret);
+		return Verifier.RESULT_INVALID;
 	}
 	
 	private Properties getAdministratorDetails() throws IOException {
@@ -79,8 +94,9 @@ public class OAuthVerifier implements Verifier {
 		return prop;
 	}
 
-	public int verifyOauthToken(Request request, Response response, String token) {
+	public int verifyOauthToken(Request request) {
 		//validate token
+		String token = request.getChallengeResponse().getRawValue();
 		Reference reference = new Reference(VALIDATION_URI);
 	    reference.addQueryParameter(ACCESS_TOKEN_QUERY, token);
 	    ClientResource clientResource = new ClientResource(reference);
@@ -96,7 +112,7 @@ public class OAuthVerifier implements Verifier {
 				return Verifier.RESULT_VALID;
 			}
 	    } catch (Exception e) {
-	    	logger.log(Level.SEVERE, "error getting authentication server response", e);
+	    	logger.log(Level.INFO, "error getting authentication server response");
 	    }
 	    return Verifier.RESULT_INVALID;
 	}

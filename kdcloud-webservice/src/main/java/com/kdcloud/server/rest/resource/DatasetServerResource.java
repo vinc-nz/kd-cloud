@@ -73,8 +73,10 @@ public class DatasetServerResource extends BasicServerResource<DataTable> implem
 
 	@Override
 	public void save(DataTable e) {
-		mGroup.getData().add(e);
-		getEntityMapper().save(mGroup);
+		if (!mGroup.getData().contains(e)) {
+			mGroup.getData().add(e);
+			getEntityMapper().save(mGroup);
+		}
 //		getInstancesMapper().save(mData, mTable);
 		getInstancesMapper().save(mData, e);
 	}

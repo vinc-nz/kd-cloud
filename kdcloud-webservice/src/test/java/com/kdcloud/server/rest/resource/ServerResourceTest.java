@@ -41,7 +41,7 @@ public class ServerResourceTest extends RestletTestCase {
 		doPost("/engine/workflow/ecg.xml", "ecg-test.properties");
 	}
 	
-	@Test
+//	@Test
 	public void testUsers() {
 		doPut("/group/test", "group.xml");
 		doGet("/group/test/contributors");

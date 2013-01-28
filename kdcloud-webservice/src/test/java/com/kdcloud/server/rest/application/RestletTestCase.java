@@ -237,4 +237,7 @@ public class RestletTestCase {
 		
 	}
 
+	public static void main(String[] args) {
+		
+	}
 }

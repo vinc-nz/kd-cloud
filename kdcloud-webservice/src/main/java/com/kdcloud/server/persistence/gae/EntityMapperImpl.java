@@ -35,8 +35,14 @@ public class EntityMapperImpl implements EntityMapper {
 	}
 
 	@Override
-	public void save(Entity e) {
-		pm.makePersistent(e);
+	public void save(final Entity e) {
+		DatastoreWriter.write(new Runnable() {
+			
+			@Override
+			public void run() {
+				pm.makePersistent(e);
+			}
+		});
 	}
 
 	@Override
@@ -44,15 +50,6 @@ public class EntityMapperImpl implements EntityMapper {
 		pm.deletePersistent(e);
 	}
 
-	@Override
-	public void save(Entity e, String name) {
-		try {
-			e.setName(name);
-			pm.makePersistent(e);
-		} catch (Exception thrown) {
-			thrown.printStackTrace();
-		}
-	}
 
 	@Override
 	public void close() {

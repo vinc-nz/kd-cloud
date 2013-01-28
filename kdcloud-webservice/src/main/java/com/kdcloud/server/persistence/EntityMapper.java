@@ -28,7 +28,6 @@ public interface EntityMapper {
 	public <T> T findChildByName(Entity father, Class<T> child, String name);
 	public <T> Collection<T> getAll(Class<T> clazz);
 	public void save(Entity e);
-	public void save(Entity e, String name);
 	public void delete(Entity e);
 	public void close();
 	

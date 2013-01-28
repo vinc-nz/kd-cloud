@@ -24,9 +24,9 @@ public class InstancesMapperImpl implements InstancesMapper {
 	
 	@Override
 	public void save(Instances instances, DataTable table) {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Key tableKey = KeyFactory.stringToKey(table.getUUID());
-		List<Entity> entities = new ArrayList<Entity>(instances.size());
+		final List<Entity> entities = new ArrayList<Entity>(instances.size());
 		for (Instance inst : instances) {
 			Entity e = new Entity(instances.relationName(), tableKey);
 			for (int i = 0; i < inst.numAttributes(); i++) {
@@ -34,7 +34,14 @@ public class InstancesMapperImpl implements InstancesMapper {
 			}
 			entities.add(e);
 		}
-		datastore.put(entities);
+		
+		DatastoreWriter.write(new Runnable() {
+			
+			@Override
+			public void run() {
+				datastore.put(entities);
+			}
+		});
 	}
 	
 	public Iterator<Entity> query(DataTable table) {
@@ -81,11 +88,17 @@ public class InstancesMapperImpl implements InstancesMapper {
 	
 	@Override
 	public void clear(DataTable table) {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Iterator<Entity> it = query(table);
-		while (it.hasNext()) {
-			datastore.delete(it.next().getKey());
-		}
+		final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		final Iterator<Entity> it = query(table);
+		DatastoreWriter.write(new Runnable() {
+			
+			@Override
+			public void run() {
+				while (it.hasNext()) {
+					datastore.delete(it.next().getKey());
+				}
+			}
+		});
 	}
 
 }

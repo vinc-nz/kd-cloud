@@ -38,7 +38,7 @@ public class GetUserSchedulingRestlet extends RehabDoctorServerResource {
 			d = result.getDocument();
 
 			try {
-				ObjectifyService.register(CompleteExercise.class);
+
 				ObjectifyService.register(UserScheduling.class);
 			} catch (Exception e) {
 			}
@@ -48,6 +48,13 @@ public class GetUserSchedulingRestlet extends RehabDoctorServerResource {
 			List<UserScheduling> schedulingList = ofy
 					.query(UserScheduling.class).filter("user", us)
 					.order("startDate").list();
+
+			try {
+
+				ObjectifyService.register(CompleteExercise.class);
+			} catch (Exception e) {
+			}
+			ofy = ObjectifyService.begin();
 
 			if (schedulingList != null) {
 
@@ -64,18 +71,19 @@ public class GetUserSchedulingRestlet extends RehabDoctorServerResource {
 						taskEl.setAttribute("user", u);
 						CompleteExercise ex = ofy.get(s.getExercise());
 						taskEl.setAttribute("exercise_name", ex.getName());
-						taskEl.setAttribute("exercise_number", "" + ex.getNumber());
+						taskEl.setAttribute("exercise_number",
+								"" + ex.getNumber());
 						root.appendChild(taskEl);
 					}
 
 					d.normalizeDocument();
-				}else{
-					result = XMLUtils
-							.createXMLError("get user scheduling", "list size = 0");
+				} else {
+					result = XMLUtils.createXMLError("get user scheduling",
+							"list size = 0");
 				}
 			} else {
-				result = XMLUtils
-						.createXMLError("get user scheduling", "list = null");
+				result = XMLUtils.createXMLError("get user scheduling",
+						"list = null");
 			}
 
 		} catch (Exception e) {

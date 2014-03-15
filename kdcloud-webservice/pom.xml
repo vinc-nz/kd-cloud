@@ -173,12 +173,6 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet.ext.httpclient</artifactId>
-			<version>${restlet.version}</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- GAE libraries for local testing as described here: http://code.google.com/appengine/docs/java/howto/unittesting.html -->
 		<dependency>

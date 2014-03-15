@@ -193,28 +193,18 @@ public abstract class BaseClient implements Runnable {
 
 	public List<ModalitySpecification> getModalities() {
 		setResourceReference("/modality");
-		return getModalities(resource);
-	}
-
-	public static List<ModalitySpecification> getModalities(String url,
-			String accessToken) {
-		ClientResource cr = new ClientResource(url + "/modality");
-		cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, "oauth",
-				accessToken);
-		return getModalities(cr);
-	}
-
-	private static List<ModalitySpecification> getModalities(ClientResource cr) {
 		LinkedList<ModalitySpecification> list = new LinkedList<ModalitySpecification>();
-		Index modalityIndex = cr.wrap(IndexResource.class).buildIndex();
+		Index modalityIndex = resource.wrap(IndexResource.class).buildIndex();
 		for (String uri : modalityIndex.getAllReferences()) {
-			cr.setReference(uri);
+			resource.setReference(uri);
 			System.out.println(uri);
-			ModalitySpecification spec = cr.get(ModalitySpecification.class);
+			ModalitySpecification spec = resource.get(ModalitySpecification.class);
 			list.add(spec);
 		}
 		return list;
 	}
+
+
 
 	@Override
 	public void run() {
@@ -367,7 +357,7 @@ public abstract class BaseClient implements Runnable {
 		default:
 			break;
 		}
-		if (!entity.isEmpty()) {
+		if (entity != null && !entity.isEmpty()) {
 			handleEntity(entity);
 		} else {
 			log("received entity is empty, doing nothing");

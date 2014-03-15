@@ -26,6 +26,7 @@ import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Protocol;
+import org.restlet.data.Reference;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Redirector;
 import org.restlet.routing.Router;
@@ -57,13 +58,18 @@ public class MainApplication extends Application {
 		Filter core = new Filter() {
 			@Override
 			protected int beforeHandle(Request request, Response response) {
-				if (!request.getProtocol().equals(Protocol.HTTPS)) {
+				if (!request.getProtocol().equals(Protocol.HTTPS) && !isLocal(request.getHostRef())) {
 					String target = "https://" + request.getHostRef().getHostDomain() + request.getResourceRef().getPath();
 	                Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_CLIENT_SEE_OTHER);
 	                redirector.handle(request, response);
 	                return STOP;
 				}
 				return CONTINUE;
+			}
+
+			private boolean isLocal(Reference hostRef) {
+				return hostRef.getHostDomain().contains("localhost")
+						|| hostRef.getHostDomain().contains("127.0.0.1");
 			}
 		};
 

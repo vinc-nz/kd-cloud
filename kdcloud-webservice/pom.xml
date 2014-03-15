@@ -12,7 +12,7 @@
 
 	<!-- Specify hard-coded project properties here -->
 	<properties>
-		<gae.version>1.7.0</gae.version>
+		<gae.version>1.9.0</gae.version>
 		<restlet.version>2.2-RC3</restlet.version>
 		<gae.port>8888</gae.port>
 		<gae.application.id>kd-cloud</gae.application.id>
@@ -36,13 +36,13 @@
 		<dependency>
 			<groupId>com.kdcloud</groupId>
 			<artifactId>kdcloud-lib</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.3-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.kdcloud</groupId>
 			<artifactId>kdcloud-engine</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.3-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

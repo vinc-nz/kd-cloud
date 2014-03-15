@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.kdcloud</groupId>
 	<artifactId>kdcloud-lib</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.3-SNAPSHOT</version>
 	<properties>
-		<restlet.version>2.1-SNAPSHOT</restlet.version>
+		<restlet.version>2.1-RC3</restlet.version>
 		<restlet.distribution>org.restlet.jse</restlet.distribution>
 	</properties>
 	<repositories>

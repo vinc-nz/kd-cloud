@@ -5,7 +5,7 @@
 
 	<groupId>com.kdcloud</groupId>
 	<artifactId>kdcloud-webservice</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.3-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>kdcloud-webservice</name>
@@ -13,7 +13,7 @@
 	<!-- Specify hard-coded project properties here -->
 	<properties>
 		<gae.version>1.7.0</gae.version>
-		<restlet.version>2.2-SNAPSHOT</restlet.version>
+		<restlet.version>2.2-RC3</restlet.version>
 		<gae.port>8888</gae.port>
 		<gae.application.id>kd-cloud</gae.application.id>
 		<gae.application.version>snapshot</gae.application.version>
@@ -123,12 +123,12 @@
 			<scope>runtime</scope>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.restlet.gae</groupId>
-			<artifactId>org.restlet.ext.net</artifactId>
-			<version>${restlet.version}</version>
-			<scope>runtime</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.restlet.gae</groupId> -->
+<!-- 			<artifactId>org.restlet.ext.net</artifactId> -->
+<!-- 			<version>${restlet.version}</version> -->
+<!-- 			<scope>runtime</scope> -->
+<!-- 		</dependency> -->
 
 		<!-- other dep -->
 		<dependency>
@@ -250,7 +250,7 @@
 			<plugin>
 				<groupId>net.kindleit</groupId>
 				<artifactId>maven-gae-plugin</artifactId>
-				<version>0.9.4</version>
+				<version>0.9.0</version>
 				<configuration>
 					<serverId>appengine.google.com</serverId>
 				</configuration>

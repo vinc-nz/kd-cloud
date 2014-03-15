@@ -1,5 +1,6 @@
 package com.kdcloud.lib.domain;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,9 +11,20 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="index")
-public class Index {
+public class Index implements Serializable {
 	
-	static class Link {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	static class Link implements Serializable {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		
 		@XmlAttribute
 		String href;

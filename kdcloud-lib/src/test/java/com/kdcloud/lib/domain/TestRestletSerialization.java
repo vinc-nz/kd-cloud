@@ -47,7 +47,7 @@ public class TestRestletSerialization {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testGetSerialized() {
 		Representation rep = cr.get(MediaType.APPLICATION_JAVA_OBJECT);
 		Assert.assertNotNull(rep);

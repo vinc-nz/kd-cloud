@@ -105,8 +105,8 @@ public class StubClient extends BaseClient {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		String url = "http://localhost:8888";
-//		String url = "https://snapshot.kd-cloud.appspot.com";
+//		String url = "http://localhost:8888";
+		String url = "https://body-cloud.appspot.com";
 		BaseClient kdcloud = new StubClient(url);
 		kdcloud.setRepeatAllowed(false);
 		kdcloud.setAuthentication("admin", "admin");

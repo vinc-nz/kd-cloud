@@ -37,6 +37,12 @@
 			<groupId>com.kdcloud</groupId>
 			<artifactId>kdcloud-lib</artifactId>
 			<version>0.3-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -163,6 +169,20 @@
 		<dependency>
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet.ext.simple</artifactId>
+			<version>${restlet.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.httpclient</artifactId>
+			<version>${restlet.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.httpclient</artifactId>
 			<version>${restlet.version}</version>
 			<scope>test</scope>
 		</dependency>

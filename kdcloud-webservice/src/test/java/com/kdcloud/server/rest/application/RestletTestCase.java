@@ -18,6 +18,8 @@ package com.kdcloud.server.rest.application;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -36,6 +38,7 @@ import org.restlet.data.Form;
 import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
+import org.restlet.ext.httpclient.HttpClientHelper;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -59,7 +62,14 @@ public class RestletTestCase {
 	
 	Restlet clientDistpatcher = new Restlet() {
 		public void handle(Request request, Response response) {
-			new Client(request.getProtocol()).handle(request, response);
+			if (request.getProtocol().equals(Protocol.HTTP)) {
+				List<Protocol> protocols = Arrays.asList(Protocol.HTTP);
+				String helperClass = HttpClientHelper.class.getName();
+				Client client = new Client(null, protocols, helperClass);
+				client.handle(request, response);
+			} else  {
+				new Client(request.getProtocol()).handle(request, response);
+			}
 		};
 	};
 	

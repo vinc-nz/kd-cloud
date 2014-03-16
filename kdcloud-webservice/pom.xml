@@ -12,11 +12,11 @@
 
 	<!-- Specify hard-coded project properties here -->
 	<properties>
-		<gae.version>1.9.0</gae.version>
+		<gae.version>1.8.8</gae.version>
 		<restlet.version>2.2-RC3</restlet.version>
 		<gae.port>8888</gae.port>
-		<gae.application.id>kd-cloud</gae.application.id>
-		<gae.application.version>snapshot</gae.application.version>
+		<gae.application.id>body-cloud</gae.application.id>
+		<gae.application.version>vincenzo</gae.application.version>
 		<datanucleus.version>3.1.3</datanucleus.version>
 		<jdo.version>3.0</jdo.version>
 		<weka.version>3.7.7-SNAPSHOT</weka.version>
@@ -103,7 +103,7 @@
 			<version>${restlet.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.restlet.gae</groupId>
 			<artifactId>org.restlet.ext.net</artifactId>
@@ -116,7 +116,7 @@
 			<artifactId>org.restlet.ext.json</artifactId>
 			<version>${restlet.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.restlet.gae</groupId>
 			<artifactId>org.restlet.ext.xml</artifactId>
@@ -129,7 +129,7 @@
 			<version>${restlet.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 
 		<!-- other dep -->
 		<dependency>
@@ -166,7 +166,7 @@
 			<version>${restlet.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 
 		<!-- GAE libraries for local testing as described here: http://code.google.com/appengine/docs/java/howto/unittesting.html -->
 		<dependency>
@@ -238,10 +238,18 @@
 			<plugin>
 				<groupId>net.kindleit</groupId>
 				<artifactId>maven-gae-plugin</artifactId>
-				<version>0.9.0</version>
+				<version>0.9.6</version>
 				<configuration>
 					<serverId>appengine.google.com</serverId>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>net.kindleit</groupId>
+						<artifactId>gae-runtime</artifactId>
+						<version>${gae.version}</version>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
 			</plugin>
 
 
@@ -269,7 +277,8 @@
 
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>

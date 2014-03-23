@@ -6,6 +6,11 @@
 			<type>DOUBLE</type>
 			<source>HEARTBEAT</source>
 		</column>
+		<column>
+			<name>heartbeat2</name>
+			<type>DOUBLE</type>
+			<source>HEARTBEAT</source>
+		</column>
 	</inputSpecification>
 	<init-action>
 		<uri>/group/london-marathon/data</uri>
@@ -14,6 +19,14 @@
 	<action>
 		<uri>/group/london-marathon/data</uri>
 		<method>PUT</method>
+		<parameter>
+			<name>sourceUser</name>
+			<reference xpath="//users/user" type="MAP" />
+		</parameter>
+		<parameter>
+			<name>sourceGroup</name>
+			<value>london-marathon</value>
+		</parameter>
 		<repeat>true</repeat>
 		<trigger after="10" />
 	</action>

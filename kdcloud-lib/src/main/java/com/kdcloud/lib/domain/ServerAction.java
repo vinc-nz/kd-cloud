@@ -18,6 +18,7 @@ package com.kdcloud.lib.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,10 +57,10 @@ public class ServerAction implements Serializable {
 	Set<ServerParameter> postParams;
 	
 	@XmlElement(required=false)
-	boolean repeat;
+	boolean repeat = false;
 
 	@XmlElement(required=false)
-	Trigger trigger;
+	Trigger trigger = new Trigger();
 	
 	ArrayList<Parameter> postForm;
 	
@@ -67,7 +68,14 @@ public class ServerAction implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		@XmlAttribute
-		int after;
+		int after = 0;
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Trigger)
+				return ((Trigger) obj).after == after;
+			return false;
+		}
 	}
 	
 	public ServerAction() {
@@ -172,6 +180,25 @@ public class ServerAction implements Serializable {
 		}
 		postString = postString + ")";
 		return method.toString() + ": " + uri + postString;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ServerAction) {
+			ServerAction other = (ServerAction) obj;
+			for (ServerParameter param : postParams) {
+				if (other.postParams.contains(param))
+					return false;
+			}
+			return true
+					&& this.uri.equals(other.uri)
+					&& this.method == other.method
+					&& this.trigger.equals(other.trigger)
+					&& this.repeat == other.repeat
+					;
+		} else {
+			return false;
+		}
 	}
 	
 }

@@ -40,12 +40,36 @@ public class DataSpecification implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@XmlAccessorType(XmlAccessType.FIELD)
-	static class Column implements Serializable {
+	public static class Column implements Serializable {
+		
 		private static final long serialVersionUID = 1L;
 		
+		public Column() {
+		}
+		
+		
+		public Column(String name, DataType type, InputSource source) {
+			super();
+			this.name = name;
+			this.type = type;
+			this.source = source;
+		}
+
 		String name;
 		DataType type;
 		InputSource source;
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Column) {
+				Column other =  ((Column) obj);
+				return name.equals(other.name)
+						&& type == other.type
+						&& source == other.source;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	public enum DataType {
@@ -57,11 +81,25 @@ public class DataSpecification implements Serializable {
 	}
 	
 	@XmlElement(name="column")
-	List<Column> columns;
+	List<Column> columns = new LinkedList<>();
 	
 	@XmlElement
 	String view;
 	
+	
+	
+	public List<Column> getColumns() {
+		return columns;
+	}
+
+	public void setColumns(List<Column> columns) {
+		this.columns = columns;
+	}
+
+	public void setView(String view) {
+		this.view = view;
+	}
+
 	public Instances newInstances(String relationalName) {
 		return new Instances(relationalName, getAttrInfo(), 1000);
 	}
@@ -95,6 +133,20 @@ public class DataSpecification implements Serializable {
 		for (Column c : columns)
 			list.add(c.source);
 		return list;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DataSpecification) {
+			DataSpecification other = (DataSpecification) obj;
+			for (Column c : columns) {
+				if (!other.columns.contains(c))
+					return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

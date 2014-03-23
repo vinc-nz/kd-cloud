@@ -45,7 +45,7 @@ public class ServerParameter implements Serializable {
 	private final String value;
 	private final Reference reference;
 	
-	static class Reference implements Serializable {
+	public static class Reference implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		@XmlAttribute
@@ -53,6 +53,17 @@ public class ServerParameter implements Serializable {
 		
 		@XmlAttribute
 		ReferenceType type = ReferenceType.CHOICE;
+		
+		public Reference() {
+		}
+
+		public Reference(String xpath, ReferenceType type) {
+			super();
+			this.xpath = xpath;
+			this.type = type;
+		}
+		
+		
 		
 	}
 	
@@ -62,7 +73,7 @@ public class ServerParameter implements Serializable {
 	}
 
 	public ServerParameter() {
-		this(null, null, null);
+		this(null, null);
 	}
 
 	public ServerParameter(String representation) {
@@ -78,12 +89,29 @@ public class ServerParameter implements Serializable {
 		}
 	}
 	
+	public ServerParameter(String name, String value) {
+		super();
+		this.name = name;
+		this.value = value;
+		this.reference = null;
+	}
+	
 	public ServerParameter(String name, String value, String reference) {
 		super();
 		this.name = name;
 		this.value = value;
 		this.reference = new Reference();
 		this.reference.xpath = reference;
+	}
+	
+
+	public ServerParameter(String name, String reference,
+			ReferenceType referenceType) {
+		this.name = name;
+		this.value = null;
+		this.reference = new Reference();
+		this.reference.xpath = reference;
+		this.reference.type = referenceType;
 	}
 
 	public String getName() {
@@ -115,7 +143,7 @@ public class ServerParameter implements Serializable {
 	}
 	
 	public ServerParameter toValue(String value) {
-		return new ServerParameter(name, value, null);
+		return new ServerParameter(name, value);
 	}
 	
 	public Parameter toRestletParameter() {

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name="")
 @XmlRootElement(name="modality")
 @XmlAccessorType(XmlAccessType.NONE)
-public class ModalitySpecification implements Serializable {
+public class ModalitySpecification implements Serializable, Modality {
 	
 	/**
 	 * 

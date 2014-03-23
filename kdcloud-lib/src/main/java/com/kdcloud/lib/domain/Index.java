@@ -40,7 +40,12 @@ public class Index implements Serializable {
 	}
 	
 	@XmlAccessorType(XmlAccessType.FIELD)
-	static class Item {
+	static class Item implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		Link reference;
 		Link metadata;
 	}

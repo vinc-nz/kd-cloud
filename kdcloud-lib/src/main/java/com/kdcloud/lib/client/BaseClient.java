@@ -45,12 +45,11 @@ import org.w3c.dom.NodeList;
 import weka.core.Instances;
 
 import com.kdcloud.lib.domain.DataSpecification;
-import com.kdcloud.lib.domain.Index;
+import com.kdcloud.lib.domain.Modality;
 import com.kdcloud.lib.domain.ModalitySpecification;
 import com.kdcloud.lib.domain.ServerAction;
 import com.kdcloud.lib.domain.ServerParameter;
 import com.kdcloud.lib.domain.ServerParameter.ReferenceType;
-import com.kdcloud.lib.rest.api.IndexResource;
 import com.kdcloud.lib.rest.ext.InstancesRepresentation;
 
 public abstract class BaseClient implements Runnable {
@@ -59,7 +58,7 @@ public abstract class BaseClient implements Runnable {
 	String baseUri;
 
 	// the executing modality
-	ModalitySpecification modality;
+	Modality modality;
 
 	// used for restlet requests
 	ClientResource resource;
@@ -133,7 +132,7 @@ public abstract class BaseClient implements Runnable {
 		this(url, null);
 	}
 
-	public BaseClient(String url, ModalitySpecification modality)
+	public BaseClient(String url, Modality modality)
 			throws ParserConfigurationException {
 		super();
 		this.baseUri = url;
@@ -167,7 +166,7 @@ public abstract class BaseClient implements Runnable {
 		return canRun;
 	}
 
-	public synchronized ModalitySpecification getModality() {
+	public synchronized Modality getModality() {
 		return modality;
 	}
 
@@ -176,7 +175,7 @@ public abstract class BaseClient implements Runnable {
 	 * 
 	 * @param modality
 	 */
-	public synchronized void setModality(ModalitySpecification modality) {
+	public synchronized void setModality(Modality modality) {
 		this.canRun = false;
 		this.modality = modality;
 	}
@@ -196,14 +195,21 @@ public abstract class BaseClient implements Runnable {
 		
 		LinkedList<ModalitySpecification> list = new LinkedList<ModalitySpecification>();
 		
-		Index modalityIndex = resource.wrap(IndexResource.class).buildIndex();
-		for (String uri : modalityIndex.getAllReferences()) {
-			resource.setReference(uri);
-			System.out.println(uri);
-			ModalitySpecification spec = resource.get(ModalitySpecification.class);
-			list.add(spec);
+		Representation rep = resource.get();
+		try {
+			NodeList nodes = new DomRepresentation(rep).getDocument().getElementsByTagName("reference");
+			for (int i = 0; i < nodes.getLength(); i++) {
+				String uri = nodes.item(i).getAttributes().getNamedItem("href").getTextContent();
+				resource.setReference(uri);
+				System.out.println(uri);
+				ModalitySpecification spec = resource.get(ModalitySpecification.class);
+				list.add(spec);
+			}
+			return list;
+		} catch (IOException e) {
+			this.log("Error parsing modality list", e);
+			return null;
 		}
-		return list;
 	}
 
 
